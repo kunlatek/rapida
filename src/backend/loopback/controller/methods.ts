@@ -352,6 +352,53 @@ const setControllerMethods = (object: MainInterface): string => {
       });
     }
   }
+
+  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(
+    modelName
+  )}', action: 'read'}})
+  @get('/${TextTransformation.plurarize(
+    TextTransformation.kebabfy(modelName)
+  )}/chart/details')
+  @response(200, {
+      description: 'Chart details',
+      content: {
+          'application/json': {
+              schema: {
+                  type: 'object',
+                  title: 'Chard data details',
+                  properties: {
+                      data: {type: 'array', items: {type: 'any'}},
+                  },
+              },
+          },
+      },
+  })
+  async chartDetails(
+      @param.query.string('locale') locale?: LocaleEnum,
+  ): Promise<IHttpResponse> {
+    try {
+      const result = await this.repository.find({
+        where: {_deletedAt: {eq: null}},
+        include: [${_propertiesRelatedFind}],
+      });
+
+      const data = await this.chartService.getChartDetails(result, this.httpRequest.url);
+
+      return HttpResponseToClient.okHttpResponse({
+        data,
+        locale,
+        request: this.httpRequest,
+        response: this.httpResponse,
+      });
+    } catch (err: any) {
+      return HttpResponseToClient.badRequestErrorHttpResponse({
+        logMessage: err.message,
+        locale,
+        request: this.httpRequest,
+        response: this.httpResponse,
+      });
+    }
+  }
   `;
 
   return code;
