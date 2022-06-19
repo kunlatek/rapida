@@ -46,13 +46,12 @@ const setRepositoryConstructorArgumentsByElement = (
 
   if (validTypes.includes(type)) {
     if (value.optionsApi) {
-      const modelNameClass = TextTransformation.setIdToClassName(modelName);
       const className = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
       const propertyName = TextTransformation.setIdToPropertyName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
 
       if (value.isMultiple) {
         code += `
-        this.${propertyName} = this.createHasManyThroughRepositoryFactoryFor('${propertyName}', ${modelName === className ? 'Getter.fromValue(this)' : `${propertyName}RepositoryGetter`}, ${modelNameClass}Has${className}RepositoryGetter,);
+        this.${propertyName} = this.createHasManyThroughRepositoryFactoryFor('${propertyName}', ${modelName.toLowerCase() === className.toLowerCase() ? 'Getter.fromValue(this)' : `${propertyName}RepositoryGetter`}, ${modelName}Has${className}RepositoryGetter,);
         this.registerInclusionResolver('${propertyName}', this.${propertyName}.inclusionResolver);
         `;
       } else {

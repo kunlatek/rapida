@@ -23,11 +23,11 @@ export class TextTransformation {
     return kebabCase;
   }
 
-  static plurarize(text: string): string {    
+  static plurarize(text: string): string {
     return pluralize(text);
   }
 
-  static singularize(text: string): string {    
+  static singularize(text: string): string {
     return pluralize.singular(text);
   }
 
@@ -95,7 +95,7 @@ export class TextTransformation {
   static setIdToPropertyName(id: string): string {
     let propertyName = '';
     const array = id.split('-');
-    propertyName += array[0];
+    propertyName += array[0].toLowerCase();
     for (let i = 0; i < array.length; i++) {
       const element = array[i];
 
@@ -105,7 +105,7 @@ export class TextTransformation {
 
     return propertyName;
   }
-  
+
   static setIdToClassName(id: string): string {
     let className = '';
     const array = id.split('-');

@@ -65,7 +65,7 @@ const setConstructorParamsByElement = (
       code += `@repository.getter('${className}Repository') ${propertyName}RepositoryGetter: Getter<${className}Repository>,`;
 
       if (value.isMultiple) {
-        code += `@repository.getter('${modelName}Has${className}Repository') ${modelNameClass}Has${className}RepositoryGetter: Getter<${modelName}Has${className}Repository>,`;
+        code += `@repository.getter('${modelNameClass}Has${className}Repository') ${modelName}Has${className}RepositoryGetter: Getter<${modelNameClass}Has${className}Repository>,`;
       }
     }
   } else if (type === "tabs") {
