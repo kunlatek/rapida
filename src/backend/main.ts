@@ -12,10 +12,6 @@ const setBackend = (
     repository: "",
   };
 
-  if (!array[index].backendFramework) {
-    return response;
-  }
-
   try {
     switch (array[index].backendFramework) {
       case BackendFrameworkEnum.Loopback:
@@ -34,7 +30,7 @@ const setBackend = (
   if (index < array.length) {
     setBackend(array, index);
   }
-  
+
   return response;
 };
 
