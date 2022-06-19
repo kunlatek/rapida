@@ -17,7 +17,7 @@ const setControllerImports = (object: MainInterface): string => {
 
   let code = `
   import {authenticate} from '@loopback/authentication';
-  import {inject} from '@loopback/core';
+  import {inject, service} from '@loopback/core';
   import {repository} from '@loopback/repository';
   import {del, get, param, patch, post, put, Request, requestBody, response, Response, RestBindings} from '@loopback/rest';
   import {SecurityBindings, securityId, UserProfile} from '@loopback/security';
@@ -33,6 +33,7 @@ const setControllerImports = (object: MainInterface): string => {
     modelName
   )}.repository';
   import {${_relatedRepositoriesImports}} from '../repositories';
+  import {ChartService} from '../services';
   import {serverMessages} from '../utils/server-messages';
   `;
 

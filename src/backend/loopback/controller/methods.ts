@@ -42,14 +42,14 @@ const setControllerMethods = (object: MainInterface): string => {
   @response(200, {
       description: '${TextTransformation.pascalfy(modelName)} model instance',
       properties: HttpDocumentation.createDocResponseSchemaForFindOneResult(${TextTransformation.pascalfy(
-        modelName
-      )})
+    modelName
+  )})
   })
   async create(
       @requestBody({
           content: HttpDocumentation.createDocRequestSchema(${TextTransformation.pascalfy(
-            modelName
-          )})
+    modelName
+  )})
       }) data: ${TextTransformation.pascalfy(modelName)},
       @param.query.string('locale') locale?: LocaleEnum,
   ): Promise<IHttpResponse> {
@@ -91,11 +91,11 @@ const setControllerMethods = (object: MainInterface): string => {
   )}')
   @response(200, {
       description: 'Array of ${TextTransformation.pascalfy(
-        modelName
-      )} model instances',
+    modelName
+  )} model instances',
       properties: HttpDocumentation.createDocResponseSchemaForFindManyResults(${TextTransformation.pascalfy(
-        modelName
-      )})
+    modelName
+  )})
   })
   async find(
       @param.query.number('limit') limit?: number,
@@ -139,8 +139,8 @@ const setControllerMethods = (object: MainInterface): string => {
   @response(200, {
       description: '${TextTransformation.pascalfy(modelName)} model instance',
       properties: HttpDocumentation.createDocResponseSchemaForFindOneResult(${TextTransformation.pascalfy(
-        modelName
-      )})
+    modelName
+  )})
   })
   async findById(
       @param.path.string('id') id: string,
@@ -186,8 +186,8 @@ const setControllerMethods = (object: MainInterface): string => {
       @param.path.string('id') id: string,
       @requestBody({
           content: HttpDocumentation.createDocRequestSchema(${TextTransformation.pascalfy(
-            modelName
-          )})
+    modelName
+  )})
       }) data: ${TextTransformation.pascalfy(modelName)},
       @param.query.string('locale') locale?: LocaleEnum,
   ): Promise<IHttpResponse> {
@@ -232,8 +232,8 @@ const setControllerMethods = (object: MainInterface): string => {
       @param.path.string('id') id: string,
       @requestBody({
           content: HttpDocumentation.createDocRequestSchema(${TextTransformation.pascalfy(
-            modelName
-          )})
+    modelName
+  )})
       }) data: ${TextTransformation.pascalfy(modelName)},
       @param.query.string('locale') locale?: LocaleEnum,
   ): Promise<IHttpResponse> {
@@ -299,6 +299,58 @@ const setControllerMethods = (object: MainInterface): string => {
           })
   
       }
+  }
+
+  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(
+    modelName
+  )}', action: 'read'}})
+  @get('/${TextTransformation.plurarize(
+    TextTransformation.kebabfy(modelName)
+  )}/chart')
+  @response(200, {
+    description: 'Chart label and data',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          title: 'Label and data',
+          properties: {
+            datasets: {
+              properties: {
+                label: {type: 'array', items: {type: 'string'}},
+                data: {type: 'array', items: {type: 'number'}},
+              }
+            }
+          },
+        },
+      },
+    },
+  })
+  async chart(
+    @param.query.string('locale') locale?: LocaleEnum,
+  ): Promise<IHttpResponse> {
+    try {
+      const result = await this.repository.find({
+        where: {_deletedAt: {eq: null}},
+        include: [${_propertiesRelatedFind}],
+      });
+
+      const data = await this.chartService.getChartDatasets(result, this.httpRequest.url);
+
+      return HttpResponseToClient.okHttpResponse({
+        data,
+        locale,
+        request: this.httpRequest,
+        response: this.httpResponse,
+      });
+    } catch (err: any) {
+      return HttpResponseToClient.badRequestErrorHttpResponse({
+        logMessage: err.message,
+        locale,
+        request: this.httpRequest,
+        response: this.httpResponse,
+      });
+    }
   }
   `;
 
@@ -418,9 +470,8 @@ const createCreateAllMethods = (
           ((dataToWorkInRelation.${relatedPropertyName} || []) as any[]).map(${secondPropertyCamelCase} => {
               return {
                   ${mainPropertyCamelCase}Id: idToWorkInRelation, 
-                  ${secondPropertyCamelCase}${
-    mainPropertyCamelCase === secondPropertyCamelCase ? "Related" : ""
-  }Id: ${secondPropertyCamelCase},
+                  ${secondPropertyCamelCase}${mainPropertyCamelCase === secondPropertyCamelCase ? "Related" : ""
+    }Id: ${secondPropertyCamelCase},
               };
           })
       ); 
