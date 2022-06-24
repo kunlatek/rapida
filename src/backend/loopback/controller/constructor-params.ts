@@ -20,6 +20,8 @@ const setControllerConstructorParams = (object: MainInterface): string => {
   )}Repository) public repository: ${TextTransformation.pascalfy(
     modelName
   )}Repository,
+
+  @service(ChartService) private chartService: ChartService,
                                         
   @inject(RestBindings.Http.REQUEST) private httpRequest: Request,
   @inject(RestBindings.Http.RESPONSE) private httpResponse: Response,
@@ -68,11 +70,11 @@ const setRelatedPropertiesByElement = (
     }
   } else if (type === "tabs") {
     element.tabs?.forEach((tab) => {
-      tab.elements.forEach(tabElement => {        
+      tab.elements.forEach(tabElement => {
         code += setRelatedPropertiesByElement(
           object, tabElement
         );
-      });  
+      });
     });
   }
 

@@ -107,7 +107,7 @@ const setRepositoryImportsByElement = (
         )
       );
 
-      code += modelName !== className ? `${className}Repository,` : "";
+      code += modelName.toLowerCase() !== className.toLowerCase() ? `${className}Repository,` : "";
     }
   } else if (type === "tabs") {
     element.tabs?.forEach((tab) => {

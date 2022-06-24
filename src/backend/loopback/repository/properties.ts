@@ -19,7 +19,7 @@ const setRepositoryProperties = (object: MainInterface): string => {
     console.info("Only forms set here");
     return ``;
   }
-  
+
   let code = ``;
 
   object.form.elements.forEach(element => {
@@ -47,12 +47,12 @@ const setRepositoryPropertiesByElement = (
       if (value.isMultiple) {
         code += `
         public readonly ${propertyName}: HasManyThroughRepositoryFactory<${className}, typeof ${className}.prototype._id,
-          ${modelName}Has${className},
-          typeof ${modelName}.prototype._id
+          ${TextTransformation.pascalfy(modelName)}Has${className},
+          typeof ${TextTransformation.pascalfy(modelName)}.prototype._id
         >;
         `;
       } else {
-        code += `public readonly ${propertyName}: BelongsToAccessor<${className}, typeof ${modelName}.prototype._id>;`;
+        code += `public readonly ${propertyName}: BelongsToAccessor<${className}, typeof ${TextTransformation.pascalfy(modelName)}.prototype._id>;`;
       }
     }
   } else if (type === 'tabs') {

@@ -50,7 +50,7 @@ const setMethodsByElement = (
       );
 
       if (value.isMultiple) {
-        code += createRepositoryRelatedModels(modelName, className);
+        code += createRepositoryRelatedModels(TextTransformation.pascalfy(modelName), className);
       }
     }
   } else if (type === "tabs") {
@@ -83,9 +83,8 @@ const createRepositoryRelatedModels = (
           ${mainPropertyCamelCase}Id?: string;
           
           @property()
-          ${secondPropertyCamelCase}${
-    mainPropertyCamelCase === secondPropertyCamelCase ? "Related" : ""
-  }Id?: string;
+          ${secondPropertyCamelCase}${mainPropertyCamelCase === secondPropertyCamelCase ? "Related" : ""
+    }Id?: string;
           
           constructor(data?: Partial<${mainProperty}Has${secondProperty}>) {
               super(data);

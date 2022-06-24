@@ -17,7 +17,7 @@ const createLoopbackProject = (
     service: "",
   };
 
-  if (index === 0) {
+  if (!doesProjectFolderExists(object)) {
     setBaseProject(object);
   }
 
@@ -47,15 +47,9 @@ const setBaseProject = (object: MainInterface) => {
     .join("/");
   const nodeModulePath = `${projectPath}/node_modules`;
 
-  try {
-    fs.readdirSync(projectPath);
-    console.info(`Project folder ${projectPath} already exists.`);
-  } catch (error) {
-    console.info(`Project folder ${projectPath} doesn't exist.`);
-    chp.execSync(`git clone ${clonePath} ${projectFolder}`, {
-      cwd: projectFolderParent,
-    });
-  }
+  chp.execSync(`git clone ${clonePath} ${projectFolder}`, {
+    cwd: projectFolderParent,
+  });
 
   fs.writeFileSync(
     `${projectPath}/.env`,
@@ -73,5 +67,17 @@ const setBaseProject = (object: MainInterface) => {
     chp.execSync(`npm install`, { cwd: projectPath });
   }
 };
+
+const doesProjectFolderExists = (object: MainInterface) => {
+  const projectPath = `${object.projectPath}-api`;
+  try {
+    fs.readdirSync(projectPath);
+    console.info(`Project folder ${projectPath} already exists.`);
+    return true;
+  } catch (error) {
+    console.info(`Project folder ${projectPath} doesn't exist.`);
+    return false;
+  }
+}
 
 export { createLoopbackProject };

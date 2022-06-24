@@ -38,6 +38,7 @@ const setModelImports = (object: MainInterface): string => {
 
   object.form.elements.forEach((element) => {
     _importsDefault += setImportsDefaultByElement(object, element);
+    _importsRelatedRepositories += setImportsRelatedRepositoriesByElement(object, element);
   });
 
   let code = `
@@ -94,13 +95,6 @@ const setImportsRelatedRepositoriesByElement = (
   let code = ``;
 
   if (validTypes.includes(type)) {
-    const propertyType = value.isMultiple
-      ? "array"
-      : stringTypes.includes(value.type)
-      ? "String"
-      : numberTypes.includes(value.type)
-      ? "number"
-      : "any";
 
     if (value.optionsApi) {
       const className = TextTransformation.setIdToClassName(
