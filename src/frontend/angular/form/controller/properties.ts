@@ -1,13 +1,18 @@
-import { FormInputTypeEnum } from "../../../../enums/form";
+import { ConditionEnum, FormInputTypeEnum } from "../../../../enums/form";
 import { FormElementInterface } from "../../../../interfaces/form";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
+
+
+let conditionProperties: Array<string>;
 
 const setFormControllerProperties = (object: MainInterface): string => {
   if (!object.form) {
     console.info("Only forms set here");
     return ``;
   }
+
+  conditionProperties = [];
 
   let code = `
   ${object.form.id}Id: string = '';
@@ -17,8 +22,9 @@ const setFormControllerProperties = (object: MainInterface): string => {
   isLoading: boolean = false;
   `;
 
-  object.form?.elements.map((element) => {
+  object.form?.elements.forEach((element) => {
     code += setByFormElement(object, element);
+    code += setConditions(object, element);
   });
 
   return code;
@@ -79,6 +85,65 @@ const setByFormElement = (
       }
   }
 
+  return code;
+};
+
+const setConditions = (
+  object: MainInterface,
+  element: FormElementInterface,
+  isArray: boolean = false
+): string => {
+  const formElements = [
+    "input",
+    "autocomplete",
+    "button",
+    "checkbox",
+    "radio",
+    "select",
+    "slide",
+    "array",
+  ];
+  const type = Object.keys(element)[0];
+  const value = Object.values(element)[0];
+  let code = ``;
+
+  if (formElements.includes(type)) {
+    if (value.conditions) {
+      // Check to not repeat property
+      if (!conditionProperties.includes(value.conditions.id)) {
+        if (value.conditions.type === ConditionEnum.Form) {
+          if (!isArray) {            
+            code += `${value.conditions.id}FormCondition: boolean = false;`;
+          }
+
+          if (isArray) {
+            code += `${value.conditions.id}FormCondition: [boolean] = [false];`;
+          }
+        }
+  
+        if (value.conditions.type === ConditionEnum.Code) {
+          code += `${value.conditions.id}CodeCondition: boolean = false;`;
+        }
+      }
+
+      conditionProperties.push(value.conditions.id);
+    }
+  }
+
+  if (element.tabs) {
+    element.tabs.forEach(tab => {
+      tab.elements.forEach(tabElement => {
+        code += setConditions(object, tabElement);
+      });
+    });
+  }
+
+  if (element.array) {
+    element.array.elements.forEach(arrayElement => {
+      code += setConditions(object, arrayElement, true);
+    });
+  }
+  
   return code;
 };
 

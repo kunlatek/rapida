@@ -37,7 +37,7 @@ export const PROJECT_FORM: MainInterface = {
           },
           {
             title: "Tratamento do frontend",
-            id: "tabEnvironment",
+            id: "tabFrontend",
             elements: [
               {
                 select: {
@@ -63,29 +63,29 @@ export const PROJECT_FORM: MainInterface = {
                   isRequired: true,
                 },
               },
-              {
-                input: {
-                  label: "Integração em desenvolvimento",
-                  name: "envFrontDev",
-                  value: "http://localhost:3000",
-                  type: FormInputTypeEnum.Text,
-                  placeholder: "URL base do ambiente dev",
-                  isRequired: true
-                }
-              },
-              {
-                input: {
-                  label: "Integração em produção",
-                  name: "envFrontProd",
-                  type: FormInputTypeEnum.Text,
-                  placeholder: "URL base do ambiente prod",
-                }
-              }
+              // {
+              //   input: {
+              //     label: "Integração em desenvolvimento",
+              //     name: "envFrontDev",
+              //     value: "http://localhost:3000",
+              //     type: FormInputTypeEnum.Text,
+              //     placeholder: "URL base do ambiente dev",
+              //     isRequired: true
+              //   }
+              // },
+              // {
+              //   input: {
+              //     label: "Integração em produção",
+              //     name: "envFrontProd",
+              //     type: FormInputTypeEnum.Text,
+              //     placeholder: "URL base do ambiente prod",
+              //   }
+              // }
             ]
           },
           {
             title: "Tratamento do backend",
-            id: "tabEnvironment",
+            id: "tabBackend",
             elements: [
               {
                 select: {
@@ -111,55 +111,55 @@ export const PROJECT_FORM: MainInterface = {
                   isRequired: true,
                 },
               },
-              {
-                input: {
-                  label: "Porta do servidor em desenvolvimento",
-                  name: "port",
-                  value: "3000",
-                  type: FormInputTypeEnum.Text,
-                  placeholder: "URL base do ambiente dev",
-                  isRequired: true
-                }
-              },
-              {
-                input: {
-                  label: "Raíz do servidor em desenvolvimento",
-                  name: "serverRootUri",
-                  value: "http://localhost",
-                  type: FormInputTypeEnum.Text,
-                  placeholder: "URL base do ambiente dev",
-                  isRequired: true
-                }
-              },
-              {
-                input: {
-                  label: "Permissão para acesso em dev",
-                  name: "clientRedirect",
-                  value: "http://localhost:4200",
-                  type: FormInputTypeEnum.Text,
-                  placeholder: "URL base do ambiente dev",
-                  isRequired: true
-                }
-              },
-              {
-                input: {
-                  label: "Projeto de BD em desenvolvimento",
-                  name: "db",
-                  type: FormInputTypeEnum.Text,
-                  placeholder: "Nome do projeto no banco",
-                  isRequired: true
-                }
-              },
-              {
-                input: {
-                  label: "Acesso ao BD em desenvolvimento",
-                  name: "dbAccessString",
-                  type: FormInputTypeEnum.Text,
-                  value: "mongodb+srv://kunlatek:Kunlatek751@cluster0.b0pfr.mongodb.net/?authSource=admin&replicaSet=atlas-zft6fn-shard-0&readPreference=primary&ssl=true",
-                  placeholder: "String para acesso ao banco",
-                  isRequired: true
-                }
-              },
+              // {
+              //   input: {
+              //     label: "Porta do servidor em desenvolvimento",
+              //     name: "port",
+              //     value: "3000",
+              //     type: FormInputTypeEnum.Text,
+              //     placeholder: "URL base do ambiente dev",
+              //     isRequired: true
+              //   }
+              // },
+              // {
+              //   input: {
+              //     label: "Raíz do servidor em desenvolvimento",
+              //     name: "serverRootUri",
+              //     value: "http://localhost",
+              //     type: FormInputTypeEnum.Text,
+              //     placeholder: "URL base do ambiente dev",
+              //     isRequired: true
+              //   }
+              // },
+              // {
+              //   input: {
+              //     label: "Permissão para acesso em dev",
+              //     name: "clientRedirect",
+              //     value: "http://localhost:4200",
+              //     type: FormInputTypeEnum.Text,
+              //     placeholder: "URL base do ambiente dev",
+              //     isRequired: true
+              //   }
+              // },
+              // {
+              //   input: {
+              //     label: "Projeto de BD em desenvolvimento",
+              //     name: "db",
+              //     type: FormInputTypeEnum.Text,
+              //     placeholder: "Nome do projeto no banco",
+              //     isRequired: true
+              //   }
+              // },
+              // {
+              //   input: {
+              //     label: "Acesso ao BD em desenvolvimento",
+              //     name: "dbAccessString",
+              //     type: FormInputTypeEnum.Text,
+              //     value: "mongodb+srv://kunlatek:Kunlatek751@cluster0.b0pfr.mongodb.net/?authSource=admin&replicaSet=atlas-zft6fn-shard-0&readPreference=primary&ssl=true",
+              //     placeholder: "String para acesso ao banco",
+              //     isRequired: true
+              //   }
+              // },
             ]
           }
         ]

@@ -18,7 +18,7 @@ export const COMPONENT_TABLE: MainInterface = {
           label: "Título"
         },
         row: {
-          field: "title"
+          field: "collectionTitle"
         }
       },
       {

@@ -7,12 +7,16 @@ import { setFormControllerProperties } from "./properties";
 import { setFormControllerConstructorParams } from "./constructor-params";
 import { setFormControllerConstructorArguments } from "./constructor-args";
 import { setFormControllerMethods } from "./methods";
+import { FormElementInterface } from "../../../../interfaces/form";
 
 /**
  * SET CODE
  * @param object
  * @returns
  */
+
+let _hasCondition = false;
+
 const setFormController = (object: MainInterface): string => {
   if (!object.form) {
     console.info("Only forms set here");
@@ -24,8 +28,13 @@ const setFormController = (object: MainInterface): string => {
   let _constructorParams = setFormControllerConstructorParams(object);
   let _constructorArguments = setFormControllerConstructorArguments(object);
   let _methods = setFormControllerMethods(object);
+  let code = ``;
 
-  let code = `
+  object.form.elements.forEach(element => {    
+    verifyFormElement(element);
+  });
+
+  code += `
   ${_imports}
 
   @Component({
@@ -37,7 +46,7 @@ const setFormController = (object: MainInterface): string => {
       object.form.id
     )}.component.scss"],
   })
-  export class ${TextTransformation.pascalfy(object.form.id)}Component {
+  export class ${TextTransformation.pascalfy(object.form.id)}Component ${_hasCondition ? `implements OnChanges` : ``}{
     ${_properties}
     
     constructor(
@@ -52,6 +61,26 @@ const setFormController = (object: MainInterface): string => {
   setFormArchitectureAndWriteToFile(object, code);
   return code;
 };
+
+const verifyFormElement = (element: FormElementInterface): void => {
+  const formElements = [
+    "input",
+    "autocomplete",
+    "button",
+    "checkbox",
+    "radio",
+    "select",
+    "slide",
+  ];
+  const type = Object.keys(element)[0];
+  const value = Object.values(element)[0];
+
+  if (formElements.includes(type)) {
+    if (value.conditions) {
+      _hasCondition = true;
+    }
+  }
+}
 
 /**
  * JOIN CODE AND ARCHITECTURE

@@ -13,7 +13,8 @@ const setFormControllerConstructorArguments = (
 
   let _formBuilderElements: string = ``;
   let _optionsCreation: string = ``;
-
+  let _patchArrayValues = setJsonToPatchValue(object, object.form.elements);
+  
   object.form.elements.forEach((element) => {
     _formBuilderElements += setFormBuilderByFormElement(object, element);
     _optionsCreation += setOptionsCreation(object, element);
@@ -28,6 +29,7 @@ const setFormControllerConstructorArguments = (
         if (this.${object.form.id}Id) {
           this.${object.form.id}ToEdit = await this._${object.form.id}Service.find(this.${object.form.id}Id);
           this.${object.form.id}Form.patchValue(this.${object.form.id}ToEdit.data);
+          ${_patchArrayValues}
         }
         this.checkOptionsCreation(
           [
@@ -181,9 +183,20 @@ const setFormBuilderByFormElement = (
     `;
   }
 
+  if (element.slide) {
+    code += `
+    ${element.slide.name}:[
+      false,
+      []
+    ],
+    `;
+  }
+
   if (element.array) {
     code += `
-    ${element.array.id}: this._formBuilder.array([]),
+    ${element.array.id}: this._formBuilder.array([
+      this.init${TextTransformation.pascalfy(element.array.id)}(),
+    ]),
     `;
   }
 
@@ -247,5 +260,33 @@ const setOptionsCreation = (
 
   return code;
 }
+
+const setJsonToPatchValue = (object: MainInterface, formElements: any, array: string | undefined = undefined): string => {
+  let code = ``;
+
+  formElements.forEach((element: any) => {
+    if (element.tabs) { 
+      element.tabs.forEach((tabElement: any) => {        
+        code += setJsonToPatchValue(object, tabElement.elements);
+      });
+    }
+
+    if (element.array) {
+      code += `
+      (${array ? `${array}Form` : `this.${object.form?.id}Form`}.get("${element.array.id}") as FormArray).clear();
+      ${array ? `_${array}` : `this.${object.form?.id}ToEdit.data`}.${element.array.id}.forEach((_${element.array.id}: any) => {
+        const ${element.array.id}Form = this.init${TextTransformation.pascalfy(element.array.id)}();
+        ${element.array.id}Form.patchValue(_${element.array.id});
+        (${array ? `${array}Form` : `this.${object.form?.id}Form`}.get("${element.array.id}") as FormArray).push(${element.array.id}Form);
+      `;
+        code += setJsonToPatchValue(object, element.array.elements, element.array.id);  
+      code += `
+      })
+      `;
+    }
+  });
+  
+  return code;
+};
 
 export { setFormControllerConstructorArguments, setFormBuilderByFormElement };

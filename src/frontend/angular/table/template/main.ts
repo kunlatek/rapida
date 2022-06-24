@@ -9,9 +9,6 @@ import {
 import { FormElementInterface } from "../../../../interfaces/form";
 import { RequestTypeEnum } from "../../../../enums/request";
 
-let _specificStructure: string = "";
-let _specificStructureOverMenu: string = "";
-
 /**
  * SET CODE
  * @param object
@@ -23,6 +20,9 @@ const setTableTemplate = (object: MainInterface): string => {
     return ``;
   }
 
+  let _specificStructure: string = "";
+  let _specificStructureOverMenu: string = "";
+
   const hasTableTitle = object.table.title
     ? `<mat-card-title>${object.table.title}</mat-card-title>`
     : "";
@@ -33,6 +33,7 @@ const setTableTemplate = (object: MainInterface): string => {
 
   object.table?.elements.forEach((element) => {
     _specificStructure += setSpecificStructureOverTableElement(object, element);
+    _specificStructureOverMenu += setSpecificStructureOverRowMenu(object, element);
   });
   
   let code = `
@@ -85,7 +86,7 @@ const setSpecificStructureOverTableElement = (
     return ``;
   }
 
-  const menuArray: Array<RowMenuElementInterface> = [];
+  
   let columnContent = "";
   let code = ``;
 
@@ -98,16 +99,6 @@ const setSpecificStructureOverTableElement = (
     }Menu"  [matMenuTriggerData]="{element: element}">
       <mat-icon>${element.row.icon}</mat-icon>
     </button>
-    `;
-
-    element.row.menu.forEach((menuElement) => {
-      menuArray.push(menuElement);
-    });
-
-    _specificStructureOverMenu = `
-    <mat-menu #${object?.table?.id}Menu="matMenu">
-      ${setSpecificStructureOverRowMenuItems(menuArray)}
-    </mat-menu>
     `;
   }
 
@@ -126,6 +117,28 @@ const setSpecificStructureOverTableElement = (
 
   return code;
 };
+
+const setSpecificStructureOverRowMenu = (
+  object: MainInterface,
+  element: TableElementInterface
+): string => {
+  const menuArray: Array<RowMenuElementInterface> = [];
+  let code = ``;
+
+  if (element.row.menu) {
+    element.row.menu.forEach((menuElement) => {
+      menuArray.push(menuElement);
+    });
+
+    code += `
+    <mat-menu #${object?.table?.id}Menu="matMenu">
+      ${setSpecificStructureOverRowMenuItems(menuArray)}
+    </mat-menu>
+    `;
+  }
+  
+  return code;
+}
 
 const setSpecificStructureOverRowMenuItems = (
   rowMenuElements: Array<RowMenuElementInterface>

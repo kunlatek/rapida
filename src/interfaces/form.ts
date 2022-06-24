@@ -1,4 +1,5 @@
-import { FormAttributeEnum, FormButtonTypeEnum, FormEncTypeEnum, FormInputTypeEnum, FormMethodEnum, FormTargetEnum, ServiceFunctionsEnum } from "../enums/form";
+import { ConditionEnum, FormAttributeEnum, FormButtonTypeEnum, FormEncTypeEnum, FormInputTypeEnum, FormMethodEnum, FormTargetEnum, ServiceFunctionsEnum } from "../enums/form";
+import { FilterComparisonOperatorEnum, FilterLogicalOperatorEnum } from "../enums/request";
 import { DialogInterface } from "./dialog";
 
 export interface FormInterface {
@@ -19,7 +20,7 @@ export interface ServiceInterface {
   hasAuthorization: boolean;
 }
 export interface FormElementInterface {
-  array?: FormInterface;
+  array?: ArrayInterface;
   autocomplete?: AutocompleteInterface;
   button?: ButtonInterface;
   checkbox?: CheckboxInterface;
@@ -33,9 +34,17 @@ export interface FormElementInterface {
   option?: OptionInterface;
   output?: OutputInterface;
   select?: SelectInterface;
-  slide?: InputInterface;
+  slide?: SlideInterface;
   tabs?: Array<FormInterface>;
   textarea?: TextareaInterface;
+}
+
+export interface ArrayInterface {
+  elements: Array<FormElementInterface>;
+  id: string;
+  title: string;
+  conditions?: ConditionInterface;
+  todo?: string;
 }
 
 export interface ButtonInterface {
@@ -71,7 +80,7 @@ export interface DatalistInterface {
     label: string;
     name: string;
     placeholder?: string;
-    condition?: string;
+    conditions?: ConditionInterface;
     mask?: string; // Over ngx-mask patterns 
     isAutoFocus?: boolean; // Specifies that an <input> element should automatically get focus when the page loads
     isChecked?: boolean; // Specifies that an <input> element should be pre-selected when the page loads (for type="checkbox" or type="radio")
@@ -102,6 +111,13 @@ export interface DatalistInterface {
     value?: string;
     width?: number;
     todo?: string;
+  }
+
+  export interface SlideInterface {
+    label: string;
+    name: string;
+    isTriggerToCondition?: boolean;
+    conditions?: ConditionInterface;
   }
   
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -150,7 +166,8 @@ export interface DatalistInterface {
     type: FormInputTypeEnum;
     name: string;
     label: string;
-    condition?: string;
+    isTriggerToCondition?: boolean;
+    conditions?: ConditionInterface;
     optgroups?: Array<OptgroupInterface>;
     optionsObject?: Array<OptionInterface>;
     optionsApi?: OptionApiInterface;
@@ -168,7 +185,7 @@ export interface DatalistInterface {
     name: string;
     label: string;
     placeholder?: string;
-    condition?: string;
+    conditions?: ConditionInterface;
     optgroups?: Array<OptgroupInterface>;
     optionsApi: AutocompleteApiInterface;
     size?: number;
@@ -183,7 +200,7 @@ export interface DatalistInterface {
   export interface CheckboxInterface {
     name: string;
     label: string;
-    condition?: string;
+    conditions?: ConditionInterface;
     optgroups?: Array<OptgroupInterface>;
     optionsObject?: Array<OptionInterface>;
     optionsApi?: OptionApiInterface;
@@ -200,7 +217,7 @@ export interface DatalistInterface {
   export interface RadioInterface {
     name: string;
     label: string;
-    condition?: string;
+    conditions?: ConditionInterface;
     optgroups?: Array<OptgroupInterface>;
     optionsObject?: Array<OptionInterface>;
     optionsApi?: OptionApiInterface;
@@ -214,3 +231,17 @@ export interface DatalistInterface {
   
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   export interface TextareaInterface {}
+
+  export interface ConditionInterface {
+    id: string;
+    type: ConditionEnum;
+    elements: Array<ConditionElementInterface>;
+  }
+
+  export interface ConditionElementInterface {
+    key: string;
+    value: any;
+    array?: string;
+    comparisonOperator?: FilterComparisonOperatorEnum;
+    logicalOperator?: FilterLogicalOperatorEnum;
+  }

@@ -4,21 +4,21 @@ export enum FilterTypeEnum {
 }
 
 export enum FilterComparisonOperatorEnum {
-    Equal = 'eq',
-    Greater = 'gt',
-    GreaterOrEqual = 'gte',
+    Equal = '===',
+    Greater = '>',
+    GreaterOrEqual = '>=',
     InArray = 'in',
-    Less = 'lt',
-    LessOrEqual = 'lte',
-    NotEqual = 'ne',
+    Less = '<',
+    LessOrEqual = '<=',
+    NotEqual = '!==',
     NotInArray = 'nin',
 }
 
 export enum FilterLogicalOperatorEnum {
-    And = 'and',
+    And = '&&',
     Not = 'not',
     Nor = 'nor',
-    Or = 'or',
+    Or = '||',
 }
 
 export enum RequestTypeEnum {

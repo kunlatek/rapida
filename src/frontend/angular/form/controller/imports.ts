@@ -6,6 +6,7 @@ let _hasArray: boolean = false;
 let _hasValidator: boolean = false;
 let _hasAutocompleteMultiple: boolean = false;
 let _hasAutocomplete: boolean = false;
+let _hasCondition: boolean = false;
 
 const setFormControllerImports = (object: MainInterface): string => {
   if (!object.form) {
@@ -17,10 +18,10 @@ const setFormControllerImports = (object: MainInterface): string => {
     verifyFormElement(element);
   });
 
-  const code = `
-  import { Component, ${
-    _hasAutocompleteMultiple ? `ElementRef, ViewChild,` : ``
-  } } from "@angular/core";
+  let code = `
+  import { Component, ${_hasAutocomplete ? `ElementRef, ViewChild,` : ``} ${
+    _hasCondition ? `OnChanges,` : ``
+  }} from "@angular/core";
   import { FormBuilder, FormGroupDirective, FormGroup, ${
     _hasArray ? "FormArray," : ""
   } ${_hasValidator ? "Validators," : ""} } from "@angular/forms";
@@ -28,10 +29,10 @@ const setFormControllerImports = (object: MainInterface): string => {
   import { MatSnackBar } from "@angular/material/snack-bar";
   ${
     _hasAutocomplete
-    ? `import { COMMA, ENTER } from "@angular/cdk/keycodes";
+      ? `import { COMMA, ENTER } from "@angular/cdk/keycodes";
     import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
     import { MyPerformance } from "src/app/utils/performance";`
-    : ``
+      : ``
   }
   ${
     _hasAutocompleteMultiple
@@ -47,51 +48,22 @@ const setFormControllerImports = (object: MainInterface): string => {
   return code;
 };
 
-const verifyFormElement = (
-  element: FormElementInterface
-): string => {
-  let code = ``;
-
-  if (element.input) {
-    if (element.input.isRequired) {
-      _hasValidator = true;
-    }
-    if (element.input.validators) {
-      if (element.input.validators.length > 0) {
-        _hasValidator = true;
-      }
-    }
-  }
-
-  if (element.select) {
-    if (element.select.isRequired) {
-      _hasValidator = true;
-    }
-    if (element.select.validators) {
-      if (element.select.validators.length > 0) {
-        _hasValidator = true;
-      }
-    }
-  }
-
-  if (element.autocomplete) {
-    _hasAutocomplete = true;
-    if (element.autocomplete.isRequired) {
-      _hasValidator = true;
-    }
-    if (element.autocomplete.validators) {
-      if (element.autocomplete.validators.length > 0) {
-        _hasValidator = true;
-      }
-    }
-    if (element.autocomplete.isMultiple) {
-      _hasAutocompleteMultiple = true;
-    }
-  }
-
+const verifyFormElement = (element: FormElementInterface): void => {
+  const formElements = [
+    "input",
+    "autocomplete",
+    "button",
+    "checkbox",
+    "radio",
+    "select",
+    "slide",
+  ];
+  const type = Object.keys(element)[0];
+  const value = Object.values(element)[0];
+  
   if (element.tabs) {
-    element.tabs.forEach(tab => {
-      tab.elements.forEach(tabElement => {
+    element.tabs.forEach((tab) => {
+      tab.elements.forEach((tabElement) => {
         verifyFormElement(tabElement);
       });
     });
@@ -99,9 +71,32 @@ const verifyFormElement = (
 
   if (element.array) {
     _hasArray = true;
+    element.array.elements.forEach((arrayElement) => {
+      verifyFormElement(arrayElement);
+    });
   }
 
-  return code;
+  if (element.autocomplete) {
+    _hasAutocomplete = true;
+
+    if (value.isMultiple) {
+      _hasAutocompleteMultiple = true;
+    }
+  }
+
+  if (formElements.includes(type)) {
+    if (value.conditions) {
+      _hasCondition = true;
+    }
+    if (value.isRequired) {
+      _hasValidator = true;
+    }
+    if (value.validators) {
+      if (value.validators.length > 0) {
+        _hasValidator = true;
+      }
+    }
+  }
 };
 
 export { setFormControllerImports };

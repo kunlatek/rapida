@@ -1,13 +1,13 @@
-import { FormInputTypeEnum } from "../../../src/enums/form";
+import { ConditionEnum, FormButtonTypeEnum, FormInputTypeEnum, ServiceFunctionsEnum } from "../../../src/enums/form";
 import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/main";
 import { MainInterface } from "../../../src/interfaces/main";
 
-export const MODULE_FORM: MainInterface = {
+export const COMPONENT_FORM: MainInterface = {
   backendFramework: BackendFrameworkEnum.Loopback,
   frontendFramework: FrontendFrameworkEnum.Angular,
   form: {
     title: "Componente",
-    id: "component",
+    id: "componentForm",
     elements: [
       {
         tabs: [
@@ -17,19 +17,19 @@ export const MODULE_FORM: MainInterface = {
             elements: [
               {
                 input: {
-                  label: "Nome",
-                  name: "id",
+                  label: "Título",
+                  name: "collectionTitle",
                   type: FormInputTypeEnum.Text,
-                  placeholder: "Nome da coleção. Ex.: animation",
+                  placeholder: "Título identificador. Ex.: Animação",
                   isRequired: true,
                 }
               },
               {
                 input: {
-                  label: "Título",
-                  name: "title",
+                  label: "Propriedade",
+                  name: "collectionId",
                   type: FormInputTypeEnum.Text,
-                  placeholder: "Título identificador. Ex.: Animação",
+                  placeholder: "Nome da coleção. Ex.: animation",
                   isRequired: true,
                 }
               },
@@ -41,13 +41,13 @@ export const MODULE_FORM: MainInterface = {
             elements: [
               {
                 array: {
-                  title: "Formulário",
+                  title: "Elemento de formulário",
                   id: "formArray",
                   elements: [
                     {
                       select: {
-                        label: "Elemento",
-                        name: "element",
+                        label: "Element",
+                        name: "formElement",
                         type: FormInputTypeEnum.Text,
                         optionsObject: [
                           {
@@ -87,39 +87,40 @@ export const MODULE_FORM: MainInterface = {
                             value: "textarea"
                           },
                         ],
+                        isTriggerToCondition: true,
                         isRequired: true,
                       }
                     },
                     {
                       input: {
-                        label: "Etiqueta do elemento",
-                        name: "label",
+                        label: "Label",
+                        name: "formLabel",
                         type: FormInputTypeEnum.Text,
-                        placeholder: "Label do elemento. Ex.: Nome",
+                        placeholder: "Element label",
                         isRequired: true
                       }
                     },
                     {
                       input: {
-                        label: "Detalhamento",
-                        name: "placeholder",
+                        label: "Placeholder",
+                        name: "formPlaceholder",
                         type: FormInputTypeEnum.Text,
-                        placeholder: "Detalhamento da etiqueta. Ex.: Nome na etiqueta",
+                        placeholder: "Element placeholder",
                       }
                     },
                     {
                       input: {
-                        label: "Propriedade",
-                        name: "name",
+                        label: "Name",
+                        name: "formName",
                         type: FormInputTypeEnum.Text,
-                        placeholder: "Nome do campo para BD. Ex.: name",
+                        placeholder: "Name to be used as property",
                         isRequired: true
                       }
                     },
                     {
                       select: {
-                        label: "Tipo de dado",
-                        name: "type",
+                        label: "Data type",
+                        name: "formType",
                         type: FormInputTypeEnum.Text,
                         optionsObject: [
                           {
@@ -148,8 +149,8 @@ export const MODULE_FORM: MainInterface = {
                     },
                     {
                       select: {
-                        label: "Entrada de opções",
-                        name: "optionsInput",
+                        label: "Options to select",
+                        name: "formSelectOptions",
                         type: FormInputTypeEnum.Text,
                         optionsObject: [
                           {
@@ -161,111 +162,165 @@ export const MODULE_FORM: MainInterface = {
                             value: "optionsAPI"
                           },
                         ],
-                        condition: `componentFormForm.get("element").value === "select"`,
+                        isTriggerToCondition: true,
+                        conditions: {
+                          id: "formElementSelect",
+                          type: ConditionEnum.Form,
+                          elements: [
+                            {
+                              key: "formElement",
+                              value: "select",
+                            }
+                          ]
+                        },
                       }
                     },
                     {
                       input: {
                         label: "Endpoint",
-                        name: "endpoint",
+                        name: "formEndpoint",
                         type: FormInputTypeEnum.Text,
-                        placeholder: `Endpoint para opções da seleção {{componentFormForm.get("title").value}}`,
-                        condition: `componentFormForm.get("optionsInput").value === "optionsAPI"`
+                        placeholder: "Endpoint para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
+                        conditions: {
+                          id: "formSelectOptionsAPI",
+                          type: ConditionEnum.Form,
+                          elements: [
+                            {
+                              key: "formSelectOptions",
+                              value: "optionsAPI",
+                            }
+                          ]
+                        },
                       }
                     },
                     {
                       input: {
                         label: "Atributo de etiqueta da opção",
-                        name: "labelField",
+                        name: "formOptionLabelField",
                         type: FormInputTypeEnum.Text,
-                        placeholder: `Label para opções da seleção {{componentFormForm.get("title").value}}`,
-                        condition: `componentFormForm.get("optionsInput").value === "optionsAPI"`
+                        placeholder: "Label para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
+                        conditions: {
+                          id: "formSelectOptionsAPI",
+                          type: ConditionEnum.Form,
+                          elements: [
+                            {
+                              key: "formSelectOptions",
+                              value: "optionsAPI",
+                            }
+                          ]
+                        },
                       }
                     },
                     {
                       input: {
                         label: "Atributo de valor da opção",
-                        name: "valueField",
+                        name: "formOptionValueField",
                         type: FormInputTypeEnum.Text,
-                        placeholder: `Valor para opções da seleção {{componentFormForm.get("title").value}}`,
-                        condition: `componentFormForm.get("optionsInput").value === "optionsAPI"`
+                        placeholder: "Valor para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
+                        conditions: {
+                          id: "formSelectOptionsAPI",
+                          type: ConditionEnum.Form,
+                          elements: [
+                            {
+                              key: "formSelectOptions",
+                              value: "optionsAPI",
+                            }
+                          ]
+                        },
                       }
                     },
                     {
-                      input: {
-                        label: "Matriz para etiqueta de opção",
-                        name: "label",
-                        type: FormInputTypeEnum.Text,
-                        placeholder: `Label para opções da seleção {{componentFormForm.get("title").value}}`,
-                        condition: `componentFormForm.get("optionsInput").value === "optionsObject"`
-                      }
-                    },
-                    {
-                      input: {
-                        label: "Matriz para valor de opção",
-                        name: "value",
-                        type: FormInputTypeEnum.Text,
-                        placeholder: `Valor para opções da seleção {{componentFormForm.get("title").value}}`,
-                        condition: `componentFormForm.get("optionsInput").value === "optionsObject"`
+                      array: {
+                        id: "selectOptionArray",
+                        title: "Option",
+                        elements: [
+                          {
+                            input: {
+                              label: "Label",
+                              name: "selectOptionLabel",
+                              type: FormInputTypeEnum.Text
+                            }
+                          },
+                          {
+                            input: {
+                              label: "Value",
+                              name: "selectOptionValue",
+                              type: FormInputTypeEnum.Text
+                            }
+                          },
+                        ],
+                        conditions: {
+                          id: "formSelectOptionsObject",
+                          type: ConditionEnum.Form,
+                          elements: [
+                            {
+                              key: "formSelectOptions",
+                              value: "optionsObject",
+                            }
+                          ]
+                        },
                       }
                     },
                     {
                       slide: {
                         label: "Seleção múltipla",
-                        name: "isMultiple",
-                        type: FormInputTypeEnum.Text,
-                        condition: `componentFormForm.get("optionsInput").value === "optionsAPI" || componentFormForm.get("optionsInput").value === "optionsObject"`,
+                        name: "formSelectIsMultiple",
+                        conditions: {
+                          id: "formElementSelect",
+                          type: ConditionEnum.Form,
+                          elements: [
+                            {
+                              key: "formElement",
+                              value: "select"
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      slide: {
+                        label: "Seleção múltipla",
+                        name: "formAutocompleteIsMultiple",
+                        conditions: {
+                          id: "formElementAutocomplete",
+                          type: ConditionEnum.Form,
+                          elements: [
+                            {
+                              key: "formElement",
+                              value: "autocomplete"
+                            }
+                          ]
+                        }
                       }
                     },
                     {
                       input: {
                         label: "Filtros",
-                        name: "paramsToFilter",
+                        name: "formParamsToFilter",
                         type: FormInputTypeEnum.Text,
-                        placeholder: `Matriz de campos para filtragem em \${componentFormForm.get("title").value}`,
-                        condition: `componentFormForm.get("element").value === "autocomplete"`
+                        placeholder: "Matriz de campos para filtragem em \${componentFormForm.get('formTitle')?.value}",
+                        conditions: {
+                          id: "formElementAutocomplete",
+                          type: ConditionEnum.Form,
+                          elements: [
+                            {
+                              key: "formElement",
+                              value: "autocomplete",
+                            }
+                          ]
+                        },
                       }
                     },
                     {
                       slide: {
                         label: "Obrigatório",
-                        name: "isRequired",
-                        type: FormInputTypeEnum.Text,
+                        name: "formIsRequired",
                       }
                     },
                     {
                       slide: {
                         label: "Desabilitado",
-                        name: "isDisabled",
-                        type: FormInputTypeEnum.Text,
-                      }
-                    },
-                    {
-                      autocomplete: {
-                        label: "Tab relacionada",
-                        name: "relatedTab",
-                        type: FormInputTypeEnum.Text,
-                        optionsApi: {
-                          endpoint: `components?{[type:"tabs"]}`,
-                          labelField: "title",
-                          valueField: "id",
-                          paramsToFilter: ["title", "id"]
-                        },
-                        condition: `componentFormForm.get("element").value === "select"`,
-                      }
-                    },
-                    {
-                      autocomplete: {
-                        label: "Array relacionada",
-                        name: "relatedArray",
-                        type: FormInputTypeEnum.Text,
-                        optionsApi: {
-                          endpoint: `components?{[type:"array"]}`,
-                          labelField: "title",
-                          valueField: "id",
-                          paramsToFilter: ["title", "id"]
-                        },
-                        condition: `componentFormForm.get("element").value === "select"`,
+                        name: "formIsDisabled",
                       }
                     },
                   ]
@@ -278,24 +333,6 @@ export const MODULE_FORM: MainInterface = {
             id: "tableTab",
             elements: [
               {
-                input: {
-                  label: "Nome",
-                  name: "id",
-                  type: FormInputTypeEnum.Text,
-                  placeholder: "Nome da coleção. Ex.: animation",
-                  isRequired: true,
-                }
-              },
-              {
-                input: {
-                  label: "Título",
-                  name: "title",
-                  type: FormInputTypeEnum.Text,
-                  placeholder: "Título identificador. Ex.: Animação",
-                  isRequired: true,
-                }
-              },
-              {
                 array: {
                   title: "Coluna e linha",
                   id: "columnAndRowArray",
@@ -303,7 +340,7 @@ export const MODULE_FORM: MainInterface = {
                     {
                       input: {
                         label: "Etiqueta de coluna",
-                        name: "columnLabel",
+                        name: "tableColumnLabel",
                         type: FormInputTypeEnum.Text,
                         placeholder: "Label de coluna",
                         isRequired: true,
@@ -312,17 +349,136 @@ export const MODULE_FORM: MainInterface = {
                     {
                       input: {
                         label: "Campo da linha",
-                        name: "rowField",
+                        name: "tableRowField",
                         type: FormInputTypeEnum.Text,
                         placeholder: "Campo de BD que preenche linha",
-                        condition: `componentFormForm.get("isMenu").value`,
+                      }
+                    },
+                    {
+                      select: {
+                        label: "Tipo de menu",
+                        name: "tableMenuType",
+                        type: FormInputTypeEnum.Text,
+                        optionsObject: [
+                          {
+                            label: "API",
+                            value: "API"
+                          },
+                          {
+                            label: "Object",
+                            value: "OBJECT"
+                          },
+                          {
+                            label: "Link",
+                            value: "LINK"
+                          },
+                          {
+                            label: "Modal",
+                            value: "DIALOG"
+                          },
+                        ],
+                      }
+                    },
+                    {
+                      input: {
+                        label: "Etiqueta do link",
+                        name: "tableMenuLinkLabel",
+                        type: FormInputTypeEnum.Text,
+                        placeholder: "Label do link do menu",
+                        conditions: {
+                          id: "tableMenuType",
+                          type: ConditionEnum.Form,
+                          elements: [
+                            {
+                              key: "tableMenuType",
+                              value: "LINK",
+                            }
+                          ]
+                        },
+                      }
+                    },
+                    {
+                      input: {
+                        label: "Rota do link",
+                        name: "tableMenuLinkUrl",
+                        type: FormInputTypeEnum.Text,
+                        placeholder: "Rota do link do menu",
+                        conditions: {
+                          id: "tableMenuType",
+                          type: ConditionEnum.Form,
+                          elements: [
+                            {
+                              key: "tableMenuType",
+                              value: "LINK",
+                            }
+                          ]
+                        },
+                      }
+                    },
+                    {
+                      input: {
+                        label: "Parâmetro do link",
+                        name: "tableMenuLinkParam",
+                        type: FormInputTypeEnum.Text,
+                        placeholder: "Parâmetro do link do menu. Exemplo: _id",
+                        conditions: {
+                          id: "tableMenuType",
+                          type: ConditionEnum.Form,
+                          elements: [
+                            {
+                              key: "tableMenuType",
+                              value: "LINK",
+                            }
+                          ]
+                        },
+                      }
+                    },
+                    {
+                      input: {
+                        label: "Etiqueta da chamada de diálogo",
+                        name: "tableMenuDialogLabel",
+                        type: FormInputTypeEnum.Text,
+                        placeholder: "Label do diálogo do menu",
+                        conditions: {
+                          id: "tableMenuType",
+                          type: ConditionEnum.Form,
+                          elements: [
+                            {
+                              key: "tableMenuType",
+                              value: "LINK",
+                            }
+                          ]
+                        },
+                      }
+                    },
+                    {
+                      select: {
+                        label: "Opções de modais",
+                        name: "tableMenuDialogParam",
+                        type: FormInputTypeEnum.Text,
+                        todo: "Default value",
+                        optionsObject: [
+                          {
+                            label: "Confirmar remoção", 
+                            value: "removeConfirmationDialog",
+                          }
+                        ],
+                        conditions: {
+                          id: "tableMenuType",
+                          type: ConditionEnum.Form,
+                          elements: [
+                            {
+                              key: "tableMenuType",
+                              value: "LINK",
+                            }
+                          ]
+                        },
                       }
                     },
                     {
                       slide: {
                         label: "Menu na linha",
-                        name: "isMenu",
-                        type: FormInputTypeEnum.Text
+                        name: "tableIsMenu",
                       }
                     },
                   ]
@@ -331,7 +487,25 @@ export const MODULE_FORM: MainInterface = {
             ]
           },
         ]
+      },
+      {
+        button: {
+          label: "Criar",
+          type: FormButtonTypeEnum.Submit,
+        }
       }
-    ]
+    ],
+    service: {
+      baseUrl: "http://localhost:3000",
+      endPoint: "components",
+      hasAuthorization: true,
+      methods: [
+        ServiceFunctionsEnum.Get,
+        ServiceFunctionsEnum.Delete,
+        ServiceFunctionsEnum.Save,
+        ServiceFunctionsEnum.Update,
+        ServiceFunctionsEnum.Find,
+      ],
+    }
   }
 }

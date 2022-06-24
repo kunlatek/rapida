@@ -70,9 +70,25 @@ const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api
 const projectPath = "/home/ryzzan/Projects/rapida-backoffice";
 
 
-import { PROJECT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/project-form";
-import { PROJECT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/project-table";
-import { PROJECT } from "../collections-frontend/kunlatek/rapida-backoffice/project";
+// import { ANIMATION_FORM } from "../collections-frontend/example/animation/animation-form";
+// import { ANIMATION_TABLE } from "../collections-frontend/example/animation/animation-table";
+// import { ANIMATION } from "../collections-frontend/example/animation/animation";
+
+// import { CHARACTER_FORM } from "../collections-frontend/example/animation/character-form";
+// import { CHARACTER_TABLE } from "../collections-frontend/example/animation/character-table";
+// import { CHARACTER } from "../collections-frontend/example/animation/character";
+
+// import { TEST_FORM } from "../collections-frontend/example/alexandre/test-form";
+// import { TEST_TABLE } from "../collections-frontend/example/alexandre/test-table";
+// import { TEST } from "../collections-frontend/example/alexandre/test";
+
+// import { PROJECT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/project-form";
+// import { PROJECT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/project-table";
+// import { PROJECT } from "../collections-frontend/kunlatek/rapida-backoffice/project";
+
+import { COMPONENT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/component-form";
+import { COMPONENT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/component-table";
+import { COMPONENT } from "../collections-frontend/kunlatek/rapida-backoffice/component";
 
 //////////////////////////////////////////////////////////
 
@@ -80,9 +96,26 @@ const array = [
   /**
    * ANIMATION
    */
-  PROJECT_FORM,
-  PROJECT_TABLE,
-  PROJECT
+
+  // ANIMATION_FORM,
+  // ANIMATION_TABLE,
+  // ANIMATION,
+
+  // CHARACTER_FORM,
+  // CHARACTER_TABLE,
+  // CHARACTER,
+
+  // PROJECT_FORM,
+  // PROJECT_TABLE,
+  // PROJECT,
+
+  COMPONENT_FORM,
+  COMPONENT_TABLE,
+  COMPONENT,
+
+  // TEST_FORM, 
+  // TEST_TABLE, 
+  // TEST,
 ];
 
 array.forEach((object) => {

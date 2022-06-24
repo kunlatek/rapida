@@ -76,8 +76,9 @@ const createAngularProject = (
       component: controllerCode,
       template: templateCode,
     };
-    console.info(response);
   }
+
+  // console.info(response);
 
   return response;
 };
