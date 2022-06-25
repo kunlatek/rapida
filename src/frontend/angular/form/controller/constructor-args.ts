@@ -281,7 +281,7 @@ const setJsonToPatchValue = (object: MainInterface, formElements: any, array: st
       `;
         code += setJsonToPatchValue(object, element.array.elements, element.array.id);  
       code += `
-      })
+      });
       `;
     }
   });
