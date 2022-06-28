@@ -1,5 +1,5 @@
-import { MainInterface } from "../../../../interfaces/main";
-import { TextTransformation } from "../../../../utils/text.transformation";
+import { MainInterface } from "../../../../../interfaces/main";
+import { TextTransformation } from "../../../../../utils/text.transformation";
 
 const setFormControllerConstructorParams = (object: MainInterface): string => {
   if (!object.form) {

@@ -1,6 +1,6 @@
-import { FormElementInterface } from "../../../../interfaces/form";
-import { MainInterface } from "../../../../interfaces/main";
-import { TextTransformation } from "../../../../utils/text.transformation";
+import { FormElementInterface } from "../../../../../interfaces/form";
+import { MainInterface } from "../../../../../interfaces/main";
+import { TextTransformation } from "../../../../../utils/text.transformation";
 
 let _hasArray: boolean = false;
 let _hasValidator: boolean = false;
