@@ -5,7 +5,7 @@ import { TextTransformation } from "../../../../utils/text.transformation";
 import { setFormControllerImports } from "./imports";
 import { setFormControllerProperties } from "./properties";
 import { setFormControllerConstructorParams } from "./constructor-params";
-import { setFormControllerConstructorArguments } from "./constructor-args";
+import { setFormControllerConstructorArguments } from "./constructor-args/main";
 import { setFormControllerMethods } from "./methods";
 import { FormElementInterface } from "../../../../interfaces/form";
 

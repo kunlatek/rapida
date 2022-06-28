@@ -2,7 +2,7 @@ import { ConditionEnum, FormInputTypeEnum } from "../../../../enums/form";
 import { FormElementInterface } from "../../../../interfaces/form";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
-import { setFormBuilderByFormElement } from "./constructor-args";
+import { setFormBuilderByElements } from "./constructor-args/form-builder";
 
 export interface ArrayFeaturesInterface {
   parentArray?: string;
@@ -27,6 +27,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
   let _methods = ``;
   let _valueTreatmentBeforeSubmit = ``;
   let _conditionsMethods = ``;
+  let _conditionsOverEdition = ``;
   let _conditionsMethodsInArray = ``;
   let _fileSubmit = ``;
 
@@ -37,6 +38,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
   object.form.elements.forEach((element) => {
     verifyFormElement(element);
     _conditionsMethods += setConditions(object, element);
+    _conditionsMethods += setConditionsOverEdition(object, element);
     _conditionsMethodsInArray += setConditionsInArray(object, element);
     _methods += setFormControllerMethodsOverFormElement(object, element);
     _fileSubmit += setFileSubmit(object, element);
@@ -53,9 +55,13 @@ const setFormControllerMethods = (object: MainInterface): string => {
           ? `if (typeof index === "number") { ${_conditionsMethodsInArray} }`
           : ""
         }
-      }`
+      };
+      
+      setConditionOverEdition = () => {
+
+      };`
       : ``
-  };
+  }
   ${_methods}
   ${object.form.id}Submit = async (
     ${object.form?.id}Directive: FormGroupDirective
@@ -434,9 +440,7 @@ const setFormControllerMethodsOverFormElement = (
       }
     });
     
-    element.array.elements.forEach((arrayElement) => {
-      formBuilderElements += setFormBuilderByFormElement(object, arrayElement);
-    });
+    formBuilderElements += setFormBuilderByElements(element.array.elements);
     
     code += `
     ${initArray}() { 
@@ -680,6 +684,98 @@ const setConditions = (
   return code;
 };
 
+const setConditionsOverEdition = (
+  object: MainInterface,
+  element: FormElementInterface,
+  array: string | undefined = undefined
+): string => {
+  const formElements = [
+    "input",
+    "autocomplete",
+    "button",
+    "checkbox",
+    "radio",
+    "select",
+    "slide",
+    "array",
+  ];
+  const type = Object.keys(element)[0];
+  const value = Object.values(element)[0];
+  let code = ``;
+  
+  if (formElements.includes(type)) {
+    if (value.conditions) {
+      if (value.conditions.type === ConditionEnum.Form) {
+        if (!_conditionMethods.includes(value.conditions.id)) {
+          if (!array) {
+            code += `this.${value.conditions.id}FormCondition = (`;
+            
+            value.conditions.elements.forEach((condition: any, index: number) => {              
+              if (index > 0) {
+                code += `${
+                  condition.logicalOperator
+                    ? ` ${condition.logicalOperator} `
+                    : ` && `
+                }`;
+              }
+              code += `(this.${object.form!.id}Form.get("${
+                condition.key
+              }")?.value ${
+                condition.comparisonOperator
+                  ? ` ${condition.comparisonOperator} `
+                  : ` === `
+              } "${condition.value}")`;
+            });
+            code += `);`;
+          }
+        }
+      }
+
+      if (value.conditions.type === ConditionEnum.Code) {
+        if (!_conditionMethods.includes(value.conditions.id)) {
+          code += `this.${value.conditions.id}CodeCondition = (`;
+
+          value.conditions.elements.forEach((condition: any, index: number) => {
+            if (!array) {              
+              if (index > 0) {
+                code += `${
+                  condition.logicalOperator
+                    ? ` ${condition.logicalOperator} `
+                    : ` && `
+                }`;
+              }
+              code += `(this.${condition.key} ${
+                condition.comparisonOperator
+                  ? ` ${condition.comparisonOperator} `
+                  : ` === `
+              } "${condition.value}");`;
+            }
+            code += `)`;
+            
+            _conditionMethods.push(value.conditions.id);
+          });
+        }
+      }
+    }
+  }
+
+  if (element.tabs) {
+    element.tabs.forEach((tab) => {
+      tab.elements.forEach((tabElement) => {
+        code += setConditions(object, tabElement);
+      });
+    });
+  }
+
+  if (element.array) {
+    element.array.elements.forEach((arrayElement) => {
+      code += setConditions(object, arrayElement, element.array?.id);
+    });
+  }
+
+  return code;
+};
+
 const setConditionsInArray = (
   object: MainInterface,
   element: FormElementInterface,
@@ -749,4 +845,7 @@ const setConditionsInArray = (
   return code;
 };
 
-export { setFormControllerMethods, setFormControllerMethodsOverFormElement };
+export { 
+  setFormControllerMethods, 
+  setFormControllerMethodsOverFormElement,
+};
