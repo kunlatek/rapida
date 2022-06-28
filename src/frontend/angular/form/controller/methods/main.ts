@@ -3,7 +3,6 @@ import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 import { setArray } from "./array";
 import { setCondition, setConditionsInArray } from "./condition";
-import { ArrayFeaturesInterface } from "./interfaces";
 import { setFileSubmit, setMethod, setValueBeforeSubmit } from "./method";
 
 const setFormControllerMethods = (object: MainInterface): string => {

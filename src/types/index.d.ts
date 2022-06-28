@@ -8,6 +8,7 @@ declare global {
   var _hasCondition: boolean;
   var _hasConditionInArray: boolean;
   var _conditionMethods: Array<string>;
+  var _conditionProperties: Array<string>;
 }
 
 export {};

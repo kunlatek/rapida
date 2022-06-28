@@ -3,7 +3,7 @@ import * as chp from "child_process";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
 import { setFormControllerImports } from "./imports/main";
-import { setFormControllerProperties } from "./properties";
+import { setFormControllerProperties } from "./properties/main";
 import { setFormControllerConstructorParams } from "./constructor-params/main";
 import { setFormControllerConstructorArguments } from "./constructor-args/main";
 import { setFormControllerMethods } from "./methods/main";
