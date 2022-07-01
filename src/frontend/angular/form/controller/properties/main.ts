@@ -8,8 +8,6 @@ const setFormControllerProperties = (object: MainInterface): string => {
     return ``;
   }
 
-  _conditionProperties = [];
-
   let code = `
   ${object.form.id}Id: string = '';
   ${object.form?.id}Form: FormGroup;

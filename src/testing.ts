@@ -87,7 +87,7 @@ const projectPath = "/home/ryzzan/Projects/rapida-backoffice";
 // import { PROJECT } from "../collections-frontend/kunlatek/rapida-backoffice/project";
 
 import { COMPONENT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/component-form";
-import { COMPONENT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/component-table";
+// import { COMPONENT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/component-table";
 import { COMPONENT } from "../collections-frontend/kunlatek/rapida-backoffice/component";
 
 //////////////////////////////////////////////////////////
@@ -110,7 +110,7 @@ const array = [
   // PROJECT,
 
   COMPONENT_FORM,
-  COMPONENT_TABLE,
+  // COMPONENT_TABLE,
   COMPONENT,
 
   // TEST_FORM, 

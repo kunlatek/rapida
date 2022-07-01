@@ -4,7 +4,7 @@ import { MainInterface } from "./interfaces/main";
 
 const createProject = (
   array: Array<MainInterface>
-) => {
+) => {  
   setFrontend(array);
   setBackend(array);
 };

@@ -2,8 +2,15 @@ import { FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 import { setArray } from "./array";
-import { setCondition, setConditionsInArray } from "./condition";
+import {
+  setCondition,
+  setConditionOverEdition,
+  setConditionsInArray,
+} from "./condition";
 import { setFileSubmit, setMethod, setValueBeforeSubmit } from "./method";
+
+let _hasCondition: boolean = false;
+let _hasConditionInArray: boolean = false;
 
 const setFormControllerMethods = (object: MainInterface): string => {
   if (!object.form) {
@@ -11,28 +18,28 @@ const setFormControllerMethods = (object: MainInterface): string => {
     return ``;
   }
 
-  let _methods = ``;
-  let _valueTreatmentBeforeSubmit = ``;
-  let _conditionsMethods = ``;
-  let _conditionsOverEdition = ``;
-  let _conditionsMethodsInArray = ``;
-  let _fileSubmit = ``;
-
-  _conditionMethods = [];
-  _arraysInAFlow = [];
-  
   setArray(object);
 
-  _conditionsMethods += setCondition(object);
-  _conditionsMethodsInArray += setConditionsInArray(object, object.form.elements);
-  _methods += setMethod(object);
-  _fileSubmit += setFileSubmit(object);
-  _valueTreatmentBeforeSubmit += setValueBeforeSubmit(object, object.form.elements);
-  
+  let _conditionsMethods = setCondition(object, object.form.elements);
+  let _conditionsMethodsOverEdition = setConditionOverEdition(
+    object,
+    object.form.elements
+  );
+  let _conditionsMethodsInArray = setConditionsInArray(
+    object,
+    object.form.elements
+  );
+  let _methods = setMethod(object);
+  let _fileSubmit = setFileSubmit(object);
+  let _valueTreatmentBeforeSubmit = setValueBeforeSubmit(
+    object,
+    object.form.elements
+  );
+
   object.form.elements.forEach((element) => {
     verifyFormElement(element);
   });
-
+  
   const code = `
   ${
     _hasCondition
@@ -40,13 +47,13 @@ const setFormControllerMethods = (object: MainInterface): string => {
         ${_conditionsMethods}
         ${
           _hasConditionInArray
-          ? `if (typeof index === "number") { ${_conditionsMethodsInArray} }`
-          : ""
+            ? `if (typeof index === "number") { ${_conditionsMethodsInArray} }`
+            : ""
         }
       };
       
       setConditionOverEdition = () => {
-
+        ${_conditionsMethodsOverEdition}
       };`
       : ``
   }
@@ -131,7 +138,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
 };
 
 const verifyFormElement = (
-  element: FormElementInterface, 
+  element: FormElementInterface,
   isArray: boolean = false
 ): void => {
   const formElements = [
@@ -171,6 +178,4 @@ const verifyFormElement = (
   }
 };
 
-export {
-  setFormControllerMethods
-}
+export { setFormControllerMethods };

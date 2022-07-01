@@ -10,6 +10,7 @@ import {
   FormInputTypeEnum,
 } from "../../../../enums/form";
 import { TextTransformation } from "../../../../utils/text.transformation";
+require('dotenv').config();
 
 export interface ArrayFeaturesInterface {
   parentArray?: string;
@@ -532,6 +533,8 @@ const setArraysInAFlow = (arrayId: string) => {
       }
     }
   });
+
+  process.env.ARRAYS_IN_A_FLOW = JSON.stringify(_arraysInAFlow);
 }
 
 const setConditions = (

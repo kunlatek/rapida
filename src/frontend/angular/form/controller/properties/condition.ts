@@ -2,6 +2,8 @@ import { ConditionEnum } from "../../../../../enums/form";
 import { FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 
+let _conditionProperties: Array<string> = [];
+
 const setCondition = (
   object: MainInterface
 ): string => {
