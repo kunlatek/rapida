@@ -24,9 +24,16 @@ const setRepositoryImports = (object: MainInterface): string => {
   let _modelImports: string = ``;
   let _repositoryImports: string = ``;
 
+  let additionalLoopbackCoreAndRepositoriesImportMethods = {
+    core: [] as string[],
+    repositories: [] as string[],
+  }
+
   object.form.elements.forEach((element) => {
     _modelImports += setModelImportsByElement(object, element);
     _repositoryImports += setRepositoryImportsByElement(object, element);
+
+    additionalLoopbackCoreAndRepositoriesImportMethods = getAdditionalLoopbackCoreAndRepositoriesImportMethods(element);
   });
 
   _modelImports = [
@@ -44,11 +51,17 @@ const setRepositoryImports = (object: MainInterface): string => {
   ].join(",");
 
   let code = `
-  import {Getter, inject} from '@loopback/core';
-  import {BelongsToAccessor, DefaultCrudRepository, HasManyThroughRepositoryFactory, repository, Entity, model, property} from '@loopback/repository';
+  import {
+    inject, 
+    ${[...new Set(additionalLoopbackCoreAndRepositoriesImportMethods['core'])].join(',')}
+  } from '@loopback/core';
+  import {
+    DefaultCrudRepository,
+    ${[...new Set(additionalLoopbackCoreAndRepositoriesImportMethods['repositories'])].join(',')}
+  } from '@loopback/repository';
   import {MongodbDataSource} from '../datasources';
   import {${_modelImports}} from '../models';
-  import {${_repositoryImports}} from '.';
+  ${_repositoryImports ? `import {${_repositoryImports}} from '.';` : ''}
   `;
 
   return code;
@@ -58,7 +71,6 @@ const setModelImportsByElement = (
   object: MainInterface,
   element: FormElementInterface
 ): string => {
-  const modelName = object.form!.id.replace("Form", "");
   const type = Object.keys(element)[0];
   const value = Object.values(element)[0];
 
@@ -119,5 +131,42 @@ const setRepositoryImportsByElement = (
 
   return code;
 };
+
+const getAdditionalLoopbackCoreAndRepositoriesImportMethods = (
+  element: FormElementInterface
+) => {
+
+  let additionalLoopbackCoreAndRepositoriesImportMethods = {
+    core: [] as string[],
+    repositories: [] as string[],
+  };
+
+  const type = Object.keys(element)[0];
+  const value = Object.values(element)[0];
+
+  if (validTypes.includes(type) && value.optionsApi) {
+    additionalLoopbackCoreAndRepositoriesImportMethods['core'].push('Getter')
+    additionalLoopbackCoreAndRepositoriesImportMethods['repositories'] = additionalLoopbackCoreAndRepositoriesImportMethods['repositories'].concat(['repository'])
+    if (value.isMultiple) {
+      additionalLoopbackCoreAndRepositoriesImportMethods['repositories'] = additionalLoopbackCoreAndRepositoriesImportMethods['repositories'].concat([
+        'HasManyThroughRepositoryFactory',
+        'Entity',
+        'model',
+        'property',
+      ])
+    } else {
+      additionalLoopbackCoreAndRepositoriesImportMethods['repositories'] = additionalLoopbackCoreAndRepositoriesImportMethods['repositories'].concat(['BelongsToAccessor'])
+    }
+  } else if (type === "tabs") {
+    element.tabs?.forEach((tab) => {
+      tab.elements.forEach((tabElement) => {
+        additionalLoopbackCoreAndRepositoriesImportMethods['core'] = additionalLoopbackCoreAndRepositoriesImportMethods['core'].concat(getAdditionalLoopbackCoreAndRepositoriesImportMethods(tabElement)['core']);
+        additionalLoopbackCoreAndRepositoriesImportMethods['repositories'] = additionalLoopbackCoreAndRepositoriesImportMethods['repositories'].concat(getAdditionalLoopbackCoreAndRepositoriesImportMethods(tabElement)['repositories']);
+      });
+    });
+  }
+
+  return additionalLoopbackCoreAndRepositoriesImportMethods;
+}
 
 export { setRepositoryImports };
