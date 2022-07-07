@@ -493,7 +493,7 @@ export const COMPONENT_FORM: MainInterface = {
           label: "Criar",
           type: FormButtonTypeEnum.Submit,
         }
-      }
+      },
     ],
     service: {
       baseUrl: "http://localhost:3000",

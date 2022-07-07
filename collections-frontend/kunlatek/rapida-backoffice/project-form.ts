@@ -161,6 +161,34 @@ export const PROJECT_FORM: MainInterface = {
               //   }
               // },
             ]
+          },
+          {
+            id: "tabModule",
+            title: "Módulos relacionados",
+            elements: [
+              {
+                array: {
+                  title: "Módulo",
+                  id: "moduleFormArray",
+                  elements: [
+                    {
+                      autocomplete: {
+                        label: "Identidade de módulo",
+                        name: "moduleFormId",
+                        type: FormInputTypeEnum.Text,
+                        optionsApi: {
+                          endpoint: "modules",
+                          labelField: "name",
+                          valueField: "_id",
+                          paramsToFilter: ["name"]
+                        },
+                        isMultiple: true,
+                      }
+                    }
+                  ]
+                }
+              },
+            ]
           }
         ]
       },

@@ -1,7 +1,10 @@
+import { FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 import { setFormBuilder } from "./form-builder";
 import { setFormSelectOptions } from "./form-select-options";
+
+let _hasCondition = false;
 
 const setFormControllerConstructorArguments = (
   object: MainInterface
@@ -15,16 +18,22 @@ const setFormControllerConstructorArguments = (
   let _optionsCreation: string = setFormSelectOptions(object);
   let _patchArrayValues = setJsonToPatchValue(object, object.form.elements);
 
+  object.form.elements.forEach((element: any) => {
+    verifyFormElement(element);
+  })
+
   const code = `
   try {
     this._activatedRoute.params.subscribe(async (routeParams) => {
-        this.${object.form.id}Id = routeParams['id'];
+        this.${object.form.id}Id = routeParams["id"];
         this.isAddModule = !this.${object.form.id}Id;
     
         if (this.${object.form.id}Id) {
           this.${object.form.id}ToEdit = await this._${object.form.id}Service.find(this.${object.form.id}Id);
           this.${object.form.id}Form.patchValue(this.${object.form.id}ToEdit.data);
           ${_patchArrayValues}
+        
+          ${_hasCondition ? "this.setConditionOverEdition();" : ""}
         }
         this.checkOptionsCreation(
           [
@@ -45,6 +54,40 @@ const setFormControllerConstructorArguments = (
   `;
 
   return code;
+}
+
+const verifyFormElement = (element: FormElementInterface): void => {
+  const formElements = [
+    "input",
+    "autocomplete",
+    "button",
+    "checkbox",
+    "radio",
+    "select",
+    "slide",
+  ];
+  const type = Object.keys(element)[0];
+  const value = Object.values(element)[0];
+
+  if (formElements.includes(type)) {
+    if (value.conditions) {
+      _hasCondition = true;
+    }
+  }
+
+  if (element.tabs) {
+    element.tabs.forEach(tab => {
+      tab.elements.forEach(tabElement => {
+        verifyFormElement(tabElement);
+      });
+    });
+  }
+
+  if (element.array) {
+    element.array.elements.forEach(arrayElement => {
+      verifyFormElement(arrayElement);
+    });
+  }
 }
 
 const setJsonToPatchValue = (object: MainInterface, formElements: any, array: string | undefined = undefined): string => {

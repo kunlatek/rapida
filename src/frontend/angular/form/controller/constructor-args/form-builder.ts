@@ -18,143 +18,156 @@ const setFormBuilder = (
 }
 
 const setFormBuilderByElements = (
-  formElements: Array<FormElementInterface>
+  formElements: Array<FormElementInterface>,
+  isInArray: boolean = false
 ) => {
   let code = ``;
 
   formElements.forEach(element => {    
     if (element.input) {
-      code += `
-      ${element.input.name}:[
-        {
-          ${element.input.value ? `value: '${element.input.value}'` : `value: null`}
-          ${element.input.isDisabled ? `, disabled: true` : `, disabled: false`}
-        },
-        [
-      `;
-      // VALIDATORS
-      if (element.input.validators) {
-        code += element.input.validators.forEach((validator) => {
-          return `Validators.${validator},`;
-        });
+      if (!isInArray) {        
+        code += `
+        ${element.input.name}:[
+          {
+            ${element.input.value ? `value: '${element.input.value}'` : `value: null`}
+            ${element.input.isDisabled ? `, disabled: true` : `, disabled: false`}
+          },
+          [
+        `;
+        // VALIDATORS
+        if (element.input.validators) {
+          code += element.input.validators.forEach((validator) => {
+            return `Validators.${validator},`;
+          });
+        }
+        if (element.input.type === FormInputTypeEnum.Email) {
+          code += `Validators.email,`;
+        }
+        if (element.input.isRequired) {
+          code += `Validators.required,`;
+        }
+        code += `
+          ]
+        ],
+        `;
       }
-      if (element.input.type === FormInputTypeEnum.Email) {
-        code += `Validators.email,`;
-      }
-      if (element.input.isRequired) {
-        code += `Validators.required,`;
-      }
-      code += `
-        ]
-      ],
-      `;
     }
   
     if (element.select) {
-      code += `
-      ${element.select.name}:[
-        ${(element.select.isMultiple) ? `[]` : `null`},
-        [
-      `;
-      // VALIDATORS
-      if (element.select.validators) {
-        code += element.select.validators.forEach((validator) => {
-          return `Validators.${validator},`;
-        });
+      if (!isInArray) {
+        code += `
+        ${element.select.name}:[
+          ${(element.select.isMultiple) ? `[]` : `null`},
+          [
+        `;
+        // VALIDATORS
+        if (element.select.validators) {
+          code += element.select.validators.forEach((validator) => {
+            return `Validators.${validator},`;
+          });
+        }
+        if (element.select.type === FormInputTypeEnum.Email) {
+          code += `Validators.email,`;
+        }
+        if (element.select.isRequired) {
+          code += `Validators.required,`;
+        }
+        code += `
+          ]
+        ],
+        `;
       }
-      if (element.select.type === FormInputTypeEnum.Email) {
-        code += `Validators.email,`;
-      }
-      if (element.select.isRequired) {
-        code += `Validators.required,`;
-      }
-      code += `
-        ]
-      ],
-      `;
     }
   
     if (element.autocomplete) {
-      code += `
-      ${element.autocomplete.name}:[
-        ${(element.autocomplete.isMultiple) ? `[]` : `null`},
-        [
-      `;
-      // VALIDATORS
-      if (element.autocomplete.validators) {
-        code += element.autocomplete.validators.forEach((validator) => {
-          return `Validators.${validator},`;
-        });
+      if (!isInArray) {
+        code += `
+        ${element.autocomplete.name}:[
+          ${(element.autocomplete.isMultiple) ? `[]` : `null`},
+          [
+        `;
+        // VALIDATORS
+        if (element.autocomplete.validators) {
+          code += element.autocomplete.validators.forEach((validator) => {
+            return `Validators.${validator},`;
+          });
+        }
+        if (element.autocomplete.type === FormInputTypeEnum.Email) {
+          code += `Validators.email,`;
+        }
+        if (element.autocomplete.isRequired) {
+          code += `Validators.required,`;
+        }
+        code += `
+          ]
+        ],
+        `;
       }
-      if (element.autocomplete.type === FormInputTypeEnum.Email) {
-        code += `Validators.email,`;
-      }
-      if (element.autocomplete.isRequired) {
-        code += `Validators.required,`;
-      }
-      code += `
-        ]
-      ],
-      `;
     }
   
     if (element.checkbox) {
-      code += `
-      ${element.checkbox.name}:[
-        {
-          value: null, 
-          ${element.checkbox.isDisabled ? "disabled: true, " : ""}
-        },
-        [
-      `;
-      // VALIDATORS
-      if (element.checkbox.validators) {
-        code += element.checkbox.validators.forEach((validator) => {
-          return `Validators.${validator},`;
-        });
+      if (!isInArray) {
+        code += `
+        ${element.checkbox.name}:[
+          {
+            value: null, 
+            ${element.checkbox.isDisabled ? "disabled: true, " : ""}
+          },
+          [
+        `;
+        // VALIDATORS
+        if (element.checkbox.validators) {
+          code += element.checkbox.validators.forEach((validator) => {
+            return `Validators.${validator},`;
+          });
+        }
+    
+        if (element.checkbox.isRequired) {
+          code += `Validators.required,`;
+        }
+        code += `
+          ]
+        ],
+        `;
       }
-  
-      if (element.checkbox.isRequired) {
-        code += `Validators.required,`;
-      }
-      code += `
-        ]
-      ],
-      `;
     }
   
     if (element.radio) {
-      code += `
-      ${element.radio.name}:[
-        {
-          value: null, 
-          ${element.radio.isDisabled ? "disabled: true, " : ""}
-        },
-        [
-      `;
-      // VALIDATORS
-      if (element.radio.validators) {
-        code += element.radio.validators.forEach((validator) => {
-          return `Validators.${validator},`;
-        });
+      if (!isInArray) {
+        code += `
+        ${element.radio.name}:[
+          {
+            value: null, 
+            ${element.radio.isDisabled ? "disabled: true, " : ""}
+          },
+          [
+        `;
+        // VALIDATORS
+        if (element.radio.validators) {
+          code += element.radio.validators.forEach((validator) => {
+            return `Validators.${validator},`;
+          });
+        }
+    
+        if (element.radio.isRequired) {
+          code += `Validators.required,`;
+        }
+        code += `
+          ]
+        ],
+        `;
       }
-  
-      if (element.radio.isRequired) {
-        code += `Validators.required,`;
-      }
-      code += `
-        ]
-      ],
-      `;
     }
   
     if (element.slide) {
-      code += `
-      ${element.slide.name}:[
-        false,
-        []
-      ],
-      `;
+      if (!isInArray) {
+        code += `
+        ${element.slide.name}:[
+          false,
+          []
+        ],
+        `;
+      }
     }
   
     if (element.array) {
@@ -164,7 +177,7 @@ const setFormBuilderByElements = (
       ]),
       `;
 
-      code += setFormBuilderByElements(element.array.elements);
+      code += setFormBuilderByElements(element.array.elements, true);
     }
   
     if (element.tabs) {

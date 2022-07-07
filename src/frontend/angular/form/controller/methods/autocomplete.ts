@@ -7,11 +7,10 @@ const setAutocompleteMethod = (
   element: FormElementInterface
 ): string => {
   let code = ``;
-
   if (!element.autocomplete) {
     return code;
   }
-
+  
   if (element.autocomplete.isMultiple) {
     code += `
     add${TextTransformation.pascalfy(
@@ -43,7 +42,7 @@ const setAutocompleteMethod = (
         this.chosen${TextTransformation.pascalfy(
           element.autocomplete.name
         )}Value.splice(index, 1);
-        this.characterFormForm.get("${
+        this.${object.form?.id}Form.get("${
           element.autocomplete.name
         }")?.setValue(this.chosen${TextTransformation.pascalfy(
       element.autocomplete.name

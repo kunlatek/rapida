@@ -128,7 +128,6 @@ const setConditionOverEdition = (
           if (!_conditionMethodsOverEdition.includes(value.conditions.id)) {
             let conditionId = "";
             if (array) {
-              console.log(value);
               code += `
               this.${object.form?.id}Form
               .get("${array}")?.value.forEach((

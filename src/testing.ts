@@ -76,19 +76,19 @@ const projectPath = "/home/ryzzan/Projects/rapida-backoffice";
 
 // import { CHARACTER_FORM } from "../collections-frontend/example/animation/character-form";
 // import { CHARACTER_TABLE } from "../collections-frontend/example/animation/character-table";
-// import { CHARACTER } from "../collections-frontend/example/animation/character";
+// import { CHARACTER } from "../collections-frontend/example/animation/c
 
-// import { TEST_FORM } from "../collections-frontend/example/alexandre/test-form";
-// import { TEST_TABLE } from "../collections-frontend/example/alexandre/test-table";
-// import { TEST } from "../collections-frontend/example/alexandre/test";
-
-// import { PROJECT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/project-form";
-// import { PROJECT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/project-table";
-// import { PROJECT } from "../collections-frontend/kunlatek/rapida-backoffice/project";
+import { PROJECT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/project-form";
+import { PROJECT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/project-table";
+import { PROJECT } from "../collections-frontend/kunlatek/rapida-backoffice/project";
 
 import { COMPONENT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/component-form";
-// import { COMPONENT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/component-table";
+import { COMPONENT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/component-table";
 import { COMPONENT } from "../collections-frontend/kunlatek/rapida-backoffice/component";
+
+import { MODULE_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/module-form";
+import { MODULE_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/module-table";
+import { MODULE } from "../collections-frontend/kunlatek/rapida-backoffice/module";
 
 //////////////////////////////////////////////////////////
 
@@ -105,17 +105,17 @@ const array = [
   // CHARACTER_TABLE,
   // CHARACTER,
 
-  // PROJECT_FORM,
-  // PROJECT_TABLE,
-  // PROJECT,
+  PROJECT_FORM,
+  PROJECT_TABLE,
+  PROJECT,
 
   COMPONENT_FORM,
-  // COMPONENT_TABLE,
+  COMPONENT_TABLE,
   COMPONENT,
 
-  // TEST_FORM, 
-  // TEST_TABLE, 
-  // TEST,
+  MODULE_FORM, 
+  MODULE_TABLE, 
+  MODULE,
 ];
 
 array.forEach((object) => {
