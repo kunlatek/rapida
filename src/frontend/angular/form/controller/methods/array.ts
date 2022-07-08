@@ -84,7 +84,7 @@ const setArrayLayer = (
       setArrayLayer(element.elements, newIndex, element.id);
     });
   }
-
+  
   process.env.ARRAY_LAYER = JSON.stringify(_arrayLayer);
 };
 
@@ -229,7 +229,7 @@ const setArrayMethod = (
   };
   `;
 
-  code += setFormMethodsByElements(object, array.elements);
+  code += setFormMethodsByElements(object, array.elements, array);
   
   return code;
 };
@@ -241,4 +241,5 @@ export {
   setArrayIndexes,
   setArrayIndexesToAdd,
   setArrayMethod,
+  setArrayLayer,
 };

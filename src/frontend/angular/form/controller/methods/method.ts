@@ -1,5 +1,5 @@
 import { FormInputTypeEnum } from "../../../../../enums/form";
-import { FormElementInterface } from "../../../../../interfaces/form";
+import { ArrayInterface, FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 import { setArrayMethod } from "./array";
@@ -22,7 +22,8 @@ const setMethod = (
 
 const setFormMethodsByElements = (
   object: MainInterface,
-  elements: Array<FormElementInterface>
+  elements: Array<FormElementInterface>,
+  array: ArrayInterface | undefined = undefined, 
 ): string => {
   let code = ``;
   elements.forEach(element => {    
@@ -34,7 +35,7 @@ const setFormMethodsByElements = (
           this.fileName = file.name;
           const formData = new FormData();
       
-          this.fileFormForm.get('${element.input.name}')?.setValue(file);
+          this.fileFormForm.get("${element.input.name}")?.setValue(file);
         }
       }
       `;
@@ -68,7 +69,7 @@ const setFormMethodsByElements = (
     }
   
     if (element.autocomplete) {
-      code += setAutocompleteMethod(object, element);
+      code += setAutocompleteMethod(object, element, array);
     }
   
     if (element.array) {
@@ -94,7 +95,7 @@ const setFileSubmit = (
     if (element.input?.type === FormInputTypeEnum.File) {
       code += `
       const formData = new FormData();
-      formData.append('myFile', this.${object.form?.id}Form.get('${element.input.name}')?.value);
+      formData.append("myFile", this.${object.form?.id}Form.get("${element.input.name}")?.value);
       `;
     }
   });
@@ -113,9 +114,15 @@ const setValueBeforeSubmit = (
       if (element.input.type === FormInputTypeEnum.Date) {
         code += `this.${object.form!.id}Form.get("${
           element.input.name
+        }")?.value
+        ? this.${object.form!.id}Form.get("${
+          element.input.name
         }")?.setValue(this.${object.form!.id}Form.get("${
           element.input.name
-        }")?.value.toISOString().split('T')[0]);`;
+        }")?.value.toISOString().split("T")[0])
+        : this.${object.form!.id}Form.get("${
+          element.input.name
+        }");`;
       }
     }
   });

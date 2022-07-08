@@ -1,16 +1,30 @@
-import { FormElementInterface } from "../../../../../interfaces/form";
+import {
+  ArrayInterface,
+  FormElementInterface,
+} from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
+import {
+  setArrayControls,
+  setArrayControlsToAdd,
+  setArrayIndexes,
+  setArrayIndexesToAdd,
+} from "./array";
 
 const setAutocompleteMethod = (
   object: MainInterface,
-  element: FormElementInterface
+  element: FormElementInterface,
+  array: ArrayInterface | undefined = undefined
 ): string => {
   let code = ``;
+
   if (!element.autocomplete) {
     return code;
   }
-  
+
+  const iterations = array ? setArrayIndexes(array.id) : undefined;
+  const controls = array ? setArrayControls(array.id) : undefined;
+
   if (element.autocomplete.isMultiple) {
     code += `
     add${TextTransformation.pascalfy(
@@ -43,8 +57,8 @@ const setAutocompleteMethod = (
           element.autocomplete.name
         )}Value.splice(index, 1);
         this.${object.form?.id}Form.get("${
-          element.autocomplete.name
-        }")?.setValue(this.chosen${TextTransformation.pascalfy(
+      element.autocomplete.name
+    }")?.setValue(this.chosen${TextTransformation.pascalfy(
       element.autocomplete.name
     )}Value);
       }
@@ -95,23 +109,32 @@ const setAutocompleteMethod = (
   };
   setFiltered${TextTransformation.pascalfy(
     element.autocomplete.name
-  )} = async () => {
+  )} = async (${iterations ? iterations : ""}) => {
     try {
       const paramsToFilter = [${element.autocomplete.optionsApi.paramsToFilter.map(
         (element) => {
           return `"${element}"`;
         }
       )}];
-      if(this.${object.form?.id}Form.value.${
-    element.autocomplete.name
-  }.length > 0) {
+      if(this.${object.form?.id}Form.
+      ${
+        array
+          ? `get([${controls}, "${element.autocomplete.name}"])?.value`
+          : `value.${element.autocomplete.name}`
+      }
+      .length > 0) {
         const filter = \`?filter={"or":[\${paramsToFilter.map((element: string) => {
-            if(element !== "undefined") {
-                return \`{"\${element}":{"like": "\${this.${
-                  object.form?.id
-                }Form.value.${element.autocomplete.name}}", "options": "i"}}\`
-            }
-            return "";
+          if(element !== "undefined") {
+            return \`{"\${element}":{"like": "\${
+              this.${object.form?.id}Form.
+              ${
+                array
+                  ? `get([${controls}, "${element.autocomplete.name}"])?.value`
+                  : `value.${element.autocomplete.name}`
+              }
+            }", "options": "i"}}\`
+          }
+          return "";
         })}]}\`;
         
         this._${object.form?.id}Service.${
@@ -128,7 +151,7 @@ const setAutocompleteMethod = (
               await this.refreshToken();
               this.setFiltered${TextTransformation.pascalfy(
                 element.autocomplete.name
-              )}();
+              )}(${iterations ? iterations?.replace(": any", "") : ""});
             } else {
                 const message = this._errorHandler.apiErrorMessage(err.error.message);
                 this.sendErrorMessage(message);
@@ -144,9 +167,9 @@ const setAutocompleteMethod = (
 };
 callSetFiltered${TextTransformation.pascalfy(
     element.autocomplete.name
-  )} = MyPerformance.debounce(() => this.setFiltered${TextTransformation.pascalfy(
+  )} = MyPerformance.debounce((${iterations ? iterations : ""}) => this.setFiltered${TextTransformation.pascalfy(
     element.autocomplete.name
-  )}());
+  )}(${iterations ? iterations?.replace(": any", "") : ""}));
   `;
 
   return code;

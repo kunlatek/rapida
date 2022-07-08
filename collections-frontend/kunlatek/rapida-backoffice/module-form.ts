@@ -59,7 +59,7 @@ export const MODULE_FORM: MainInterface = {
     ],
     service: {
       baseUrl: "http://localhost:3000",
-      endPoint: "components",
+      endPoint: "modules",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

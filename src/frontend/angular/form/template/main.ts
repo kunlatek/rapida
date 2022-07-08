@@ -171,7 +171,7 @@ const setSpecificStructureOverFormElement = (
     } else if (element.input.type === FormInputTypeEnum.Date) {
       code += `
       <mat-form-field ${conditions}>
-        <input matInput type="${element.input.type}" formControlName="${element.input.name}" ${placeholder} ${required} ${mask} [matDatepicker]="${element.input.name}Picker" [disabled]="true">
+        <input matInput formControlName="${element.input.name}" ${placeholder ? placeholder : `placeholder="${element.input.label}"`} ${required} ${mask} [matDatepicker]="${element.input.name}Picker" [disabled]="true">
         <mat-datepicker-toggle matSuffix [for]="${element.input.name}Picker"></mat-datepicker-toggle>
         <mat-datepicker #${element.input.name}Picker [disabled]="false"></mat-datepicker>
       </mat-form-field>

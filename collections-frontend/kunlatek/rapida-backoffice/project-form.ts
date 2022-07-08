@@ -178,9 +178,9 @@ export const PROJECT_FORM: MainInterface = {
                         type: FormInputTypeEnum.Text,
                         optionsApi: {
                           endpoint: "modules",
-                          labelField: "name",
+                          labelField: "collectionTitle",
                           valueField: "_id",
-                          paramsToFilter: ["name"]
+                          paramsToFilter: ["collectionId", "collectionTitle"]
                         },
                         isMultiple: true,
                       }

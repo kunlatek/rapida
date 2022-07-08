@@ -96,25 +96,16 @@ export const CHARACTER_FORM: MainInterface = {
                   type: FormInputTypeEnum.Text,
                   isMultipleLines: true,
                 }
-              },
-              {
-                button: {
-                  label: "Criar",
-                  type: FormButtonTypeEnum.Submit,          
-                }
-              },
+              }
             ],
           },
         ],
       },
-    ],
-    actions: [
       {
         button: {
           label: "Criar",
-          type: FormButtonTypeEnum.Submit,
-          icon: "save",
-        },
+          type: FormButtonTypeEnum.Submit,          
+        }
       },
     ],
     service: {
