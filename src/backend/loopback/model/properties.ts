@@ -29,6 +29,8 @@ const stringTypes = [
 ];
 const numberTypes = ["number"];
 
+const booleanTypes = ["slide"];
+
 const setModelProperties = (object: MainInterface): string => {
   if (!object.form) {
     console.info("Only forms set here");
@@ -65,8 +67,11 @@ const setByElement = (
     const propertyType = value.isMultiple ?
       'array' :
       (
-          stringTypes.includes(value.type) ? 'String' :
-              (numberTypes.includes(value.type) ? 'number' : 'any')
+        stringTypes.includes(value.type || type) ? 'String' :
+          (
+            numberTypes.includes(value.type || type) ? 'number' :
+              (booleanTypes.includes(value.type || type) ? 'boolean' : 'any')
+          )
       )
 
     if (value.optionsApi) {
@@ -108,13 +113,20 @@ const setByElement = (
       });
     })
   } else if (type === 'array') {
-      code += `
-      @property({
-          type: 'array',
-          itemType: 'object',
+
+    code += `
+        @property({
+            type: 'array',
+            itemType: 'object',
+        })
+        ${value.id}?: object[];
+        `;
+
+    if (element.array?.elements) {
+      element.array?.elements?.forEach(element => {
+        code += setByElement(object, element);
       })
-      ${value.id}?: object[];
-      `;
+    }
   }
 
   return code;
