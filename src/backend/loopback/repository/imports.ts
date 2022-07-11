@@ -11,6 +11,7 @@ const validTypes = [
   "select",
   "slide",
   "textarea",
+  "text",
   "autocomplete",
 ];
 
@@ -33,8 +34,10 @@ const setRepositoryImports = (object: MainInterface): string => {
     _modelImports += setModelImportsByElement(object, element);
     _repositoryImports += setRepositoryImportsByElement(object, element);
 
-    additionalLoopbackCoreAndRepositoriesImportMethods = getAdditionalLoopbackCoreAndRepositoriesImportMethods(element);
+    additionalLoopbackCoreAndRepositoriesImportMethods["core"] = [...additionalLoopbackCoreAndRepositoriesImportMethods.core, ...getAdditionalLoopbackCoreAndRepositoriesImportMethods(element).core];
+    additionalLoopbackCoreAndRepositoriesImportMethods["repositories"] = [...additionalLoopbackCoreAndRepositoriesImportMethods.repositories, ...getAdditionalLoopbackCoreAndRepositoriesImportMethods(element).repositories];
   });
+
 
   _modelImports = [
     ...new Set(

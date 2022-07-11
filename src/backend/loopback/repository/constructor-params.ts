@@ -11,6 +11,7 @@ const validTypes = [
   "select",
   "slide",
   "textarea",
+  "text",
   "autocomplete",
 ];
 

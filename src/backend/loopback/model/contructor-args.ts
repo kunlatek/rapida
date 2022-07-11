@@ -1,5 +1,4 @@
 import { MainInterface } from "../../../interfaces/main";
-import { TextTransformation } from "../../../utils/text.transformation";
 
 const setModelConstructorArguments = (object: MainInterface): string => {
   if (!object.form) {
@@ -7,8 +6,6 @@ const setModelConstructorArguments = (object: MainInterface): string => {
     return ``;
   }
 
-  const modelName: string = object.form.id.replace("Form", "");
-  
   let code = `
   super(data);
   `;
