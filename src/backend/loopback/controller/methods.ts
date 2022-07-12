@@ -514,15 +514,16 @@ const createCreateAllMethods = (
     secondProperty.charAt(0).toLowerCase() + secondProperty.slice(1);
 
   return `
-      await this.${mainPropertyCamelCase}Has${secondProperty}Repository.createAll(
-          ((dataToWorkInRelation.${relatedPropertyName} || []) as any[]).map(${secondPropertyCamelCase} => {
-              return {
-                  ${mainPropertyCamelCase}Id: idToWorkInRelation, 
-                  ${secondPropertyCamelCase}${mainPropertyCamelCase === secondPropertyCamelCase ? "Related" : ""
-    }Id: ${secondPropertyCamelCase},
-              };
-          })
-      ); 
+      if(dataToWorkInRelation.${relatedPropertyName} && (dataToWorkInRelation.${relatedPropertyName}.length > 0)){
+        await this.${mainPropertyCamelCase}Has${secondProperty}Repository.createAll(
+            (dataToWorkInRelation.${relatedPropertyName} as any[]).map(${secondPropertyCamelCase} => {
+                return {
+                    ${mainPropertyCamelCase}Id: idToWorkInRelation, 
+                    ${secondPropertyCamelCase}${mainPropertyCamelCase === secondPropertyCamelCase ? "Related" : ""}Id: ${secondPropertyCamelCase},
+                };
+            })
+        ); 
+      }
   `;
 };
 
@@ -537,11 +538,13 @@ const createDeleteAllMethods = (
     secondProperty.charAt(0).toLowerCase() + secondProperty.slice(1);
 
   return `
-      await this.${mainPropertyCamelCase}Has${secondProperty}Repository.deleteAll({
-          or: ((dataToWorkInRelation.${relatedPropertyName} || []) as any[]).map(${secondPropertyCamelCase} => {
-              return {${secondPropertyCamelCase}Id: ${secondPropertyCamelCase}._id};
-          })
-      }); 
+      if(dataToWorkInRelation.${relatedPropertyName} && (dataToWorkInRelation.${relatedPropertyName}.length > 0)){
+        await this.${mainPropertyCamelCase}Has${secondProperty}Repository.deleteAll({
+            or: (dataToWorkInRelation.${relatedPropertyName} as any[]).map(${secondPropertyCamelCase} => {
+                return {${secondPropertyCamelCase}Id: ${secondPropertyCamelCase}._id};
+            })
+        }); 
+      }
   `;
 };
 
