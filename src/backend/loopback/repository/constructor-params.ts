@@ -75,6 +75,12 @@ const setConstructorParamsByElement = (
         code += setConstructorParamsByElement(object, tabElement);
       });
     });
+  } else if (type === "array") {
+    if (element.array?.elements) {
+      element.array?.elements.forEach((arrayElement) => {
+        code += setConstructorParamsByElement(object, arrayElement);
+      });
+    }
   }
 
   return code;

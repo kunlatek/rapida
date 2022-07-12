@@ -76,6 +76,14 @@ const setRelatedPropertiesByElement = (
         );
       });
     });
+  } else if (type === "array") {
+    if (element.array?.elements) {
+      element.array?.elements?.forEach((arrayElement) => {
+        code += setRelatedPropertiesByElement(
+          object, arrayElement
+        );
+      });
+    }
   }
 
   return code;

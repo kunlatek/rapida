@@ -97,6 +97,12 @@ const setModelImportsByElement = (
         code += setModelImportsByElement(object, tabElement);
       });
     });
+  } else if (type === "array") {
+    if (element.array?.elements) {
+      element.array?.elements.forEach((arrayElement) => {
+        code += setModelImportsByElement(object, arrayElement);
+      });
+    }
   }
 
   return code;
@@ -130,6 +136,12 @@ const setRepositoryImportsByElement = (
         code += setRepositoryImportsByElement(object, tabElement);
       });
     });
+  } else if (type === "array") {
+    if (element.array?.elements) {
+      element.array?.elements.forEach((arrayElement) => {
+        code += setRepositoryImportsByElement(object, arrayElement);
+      });
+    }
   }
 
   return code;
@@ -167,6 +179,13 @@ const getAdditionalLoopbackCoreAndRepositoriesImportMethods = (
         additionalLoopbackCoreAndRepositoriesImportMethods['repositories'] = additionalLoopbackCoreAndRepositoriesImportMethods['repositories'].concat(getAdditionalLoopbackCoreAndRepositoriesImportMethods(tabElement)['repositories']);
       });
     });
+  } else if (type === "array") {
+    if (element.array?.elements) {
+      element.array?.elements.forEach((arrayElement) => {
+        additionalLoopbackCoreAndRepositoriesImportMethods['core'] = additionalLoopbackCoreAndRepositoriesImportMethods['core'].concat(getAdditionalLoopbackCoreAndRepositoriesImportMethods(arrayElement)['core']);
+        additionalLoopbackCoreAndRepositoriesImportMethods['repositories'] = additionalLoopbackCoreAndRepositoriesImportMethods['repositories'].concat(getAdditionalLoopbackCoreAndRepositoriesImportMethods(arrayElement)['repositories']);
+      });
+    }
   }
 
   return additionalLoopbackCoreAndRepositoriesImportMethods;

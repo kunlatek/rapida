@@ -430,6 +430,12 @@ const setPropertiesToFindByElement = (
         code += setPropertiesToFindByElement(element);
       });
     });
+  } else if (type === "array") {
+    if (element.array?.elements) {
+      element.array?.elements.forEach((arrayElement) => {
+        code += setPropertiesToFindByElement(arrayElement);
+      });
+    }
   }
 
   return code;
@@ -464,6 +470,12 @@ const setCreateAllMethodsByElement = (
         code += setCreateAllMethodsByElement(object, tabElement);
       });
     });
+  } else if (type === "array") {
+    if (element.array?.elements) {
+      element.array?.elements.forEach((arrayElement) => {
+        code += setCreateAllMethodsByElement(object, arrayElement);
+      });
+    }
   }
 
   return code;
@@ -498,6 +510,12 @@ const setDeleteAllMethodsByElement = (
         code += setDeleteAllMethodsByElement(object, tabElement);
       });
     });
+  } else if (type === "array") {
+    if (element.array?.elements) {
+      element.array?.elements.forEach((arrayElement) => {
+        code += setDeleteAllMethodsByElement(object, arrayElement);
+      });
+    }
   }
 
   return code;

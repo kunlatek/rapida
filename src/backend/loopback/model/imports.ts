@@ -36,7 +36,7 @@ const setModelImports = (object: MainInterface): string => {
   let code = `
   import {model, property, ${additionalLoopbackRepositoriesImportMethods.join(',')}} from '@loopback/repository';
   import {${_importsDefault}__Default} from '.';
-  import {${_importsRelatedRepositories}} from '../repositories/';
+  ${_importsRelatedRepositories ? `import {${_importsRelatedRepositories}} from '../repositories/';` : ""}
   `;
 
   return code;
@@ -71,6 +71,12 @@ const setImportsDefaultByElement = (
         code += setImportsDefaultByElement(object, tabElement);
       });
     });
+  } else if (type === 'array') {
+    if (element.array?.elements) {
+      element.array?.elements?.forEach(arrayElement => {
+        code += setImportsDefaultByElement(object, arrayElement);
+      })
+    }
   }
 
   return code;
@@ -108,6 +114,12 @@ const setImportsRelatedRepositoriesByElement = (
         code += setImportsRelatedRepositoriesByElement(object, tabElement);
       });
     });
+  } else if (type === 'array') {
+    if (element.array?.elements) {
+      element.array?.elements?.forEach(arrayElement => {
+        code += setImportsRelatedRepositoriesByElement(object, arrayElement);
+      })
+    }
   }
 
   return code;
@@ -131,6 +143,12 @@ const getAdditionalLoopbackRepositoriesImportMethods = (
         additionalLoopbackRepositoriesImportMethods.push(getAdditionalLoopbackRepositoriesImportMethods(tabElement));
       });
     });
+  } else if (type === 'array') {
+    if (element.array?.elements) {
+      element.array?.elements?.forEach(arrayElement => {
+        additionalLoopbackRepositoriesImportMethods.push(getAdditionalLoopbackRepositoriesImportMethods(arrayElement));
+      })
+    }
   }
 
   return additionalLoopbackRepositoriesImportMethods.flat();

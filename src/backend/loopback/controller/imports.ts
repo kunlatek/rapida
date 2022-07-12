@@ -80,6 +80,12 @@ const setRepositoriesImportsByElement = (
         code += setRepositoriesImportsByElement(object, tabElement);
       });
     });
+  } else if (type === "array") {
+    if (element.array?.elements) {
+      element.array?.elements.forEach((arrayElement) => {
+        code += setRepositoriesImportsByElement(object, arrayElement);
+      });
+    }
   }
 
   return code;

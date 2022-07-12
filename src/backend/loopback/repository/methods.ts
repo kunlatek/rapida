@@ -60,6 +60,12 @@ const setMethodsByElement = (
         code += setMethodsByElement(object, tabElement);
       });
     });
+  } else if (type === "array") {
+    if (element.array?.elements) {
+      element.array?.elements.forEach((arrayElement) => {
+        code += setMethodsByElement(object, arrayElement);
+      });
+    }
   }
 
   return code;
