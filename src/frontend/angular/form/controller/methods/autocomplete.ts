@@ -104,7 +104,7 @@ const setAutocompleteMethod = (
         element.autocomplete.name
       )}.find((_) => _.${
     element.autocomplete.optionsApi.valueField
-  } === value).${element.autocomplete.optionsApi.labelField}
+  } === value)?.${element.autocomplete.optionsApi.labelField}
       : null;
   };
   setFiltered${TextTransformation.pascalfy(
