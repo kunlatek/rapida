@@ -62,6 +62,12 @@ const setRepositoryPropertiesByElement = (
         code += setRepositoryPropertiesByElement(object, tabElement);
       });
     });
+  } else if (type === 'array') {
+    if (element.array?.elements) {
+      element.array?.elements.forEach(arrayElement => {
+        code += setRepositoryPropertiesByElement(object, arrayElement);
+      });
+    }
   }
 
   return code;
