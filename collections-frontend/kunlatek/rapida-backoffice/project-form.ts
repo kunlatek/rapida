@@ -167,25 +167,17 @@ export const PROJECT_FORM: MainInterface = {
             title: "Módulos relacionados",
             elements: [
               {
-                array: {
-                  title: "Módulo",
-                  id: "moduleFormArray",
-                  elements: [
-                    {
-                      autocomplete: {
-                        label: "Identidade de módulo",
-                        name: "moduleFormId",
-                        type: FormInputTypeEnum.Text,
-                        optionsApi: {
-                          endpoint: "modules",
-                          labelField: "collectionTitle",
-                          valueField: "_id",
-                          paramsToFilter: ["collectionId", "collectionTitle"]
-                        },
-                        isMultiple: true,
-                      }
-                    }
-                  ]
+                autocomplete: {
+                  label: "Identidade de módulo",
+                  name: "moduleFormId",
+                  type: FormInputTypeEnum.Text,
+                  optionsApi: {
+                    endpoint: "modules",
+                    labelField: "collectionTitle",
+                    valueField: "_id",
+                    paramsToFilter: ["collectionId", "collectionTitle"]
+                  },
+                  isMultiple: true,
                 }
               },
             ]

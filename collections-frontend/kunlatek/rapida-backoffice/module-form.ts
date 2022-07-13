@@ -28,26 +28,17 @@ export const MODULE_FORM: MainInterface = {
         }
       },
       {
-        array: {
-          title: "Componente",
-          id: "componentFormArray",
-          elements: [
-            {
-              autocomplete: {
-                label: "Identidade de componente",
-                name: "componentFormId",
-                type: FormInputTypeEnum.Text,
-                optionsApi: {
-                  endpoint: "components",
-                  labelField: "name",
-                  valueField: "_id",
-                  paramsToFilter: ["name"]
-                },
-                isMultiple: true,
-                isRequired: true,
-              }
-            }
-          ]
+        autocomplete: {
+          label: "Identidade de componente",
+          name: "componentFormId",
+          type: FormInputTypeEnum.Text,
+          optionsApi: {
+            endpoint: "components",
+            labelField: "name",
+            valueField: "_id",
+            paramsToFilter: ["name"]
+          },
+          isMultiple: true,
         }
       },
       {
