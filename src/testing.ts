@@ -67,7 +67,7 @@ ADMIN_USERS=
 
 const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart";
 const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api";
-const projectPath = "/home/ryzzan/Projects/rapida-backoffice";
+const projectPath = "/home/giovanniestevam/projects/rapida-backoffice";
 
 
 // import { ANIMATION_FORM } from "../collections-frontend/example/animation/animation-form";
