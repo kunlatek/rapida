@@ -1,19 +1,7 @@
 import { FormElementInterface } from "../../../interfaces/form";
 import { MainInterface } from "../../../interfaces/main";
 import { TextTransformation } from "../../../utils/text.transformation";
-
-const validTypes = [
-  "checkbox",
-  "radio",
-  "datalist",
-  "fieldset",
-  "input",
-  "select",
-  "slide",
-  "textarea",
-  "text",
-  "autocomplete",
-];
+import { getAllElements } from "../main";
 
 const setControllerMethods = (object: MainInterface): string => {
   if (!object.form) {
@@ -27,7 +15,9 @@ const setControllerMethods = (object: MainInterface): string => {
   let _createRelated: string = ``;
   let _deleteRelated: string = ``;
 
-  object.form.elements.forEach((element) => {
+  const elements: Array<FormElementInterface> = getAllElements(object.form?.elements);
+
+  elements.forEach((element) => {
     _propertiesRelatedFind += setPropertiesToFindByElement(element);
     _createRelated += setCreateAllMethodsByElement(object, element);
     _deleteRelated += setDeleteAllMethodsByElement(object, element);
@@ -410,32 +400,17 @@ const setPropertiesToFindByElement = (
 ): string => {
   let code = ``;
 
-  const type = Object.keys(element)[0];
   const value = Object.values(element)[0];
 
-  if (validTypes.includes(type)) {
-    if (value.optionsApi) {
-      const propertyName = TextTransformation.setIdToPropertyName(
-        TextTransformation.pascalfy(
-          TextTransformation.singularize(
-            value.optionsApi.endpoint.split("-").join(" ")
-          )
+  if (value.optionsApi) {
+    const propertyName = TextTransformation.setIdToPropertyName(
+      TextTransformation.pascalfy(
+        TextTransformation.singularize(
+          value.optionsApi.endpoint.split("-").join(" ")
         )
-      );
-      code += `'${propertyName}',`;
-    }
-  } else if (type === "tabs") {
-    element.tabs?.forEach((tab) => {
-      tab.elements.forEach((element) => {
-        code += setPropertiesToFindByElement(element);
-      });
-    });
-  } else if (type === "array") {
-    if (element.array?.elements) {
-      element.array?.elements.forEach((arrayElement) => {
-        code += setPropertiesToFindByElement(arrayElement);
-      });
-    }
+      )
+    );
+    code += `'${propertyName}',`;
   }
 
   return code;
@@ -448,33 +423,18 @@ const setCreateAllMethodsByElement = (
   let code = ``;
 
   const modelName: string = object.form!.id.replace("Form", "");
-  const type = Object.keys(element)[0];
   const value = Object.values(element)[0];
 
-  if (validTypes.includes(type)) {
-    if (value.optionsApi) {
-      const className = TextTransformation.setIdToClassName(
-        TextTransformation.pascalfy(
-          TextTransformation.singularize(
-            value.optionsApi.endpoint.split("-").join(" ")
-          )
+  if (value.optionsApi) {
+    const className = TextTransformation.setIdToClassName(
+      TextTransformation.pascalfy(
+        TextTransformation.singularize(
+          value.optionsApi.endpoint.split("-").join(" ")
         )
-      );
-      if (value.isMultiple) {
-        code += createCreateAllMethods(modelName, className, value.name);
-      }
-    }
-  } else if (type === "tabs") {
-    element.tabs?.forEach((tab) => {
-      tab.elements.forEach((tabElement) => {
-        code += setCreateAllMethodsByElement(object, tabElement);
-      });
-    });
-  } else if (type === "array") {
-    if (element.array?.elements) {
-      element.array?.elements.forEach((arrayElement) => {
-        code += setCreateAllMethodsByElement(object, arrayElement);
-      });
+      )
+    );
+    if (value.isMultiple) {
+      code += createCreateAllMethods(modelName, className, value.name);
     }
   }
 
@@ -488,33 +448,18 @@ const setDeleteAllMethodsByElement = (
   let code = ``;
 
   const modelName: string = object.form!.id.replace("Form", "");
-  const type = Object.keys(element)[0];
   const value = Object.values(element)[0];
 
-  if (validTypes.includes(type)) {
-    if (value.optionsApi) {
-      const className = TextTransformation.setIdToClassName(
-        TextTransformation.pascalfy(
-          TextTransformation.singularize(
-            value.optionsApi.endpoint.split("-").join(" ")
-          )
+  if (value.optionsApi) {
+    const className = TextTransformation.setIdToClassName(
+      TextTransformation.pascalfy(
+        TextTransformation.singularize(
+          value.optionsApi.endpoint.split("-").join(" ")
         )
-      );
-      if (value.isMultiple) {
-        code += createDeleteAllMethods(modelName, className, value.name);
-      }
-    }
-  } else if (type === "tabs") {
-    element.tabs?.forEach((tab) => {
-      tab.elements.forEach((tabElement) => {
-        code += setDeleteAllMethodsByElement(object, tabElement);
-      });
-    });
-  } else if (type === "array") {
-    if (element.array?.elements) {
-      element.array?.elements.forEach((arrayElement) => {
-        code += setDeleteAllMethodsByElement(object, arrayElement);
-      });
+      )
+    );
+    if (value.isMultiple) {
+      code += createDeleteAllMethods(modelName, className, value.name);
     }
   }
 

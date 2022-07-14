@@ -5,6 +5,7 @@ import { BuildedBackendCode, MainInterface } from "../../interfaces/main";
 import { controllerMain } from "./controller/main";
 import { modelMain } from "./model/main";
 import { repositoryMain } from "./repository/main";
+import { FormElementInterface } from "../../interfaces/form";
 
 const createLoopbackProject = (
   object: MainInterface,
@@ -80,4 +81,51 @@ const doesProjectFolderExists = (object: MainInterface) => {
   }
 }
 
-export { createLoopbackProject };
+const getAllElements = (
+  elementList: Array<FormElementInterface>,
+  elementsToReturn: Array<FormElementInterface> = [],
+): Array<FormElementInterface> => {
+
+  const validTypes = [
+    "checkbox",
+    "radio",
+    "datalist",
+    "fieldset",
+    "input",
+    "select",
+    "slide",
+    "textarea",
+    "text",
+    "autocomplete",
+  ];
+
+  elementList.forEach(element => {
+    const type = Object.keys(element)[0];
+
+    if (validTypes.includes(type)) {
+
+      elementsToReturn.push(element);
+
+    } else if (type === "tabs") {
+
+      element.tabs?.forEach((tab) => {
+        elementsToReturn = getAllElements(tab.elements, elementsToReturn);
+      });
+
+    } else if (type === "array") {
+
+      if (element.array?.elements) {
+        elementsToReturn = getAllElements(element.array?.elements, elementsToReturn);
+      }
+
+    }
+
+  })
+
+  return elementsToReturn;
+}
+
+export {
+  createLoopbackProject,
+  getAllElements,
+};

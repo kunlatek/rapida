@@ -1,6 +1,7 @@
 import { FormElementInterface } from "../../../interfaces/form";
 import { MainInterface } from "../../../interfaces/main";
 import { TextTransformation } from "../../../utils/text.transformation";
+import { getAllElements } from "../main";
 
 const setControllerImports = (object: MainInterface): string => {
   if (!object.form) {
@@ -11,7 +12,9 @@ const setControllerImports = (object: MainInterface): string => {
   const modelName: string = object.form.id.replace("Form", "");
   let _relatedRepositoriesImports: string = ``;
 
-  object.form.elements.forEach((element) => {
+  const elements: Array<FormElementInterface> = getAllElements(object.form?.elements);
+
+  elements.forEach((element) => {
     _relatedRepositoriesImports += setRepositoriesImportsByElement(object, element);
   });
 
@@ -46,45 +49,19 @@ const setRepositoriesImportsByElement = (
 ): string => {
   let code = ``;
   const modelName = object.form!.id.replace("Form", "");
-  const validTypes = [
-    "checkbox",
-    "radio",
-    "datalist",
-    "fieldset",
-    "input",
-    "select",
-    "slide",
-    "textarea",
-    "autocomplete",
-  ];
-  const type = Object.keys(element)[0];
   const value = Object.values(element)[0];
 
-  if (validTypes.includes(type)) {
-    if (value.optionsApi) {
-      const className = TextTransformation.setIdToClassName(
-        TextTransformation.pascalfy(
-          TextTransformation.singularize(
-            value.optionsApi.endpoint.split("-").join(" ")
-          )
+  if (value.optionsApi) {
+    const className = TextTransformation.setIdToClassName(
+      TextTransformation.pascalfy(
+        TextTransformation.singularize(
+          value.optionsApi.endpoint.split("-").join(" ")
         )
-      );
+      )
+    );
 
-      if (value.isMultiple) {
-        code += createRepositoriesImports(modelName, className);
-      }
-    }
-  } else if (type === "tabs") {
-    element.tabs?.forEach((tab) => {
-      tab.elements.forEach((tabElement) => {
-        code += setRepositoriesImportsByElement(object, tabElement);
-      });
-    });
-  } else if (type === "array") {
-    if (element.array?.elements) {
-      element.array?.elements.forEach((arrayElement) => {
-        code += setRepositoriesImportsByElement(object, arrayElement);
-      });
+    if (value.isMultiple) {
+      code += createRepositoriesImports(modelName, className);
     }
   }
 

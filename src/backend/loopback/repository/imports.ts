@@ -1,19 +1,7 @@
 import { FormElementInterface } from "../../../interfaces/form";
 import { MainInterface } from "../../../interfaces/main";
 import { TextTransformation } from "../../../utils/text.transformation";
-
-const validTypes = [
-  "checkbox",
-  "radio",
-  "datalist",
-  "fieldset",
-  "input",
-  "select",
-  "slide",
-  "textarea",
-  "text",
-  "autocomplete",
-];
+import { getAllElements } from "../main";
 
 const setRepositoryImports = (object: MainInterface): string => {
   if (!object.form) {
@@ -30,7 +18,9 @@ const setRepositoryImports = (object: MainInterface): string => {
     repositories: [] as string[],
   }
 
-  object.form.elements.forEach((element) => {
+  const elements: Array<FormElementInterface> = getAllElements(object.form?.elements);
+
+  elements.forEach((element) => {
     _modelImports += setModelImportsByElement(object, element);
     _repositoryImports += setRepositoryImportsByElement(object, element);
 
@@ -79,30 +69,16 @@ const setModelImportsByElement = (
 
   let code = ``;
 
-  if (validTypes.includes(type)) {
-    if (value.optionsApi) {
-      const className = TextTransformation.setIdToClassName(
-        TextTransformation.pascalfy(
-          TextTransformation.singularize(
-            value.optionsApi.endpoint.split("-").join(" ")
-          )
+  if (value.optionsApi) {
+    const className = TextTransformation.setIdToClassName(
+      TextTransformation.pascalfy(
+        TextTransformation.singularize(
+          value.optionsApi.endpoint.split("-").join(" ")
         )
-      );
+      )
+    );
 
-      code += `${className},`;
-    }
-  } else if (type === "tabs") {
-    element.tabs?.forEach((tab) => {
-      tab.elements.forEach((tabElement) => {
-        code += setModelImportsByElement(object, tabElement);
-      });
-    });
-  } else if (type === "array") {
-    if (element.array?.elements) {
-      element.array?.elements.forEach((arrayElement) => {
-        code += setModelImportsByElement(object, arrayElement);
-      });
-    }
+    code += `${className},`;
   }
 
   return code;
@@ -113,35 +89,20 @@ const setRepositoryImportsByElement = (
   element: FormElementInterface
 ): string => {
   const modelName = object.form!.id.replace("Form", "");
-  const type = Object.keys(element)[0];
   const value = Object.values(element)[0];
 
   let code = ``;
 
-  if (validTypes.includes(type)) {
-    if (value.optionsApi) {
-      const className = TextTransformation.setIdToClassName(
-        TextTransformation.pascalfy(
-          TextTransformation.singularize(
-            value.optionsApi.endpoint.split("-").join(" ")
-          )
+  if (value.optionsApi) {
+    const className = TextTransformation.setIdToClassName(
+      TextTransformation.pascalfy(
+        TextTransformation.singularize(
+          value.optionsApi.endpoint.split("-").join(" ")
         )
-      );
+      )
+    );
 
-      code += modelName.toLowerCase() !== className.toLowerCase() ? `${className}Repository,` : "";
-    }
-  } else if (type === "tabs") {
-    element.tabs?.forEach((tab) => {
-      tab.elements.forEach((tabElement) => {
-        code += setRepositoryImportsByElement(object, tabElement);
-      });
-    });
-  } else if (type === "array") {
-    if (element.array?.elements) {
-      element.array?.elements.forEach((arrayElement) => {
-        code += setRepositoryImportsByElement(object, arrayElement);
-      });
-    }
+    code += modelName.toLowerCase() !== className.toLowerCase() ? `${className}Repository,` : "";
   }
 
   return code;
@@ -156,10 +117,9 @@ const getAdditionalLoopbackCoreAndRepositoriesImportMethods = (
     repositories: [] as string[],
   };
 
-  const type = Object.keys(element)[0];
   const value = Object.values(element)[0];
 
-  if (validTypes.includes(type) && value.optionsApi) {
+  if (value.optionsApi) {
     additionalLoopbackCoreAndRepositoriesImportMethods['core'].push('Getter')
     additionalLoopbackCoreAndRepositoriesImportMethods['repositories'] = additionalLoopbackCoreAndRepositoriesImportMethods['repositories'].concat(['repository'])
     if (value.isMultiple) {
@@ -171,20 +131,6 @@ const getAdditionalLoopbackCoreAndRepositoriesImportMethods = (
       ])
     } else {
       additionalLoopbackCoreAndRepositoriesImportMethods['repositories'] = additionalLoopbackCoreAndRepositoriesImportMethods['repositories'].concat(['BelongsToAccessor'])
-    }
-  } else if (type === "tabs") {
-    element.tabs?.forEach((tab) => {
-      tab.elements.forEach((tabElement) => {
-        additionalLoopbackCoreAndRepositoriesImportMethods['core'] = additionalLoopbackCoreAndRepositoriesImportMethods['core'].concat(getAdditionalLoopbackCoreAndRepositoriesImportMethods(tabElement)['core']);
-        additionalLoopbackCoreAndRepositoriesImportMethods['repositories'] = additionalLoopbackCoreAndRepositoriesImportMethods['repositories'].concat(getAdditionalLoopbackCoreAndRepositoriesImportMethods(tabElement)['repositories']);
-      });
-    });
-  } else if (type === "array") {
-    if (element.array?.elements) {
-      element.array?.elements.forEach((arrayElement) => {
-        additionalLoopbackCoreAndRepositoriesImportMethods['core'] = additionalLoopbackCoreAndRepositoriesImportMethods['core'].concat(getAdditionalLoopbackCoreAndRepositoriesImportMethods(arrayElement)['core']);
-        additionalLoopbackCoreAndRepositoriesImportMethods['repositories'] = additionalLoopbackCoreAndRepositoriesImportMethods['repositories'].concat(getAdditionalLoopbackCoreAndRepositoriesImportMethods(arrayElement)['repositories']);
-      });
     }
   }
 

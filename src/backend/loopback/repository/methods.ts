@@ -1,19 +1,7 @@
 import { FormElementInterface } from "../../../interfaces/form";
 import { MainInterface } from "../../../interfaces/main";
 import { TextTransformation } from "../../../utils/text.transformation";
-
-const validTypes = [
-  "checkbox",
-  "radio",
-  "datalist",
-  "fieldset",
-  "input",
-  "select",
-  "slide",
-  "textarea",
-  "text",
-  "autocomplete",
-];
+import { getAllElements } from "../main";
 
 const setRepositoryMethods = (object: MainInterface): string => {
   if (!object.form) {
@@ -23,7 +11,9 @@ const setRepositoryMethods = (object: MainInterface): string => {
 
   let code = ``;
 
-  object.form.elements.forEach((element) => {
+  const elements: Array<FormElementInterface> = getAllElements(object.form?.elements);
+
+  elements.forEach((element) => {
     code += setMethodsByElement(object, element);
   });
 
@@ -35,36 +25,21 @@ const setMethodsByElement = (
   element: FormElementInterface
 ): string => {
   const modelName = object.form!.id.replace("Form", "");
-  const type = Object.keys(element)[0];
   const value = Object.values(element)[0];
 
   let code = ``;
 
-  if (validTypes.includes(type)) {
-    if (value.optionsApi) {
-      const className = TextTransformation.setIdToClassName(
-        TextTransformation.pascalfy(
-          TextTransformation.singularize(
-            value.optionsApi.endpoint.split("-").join(" ")
-          )
+  if (value.optionsApi) {
+    const className = TextTransformation.setIdToClassName(
+      TextTransformation.pascalfy(
+        TextTransformation.singularize(
+          value.optionsApi.endpoint.split("-").join(" ")
         )
-      );
+      )
+    );
 
-      if (value.isMultiple) {
-        code += createRepositoryRelatedModels(TextTransformation.pascalfy(modelName), className);
-      }
-    }
-  } else if (type === "tabs") {
-    element.tabs?.forEach((tab) => {
-      tab.elements.forEach((tabElement) => {
-        code += setMethodsByElement(object, tabElement);
-      });
-    });
-  } else if (type === "array") {
-    if (element.array?.elements) {
-      element.array?.elements.forEach((arrayElement) => {
-        code += setMethodsByElement(object, arrayElement);
-      });
+    if (value.isMultiple) {
+      code += createRepositoryRelatedModels(TextTransformation.pascalfy(modelName), className);
     }
   }
 

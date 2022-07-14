@@ -1,19 +1,8 @@
 import { FormElementInterface } from "../../../interfaces/form";
 import { MainInterface } from "../../../interfaces/main";
 import { TextTransformation } from "../../../utils/text.transformation";
+import { getAllElements } from "../main";
 
-const validTypes = [
-  "checkbox",
-  "radio",
-  "datalist",
-  "fieldset",
-  "input",
-  "select",
-  "slide",
-  "textarea",
-  "text",
-  "autocomplete",
-];
 const stringTypes = [
   "email",
   "password",
@@ -47,7 +36,9 @@ const setModelProperties = (object: MainInterface): string => {
   _id?: string;
   `;
 
-  object.form.elements.forEach((element) => {
+  const elements: Array<FormElementInterface> = getAllElements(object.form.elements);
+
+  elements.forEach((element) => {
     code += setByElement(object, element);
   });
 
@@ -64,24 +55,23 @@ const setByElement = (
 
   let code = ``;
 
-  if (validTypes.includes(type)) {
-    const propertyType = value.isMultiple ?
-      'array' :
-      (
-        stringTypes.includes(value.type || type) ? 'String' :
-          (
-            numberTypes.includes(value.type || type) ? 'number' :
-              (booleanTypes.includes(value.type || type) ? 'boolean' : 'any')
-          )
-      )
+  const propertyType = value.isMultiple ?
+    'array' :
+    (
+      stringTypes.includes(value.type || type) ? 'String' :
+        (
+          numberTypes.includes(value.type || type) ? 'number' :
+            (booleanTypes.includes(value.type || type) ? 'boolean' : 'any')
+        )
+    )
 
-    if (value.optionsApi) {
-      const className = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
-      const propertyName = TextTransformation.setIdToPropertyName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
-      const modelNameClass = TextTransformation.setIdToClassName(modelName);
+  if (value.optionsApi) {
+    const className = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
+    const propertyName = TextTransformation.setIdToPropertyName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
+    const modelNameClass = TextTransformation.setIdToClassName(modelName);
 
-      if (value.isMultiple) {
-        code += `
+    if (value.isMultiple) {
+      code += `
         @property({ type: 'array', itemType: 'any'})
         ${value.name}?: any[];
         @hasMany(() => ${className}, {
@@ -92,43 +82,29 @@ const setByElement = (
         })
         ${propertyName}: ${className}[];
         `;
-      } else {
-        code += `
+    } else {
+      code += `
         @belongsTo(() => ${className})
         ${propertyName}Id: String;
         `;
-      }
-    } else {
-      code += `
+    }
+  } else {
+    code += `
       @property({
           type: '${propertyType}',
           ${value.isMultiple ? "itemType: 'any'," : 'jsonSchema: {nullable: true},'}
       })
       ${value.name}?: ${value.isMultiple ? 'any[]' : propertyType};
       `;
-    }
-  } else if (type === 'tabs') {
-    element.tabs?.forEach(tab => {
-      tab.elements.forEach(tabElement => {
-        code += setByElement(object, tabElement);
-      });
-    })
-  } else if (type === 'array') {
-
-    code += `
-        @property({
-            type: 'array',
-            itemType: 'object',
-        })
-        ${value.id}?: object[];
-        `;
-
-    if (element.array?.elements) {
-      element.array?.elements?.forEach(element => {
-        code += setByElement(object, element);
-      })
-    }
   }
+
+  // code += `
+  //     @property({
+  //         type: 'array',
+  //         itemType: 'object',
+  //     })
+  //     ${value.id}?: object[];
+  //     `;
 
   return code;
 }
