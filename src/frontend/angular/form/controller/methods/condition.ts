@@ -30,9 +30,9 @@ const setCondition = (
     if (formElements.includes(type)) {
       if (value.conditions) {
         if (value.conditions.type === ConditionEnum.Form) {
-          if (!_conditionMethods.includes(value.conditions.id)) {
+          if (!_conditionMethods.includes(value.name ? value.name : value.id)) {
             if (!array) {
-              code += `this.${value.conditions.id}FormCondition = (`;
+              code += `this.${value.name}FormCondition = (`;
 
               value.conditions.elements.forEach(
                 (condition: any, index: number) => {
@@ -58,8 +58,8 @@ const setCondition = (
         }
 
         if (value.conditions.type === ConditionEnum.Code) {
-          if (!_conditionMethods.includes(value.conditions.id)) {
-            code += `this.${value.conditions.id}CodeCondition = (`;
+          if (!_conditionMethods.includes(value.name ? value.name : value.id)) {
+            code += `this.${value.name}CodeCondition = (`;
 
             value.conditions.elements.forEach(
               (condition: any, index: number) => {
@@ -79,7 +79,7 @@ const setCondition = (
                 }
                 code += `)`;
 
-                _conditionMethods.push(value.conditions.id);
+                _conditionMethods.push(value.name);
               }
             );
           }
@@ -125,7 +125,7 @@ const setConditionOverEdition = (
     if (formElements.includes(type)) {
       if (value.conditions) {
         if (value.conditions.type === ConditionEnum.Form) {
-          if (!_conditionMethodsOverEdition.includes(value.conditions.id)) {
+          if (!_conditionMethodsOverEdition.includes(value.name ? value.name : value.id)) {
             let conditionId = "";
             if (array) {
               code += `
@@ -139,7 +139,7 @@ const setConditionOverEdition = (
             }
             value.conditions.elements.forEach(
               (condition: ConditionElementInterface, index: number) => {
-                conditionId = `${value.conditions.id}FormCondition`;
+                conditionId = `${value.name ? value.name : value.id}FormCondition`;
                 if (array) {
                   if (index > 0) {
                     code += `${
@@ -156,7 +156,7 @@ const setConditionOverEdition = (
                   } "${condition.value}"`;
                 }
 
-                _conditionMethodsOverEdition.push(value.conditions.id);
+                _conditionMethodsOverEdition.push(value.name ? value.name : value.id);
               }
             );
 
@@ -210,9 +210,9 @@ const setConditionsInArray = (
     if (formElements.includes(type)) {
       if (value.conditions) {
         if (value.conditions.type === ConditionEnum.Form) {
-          if (!_conditionMethods.includes(value.conditions.id)) {
+          if (!_conditionMethods.includes(value.name ? value.name : value.id)) {
             if (array) {
-              code += `this.${value.conditions.id}FormCondition[index] = (`;
+              code += `this.${value.name ? value.name : value.id}FormCondition[index] = (`;
 
               value.conditions.elements.forEach(
                 (condition: any, index: number) => {
@@ -235,7 +235,7 @@ const setConditionsInArray = (
 
               code += `);`;
 
-              _conditionMethods.push(value.conditions.id);
+              _conditionMethods.push(value.id);
             }
           }
         }

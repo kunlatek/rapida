@@ -34,9 +34,9 @@ export const MODULE_FORM: MainInterface = {
           type: FormInputTypeEnum.Text,
           optionsApi: {
             endpoint: "components",
-            labelField: "name",
+            labelField: "collectionTitle",
             valueField: "_id",
-            paramsToFilter: ["name"]
+            paramsToFilter: ["collectionTitle", "collectionId"]
           },
           isMultiple: true,
         }
