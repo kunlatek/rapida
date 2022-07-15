@@ -107,7 +107,7 @@ const setJsonToPatchValue = (object: MainInterface, formElements: Array<FormElem
     if (element.array) {
       code += `
       (${array ? `${array}Form` : `this.${object.form?.id}Form`}.get("${element.array.id}") as FormArray).clear();
-      ${array ? `_${array}` : `this.${object.form?.id}ToEdit.data`}.${element.array.id}.forEach((_${element.array.id}: any) => {
+      ${array ? `_${array}` : `this.${object.form?.id}ToEdit.data`}.${element.array.id}?.forEach((_${element.array.id}: any) => {
         const ${element.array.id}Form = this.init${TextTransformation.pascalfy(element.array.id)}();
         ${element.array.id}Form.patchValue(_${element.array.id});
         (${array ? `${array}Form` : `this.${object.form?.id}Form`}.get("${element.array.id}") as FormArray).push(${element.array.id}Form);
@@ -139,6 +139,8 @@ const setAutocompleteToEdit = (object: MainInterface, formElements: any, array: 
       if(element.autocomplete.isMultiple) {
         code += `
         if (this.${object.form?.id}ToEdit.data.${TextTransformation.singularize(element.autocomplete.optionsApi.endpoint)}) {
+          this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}View = [];
+          this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}Value = [];
           this.${object.form?.id}ToEdit.data
           .${TextTransformation.singularize(element.autocomplete.optionsApi.endpoint)}
           .forEach((element: any) => {

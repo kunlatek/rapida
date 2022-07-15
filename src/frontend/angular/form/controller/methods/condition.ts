@@ -223,13 +223,14 @@ const setConditionsInArray = (
                         : ` && `
                     }`;
                   }
+                  
                   code += `(this.${
                     object.form!.id
                   }Form.get("${array}")?.value[index]?.${condition.key} ${
                     condition.comparisonOperator
                       ? ` ${condition.comparisonOperator} `
                       : ` === `
-                  } "${condition.value}")`;
+                  } ${(typeof condition.value !== "string") ? condition.value :  `"${condition.value}"`})`;
                 }
               );
 
