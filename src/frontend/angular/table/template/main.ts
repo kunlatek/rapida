@@ -66,7 +66,7 @@ const setTableTemplate = (object: MainInterface): string => {
     </table>
     <div 
       style="width: 100%; height: 100px; display: flex; align-items: center; justify-content: center; color: #c9c9c9"
-      *ngIf="${object.table.id}DataSource.length === 0">
+      *ngIf="${object.table.id}DataSource.length === 0 && !isLoading">
       <div style="display: flex; flex-direction: column;">
         <img 
           width="50"
