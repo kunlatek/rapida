@@ -19,7 +19,7 @@ PORT=3000
 SERVER_ROOT_URI=http://localhost
 CLIENT_REDIRECT_URI=http://localhost:4200
 MONGO_URL=mongodb+srv://kunlatek:Kunlatek751@cluster0.b0pfr.mongodb.net/?authSource=admin&replicaSet=atlas-zft6fn-shard-0&readPreference=primary&ssl=true
-DB=rapida
+DB=animation
 NODEMAILER_USER=
 NODEMAILER_PASS=
 ADMIN_USERS=
@@ -67,28 +67,28 @@ ADMIN_USERS=
 
 const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart";
 const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api";
-const projectPath = "/home/ryzzan/Projects/rapida-backoffice";
+const projectPath = "/home/giovanniestevam/projects/animation";
 
 
-// import { ANIMATION_FORM } from "../collections-frontend/example/animation/animation-form";
-// import { ANIMATION_TABLE } from "../collections-frontend/example/animation/animation-table";
-// import { ANIMATION } from "../collections-frontend/example/animation/animation";
+import { ANIMATION_FORM } from "../collections-frontend/example/animation/animation-form";
+import { ANIMATION_TABLE } from "../collections-frontend/example/animation/animation-table";
+import { ANIMATION } from "../collections-frontend/example/animation/animation";
 
-// import { CHARACTER_FORM } from "../collections-frontend/example/animation/character-form";
-// import { CHARACTER_TABLE } from "../collections-frontend/example/animation/character-table";
-// import { CHARACTER } from "../collections-frontend/example/animation/character";
+import { CHARACTER_FORM } from "../collections-frontend/example/animation/character-form";
+import { CHARACTER_TABLE } from "../collections-frontend/example/animation/character-table";
+import { CHARACTER } from "../collections-frontend/example/animation/character";
 
-import { PROJECT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/project-form";
-import { PROJECT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/project-table";
-import { PROJECT } from "../collections-frontend/kunlatek/rapida-backoffice/project";
+// import { PROJECT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/project-form";
+// import { PROJECT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/project-table";
+// import { PROJECT } from "../collections-frontend/kunlatek/rapida-backoffice/project";
 
-import { COMPONENT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/component-form";
-import { COMPONENT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/component-table";
-import { COMPONENT } from "../collections-frontend/kunlatek/rapida-backoffice/component";
+// import { COMPONENT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/component-form";
+// import { COMPONENT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/component-table";
+// import { COMPONENT } from "../collections-frontend/kunlatek/rapida-backoffice/component";
 
-import { MODULE_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/module-form";
-import { MODULE_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/module-table";
-import { MODULE } from "../collections-frontend/kunlatek/rapida-backoffice/module";
+// import { MODULE_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/module-form";
+// import { MODULE_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/module-table";
+// import { MODULE } from "../collections-frontend/kunlatek/rapida-backoffice/module";
 
 //////////////////////////////////////////////////////////
 
@@ -97,25 +97,25 @@ const array = [
    * ANIMATION
    */
 
-  // ANIMATION_FORM,
-  // ANIMATION_TABLE,
-  // ANIMATION,
+  ANIMATION_FORM,
+  ANIMATION_TABLE,
+  ANIMATION,
 
-  // CHARACTER_FORM,
-  // CHARACTER_TABLE,
-  // CHARACTER,
+  CHARACTER_FORM,
+  CHARACTER_TABLE,
+  CHARACTER,
 
-  PROJECT_FORM,
-  PROJECT_TABLE,
-  PROJECT,
+  // PROJECT_FORM,
+  // PROJECT_TABLE,
+  // PROJECT,
 
-  COMPONENT_FORM,
-  COMPONENT_TABLE,
-  COMPONENT,
+  // COMPONENT_FORM,
+  // COMPONENT_TABLE,
+  // COMPONENT,
 
-  MODULE_FORM, 
-  MODULE_TABLE, 
-  MODULE,
+  // MODULE_FORM, 
+  // MODULE_TABLE, 
+  // MODULE,
 ];
 
 array.forEach((object) => {

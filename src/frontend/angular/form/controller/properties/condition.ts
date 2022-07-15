@@ -42,23 +42,23 @@ const setConditionByElements = (
     if (formElements.includes(type)) {
       if (value.conditions) {
         // Check to not repeat property
-        if (!_conditionProperties.includes(value.conditions.id)) {
+        if (!_conditionProperties.includes(value.name ? value.name : value.id)) {
           if (value.conditions.type === ConditionEnum.Form) {
             if (!isArray) {            
-              code += `${value.conditions.id}FormCondition: boolean = false;`;
+              code += `${value.name}FormCondition: boolean = false;`;
             }
   
             if (isArray) {
-              code += `${value.conditions.id}FormCondition: [boolean] = [false];`;
+              code += `${value.name ? value.name : value.id}FormCondition: [boolean] = [false];`;
             }
           }
     
           if (value.conditions.type === ConditionEnum.Code) {
-            code += `${value.conditions.id}CodeCondition: boolean = false;`;
+            code += `${value.name}CodeCondition: boolean = false;`;
           }
         }
   
-        _conditionProperties.push(value.conditions.id);
+        _conditionProperties.push(value.name ? value.name : value.id);
       }
     }
   

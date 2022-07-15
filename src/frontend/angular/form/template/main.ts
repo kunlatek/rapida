@@ -392,7 +392,7 @@ const setSpecificStructureOverFormElement = (
   }
 
   if (element.slide) {
-    const setCondition = element.slide.isTriggerToCondition ? `(selectionChange)="setCondition(i, checked)"` : "";
+    const setCondition = element.slide.isTriggerToCondition ? `(change)="setCondition(i, true)"` : "";
     code += `
     <mat-slide-toggle formControlName="${element.slide.name}" ${conditions} ${setCondition}>
       ${element.slide.label}
@@ -559,16 +559,16 @@ const setConditions = (
     if (value.conditions) {
       if (value.conditions.type === ConditionEnum.Form) {
         if (array) {
-          code += `*ngIf="${value.conditions.id}FormCondition[i]"`;
+          code += `*ngIf="${value.name ? value.name : value.id}FormCondition[i]"`;
         }
 
         if (!array) {          
-          code += `*ngIf="${value.conditions.id}FormCondition"`;
+          code += `*ngIf="${value.name ? value.name : value.id}FormCondition"`;
         }
       }
 
       if (value.conditions.type === ConditionEnum.Code) {
-        code += `*ngIf="${value.conditions.id}CodeCondition"`;
+        code += `*ngIf="${value.name ? value.name : value.id}CodeCondition"`;
       }
     }
   }
