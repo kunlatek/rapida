@@ -502,11 +502,7 @@ const createDeleteAllMethods = (
 
   return `
       if(dataToWorkInRelation.${relatedPropertyName} && (dataToWorkInRelation.${relatedPropertyName}.length > 0)){
-        await this.${mainPropertyCamelCase}Has${secondProperty}Repository.deleteAll({
-            or: (dataToWorkInRelation.${relatedPropertyName} as any[]).map(${secondPropertyCamelCase} => {
-                return {${secondPropertyCamelCase}Id: ${secondPropertyCamelCase}._id};
-            })
-        }); 
+        await this.${mainPropertyCamelCase}Has${secondProperty}Repository.deleteAll({ ${mainPropertyCamelCase}Id: id }) 
       }
   `;
 };
