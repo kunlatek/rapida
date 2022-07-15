@@ -120,7 +120,7 @@ const setByElement = (
             type: 'array',
             itemType: 'object',
         })
-        ${value.id}?: object[];
+        ${value.name ? value.name : value.id}?: object[];
         `;
 
     if (element.array?.elements) {

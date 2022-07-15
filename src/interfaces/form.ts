@@ -233,7 +233,6 @@ export interface DatalistInterface {
   export interface TextareaInterface {}
 
   export interface ConditionInterface {
-    id: string;
     type: ConditionEnum;
     elements: Array<ConditionElementInterface>;
   }

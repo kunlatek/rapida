@@ -164,7 +164,6 @@ export const COMPONENT_FORM: MainInterface = {
                         ],
                         isTriggerToCondition: true,
                         conditions: {
-                          id: "formElementSelect",
                           type: ConditionEnum.Form,
                           elements: [
                             {
@@ -182,7 +181,6 @@ export const COMPONENT_FORM: MainInterface = {
                         type: FormInputTypeEnum.Text,
                         placeholder: "Endpoint para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
                         conditions: {
-                          id: "formSelectOptionsAPI",
                           type: ConditionEnum.Form,
                           elements: [
                             {
@@ -200,7 +198,6 @@ export const COMPONENT_FORM: MainInterface = {
                         type: FormInputTypeEnum.Text,
                         placeholder: "Label para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
                         conditions: {
-                          id: "formSelectOptionsAPI",
                           type: ConditionEnum.Form,
                           elements: [
                             {
@@ -218,7 +215,6 @@ export const COMPONENT_FORM: MainInterface = {
                         type: FormInputTypeEnum.Text,
                         placeholder: "Valor para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
                         conditions: {
-                          id: "formSelectOptionsAPI",
                           type: ConditionEnum.Form,
                           elements: [
                             {
@@ -250,7 +246,6 @@ export const COMPONENT_FORM: MainInterface = {
                           },
                         ],
                         conditions: {
-                          id: "formSelectOptionsObject",
                           type: ConditionEnum.Form,
                           elements: [
                             {
@@ -266,7 +261,6 @@ export const COMPONENT_FORM: MainInterface = {
                         label: "Seleção múltipla",
                         name: "formSelectIsMultiple",
                         conditions: {
-                          id: "formElementSelect",
                           type: ConditionEnum.Form,
                           elements: [
                             {
@@ -282,7 +276,6 @@ export const COMPONENT_FORM: MainInterface = {
                         label: "Seleção múltipla",
                         name: "formAutocompleteIsMultiple",
                         conditions: {
-                          id: "formElementAutocomplete",
                           type: ConditionEnum.Form,
                           elements: [
                             {
@@ -290,17 +283,25 @@ export const COMPONENT_FORM: MainInterface = {
                               value: "autocomplete"
                             }
                           ]
-                        }
+                        },
+                        isTriggerToCondition: true,
                       }
                     },
                     {
-                      input: {
-                        label: "Filtros",
-                        name: "formParamsToFilter",
-                        type: FormInputTypeEnum.Text,
-                        placeholder: "Matriz de campos para filtragem em \${componentFormForm.get('formTitle')?.value}",
+                      array: {
+                        id: "filterArray",
+                        title: "Filtro",
+                        elements: [
+                          {
+                            input: {
+                              label: "Propriedade de filtro",
+                              name: "formParamsToFilter",
+                              type: FormInputTypeEnum.Text,
+                              placeholder: "Propriedade para filtragem no autocomplete",
+                            }
+                          }
+                        ],
                         conditions: {
-                          id: "formElementAutocomplete",
                           type: ConditionEnum.Form,
                           elements: [
                             {
@@ -359,6 +360,15 @@ export const COMPONENT_FORM: MainInterface = {
                         label: "Tipo de menu",
                         name: "tableMenuType",
                         type: FormInputTypeEnum.Text,
+                        conditions: {
+                          type: ConditionEnum.Form,
+                          elements: [
+                            {
+                              key: "tableIsMenu",
+                              value: true
+                            }
+                          ]
+                        },
                         optionsObject: [
                           {
                             label: "API",
@@ -377,6 +387,7 @@ export const COMPONENT_FORM: MainInterface = {
                             value: "DIALOG"
                           },
                         ],
+                        isTriggerToCondition: true,
                       }
                     },
                     {
@@ -386,7 +397,6 @@ export const COMPONENT_FORM: MainInterface = {
                         type: FormInputTypeEnum.Text,
                         placeholder: "Label do link do menu",
                         conditions: {
-                          id: "tableMenuType",
                           type: ConditionEnum.Form,
                           elements: [
                             {
@@ -404,7 +414,6 @@ export const COMPONENT_FORM: MainInterface = {
                         type: FormInputTypeEnum.Text,
                         placeholder: "Rota do link do menu",
                         conditions: {
-                          id: "tableMenuType",
                           type: ConditionEnum.Form,
                           elements: [
                             {
@@ -422,7 +431,6 @@ export const COMPONENT_FORM: MainInterface = {
                         type: FormInputTypeEnum.Text,
                         placeholder: "Parâmetro do link do menu. Exemplo: _id",
                         conditions: {
-                          id: "tableMenuType",
                           type: ConditionEnum.Form,
                           elements: [
                             {
@@ -440,7 +448,6 @@ export const COMPONENT_FORM: MainInterface = {
                         type: FormInputTypeEnum.Text,
                         placeholder: "Label do diálogo do menu",
                         conditions: {
-                          id: "tableMenuType",
                           type: ConditionEnum.Form,
                           elements: [
                             {
@@ -464,7 +471,6 @@ export const COMPONENT_FORM: MainInterface = {
                           }
                         ],
                         conditions: {
-                          id: "tableMenuType",
                           type: ConditionEnum.Form,
                           elements: [
                             {
@@ -479,6 +485,7 @@ export const COMPONENT_FORM: MainInterface = {
                       slide: {
                         label: "Menu na linha",
                         name: "tableIsMenu",
+                        isTriggerToCondition: true,
                       }
                     },
                   ]
