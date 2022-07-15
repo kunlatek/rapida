@@ -64,6 +64,18 @@ const setTableTemplate = (object: MainInterface): string => {
       <tr mat-header-row *matHeaderRowDef="${object.table.id}DisplayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: ${object.table.id}DisplayedColumns;"></tr>                                        
     </table>
+    <div 
+      style="width: 100%; height: 100px; display: flex; align-items: center; justify-content: center; color: #c9c9c9"
+      *ngIf="${object.table.id}DataSource.length === 0">
+      <div style="display: flex; flex-direction: column;">
+        <img 
+          width="50"
+          height="50"
+          style="filter: invert(60%) sepia(0%) saturate(60%) hue-rotate(88deg) brightness(128%) contrast(119%);"
+          src="https://www.svgrepo.com/show/97068/empty-box.svg" alt="">
+        <span>No Data</span>
+      </div>
+    </div> 
     <div *ngIf="isLoading" class="loading">
         <mat-progress-bar color="primary" mode="buffer">
         </mat-progress-bar>
