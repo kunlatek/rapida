@@ -6,6 +6,7 @@ import { controllerMain } from "./controller/main";
 import { modelMain } from "./model/main";
 import { repositoryMain } from "./repository/main";
 import { FormElementInterface } from "../../interfaces/form";
+import { FormInputTypeEnum } from "../../enums/form";
 
 const createLoopbackProject = (
   object: MainInterface,
@@ -115,7 +116,18 @@ const getAllElements = (
     } else if (type === "array") {
 
       if (element.array?.elements) {
-        elementsToReturn = getAllElements(element.array?.elements, elementsToReturn);
+        elementsToReturn = [
+          {
+            select: {
+              label: element.array?.title,
+              name: element.array?.id,
+              isMultiple: true,
+              type: FormInputTypeEnum.Text,
+            },
+          },
+          ...getAllElements(element.array?.elements, elementsToReturn),
+        ];
+
       }
 
     }
