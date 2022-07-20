@@ -96,6 +96,17 @@ export const CHARACTER_FORM: MainInterface = {
                   type: FormInputTypeEnum.Text,
                   isMultipleLines: true,
                 }
+              },
+              {
+                array: {
+                  title: "Teste",
+                  id: "testArray",
+                  elements: [
+                    {
+                      elementReplicaId: "mainTab",
+                    }
+                  ]
+                }
               }
             ],
           },

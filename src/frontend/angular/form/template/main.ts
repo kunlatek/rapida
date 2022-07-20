@@ -134,10 +134,11 @@ const setArrayLayer = (
 const setSpecificStructureOverFormElement = (
   object: MainInterface,
   element: FormElementInterface,
-  array: string | undefined = undefined
+  array: string | undefined = undefined,
+  arrayCurrentIndexAsParam: string | undefined = undefined
 ): string => {
   let code = ``;
-  let conditions = setConditions(element, array);
+  let conditions = setConditions(element, array, arrayCurrentIndexAsParam);
 
   if (element.input) {
     const placeholder = element.input.placeholder
@@ -377,7 +378,7 @@ const setSpecificStructureOverFormElement = (
   if (element.select) {
     const multiple = element.select.isMultiple ? "multiple" : "";
     const required = element.select.isRequired ? "required" : "";
-    const setCondition = element.select.isTriggerToCondition ? `(selectionChange)="setCondition(i)"` : "";
+    const setCondition = element.select.isTriggerToCondition ? `(selectionChange)="setCondition(${arrayCurrentIndexAsParam})"` : "";
     
     code += `
     <mat-form-field ${conditions}>
@@ -420,7 +421,7 @@ const setSpecificStructureOverFormElement = (
     let arrayStructure = ``;
     let arrayIndexes = setArrayIndexes(element.array.id);
     let arrayIndexesToAdd = setArrayIndexesToAdd(element.array.id);
-    let arrayCurrentIndex;
+    let arrayCurrentIndex: any;
     let arrayFlowIdentifier = setArrayFlowIdentifier(element.array.id) ? setArrayFlowIdentifier(element.array.id) : `this.${object.form?.id}Form`;
     _arrayLayer?.forEach(array => {
       if (array.name === element.array?.id) {
@@ -432,7 +433,8 @@ const setSpecificStructureOverFormElement = (
       arrayStructure += setSpecificStructureOverFormElement(
         object,
         arrayElement,
-        element.array?.id
+        element.array?.id,
+        arrayCurrentIndex
       );
     });
     code += `
@@ -539,7 +541,8 @@ const setArraysInAFlow = (arrayId: string) => {
 
 const setConditions = (
   element: FormElementInterface,
-  array: string | undefined = undefined
+  array: string | undefined = undefined,
+  arrayCurrentIndexAsParam: string | undefined = undefined
 ): string => {
   const formElements = [
     "input",
@@ -559,7 +562,7 @@ const setConditions = (
     if (value.conditions) {
       if (value.conditions.type === ConditionEnum.Form) {
         if (array) {
-          code += `*ngIf="${value.name ? value.name : value.id}FormCondition[i]"`;
+          code += `*ngIf="${value.name ? value.name : value.id}FormCondition[${arrayCurrentIndexAsParam}]"`;
         }
 
         if (!array) {          

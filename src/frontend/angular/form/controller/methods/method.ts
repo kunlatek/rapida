@@ -111,19 +111,19 @@ const setValueBeforeSubmit = (
 
   elements.forEach(element => {
     if (element.input) {
-      if (element.input.type === FormInputTypeEnum.Date) {
-        code += `this.${object.form!.id}Form.get("${
-          element.input.name
-        }")?.value
-        ? this.${object.form!.id}Form.get("${
-          element.input.name
-        }")?.setValue(this.${object.form!.id}Form.get("${
-          element.input.name
-        }")?.value.toISOString().split("T")[0])
-        : this.${object.form!.id}Form.get("${
-          element.input.name
-        }");`;
-      }
+      // if (element.input.type === FormInputTypeEnum.Date) {
+      //   code += `this.${object.form!.id}Form.get("${
+      //     element.input.name
+      //   }")?.value
+      //   ? this.${object.form!.id}Form.get("${
+      //     element.input.name
+      //   }")?.setValue(this.${object.form!.id}Form.get("${
+      //     element.input.name
+      //   }")?.value.toISOString().split("T")[0])
+      //   : this.${object.form!.id}Form.get("${
+      //     element.input.name
+      //   }");`;
+      // }
     }
   });
 

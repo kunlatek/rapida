@@ -4,7 +4,6 @@ import {
 } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
-import { setFormBuilderByElements } from "../constructor-args/form-builder";
 import { ArrayFeaturesInterface } from "./interfaces";
 import { setFormMethodsByElements } from "./method";
 require("dotenv").config();
@@ -201,13 +200,9 @@ const setArrayMethod = (
     }
   });
 
-  formBuilderElements += setFormBuilderByElements(array.elements);
-
   code += `
   ${initArray}() { 
-    return this._formBuilder.group({
-      ${formBuilderElements}
-    })
+    return this._formBuilder.group(this.${array.id}Builder)
   };
   
   ${add}(${iterationsToAdd}) {

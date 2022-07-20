@@ -344,7 +344,7 @@ export const COMPONENT_FORM: MainInterface = {
                     },
                     {
                       array: {
-                        id: "arrayFilterArray",
+                        id: "filterArray",
                         title: "Filtro",
                         elements: [
                           {
@@ -452,7 +452,7 @@ export const COMPONENT_FORM: MainInterface = {
                     },
                     {
                       array: {
-                        id: "arraySelectOptionArray",
+                        id: "selectOptionArray",
                         title: "Option",
                         elements: [
                           {
@@ -496,7 +496,7 @@ export const COMPONENT_FORM: MainInterface = {
                         },
                       },
                     },
-                    //ARRAY
+                    // ARRAY
                     {
                       input: {
                         label: "Title",
@@ -547,21 +547,66 @@ export const COMPONENT_FORM: MainInterface = {
                         },
                       },
                     },
+                    // {
+                    //   array: {
+                    //     id: "arrayArray",
+                    //     title: "Elemento de formulário em array",
+                    //     todo: "Chamar os elements recursivamente",
+                    //     elements: [
+                    //       {
+                    //         array: {
+                    //           title: "Elemento de formulário",
+                    //           id: "arrayFormArray",
+                    //           elements: [
+                    //             {
+                    //               elementReplicaId: "formArray",
+                    //             }
+                    //           ]
+                    //         },
+                    //       },
+                    //     ],
+                    //     conditions: {
+                    //       type: ConditionEnum.Form,
+                    //       elements: [
+                    //         {
+                    //           key: "formElement",
+                    //           value: "array",
+                    //         },
+                    //       ],
+                    //     },
+                    //   },
+                    // },
+                    // TABS
                     {
                       array: {
-                        id: "arrayArray",
-                        title: "Elemento de formulário em array",
-                        todo: "Chamar os elements recursivamente",
+                        id: "tabsArray",
+                        title: "Tab",
                         elements: [
                           {
+                            input: {
+                              label: "Title",
+                              name: "tabsTitle",
+                              type: FormInputTypeEnum.Text,
+                              isRequired: true,
+                            },
+                          },
+                          {
+                            input: {
+                              label: "Id",
+                              name: "tabsId",
+                              type: FormInputTypeEnum.Text,
+                              isRequired: true,
+                            },
+                          },
+                          {
                             array: {
-                              title: "Elemento de formulário",
-                              id: "arrayFormArray",
+                              id: "tabElementsArray",
+                              title: "Elemento de formulário em tab",
                               elements: [
                                 {
                                   select: {
                                     label: "Element",
-                                    name: "arrayFormElement",
+                                    name: "tabsFormElement",
                                     type: FormInputTypeEnum.Text,
                                     optionsObject: [
                                       {
@@ -609,7 +654,7 @@ export const COMPONENT_FORM: MainInterface = {
                                 {
                                   input: {
                                     label: "Label",
-                                    name: "arrayFormLabel",
+                                    name: "tabsFormLabel",
                                     type: FormInputTypeEnum.Text,
                                     placeholder: "Element label",
                                     isRequired: true,
@@ -617,13 +662,13 @@ export const COMPONENT_FORM: MainInterface = {
                                       type: ConditionEnum.Form,
                                       elements: [
                                         {
-                                          key: "arrayFormElement",
+                                          key: "tabsFormElement",
                                           comparisonOperator:
                                             FilterComparisonOperatorEnum.NotEqual,
                                           value: "tabs",
                                         },
                                         {
-                                          key: "arrayFormElement",
+                                          key: "tabsFormElement",
                                           comparisonOperator:
                                             FilterComparisonOperatorEnum.NotEqual,
                                           value: "array",
@@ -635,20 +680,20 @@ export const COMPONENT_FORM: MainInterface = {
                                 {
                                   input: {
                                     label: "Placeholder",
-                                    name: "arrayFormPlaceholder",
+                                    name: "tabsFormPlaceholder",
                                     type: FormInputTypeEnum.Text,
                                     placeholder: "Element placeholder",
                                     conditions: {
                                       type: ConditionEnum.Form,
                                       elements: [
                                         {
-                                          key: "arrayFormElement",
+                                          key: "tabsFormElement",
                                           comparisonOperator:
                                             FilterComparisonOperatorEnum.NotEqual,
                                           value: "tabs",
                                         },
                                         {
-                                          key: "arrayFormElement",
+                                          key: "tabsFormElement",
                                           comparisonOperator:
                                             FilterComparisonOperatorEnum.NotEqual,
                                           value: "array",
@@ -660,7 +705,7 @@ export const COMPONENT_FORM: MainInterface = {
                                 {
                                   input: {
                                     label: "Name",
-                                    name: "arrayFormName",
+                                    name: "tabsFormName",
                                     type: FormInputTypeEnum.Text,
                                     placeholder: "Name to be used as property",
                                     isRequired: true,
@@ -668,13 +713,13 @@ export const COMPONENT_FORM: MainInterface = {
                                       type: ConditionEnum.Form,
                                       elements: [
                                         {
-                                          key: "arrayFormElement",
+                                          key: "tabsFormElement",
                                           comparisonOperator:
                                             FilterComparisonOperatorEnum.NotEqual,
                                           value: "tabs",
                                         },
                                         {
-                                          key: "arrayFormElement",
+                                          key: "tabsFormElement",
                                           comparisonOperator:
                                             FilterComparisonOperatorEnum.NotEqual,
                                           value: "array",
@@ -686,7 +731,7 @@ export const COMPONENT_FORM: MainInterface = {
                                 {
                                   select: {
                                     label: "Data type",
-                                    name: "arrayFormType",
+                                    name: "tabsFormType",
                                     type: FormInputTypeEnum.Text,
                                     optionsObject: [
                                       {
@@ -715,13 +760,13 @@ export const COMPONENT_FORM: MainInterface = {
                                       type: ConditionEnum.Form,
                                       elements: [
                                         {
-                                          key: "arrayFormElement",
+                                          key: "tabsFormElement",
                                           comparisonOperator:
                                             FilterComparisonOperatorEnum.NotEqual,
                                           value: "tabs",
                                         },
                                         {
-                                          key: "arrayFormElement",
+                                          key: "tabsFormElement",
                                           comparisonOperator:
                                             FilterComparisonOperatorEnum.NotEqual,
                                           value: "array",
@@ -733,18 +778,18 @@ export const COMPONENT_FORM: MainInterface = {
                                 {
                                   slide: {
                                     label: "Obrigatório",
-                                    name: "arrayFormIsRequired",
+                                    name: "tabsFormIsRequired",
                                     conditions: {
                                       type: ConditionEnum.Form,
                                       elements: [
                                         {
-                                          key: "arrayFormElement",
+                                          key: "tabsFormElement",
                                           comparisonOperator:
                                             FilterComparisonOperatorEnum.NotEqual,
                                           value: "tabs",
                                         },
                                         {
-                                          key: "arrayFormElement",
+                                          key: "tabsFormElement",
                                           comparisonOperator:
                                             FilterComparisonOperatorEnum.NotEqual,
                                           value: "array",
@@ -756,18 +801,18 @@ export const COMPONENT_FORM: MainInterface = {
                                 {
                                   slide: {
                                     label: "Desabilitado",
-                                    name: "arrayFormIsDisabled",
+                                    name: "tabsFormIsDisabled",
                                     conditions: {
                                       type: ConditionEnum.Form,
                                       elements: [
                                         {
-                                          key: "arrayFormElement",
+                                          key: "tabsFormElement",
                                           comparisonOperator:
                                             FilterComparisonOperatorEnum.NotEqual,
                                           value: "tabs",
                                         },
                                         {
-                                          key: "arrayFormElement",
+                                          key: "tabsFormElement",
                                           comparisonOperator:
                                             FilterComparisonOperatorEnum.NotEqual,
                                           value: "array",
@@ -780,7 +825,7 @@ export const COMPONENT_FORM: MainInterface = {
                                 {
                                   input: {
                                     label: "Endpoint",
-                                    name: "arrayFormAutocompleteEndpoint",
+                                    name: "tabsFormAutocompleteEndpoint",
                                     type: FormInputTypeEnum.Text,
                                     placeholder:
                                       "Endpoint para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
@@ -788,7 +833,7 @@ export const COMPONENT_FORM: MainInterface = {
                                       type: ConditionEnum.Form,
                                       elements: [
                                         {
-                                          key: "arrayFormElement",
+                                          key: "tabsFormElement",
                                           value: "autocomplete",
                                         },
                                       ],
@@ -798,7 +843,7 @@ export const COMPONENT_FORM: MainInterface = {
                                 {
                                   input: {
                                     label: "Atributo de etiqueta da opção",
-                                    name: "arrayFormAutocompleteLabelField",
+                                    name: "tabsFormAutocompleteLabelField",
                                     type: FormInputTypeEnum.Text,
                                     placeholder:
                                       "Label para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
@@ -806,7 +851,7 @@ export const COMPONENT_FORM: MainInterface = {
                                       type: ConditionEnum.Form,
                                       elements: [
                                         {
-                                          key: "arrayFormElement",
+                                          key: "tabsFormElement",
                                           value: "autocomplete",
                                         },
                                       ],
@@ -816,7 +861,7 @@ export const COMPONENT_FORM: MainInterface = {
                                 {
                                   input: {
                                     label: "Atributo de valor da opção",
-                                    name: "arrayFormAutocompleteValueField",
+                                    name: "tabsFormAutocompleteValueField",
                                     type: FormInputTypeEnum.Text,
                                     placeholder:
                                       "Valor para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
@@ -824,7 +869,7 @@ export const COMPONENT_FORM: MainInterface = {
                                       type: ConditionEnum.Form,
                                       elements: [
                                         {
-                                          key: "arrayFormElement",
+                                          key: "tabsFormElement",
                                           value: "autocomplete",
                                         },
                                       ],
@@ -834,12 +879,12 @@ export const COMPONENT_FORM: MainInterface = {
                                 {
                                   slide: {
                                     label: "Seleção múltipla",
-                                    name: "arrayFormAutocompleteIsMultiple",
+                                    name: "tabsFormAutocompleteIsMultiple",
                                     conditions: {
                                       type: ConditionEnum.Form,
                                       elements: [
                                         {
-                                          key: "arrayFormElement",
+                                          key: "tabsFormElement",
                                           value: "autocomplete",
                                         },
                                       ],
@@ -849,13 +894,13 @@ export const COMPONENT_FORM: MainInterface = {
                                 },
                                 {
                                   array: {
-                                    id: "filterArray",
+                                    id: "tabsFilterArray",
                                     title: "Filtro",
                                     elements: [
                                       {
                                         input: {
                                           label: "Propriedade de filtro",
-                                          name: "arrayFormParamsToFilter",
+                                          name: "tabsFormParamsToFilter",
                                           type: FormInputTypeEnum.Text,
                                           placeholder:
                                             "Propriedade para filtragem no autocomplete",
@@ -866,7 +911,7 @@ export const COMPONENT_FORM: MainInterface = {
                                       type: ConditionEnum.Form,
                                       elements: [
                                         {
-                                          key: "arrayFormElement",
+                                          key: "tabsFormElement",
                                           value: "autocomplete",
                                         },
                                       ],
@@ -877,7 +922,7 @@ export const COMPONENT_FORM: MainInterface = {
                                 {
                                   select: {
                                     label: "Options to select",
-                                    name: "arrayFormSelectOptions",
+                                    name: "tabsFormSelectOptions",
                                     type: FormInputTypeEnum.Text,
                                     optionsObject: [
                                       {
@@ -894,7 +939,7 @@ export const COMPONENT_FORM: MainInterface = {
                                       type: ConditionEnum.Form,
                                       elements: [
                                         {
-                                          key: "arrayFormElement",
+                                          key: "tabsFormElement",
                                           value: "select",
                                         },
                                       ],
@@ -904,7 +949,7 @@ export const COMPONENT_FORM: MainInterface = {
                                 {
                                   input: {
                                     label: "Endpoint",
-                                    name: "arrayFormSelectEndpoint",
+                                    name: "tabsFormSelectEndpoint",
                                     type: FormInputTypeEnum.Text,
                                     placeholder:
                                       "Endpoint para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
@@ -912,7 +957,7 @@ export const COMPONENT_FORM: MainInterface = {
                                       type: ConditionEnum.Form,
                                       elements: [
                                         {
-                                          key: "arrayFormSelectOptions",
+                                          key: "tabsFormSelectOptions",
                                           value: "optionsAPI",
                                         },
                                       ],
@@ -922,7 +967,7 @@ export const COMPONENT_FORM: MainInterface = {
                                 {
                                   input: {
                                     label: "Atributo de etiqueta da opção",
-                                    name: "arrayFormOptionLabelField",
+                                    name: "tabsFormOptionLabelField",
                                     type: FormInputTypeEnum.Text,
                                     placeholder:
                                       "Label para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
@@ -930,7 +975,7 @@ export const COMPONENT_FORM: MainInterface = {
                                       type: ConditionEnum.Form,
                                       elements: [
                                         {
-                                          key: "arrayFormSelectOptions",
+                                          key: "tabsFormSelectOptions",
                                           value: "optionsAPI",
                                         },
                                       ],
@@ -940,7 +985,7 @@ export const COMPONENT_FORM: MainInterface = {
                                 {
                                   input: {
                                     label: "Atributo de valor da opção",
-                                    name: "arrayFormOptionValueField",
+                                    name: "tabsFormOptionValueField",
                                     type: FormInputTypeEnum.Text,
                                     placeholder:
                                       "Valor para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
@@ -948,7 +993,7 @@ export const COMPONENT_FORM: MainInterface = {
                                       type: ConditionEnum.Form,
                                       elements: [
                                         {
-                                          key: "arrayFormSelectOptions",
+                                          key: "tabsFormSelectOptions",
                                           value: "optionsAPI",
                                         },
                                       ],
@@ -957,20 +1002,20 @@ export const COMPONENT_FORM: MainInterface = {
                                 },
                                 {
                                   array: {
-                                    id: "selectOptionArray",
+                                    id: "tabsSelectOptionArray",
                                     title: "Option",
                                     elements: [
                                       {
                                         input: {
                                           label: "Label",
-                                          name: "arraySelectOptionLabel",
+                                          name: "tabsSelectOptionLabel",
                                           type: FormInputTypeEnum.Text,
                                         },
                                       },
                                       {
                                         input: {
                                           label: "Value",
-                                          name: "arraySelectOptionValue",
+                                          name: "tabsSelectOptionValue",
                                           type: FormInputTypeEnum.Text,
                                         },
                                       },
@@ -979,7 +1024,7 @@ export const COMPONENT_FORM: MainInterface = {
                                       type: ConditionEnum.Form,
                                       elements: [
                                         {
-                                          key: "arrayFormSelectOptions",
+                                          key: "tabsFormSelectOptions",
                                           value: "optionsObject",
                                         },
                                       ],
@@ -989,1128 +1034,98 @@ export const COMPONENT_FORM: MainInterface = {
                                 {
                                   slide: {
                                     label: "Seleção múltipla",
-                                    name: "arrayFormSelectIsMultiple",
+                                    name: "tabsFormSelectIsMultiple",
                                     conditions: {
                                       type: ConditionEnum.Form,
                                       elements: [
                                         {
-                                          key: "arrayFormElement",
+                                          key: "tabsFormElement",
                                           value: "select",
                                         },
                                       ],
                                     },
                                   },
                                 },
-                              ],
-                            },
-                          },
-                        ],
-                        conditions: {
-                          type: ConditionEnum.Form,
-                          elements: [
-                            {
-                              key: "formElement",
-                              value: "array",
-                            },
-                          ],
-                        },
-                      },
-                    },
-                    //TABS
-                    {
-                      array: {
-                        id: "tabsArray",
-                        title: "Tab",
-                        elements: [
-                          {
-                            input: {
-                              label: "Title",
-                              name: "tabsTitle",
-                              type: FormInputTypeEnum.Text,
-                              isRequired: true,
-                            },
-                          },
-                          {
-                            input: {
-                              label: "Id",
-                              name: "tabsId",
-                              type: FormInputTypeEnum.Text,
-                              isRequired: true,
-                            },
-                          },
-                          {
-                            array: {
-                              id: "tabElementsArray",
-                              title: "Elemento de formulário de tab em array",
-                              elements: [
+                                // ARRAY
                                 {
-                                  array: {
-                                    title: "Elemento de formulário",
-                                    id: "tabsFormArray",
-                                    elements: [
-                                      {
-                                        select: {
-                                          label: "Element",
-                                          name: "tabsFormElement",
-                                          type: FormInputTypeEnum.Text,
-                                          optionsObject: [
-                                            {
-                                              label: "Array",
-                                              value: "array",
-                                            },
-                                            {
-                                              label: "Autocomplete",
-                                              value: "autocomplete",
-                                            },
-                                            {
-                                              label: "Checkbox",
-                                              value: "checkbox",
-                                            },
-                                            {
-                                              label: "Radio",
-                                              value: "radio",
-                                            },
-                                            {
-                                              label: "Input",
-                                              value: "input",
-                                            },
-                                            {
-                                              label: "Select",
-                                              value: "select",
-                                            },
-                                            {
-                                              label: "Slide",
-                                              value: "slide",
-                                            },
-                                            {
-                                              label: "Tabs",
-                                              value: "tabs",
-                                            },
-                                            {
-                                              label: "Text area",
-                                              value: "textarea",
-                                            },
-                                          ],
-                                          isTriggerToCondition: true,
-                                          isRequired: true,
+                                  input: {
+                                    label: "Title",
+                                    name: "tabsArrayTitle",
+                                    type: FormInputTypeEnum.Text,
+                                    isRequired: true,
+                                    conditions: {
+                                      type: ConditionEnum.Form,
+                                      elements: [
+                                        {
+                                          key: "tabsFormElement",
+                                          value: "array",
                                         },
-                                      },
-                                      //!TABS && !ARRAY
-                                      {
-                                        input: {
-                                          label: "Label",
-                                          name: "tabsFormLabel",
-                                          type: FormInputTypeEnum.Text,
-                                          placeholder: "Element label",
-                                          isRequired: true,
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormElement",
-                                                comparisonOperator:
-                                                  FilterComparisonOperatorEnum.NotEqual,
-                                                value: "tabs",
-                                              },
-                                              {
-                                                key: "tabsFormElement",
-                                                comparisonOperator:
-                                                  FilterComparisonOperatorEnum.NotEqual,
-                                                value: "array",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                      {
-                                        input: {
-                                          label: "Placeholder",
-                                          name: "tabsFormPlaceholder",
-                                          type: FormInputTypeEnum.Text,
-                                          placeholder: "Element placeholder",
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormElement",
-                                                comparisonOperator:
-                                                  FilterComparisonOperatorEnum.NotEqual,
-                                                value: "tabs",
-                                              },
-                                              {
-                                                key: "tabsFormElement",
-                                                comparisonOperator:
-                                                  FilterComparisonOperatorEnum.NotEqual,
-                                                value: "array",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                      {
-                                        input: {
-                                          label: "Name",
-                                          name: "tabsFormName",
-                                          type: FormInputTypeEnum.Text,
-                                          placeholder:
-                                            "Name to be used as property",
-                                          isRequired: true,
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormElement",
-                                                comparisonOperator:
-                                                  FilterComparisonOperatorEnum.NotEqual,
-                                                value: "tabs",
-                                              },
-                                              {
-                                                key: "tabsFormElement",
-                                                comparisonOperator:
-                                                  FilterComparisonOperatorEnum.NotEqual,
-                                                value: "array",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                      {
-                                        select: {
-                                          label: "Data type",
-                                          name: "tabsFormType",
-                                          type: FormInputTypeEnum.Text,
-                                          optionsObject: [
-                                            {
-                                              label: "Texto",
-                                              value: "text",
-                                            },
-                                            {
-                                              label: "Número",
-                                              value: "number",
-                                            },
-                                            {
-                                              label: "E-mail",
-                                              value: "email",
-                                            },
-                                            {
-                                              label: "Data",
-                                              value: "date",
-                                            },
-                                            {
-                                              label: "Arquivo",
-                                              value: "file",
-                                            },
-                                          ],
-                                          isRequired: true,
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormElement",
-                                                comparisonOperator:
-                                                  FilterComparisonOperatorEnum.NotEqual,
-                                                value: "tabs",
-                                              },
-                                              {
-                                                key: "tabsFormElement",
-                                                comparisonOperator:
-                                                  FilterComparisonOperatorEnum.NotEqual,
-                                                value: "array",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                      {
-                                        slide: {
-                                          label: "Obrigatório",
-                                          name: "tabsFormIsRequired",
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormElement",
-                                                comparisonOperator:
-                                                  FilterComparisonOperatorEnum.NotEqual,
-                                                value: "tabs",
-                                              },
-                                              {
-                                                key: "tabsFormElement",
-                                                comparisonOperator:
-                                                  FilterComparisonOperatorEnum.NotEqual,
-                                                value: "array",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                      {
-                                        slide: {
-                                          label: "Desabilitado",
-                                          name: "tabsFormIsDisabled",
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormElement",
-                                                comparisonOperator:
-                                                  FilterComparisonOperatorEnum.NotEqual,
-                                                value: "tabs",
-                                              },
-                                              {
-                                                key: "tabsFormElement",
-                                                comparisonOperator:
-                                                  FilterComparisonOperatorEnum.NotEqual,
-                                                value: "array",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                      //AUTOCOMPLETE
-                                      {
-                                        input: {
-                                          label: "Endpoint",
-                                          name: "tabsFormAutocompleteEndpoint",
-                                          type: FormInputTypeEnum.Text,
-                                          placeholder:
-                                            "Endpoint para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormElement",
-                                                value: "autocomplete",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                      {
-                                        input: {
-                                          label:
-                                            "Atributo de etiqueta da opção",
-                                          name:
-                                            "tabsFormAutocompleteLabelField",
-                                          type: FormInputTypeEnum.Text,
-                                          placeholder:
-                                            "Label para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormElement",
-                                                value: "autocomplete",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                      {
-                                        input: {
-                                          label: "Atributo de valor da opção",
-                                          name:
-                                            "tabsFormAutocompleteValueField",
-                                          type: FormInputTypeEnum.Text,
-                                          placeholder:
-                                            "Valor para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormElement",
-                                                value: "autocomplete",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                      {
-                                        slide: {
-                                          label: "Seleção múltipla",
-                                          name:
-                                            "tabsFormAutocompleteIsMultiple",
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormElement",
-                                                value: "autocomplete",
-                                              },
-                                            ],
-                                          },
-                                          isTriggerToCondition: true,
-                                        },
-                                      },
-                                      {
-                                        array: {
-                                          id: "tabsFilterArray",
-                                          title: "Filtro",
-                                          elements: [
-                                            {
-                                              input: {
-                                                label: "Propriedade de filtro",
-                                                name: "tabsFormParamsToFilter",
-                                                type: FormInputTypeEnum.Text,
-                                                placeholder:
-                                                  "Propriedade para filtragem no autocomplete",
-                                              },
-                                            },
-                                          ],
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormElement",
-                                                value: "autocomplete",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                      //SELECT
-                                      {
-                                        select: {
-                                          label: "Options to select",
-                                          name: "tabsFormSelectOptions",
-                                          type: FormInputTypeEnum.Text,
-                                          optionsObject: [
-                                            {
-                                              label: "Manual",
-                                              value: "optionsObject",
-                                            },
-                                            {
-                                              label: "API",
-                                              value: "optionsAPI",
-                                            },
-                                          ],
-                                          isTriggerToCondition: true,
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormElement",
-                                                value: "select",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                      {
-                                        input: {
-                                          label: "Endpoint",
-                                          name: "tabsFormSelectEndpoint",
-                                          type: FormInputTypeEnum.Text,
-                                          placeholder:
-                                            "Endpoint para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormSelectOptions",
-                                                value: "optionsAPI",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                      {
-                                        input: {
-                                          label:
-                                            "Atributo de etiqueta da opção",
-                                          name: "tabsFormOptionLabelField",
-                                          type: FormInputTypeEnum.Text,
-                                          placeholder:
-                                            "Label para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormSelectOptions",
-                                                value: "optionsAPI",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                      {
-                                        input: {
-                                          label: "Atributo de valor da opção",
-                                          name: "tabsFormOptionValueField",
-                                          type: FormInputTypeEnum.Text,
-                                          placeholder:
-                                            "Valor para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormSelectOptions",
-                                                value: "optionsAPI",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                      {
-                                        array: {
-                                          id: "tabsSelectOptionArray",
-                                          title: "Option",
-                                          elements: [
-                                            {
-                                              input: {
-                                                label: "Label",
-                                                name: "tabsSelectOptionLabel",
-                                                type: FormInputTypeEnum.Text,
-                                              },
-                                            },
-                                            {
-                                              input: {
-                                                label: "Value",
-                                                name: "tabsSelectOptionValue",
-                                                type: FormInputTypeEnum.Text,
-                                              },
-                                            },
-                                          ],
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormSelectOptions",
-                                                value: "optionsObject",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                      {
-                                        slide: {
-                                          label: "Seleção múltipla",
-                                          name: "tabsFormSelectIsMultiple",
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormElement",
-                                                value: "select",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                      //ARRAY
-                                      {
-                                        input: {
-                                          label: "Title",
-                                          name: "tabsArrayTitle",
-                                          type: FormInputTypeEnum.Text,
-                                          isRequired: true,
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormElement",
-                                                value: "array",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                      {
-                                        input: {
-                                          label: "Id",
-                                          name: "tabsArrayId",
-                                          type: FormInputTypeEnum.Text,
-                                          isRequired: true,
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormElement",
-                                                value: "array",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                      {
-                                        input: {
-                                          label: "Id de array pai",
-                                          name: "tabsArrayParentId",
-                                          type: FormInputTypeEnum.Text,
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormElement",
-                                                value: "array",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                      {
-                                        array: {
-                                          id: "tabsArrayArray",
-                                          title:
-                                            "Elemento de formulário em array",
-                                          todo:
-                                            "Chamar os elements recursivamente",
-                                          elements: [
-                                            {
-                                              array: {
-                                                title: "Elemento de formulário",
-                                                id: "tabsArrayFormArray",
-                                                elements: [
-                                                  {
-                                                    select: {
-                                                      label: "Element",
-                                                      name:
-                                                        "tabsArrayFormElement",
-                                                      type:
-                                                        FormInputTypeEnum.Text,
-                                                      optionsObject: [
-                                                        {
-                                                          label: "Array",
-                                                          value: "array",
-                                                        },
-                                                        {
-                                                          label: "Autocomplete",
-                                                          value: "autocomplete",
-                                                        },
-                                                        {
-                                                          label: "Checkbox",
-                                                          value: "checkbox",
-                                                        },
-                                                        {
-                                                          label: "Radio",
-                                                          value: "radio",
-                                                        },
-                                                        {
-                                                          label: "Input",
-                                                          value: "input",
-                                                        },
-                                                        {
-                                                          label: "Select",
-                                                          value: "select",
-                                                        },
-                                                        {
-                                                          label: "Slide",
-                                                          value: "slide",
-                                                        },
-                                                        {
-                                                          label: "Tabs",
-                                                          value: "tabs",
-                                                        },
-                                                        {
-                                                          label: "Text area",
-                                                          value: "textarea",
-                                                        },
-                                                      ],
-                                                      isTriggerToCondition: true,
-                                                      isRequired: true,
-                                                    },
-                                                  },
-                                                  //!TABS && !ARRAY
-                                                  {
-                                                    input: {
-                                                      label: "Label",
-                                                      name:
-                                                        "tabsArrayFormLabel",
-                                                      type:
-                                                        FormInputTypeEnum.Text,
-                                                      placeholder:
-                                                        "Element label",
-                                                      isRequired: true,
-                                                      conditions: {
-                                                        type:
-                                                          ConditionEnum.Form,
-                                                        elements: [
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormElement",
-                                                            comparisonOperator:
-                                                              FilterComparisonOperatorEnum.NotEqual,
-                                                            value: "tabs",
-                                                          },
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormElement",
-                                                            comparisonOperator:
-                                                              FilterComparisonOperatorEnum.NotEqual,
-                                                            value: "array",
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  },
-                                                  {
-                                                    input: {
-                                                      label: "Placeholder",
-                                                      name:
-                                                        "tabsArrayFormPlaceholder",
-                                                      type:
-                                                        FormInputTypeEnum.Text,
-                                                      placeholder:
-                                                        "Element placeholder",
-                                                      conditions: {
-                                                        type:
-                                                          ConditionEnum.Form,
-                                                        elements: [
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormElement",
-                                                            comparisonOperator:
-                                                              FilterComparisonOperatorEnum.NotEqual,
-                                                            value: "tabs",
-                                                          },
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormElement",
-                                                            comparisonOperator:
-                                                              FilterComparisonOperatorEnum.NotEqual,
-                                                            value: "array",
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  },
-                                                  {
-                                                    input: {
-                                                      label: "Name",
-                                                      name: "tabsArrayFormName",
-                                                      type:
-                                                        FormInputTypeEnum.Text,
-                                                      placeholder:
-                                                        "Name to be used as property",
-                                                      isRequired: true,
-                                                      conditions: {
-                                                        type:
-                                                          ConditionEnum.Form,
-                                                        elements: [
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormElement",
-                                                            comparisonOperator:
-                                                              FilterComparisonOperatorEnum.NotEqual,
-                                                            value: "tabs",
-                                                          },
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormElement",
-                                                            comparisonOperator:
-                                                              FilterComparisonOperatorEnum.NotEqual,
-                                                            value: "array",
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  },
-                                                  {
-                                                    select: {
-                                                      label: "Data type",
-                                                      name: "tabsArrayFormType",
-                                                      type:
-                                                        FormInputTypeEnum.Text,
-                                                      optionsObject: [
-                                                        {
-                                                          label: "Texto",
-                                                          value: "text",
-                                                        },
-                                                        {
-                                                          label: "Número",
-                                                          value: "number",
-                                                        },
-                                                        {
-                                                          label: "E-mail",
-                                                          value: "email",
-                                                        },
-                                                        {
-                                                          label: "Data",
-                                                          value: "date",
-                                                        },
-                                                        {
-                                                          label: "Arquivo",
-                                                          value: "file",
-                                                        },
-                                                      ],
-                                                      isRequired: true,
-                                                      conditions: {
-                                                        type:
-                                                          ConditionEnum.Form,
-                                                        elements: [
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormElement",
-                                                            comparisonOperator:
-                                                              FilterComparisonOperatorEnum.NotEqual,
-                                                            value: "tabs",
-                                                          },
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormElement",
-                                                            comparisonOperator:
-                                                              FilterComparisonOperatorEnum.NotEqual,
-                                                            value: "array",
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  },
-                                                  {
-                                                    slide: {
-                                                      label: "Obrigatório",
-                                                      name:
-                                                        "tabsArrayFormIsRequired",
-                                                      conditions: {
-                                                        type:
-                                                          ConditionEnum.Form,
-                                                        elements: [
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormElement",
-                                                            comparisonOperator:
-                                                              FilterComparisonOperatorEnum.NotEqual,
-                                                            value: "tabs",
-                                                          },
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormElement",
-                                                            comparisonOperator:
-                                                              FilterComparisonOperatorEnum.NotEqual,
-                                                            value: "array",
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  },
-                                                  {
-                                                    slide: {
-                                                      label: "Desabilitado",
-                                                      name:
-                                                        "tabsArrayFormIsDisabled",
-                                                      conditions: {
-                                                        type:
-                                                          ConditionEnum.Form,
-                                                        elements: [
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormElement",
-                                                            comparisonOperator:
-                                                              FilterComparisonOperatorEnum.NotEqual,
-                                                            value: "tabs",
-                                                          },
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormElement",
-                                                            comparisonOperator:
-                                                              FilterComparisonOperatorEnum.NotEqual,
-                                                            value: "array",
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  },
-                                                  //AUTOCOMPLETE
-                                                  {
-                                                    input: {
-                                                      label: "Endpoint",
-                                                      name:
-                                                        "tabsArrayFormAutocompleteEndpoint",
-                                                      type:
-                                                        FormInputTypeEnum.Text,
-                                                      placeholder:
-                                                        "Endpoint para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
-                                                      conditions: {
-                                                        type:
-                                                          ConditionEnum.Form,
-                                                        elements: [
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormElement",
-                                                            value:
-                                                              "autocomplete",
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  },
-                                                  {
-                                                    input: {
-                                                      label:
-                                                        "Atributo de etiqueta da opção",
-                                                      name:
-                                                        "tabsArrayFormAutocompleteLabelField",
-                                                      type:
-                                                        FormInputTypeEnum.Text,
-                                                      placeholder:
-                                                        "Label para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
-                                                      conditions: {
-                                                        type:
-                                                          ConditionEnum.Form,
-                                                        elements: [
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormElement",
-                                                            value:
-                                                              "autocomplete",
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  },
-                                                  {
-                                                    input: {
-                                                      label:
-                                                        "Atributo de valor da opção",
-                                                      name:
-                                                        "tabsArrayFormAutocompleteValueField",
-                                                      type:
-                                                        FormInputTypeEnum.Text,
-                                                      placeholder:
-                                                        "Valor para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
-                                                      conditions: {
-                                                        type:
-                                                          ConditionEnum.Form,
-                                                        elements: [
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormElement",
-                                                            value:
-                                                              "autocomplete",
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  },
-                                                  {
-                                                    slide: {
-                                                      label: "Seleção múltipla",
-                                                      name:
-                                                        "tabsArrayFormAutocompleteIsMultiple",
-                                                      conditions: {
-                                                        type:
-                                                          ConditionEnum.Form,
-                                                        elements: [
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormElement",
-                                                            value:
-                                                              "autocomplete",
-                                                          },
-                                                        ],
-                                                      },
-                                                      isTriggerToCondition: true,
-                                                    },
-                                                  },
-                                                  {
-                                                    array: {
-                                                      id: "tabsArrayFilterArray",
-                                                      title: "Filtro",
-                                                      elements: [
-                                                        {
-                                                          input: {
-                                                            label:
-                                                              "Propriedade de filtro",
-                                                            name:
-                                                              "tabsArrayFormParamsToFilter",
-                                                            type:
-                                                              FormInputTypeEnum.Text,
-                                                            placeholder:
-                                                              "Propriedade para filtragem no autocomplete",
-                                                          },
-                                                        },
-                                                      ],
-                                                      conditions: {
-                                                        type:
-                                                          ConditionEnum.Form,
-                                                        elements: [
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormElement",
-                                                            value:
-                                                              "autocomplete",
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  },
-                                                  //SELECT
-                                                  {
-                                                    select: {
-                                                      label:
-                                                        "Options to select",
-                                                      name:
-                                                        "tabsArrayFormSelectOptions",
-                                                      type:
-                                                        FormInputTypeEnum.Text,
-                                                      optionsObject: [
-                                                        {
-                                                          label: "Manual",
-                                                          value:
-                                                            "optionsObject",
-                                                        },
-                                                        {
-                                                          label: "API",
-                                                          value: "optionsAPI",
-                                                        },
-                                                      ],
-                                                      isTriggerToCondition: true,
-                                                      conditions: {
-                                                        type:
-                                                          ConditionEnum.Form,
-                                                        elements: [
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormElement",
-                                                            value: "select",
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  },
-                                                  {
-                                                    input: {
-                                                      label: "Endpoint",
-                                                      name:
-                                                        "tabsArrayFormSelectEndpoint",
-                                                      type:
-                                                        FormInputTypeEnum.Text,
-                                                      placeholder:
-                                                        "Endpoint para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
-                                                      conditions: {
-                                                        type:
-                                                          ConditionEnum.Form,
-                                                        elements: [
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormSelectOptions",
-                                                            value: "optionsAPI",
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  },
-                                                  {
-                                                    input: {
-                                                      label:
-                                                        "Atributo de etiqueta da opção",
-                                                      name:
-                                                        "tabsArrayFormOptionLabelField",
-                                                      type:
-                                                        FormInputTypeEnum.Text,
-                                                      placeholder:
-                                                        "Label para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
-                                                      conditions: {
-                                                        type:
-                                                          ConditionEnum.Form,
-                                                        elements: [
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormSelectOptions",
-                                                            value: "optionsAPI",
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  },
-                                                  {
-                                                    input: {
-                                                      label:
-                                                        "Atributo de valor da opção",
-                                                      name:
-                                                        "tabsArrayFormOptionValueField",
-                                                      type:
-                                                        FormInputTypeEnum.Text,
-                                                      placeholder:
-                                                        "Valor para opções da seleção {{componentFormForm.get('formTitle')?.value}}",
-                                                      conditions: {
-                                                        type:
-                                                          ConditionEnum.Form,
-                                                        elements: [
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormSelectOptions",
-                                                            value: "optionsAPI",
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  },
-                                                  {
-                                                    array: {
-                                                      id:
-                                                        "tabsArraySelectOptionArray",
-                                                      title: "Option",
-                                                      elements: [
-                                                        {
-                                                          input: {
-                                                            label: "Label",
-                                                            name:
-                                                              "tabsArraySelectOptionLabel",
-                                                            type:
-                                                              FormInputTypeEnum.Text,
-                                                          },
-                                                        },
-                                                        {
-                                                          input: {
-                                                            label: "Value",
-                                                            name:
-                                                              "tabsArraySelectOptionValue",
-                                                            type:
-                                                              FormInputTypeEnum.Text,
-                                                          },
-                                                        },
-                                                      ],
-                                                      conditions: {
-                                                        type:
-                                                          ConditionEnum.Form,
-                                                        elements: [
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormSelectOptions",
-                                                            value:
-                                                              "optionsObject",
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  },
-                                                  {
-                                                    slide: {
-                                                      label: "Seleção múltipla",
-                                                      name:
-                                                        "tabsArrayFormSelectIsMultiple",
-                                                      conditions: {
-                                                        type:
-                                                          ConditionEnum.Form,
-                                                        elements: [
-                                                          {
-                                                            key:
-                                                              "tabsArrayFormElement",
-                                                            value: "select",
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  },
-                                                ],
-                                              },
-                                            },
-                                          ],
-                                          conditions: {
-                                            type: ConditionEnum.Form,
-                                            elements: [
-                                              {
-                                                key: "tabsFormElement",
-                                                value: "array",
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      },
-                                    ],
+                                      ],
+                                    },
                                   },
                                 },
+                                {
+                                  input: {
+                                    label: "Id",
+                                    name: "tabsArrayId",
+                                    type: FormInputTypeEnum.Text,
+                                    isRequired: true,
+                                    conditions: {
+                                      type: ConditionEnum.Form,
+                                      elements: [
+                                        {
+                                          key: "tabsFormElement",
+                                          value: "array",
+                                        },
+                                      ],
+                                    },
+                                  },
+                                },
+                                {
+                                  input: {
+                                    label: "Id de array pai",
+                                    name: "tabsArrayParentId",
+                                    type: FormInputTypeEnum.Text,
+                                    conditions: {
+                                      type: ConditionEnum.Form,
+                                      elements: [
+                                        {
+                                          key: "tabsFormElement",
+                                          value: "array",
+                                        },
+                                      ],
+                                    },
+                                  },
+                                },
+                                // {
+                                //   array: {
+                                //     id: "tabsArrayArray",
+                                //     title: "Elemento de formulário em array",
+                                //     todo: "Chamar os elements recursivamente",
+                                //     elements: [
+                                //       {
+                                //         array: {
+                                //           title: "Elemento de formulário",
+                                //           id: "tabsArrayFormArray",
+                                //           elements: [
+                                //             {
+                                //               elementReplicaId: "formArray",
+                                //             }
+                                //           ]
+                                //         },
+                                //       },
+                                //     ],
+                                //     conditions: {
+                                //       type: ConditionEnum.Form,
+                                //       elements: [
+                                //         {
+                                //           key: "tabsFormElement",
+                                //           value: "array",
+                                //         },
+                                //       ],
+                                //     },
+                                //   },
+                                // },
                               ],
                             },
                           },

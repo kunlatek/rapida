@@ -2,6 +2,7 @@ import { FormInputTypeEnum } from "../../../../../enums/form";
 import { FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
+import { setFormBuilderProperty } from "./form-builder";
 
 const setProperty = (
   object: MainInterface
@@ -13,6 +14,7 @@ const setProperty = (
   }
   
   code += setFormPropertiesByElements(object, object.form.elements);
+  code += setFormBuilderProperty(object);
 
   return code;
 };

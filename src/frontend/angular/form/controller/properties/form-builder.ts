@@ -1,9 +1,8 @@
 import { FormInputTypeEnum } from "../../../../../enums/form";
 import { FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
-import { TextTransformation } from "../../../../../utils/text.transformation";
 
-const setFormBuilder = (
+const setFormBuilderProperty = (
   object: MainInterface
 ): string => {
   let code = ``;
@@ -11,9 +10,37 @@ const setFormBuilder = (
   if (!object.form) {
     return code;
   }
-  
+  code += `${object.form.id}Builder = {`;
   code += setFormBuilderByElements(object.form.elements);
+  code += "};";
 
+  code += setFormArrayBuilderByElementsProperty(object.form.elements);
+
+  return code;
+}
+
+const setFormArrayBuilderByElementsProperty = (
+  formElements: Array<FormElementInterface>
+): string => {
+  let code = ``;
+  for (let index = 0; index < formElements.length; index++) {
+    const element = formElements[index];
+    
+    if (element.array) {
+      code += `${element.array.id}Builder = { 
+        ${setFormBuilderByElements(element.array.elements)}
+      };`;
+
+      code += setFormArrayBuilderByElementsProperty(element.array.elements);
+    }
+  
+    if (element.tabs) {
+      element.tabs.forEach((tab) => {
+        code += setFormArrayBuilderByElementsProperty(tab.elements);
+      });
+    }
+  }
+  
   return code;
 }
 
@@ -172,9 +199,7 @@ const setFormBuilderByElements = (
   
     if (element.array) {
       code += `
-      ${element.array.id}: this._formBuilder.array([
-        this.init${TextTransformation.pascalfy(element.array.id)}(),
-      ]),
+      ${element.array.id}: this._formBuilder.array([]),
       `;
 
       code += setFormBuilderByElements(element.array.elements, true);
@@ -191,6 +216,6 @@ const setFormBuilderByElements = (
 };
 
 export {
-  setFormBuilder,
-  setFormBuilderByElements
+  setFormBuilderProperty,
+  setFormArrayBuilderByElementsProperty
 };
