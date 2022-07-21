@@ -54,7 +54,7 @@ export const USERS_GROUP_TABLE: MainInterface = {
     ],
     service: {
         baseUrl: "http://devbackadmin.lpsbr.com/api/v1",
-        endPoint: "user-groups?page=0&size=25&sort=description (asc)",
+        endpoint: "user-groups?page=0&size=25&sort=description (asc)",
         hasAuthorization: true,
         methods: [
             ServiceFunctionsEnum.Get,

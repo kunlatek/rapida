@@ -1,14 +1,15 @@
+import { ServiceFunctionsEnum } from "../../../src/enums/form";
 import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/main";
 import { RequestTypeEnum } from "../../../src/enums/request";
 import { MainInterface } from "../../../src/interfaces/main";
 
-const CLIENT_PERSON_TABLE: MainInterface = {
+export const DAXTV_CLIENT_PERSON_TABLE: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
   backendFramework: BackendFrameworkEnum.Loopback,
   table: {
     title: "Pessoas",
     subtitle: "Listagem de pessoas",
-    id: "daxTvClientPersonTable",
+    id: "daxtvClientPersonTable",
     data: {
       type: RequestTypeEnum.Object,
     },
@@ -71,6 +72,14 @@ const CLIENT_PERSON_TABLE: MainInterface = {
       },
       {
         column: {
+          label: "Valor",
+        },
+        row: {
+          field: "price",
+        },
+      },
+      {
+        column: {
           label: "Ações",
         },
         row: {
@@ -99,6 +108,18 @@ const CLIENT_PERSON_TABLE: MainInterface = {
           ],
         },
       },
-    ]
+    ],
+    service: {
+      baseUrl: "http://localhost:3000",
+      endpoint: "daxtvClientPeople",
+      hasAuthorization: true,
+      methods: [
+        ServiceFunctionsEnum.Get,
+        ServiceFunctionsEnum.Delete,
+        ServiceFunctionsEnum.Save,
+        ServiceFunctionsEnum.Update,
+        ServiceFunctionsEnum.Find,
+      ],
+    },
   }
 }

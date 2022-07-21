@@ -1,14 +1,14 @@
-import { FormButtonTypeEnum, FormInputTypeEnum } from "../../../src/enums/form";
+import { FormButtonTypeEnum, FormInputTypeEnum, ServiceFunctionsEnum } from "../../../src/enums/form";
 import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/main";
 import { MainInterface } from "../../../src/interfaces/main";
 
-const DAXTV_PACKAGE_FORM: MainInterface = {
+export const DAXTV_PACKAGE_FORM: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
   backendFramework: BackendFrameworkEnum.Loopback,
   form: {
     title: "Planos e extras",
     subtitle: "Gerenciamento de dados de pacotes",
-    id:"daxTvPackageForm",
+    id:"daxtvPackageForm",
     elements: [
       {
         input: {
@@ -124,5 +124,17 @@ const DAXTV_PACKAGE_FORM: MainInterface = {
         }
       },
     ],
+    service: {
+      baseUrl: "http://localhost:3000",
+      endpoint: "daxtvPackages",
+      hasAuthorization: true,
+      methods: [
+        ServiceFunctionsEnum.Get,
+        ServiceFunctionsEnum.Delete,
+        ServiceFunctionsEnum.Save,
+        ServiceFunctionsEnum.Update,
+        ServiceFunctionsEnum.Find,
+      ],
+    },
   }
 }

@@ -31,7 +31,7 @@ export const USERS_GROUP_FORM: MainInterface = {
     ],
     service: {
       baseUrl: "http://devbackadmin.lpsbr.com/api/v1",
-      endPoint: "user-groups",
+      endpoint: "user-groups",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

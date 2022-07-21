@@ -1321,7 +1321,7 @@ export const COMPONENT_FORM: MainInterface = {
     ],
     service: {
       baseUrl: "http://localhost:3000",
-      endPoint: "components",
+      endpoint: "components",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

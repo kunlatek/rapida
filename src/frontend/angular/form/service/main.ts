@@ -82,7 +82,7 @@ const setFormServiceServices = (
         code += `
         getAll(filter: string = "") {
           return this._httpClient.get(
-            \`\${this.BASE_URL}/${service.endPoint}\${filter}\`, {
+            \`\${this.BASE_URL}/${service.endpoint}\${filter}\`, {
               headers: {
                 ${hasAuthorization}
               }
@@ -96,7 +96,7 @@ const setFormServiceServices = (
         code += `
         find(id: string) {
           return this._httpClient.get(
-            \`\${this.BASE_URL}/${service.endPoint}/\${id}\`,
+            \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
             {
               headers: {
                 ${hasAuthorization}
@@ -111,7 +111,7 @@ const setFormServiceServices = (
         code += `
         save(body: any) {
           return this._httpClient.post(
-          \`\${this.BASE_URL}/${service.endPoint}\`, 
+          \`\${this.BASE_URL}/${service.endpoint}\`, 
           body,
           {
             headers: {
@@ -127,7 +127,7 @@ const setFormServiceServices = (
         code += `
         update(body: any, id: string) {
           return this._httpClient.put(
-            \`\${this.BASE_URL}/${service.endPoint}/\${id}\`, 
+            \`\${this.BASE_URL}/${service.endpoint}/\${id}\`, 
             body,
             {
               headers: {
@@ -143,7 +143,7 @@ const setFormServiceServices = (
         code += `
         delete(id: string) {
           return this._httpClient.delete(
-            \`\${this.BASE_URL}/${service.endPoint}/\${id}\`,
+            \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
             {
               headers: {
                 ${hasAuthorization}
@@ -158,7 +158,7 @@ const setFormServiceServices = (
         code += `
         softDelete(id: string) {
           return this._httpClient.put(
-            \`\${this.BASE_URL}/${service.endPoint}/\${id}\`,
+            \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
             {
               headers: {
                 ${hasAuthorization}

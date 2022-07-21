@@ -46,7 +46,7 @@ const setFormPropertiesByElements = (
         }
   
         if (element.select.optionsApi) {
-            code += `${element.select.name}SelectObject: Array<SelectObjectInterface> = [];`;
+            code += `${element.select.name}SelectObject: Array<any> = [];`;
         }
     }
   

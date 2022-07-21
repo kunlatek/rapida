@@ -3,31 +3,23 @@ import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/
 import { RequestTypeEnum } from "../../../src/enums/request";
 import { MainInterface } from "../../../src/interfaces/main";
 
-export const DAXTV_USER_TABLE: MainInterface = {
+export const DAXTV_CLIENT_COMPANY_TABLE: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
   backendFramework: BackendFrameworkEnum.Loopback,
   table: {
-    title: "Usuários",
-    subtitle: "Relatório de usuários",
-    id: "daxtvUserTable",
+    title: "Pessoas",
+    subtitle: "Listagem de pessoas",
+    id: "daxtvClientCompanyTable",
     data: {
       type: RequestTypeEnum.Object,
     },
     elements: [
       {
         column: {
-          label: "Nome",
+          label: "Nome fantasia",
         },
         row: {
-          field: "name",
-        },
-      },
-      {
-        column: {
-          label: "CPF",
-        },
-        row: {
-          field: "cpf",
+          field: "businessName",
         },
       },
       {
@@ -48,14 +40,6 @@ export const DAXTV_USER_TABLE: MainInterface = {
       },
       {
         column: {
-          label: "Grupo",
-        },
-        row: {
-          field: "permissions",
-        },
-      },
-      {
-        column: {
           label: "Cidade",
         },
         row: {
@@ -72,6 +56,30 @@ export const DAXTV_USER_TABLE: MainInterface = {
       },
       {
         column: {
+          label: "Valor",
+        },
+        row: {
+          field: "price",
+        },
+      },
+      {
+        column: {
+          label: "Plano",
+        },
+        row: {
+          field: "packageId",
+        },
+      },
+      {
+        column: {
+          label: "Extras",
+        },
+        row: {
+          field: "extraId",
+        },
+      },
+      {
+        column: {
           label: "Ações",
         },
         row: {
@@ -81,7 +89,7 @@ export const DAXTV_USER_TABLE: MainInterface = {
             {
               action: {
                 type: RequestTypeEnum.Link,
-                url: "/main/user",
+                url: "/main/person",
                 param: "_id",
               },
               label: "Editar",
@@ -103,7 +111,7 @@ export const DAXTV_USER_TABLE: MainInterface = {
     ],
     service: {
       baseUrl: "http://localhost:3000",
-      endpoint: "daxtvUsers",
+      endpoint: "daxtvClientCompanies",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

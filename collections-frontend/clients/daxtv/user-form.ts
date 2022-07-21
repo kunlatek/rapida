@@ -1,20 +1,20 @@
-import { FormInputTypeEnum } from "../../../src/enums/form";
+import { FormInputTypeEnum, ServiceFunctionsEnum } from "../../../src/enums/form";
 import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/main";
 import { MainInterface } from "../../../src/interfaces/main";
 
-const DAXTV_USER_FORM: MainInterface = {
+export const DAXTV_USER_FORM: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
   backendFramework: BackendFrameworkEnum.Loopback,
   form: {
     title: "Usuário",
     subtitle: "Utilize as abas abaixo para cadastrar os usuários que terão acesso a esta ferramenta administrativa.",
-    id: "daxTvUserForm",
+    id: "daxtvUserForm",
     elements: [
       {
         tabs: [
           {
             title: "Dados pessoais",
-            id: "daxTvMainTab",
+            id: "daxtvMainTab",
             elements: [
               {
                 input: {
@@ -64,7 +64,7 @@ const DAXTV_USER_FORM: MainInterface = {
           },
           {
             title: "Contatos",
-            id: "daxTvContactsTab",
+            id: "daxtvContactsTab",
             elements: [
               {
                 input: {
@@ -88,7 +88,7 @@ const DAXTV_USER_FORM: MainInterface = {
           },
           {
             title: "Endereços",
-            id: "daxTvAddressesTab",
+            id: "daxtvAddressesTab",
             elements: [
               {
                 input: {
@@ -166,7 +166,7 @@ const DAXTV_USER_FORM: MainInterface = {
           },
           {
             title: "Permissões",
-            id: "daxTvPermissionsTab",
+            id: "daxtvPermissionsTab",
             elements: [
               {
                 select: {
@@ -195,6 +195,18 @@ const DAXTV_USER_FORM: MainInterface = {
           },
         ]
       }
-    ]
+    ],
+    service: {
+      baseUrl: "http://localhost:3000",
+      endpoint: "daxtvUsers",
+      hasAuthorization: true,
+      methods: [
+        ServiceFunctionsEnum.Get,
+        ServiceFunctionsEnum.Delete,
+        ServiceFunctionsEnum.Save,
+        ServiceFunctionsEnum.Update,
+        ServiceFunctionsEnum.Find,
+      ],
+    },
   }
 }

@@ -121,7 +121,7 @@ export const CHARACTER_FORM: MainInterface = {
     ],
     service: {
       baseUrl: "http://localhost:3000",
-      endPoint: "characters",
+      endpoint: "characters",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

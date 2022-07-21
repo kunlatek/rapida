@@ -193,7 +193,7 @@ export const PROJECT_FORM: MainInterface = {
     ],
     service: {
       baseUrl: "http://localhost:3000",
-      endPoint: "projects",
+      endpoint: "projects",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

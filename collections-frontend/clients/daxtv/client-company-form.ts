@@ -1,20 +1,20 @@
-import { FormButtonTypeEnum, FormInputTypeEnum } from "../../../src/enums/form";
+import { FormButtonTypeEnum, FormInputTypeEnum, ServiceFunctionsEnum } from "../../../src/enums/form";
 import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/main";
 import { MainInterface } from "../../../src/interfaces/main";
 
-const DAXTV_CLIENT_COMPANY_FORM: MainInterface = {
+export const DAXTV_CLIENT_COMPANY_FORM: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
   backendFramework: BackendFrameworkEnum.Loopback,
   form: {
     title: "Empresa",
     subtitle: "Utilize as abas abaixo para cadastrar o cliente, seu plano e os eventuais produtos extras.",
-    id: "daxTvClientCompanyForm",
+    id: "daxtvClientCompanyForm",
     elements: [
       {
         tabs: [
           {
             title: "Dados da empresa",
-            id: "daxTvMainTab",
+            id: "daxtvMainTab",
             elements: [
               {
                 input: {
@@ -57,7 +57,7 @@ const DAXTV_CLIENT_COMPANY_FORM: MainInterface = {
           },
           {
             title: "Contatos",
-            id: "daxTvContactsTab",
+            id: "daxtvContactsTab",
             elements: [
               {
                 input: {
@@ -81,7 +81,7 @@ const DAXTV_CLIENT_COMPANY_FORM: MainInterface = {
           },
           {
             title: "Endereços",
-            id: "daxTvAddressesTab",
+            id: "daxtvAddressesTab",
             elements: [
               {
                 input: {
@@ -159,7 +159,7 @@ const DAXTV_CLIENT_COMPANY_FORM: MainInterface = {
           },
           {
             title: "Pacotes",
-            id: "daxTvPackageTab",
+            id: "daxtvPackageTab",
             elements: [
               {
                 select: {
@@ -167,7 +167,7 @@ const DAXTV_CLIENT_COMPANY_FORM: MainInterface = {
                   name: "packageId",
                   type: FormInputTypeEnum.Text,
                   optionsApi: {
-                    endpoint: `daxTvPackages?filter={"type":"main"}`,
+                    endpoint: `daxtvPackages`,
                     labelField: "name",
                     valueField: "_id",
                     
@@ -180,7 +180,7 @@ const DAXTV_CLIENT_COMPANY_FORM: MainInterface = {
                   name: "extraId",
                   type: FormInputTypeEnum.Text,
                   optionsApi: {
-                    endpoint: `daxTvPackages?filter={"type":"extra"}`,
+                    endpoint: `daxtvPackages`,
                     labelField: "name",
                     valueField: "_id",
                   },
@@ -206,6 +206,18 @@ const DAXTV_CLIENT_COMPANY_FORM: MainInterface = {
           },
         ]
       }
-    ]
+    ],
+    service: {
+      baseUrl: "http://localhost:3000",
+      endpoint: "daxtvClientCompanies",
+      hasAuthorization: true,
+      methods: [
+        ServiceFunctionsEnum.Get,
+        ServiceFunctionsEnum.Delete,
+        ServiceFunctionsEnum.Save,
+        ServiceFunctionsEnum.Update,
+        ServiceFunctionsEnum.Find,
+      ],
+    },
   }
 }

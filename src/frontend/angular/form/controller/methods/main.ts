@@ -1,11 +1,10 @@
 import { FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
-import { setArray } from "./array";
+import { setArray, setConditionsInArray } from "./array";
 import {
   setCondition,
   setConditionOverEdition,
-  setConditionsInArray,
 } from "./condition";
 import { setFileSubmit, setMethod, setValueBeforeSubmit } from "./method";
 
@@ -44,12 +43,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
   ${
     _hasCondition
       ? `setCondition = (index: number | undefined = undefined, checked: boolean = true) => {
-        ${_conditionsMethods}
-        ${
-          _hasConditionInArray
-            ? `if (typeof index === "number") { ${_conditionsMethodsInArray} }`
-            : ""
-        }
+        ${_conditionsMethods}        
       };
       
       setConditionOverEdition = () => {
@@ -57,6 +51,13 @@ const setFormControllerMethods = (object: MainInterface): string => {
       };`
       : ``
   }
+
+  ${
+    _hasConditionInArray
+      ? _conditionsMethodsInArray
+      : ""
+  }
+
   ${_methods}
   ${object.form.id}Submit = async (
     ${object.form?.id}Directive: FormGroupDirective

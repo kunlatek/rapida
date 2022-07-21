@@ -46,7 +46,7 @@ export const ANIMATION_FORM: MainInterface = {
     ],
     service: {
       baseUrl: "http://localhost:3000",
-      endPoint: "animations",
+      endpoint: "animations",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

@@ -54,7 +54,7 @@ export const MODULE_TABLE: MainInterface = {
     ],
     service: {
         baseUrl: "http://localhost:3000",
-        endPoint: "modules",
+        endpoint: "modules",
         hasAuthorization: true,
         methods: [
             ServiceFunctionsEnum.Get,

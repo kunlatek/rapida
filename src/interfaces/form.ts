@@ -27,7 +27,7 @@ export interface FormInterface {
 }
 export interface ServiceInterface {
   baseUrl: string;
-  endPoint: string;
+  endpoint: string;
   methods: Array<ServiceFunctionsEnum>;
   hasAuthorization: boolean;
 }

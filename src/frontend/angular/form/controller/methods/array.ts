@@ -1,3 +1,4 @@
+import { ConditionEnum } from "../../../../../enums/form";
 import {
   ArrayInterface,
   FormElementInterface,
@@ -11,7 +12,10 @@ require("dotenv").config();
 let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
   process.env.ARRAY_LAYER!
 );
-let _arraysInAFlow: Array<ArrayFeaturesInterface> = [];
+let _arraysInAFlow: Array<ArrayFeaturesInterface> = JSON.parse(
+  process.env.ARRAYS_IN_A_FLOW!
+);
+let _conditionMethods: Array<string> = [];
 
 const setArray = (object: MainInterface) => {
   let code = ``;
@@ -229,6 +233,94 @@ const setArrayMethod = (
   return code;
 };
 
+const setConditionsInArray = (
+  object: MainInterface,
+  elements: Array<FormElementInterface>,
+  array: string | undefined = undefined
+): string => {
+  const formElements = [
+    "input",
+    "autocomplete",
+    "button",
+    "checkbox",
+    "radio",
+    "select",
+    "slide",
+    "array",
+  ];
+  
+  let code = ``;
+
+  elements.forEach((element) => {
+    const type = Object.keys(element)[0];
+    const value = Object.values(element)[0];
+
+    if (formElements.includes(type)) {
+      if (value.conditions) {
+        if (value.conditions.type === ConditionEnum.Form) {
+          if (!_conditionMethods.includes(value.name ? value.name : value.id)) {
+            if (array) {
+              const controlsToAdd = setArrayControlsToAdd(value.id);
+              const iterationsToAdd = setArrayIndexesToAdd(value.id);
+              
+              code += `
+              setConditionIn${value.name ? TextTransformation.pascalfy(value.name) : TextTransformation.pascalfy(value.id)} = (
+                ${iterationsToAdd}index: number | undefined = undefined, checked: boolean = true
+              ) => {
+                if (typeof index === "number") {
+                  this.${value.name ? value.name : value.id}FormCondition[index] = (
+              `;
+
+              value.conditions.elements.forEach(
+                (condition: any, index: number) => {
+                  if (index > 0) {
+                    code += `${
+                      condition.logicalOperator
+                        ? ` ${condition.logicalOperator} `
+                        : ` && `
+                    }`;
+                  }
+                  
+                  code += `(this.${
+                    object.form!.id
+                  }Form.get([${controlsToAdd ? controlsToAdd : `"${array}"`}])?.value[index]?.${condition.key} ${
+                    condition.comparisonOperator
+                      ? ` ${condition.comparisonOperator} `
+                      : ` === `
+                  } ${(typeof condition.value !== "string") ? condition.value :  `"${condition.value}"`})`;
+                }
+              );
+
+              code += `
+                  );
+                }
+              }`;
+
+              _conditionMethods.push(value.id);
+            }
+          }
+        }
+      }
+    }
+
+    if (element.tabs) {
+      element.tabs.forEach((tab) => {
+        code += setConditionsInArray(object, tab.elements);
+      });
+    }
+
+    if (element.array) {
+      code += setConditionsInArray(
+        object,
+        element.array.elements,
+        element.array?.id
+      );
+    }
+  });
+  
+  return code;
+};
+
 export {
   setArray,
   setArrayControls,
@@ -237,4 +329,5 @@ export {
   setArrayIndexesToAdd,
   setArrayMethod,
   setArrayLayer,
+  setConditionsInArray
 };

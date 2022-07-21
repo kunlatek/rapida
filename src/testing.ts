@@ -90,6 +90,22 @@ import { MODULE_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/
 import { MODULE_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/module-table";
 import { MODULE } from "../collections-frontend/kunlatek/rapida-backoffice/module";
 
+// import { DAXTV_CLIENT_COMPANY } from "../collections-frontend/clients/daxtv/client-company";
+// import { DAXTV_CLIENT_COMPANY_FORM } from "../collections-frontend/clients/daxtv/client-company-form";
+// import { DAXTV_CLIENT_COMPANY_TABLE } from "../collections-frontend/clients/daxtv/client-company-table";
+
+// import { DAXTV_CLIENT_PERSON } from "../collections-frontend/clients/daxtv/client-person";
+// import { DAXTV_CLIENT_PERSON_FORM } from "../collections-frontend/clients/daxtv/client-person-form";
+// import { DAXTV_CLIENT_PERSON_TABLE } from "../collections-frontend/clients/daxtv/client-person-table";
+
+// import { DAXTV_PACKAGE } from "../collections-frontend/clients/daxtv/package";
+// import { DAXTV_PACKAGE_FORM } from "../collections-frontend/clients/daxtv/package-form";
+// import { DAXTV_PACKAGE_TABLE } from "../collections-frontend/clients/daxtv/package-table";
+
+// import { DAXTV_USER } from "../collections-frontend/clients/daxtv/user";
+// import { DAXTV_USER_FORM } from "../collections-frontend/clients/daxtv/user-form";
+// import { DAXTV_USER_TABLE } from "../collections-frontend/clients/daxtv/user-table";
+
 //////////////////////////////////////////////////////////
 
 const array = [
@@ -116,6 +132,22 @@ const array = [
   MODULE_FORM, 
   MODULE_TABLE, 
   MODULE,
+
+  // DAXTV_CLIENT_COMPANY,
+  // DAXTV_CLIENT_COMPANY_FORM,
+  // DAXTV_CLIENT_COMPANY_TABLE,
+  
+  // DAXTV_CLIENT_PERSON,
+  // DAXTV_CLIENT_PERSON_FORM,
+  // DAXTV_CLIENT_PERSON_TABLE,
+
+  // DAXTV_PACKAGE,
+  // DAXTV_PACKAGE_FORM,
+  // DAXTV_PACKAGE_TABLE,
+
+  // DAXTV_USER,
+  // DAXTV_USER_FORM,
+  // DAXTV_USER_TABLE,
 ];
 
 array.forEach((object) => {
