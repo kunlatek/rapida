@@ -25,6 +25,8 @@ export interface ArrayFeaturesInterface {
 let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
   process.env.ARRAY_LAYER!
 );
+let _hasCondition: boolean = false;
+let _hasConditionInArray: boolean = false;
 
 /**
  * SET CODE
@@ -45,9 +47,10 @@ const setFormTemplate = (object: MainInterface): string => {
   _arrayLayer = JSON.parse(
     process.env.ARRAY_LAYER!
   );
-
+  
   object.form.elements.forEach((element) => {
     _specificStructure += setSpecificStructureOverFormElement(object, element);
+    verifyFormElement(element);
   });
 
   const hasFormTitle = object.form.title
@@ -222,7 +225,19 @@ const setSpecificStructureOverFormElement = (
   if (element.select) {
     const multiple = element.select.isMultiple ? "multiple" : "";
     const required = element.select.isRequired ? "required" : "";
-    const setCondition = element.select.isTriggerToCondition ? `(selectionChange)="setCondition(${arrayCurrentIndexAsParam})"` : "";
+    let setCondition = "";
+    if (element.select.isTriggerToCondition) {
+      setCondition += `(selectionChange)="`;
+
+      if (array) {
+        setCondition += `setConditionIn${TextTransformation.pascalfy(element.select.name)}(${setArrayIndexes(element.select.name)})`;
+      }
+
+      if (!array) {
+        setCondition += `setCondition()"`
+      }
+      setCondition += `"`;
+    }
     
     code += `
     <mat-form-field ${conditions}>
@@ -361,6 +376,47 @@ const setFormTemplateArchitectureAndWriteToFile = (
     fs.writeFileSync(filePath, code);
 
     console.info(`File successfully created in ${filePath}.`);
+  }
+};
+
+const verifyFormElement = (
+  element: FormElementInterface,
+  isArray: boolean = false
+): void => {
+  const formElements = [
+    "input",
+    "autocomplete",
+    "button",
+    "checkbox",
+    "radio",
+    "select",
+    "slide",
+  ];
+  const type = Object.keys(element)[0];
+  const value = Object.values(element)[0];
+
+  if (element.tabs) {
+    element.tabs.forEach((tab) => {
+      tab.elements.forEach((tabElement) => {
+        verifyFormElement(tabElement);
+      });
+    });
+  }
+
+  if (element.array) {
+    element.array.elements.forEach((arrayElement) => {
+      verifyFormElement(arrayElement, true);
+    });
+  }
+
+  if (formElements.includes(type)) {
+    if (value.conditions) {
+      _hasCondition = true;
+
+      if (isArray) {
+        _hasConditionInArray = true;
+      }
+    }
   }
 };
 

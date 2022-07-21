@@ -1,6 +1,8 @@
 import { ConditionEnum } from "../../../../../enums/form";
 import { ConditionElementInterface, FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
+import { TextTransformation } from "../../../../../utils/text.transformation";
+import { setArrayControlsToAdd, setArrayIndexesToAdd } from "./array";
 
 let _conditionMethods: Array<string> = [];
 let _conditionMethodsOverEdition: Array<string> = [];
@@ -185,4 +187,95 @@ const setConditionOverEdition = (
   return code;
 };
 
-export { setCondition, setConditionOverEdition };
+const setConditionsInArray = (
+  object: MainInterface,
+  elements: Array<FormElementInterface>,
+  array: string | undefined = undefined
+): string => {
+  const formElements = [
+    "input",
+    "autocomplete",
+    "button",
+    "checkbox",
+    "radio",
+    "select",
+    "slide",
+    "array",
+  ];
+  
+  let code = ``;
+  let substring = ``;
+
+  elements.forEach((element) => {
+    const type = Object.keys(element)[0];
+    const value = Object.values(element)[0];
+
+    if (formElements.includes(type)) {
+      if (value.conditions) {
+        if (value.conditions.type === ConditionEnum.Form) {
+          if (!_conditionMethods.includes(value.name ? value.name : value.id)) {
+            if (array) {
+              const controlsToAdd = setArrayControlsToAdd(value.id);
+              const iterationsToAdd = setArrayIndexesToAdd(value.id);
+              const conditionMethod = `setConditionIn${TextTransformation.pascalfy(value.conditions.elements[0].key)} = (${iterationsToAdd}index: number | undefined = undefined, checked: boolean = true) => { if (typeof index === "number") {`;
+              const conditionMethodIndexToSubstring = code.search(conditionMethod);
+              console.log(conditionMethodIndexToSubstring, 222222);
+              if (conditionMethodIndexToSubstring !== -1) {
+                console.log(conditionMethodIndexToSubstring, 224224);
+              }
+
+              code += `${conditionMethod}`;
+              
+              code += `this.${value.name ? value.name : value.id}FormCondition[index] = (`;
+
+              value.conditions.elements.forEach(
+                (condition: any, index: number) => {
+                  if (index > 0) {
+                    code += `${
+                      condition.logicalOperator
+                        ? ` ${condition.logicalOperator} `
+                        : ` && `
+                    }`;
+                  }
+                  
+                  code += `(this.${
+                    object.form!.id
+                  }Form.get([${controlsToAdd ? controlsToAdd : `"${array}"`}])?.value[index]?.${condition.key} ${
+                    condition.comparisonOperator
+                      ? ` ${condition.comparisonOperator} `
+                      : ` === `
+                  } ${(typeof condition.value !== "string") ? condition.value :  `"${condition.value}"`})`;
+                }
+              );
+
+              code += `
+                  );
+                }
+              }; `;
+              console.log(code);
+              _conditionMethods.push(value.id);
+            }
+          }
+        }
+      }
+    }
+
+    if (element.tabs) {
+      element.tabs.forEach((tab) => {
+        code += setConditionsInArray(object, tab.elements);
+      });
+    }
+
+    if (element.array) {
+      code += setConditionsInArray(
+        object,
+        element.array.elements,
+        element.array?.id
+      );
+    }
+  });
+  
+  return code;
+};
+
+export { setCondition, setConditionOverEdition, setConditionsInArray };

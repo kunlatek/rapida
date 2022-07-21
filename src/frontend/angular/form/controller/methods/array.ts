@@ -329,5 +329,4 @@ export {
   setArrayIndexesToAdd,
   setArrayMethod,
   setArrayLayer,
-  setConditionsInArray
 };

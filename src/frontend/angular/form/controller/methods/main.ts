@@ -1,10 +1,11 @@
 import { FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
-import { setArray, setConditionsInArray } from "./array";
+import { setArray } from "./array";
 import {
   setCondition,
   setConditionOverEdition,
+  setConditionsInArray,
 } from "./condition";
 import { setFileSubmit, setMethod, setValueBeforeSubmit } from "./method";
 
@@ -21,10 +22,6 @@ const setFormControllerMethods = (object: MainInterface): string => {
 
   let _conditionsMethods = setCondition(object, object.form.elements);
   let _conditionsMethodsOverEdition = setConditionOverEdition(
-    object,
-    object.form.elements
-  );
-  let _conditionsMethodsInArray = setConditionsInArray(
     object,
     object.form.elements
   );
@@ -54,7 +51,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
 
   ${
     _hasConditionInArray
-      ? _conditionsMethodsInArray
+      ? setConditionsInArray(object, object.form.elements)
       : ""
   }
 
