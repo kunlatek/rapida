@@ -39,19 +39,16 @@ const setCondition = (
               value.conditions.elements.forEach(
                 (condition: any, index: number) => {
                   if (index > 0) {
-                    code += `${
-                      condition.logicalOperator
-                        ? ` ${condition.logicalOperator} `
-                        : ` && `
-                    }`;
+                    code += `${condition.logicalOperator
+                      ? ` ${condition.logicalOperator} `
+                      : ` && `
+                      }`;
                   }
-                  code += `(this.${object.form!.id}Form.get("${
-                    condition.key
-                  }")?.value ${
-                    condition.comparisonOperator
+                  code += `(this.${object.form!.id}Form.get("${condition.key
+                    }")?.value ${condition.comparisonOperator
                       ? ` ${condition.comparisonOperator} `
                       : ` === `
-                  } "${condition.value}")`;
+                    } "${condition.value}")`;
                 }
               );
               code += `);`;
@@ -67,17 +64,15 @@ const setCondition = (
               (condition: any, index: number) => {
                 if (!array) {
                   if (index > 0) {
-                    code += `${
-                      condition.logicalOperator
-                        ? ` ${condition.logicalOperator} `
-                        : ` && `
-                    }`;
+                    code += `${condition.logicalOperator
+                      ? ` ${condition.logicalOperator} `
+                      : ` && `
+                      }`;
                   }
-                  code += `(this.${condition.key} ${
-                    condition.comparisonOperator
-                      ? ` ${condition.comparisonOperator} `
-                      : ` === `
-                  } "${condition.value}");`;
+                  code += `(this.${condition.key} ${condition.comparisonOperator
+                    ? ` ${condition.comparisonOperator} `
+                    : ` === `
+                    } "${condition.value}");`;
                 }
                 code += `)`;
 
@@ -123,7 +118,7 @@ const setConditionOverEdition = (
   elements.forEach((element) => {
     const type = Object.keys(element)[0];
     const value = Object.values(element)[0];
-    
+
     if (formElements.includes(type)) {
       if (value.conditions) {
         if (value.conditions.type === ConditionEnum.Form) {
@@ -144,18 +139,16 @@ const setConditionOverEdition = (
                 conditionId = `${value.name ? value.name : value.id}FormCondition`;
                 if (array) {
                   if (index > 0) {
-                    code += `${
-                      condition.logicalOperator
-                        ? ` ${condition.logicalOperator} `
-                        : ` && `
-                    }`;
+                    code += `${condition.logicalOperator
+                      ? ` ${condition.logicalOperator} `
+                      : ` && `
+                      }`;
                   }
                   code += `_${array}.${condition.key}`
-                  code += `${
-                    condition.comparisonOperator
-                      ? ` ${condition.comparisonOperator} `
-                      : ` === `
-                  } "${condition.value}"`;
+                  code += `${condition.comparisonOperator
+                    ? ` ${condition.comparisonOperator} `
+                    : ` === `
+                    } "${condition.value}"`;
                 }
 
                 _conditionMethodsOverEdition.push(value.name ? value.name : value.id);
@@ -183,7 +176,7 @@ const setConditionOverEdition = (
       code += setConditionOverEdition(object, element.array.elements, element.array.id);
     }
   });
-  
+
   return code;
 };
 
@@ -202,7 +195,7 @@ const setConditionsInArray = (
     "slide",
     "array",
   ];
-  
+
   let code = ``;
   let substring = ``;
 
@@ -219,42 +212,34 @@ const setConditionsInArray = (
               const iterationsToAdd = setArrayIndexesToAdd(value.id);
               const conditionMethod = `setConditionIn${TextTransformation.pascalfy(value.conditions.elements[0].key)} = (${iterationsToAdd}index: number | undefined = undefined, checked: boolean = true) => { if (typeof index === "number") {`;
               const conditionMethodExists = code.includes(conditionMethod);
-              
-              if (conditionMethodExists) {
-                console.log(code.includes(conditionMethod), code.search(conditionMethod), 224224);
-              }
 
-              code += `${conditionMethod}`;
-              
-              code += `this.${value.name ? value.name : value.id}FormCondition[index] = (`;
+              let conditionMethodCode = `this.${value.name ? value.name : value.id}FormCondition[index] = (`;
 
               value.conditions.elements.forEach(
                 (condition: any, index: number) => {
                   if (index > 0) {
-                    code += `${
-                      condition.logicalOperator
-                        ? ` ${condition.logicalOperator} `
-                        : ` && `
-                    }`;
+                    conditionMethodCode += `${condition.logicalOperator
+                      ? ` ${condition.logicalOperator} `
+                      : ` && `
+                      }`;
                   }
-                  
-                  code += `(this.${
-                    object.form!.id
-                  }Form.get([${controlsToAdd ? controlsToAdd : `"${array}"`}])?.value[index]?.${condition.key} ${
-                    condition.comparisonOperator
+
+                  conditionMethodCode += `(this.${object.form!.id
+                    }Form.get([${controlsToAdd ? controlsToAdd : `"${array}"`}])?.value[index]?.${condition.key} ${condition.comparisonOperator
                       ? ` ${condition.comparisonOperator} `
                       : ` === `
-                  } ${(typeof condition.value !== "string") ? condition.value :  `"${condition.value}"`})`;
+                    } ${(typeof condition.value !== "string") ? condition.value : `"${condition.value}"`})`;
                 }
               );
 
-              if (!conditionMethodExists) {
-                code += `
-                    );
-                  }
-                }; `;
+              if (conditionMethodExists) {
+                const codeSplited = code.split(conditionMethod);
+                codeSplited.splice(1, 0, `${conditionMethod} ${conditionMethodCode});`);
+                code = codeSplited.join('');
+              } else {
+                code += `${conditionMethod} ${conditionMethodCode}); } };`
               }
-              
+
               _conditionMethods.push(value.id);
             }
           }
@@ -276,7 +261,7 @@ const setConditionsInArray = (
       );
     }
   });
-  
+
   return code;
 };
 
