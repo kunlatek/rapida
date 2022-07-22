@@ -218,10 +218,10 @@ const setConditionsInArray = (
               const controlsToAdd = setArrayControlsToAdd(value.id);
               const iterationsToAdd = setArrayIndexesToAdd(value.id);
               const conditionMethod = `setConditionIn${TextTransformation.pascalfy(value.conditions.elements[0].key)} = (${iterationsToAdd}index: number | undefined = undefined, checked: boolean = true) => { if (typeof index === "number") {`;
-              const conditionMethodIndexToSubstring = code.search(conditionMethod);
-              console.log(conditionMethodIndexToSubstring, 222222);
-              if (conditionMethodIndexToSubstring !== -1) {
-                console.log(conditionMethodIndexToSubstring, 224224);
+              const conditionMethodExists = code.includes(conditionMethod);
+              
+              if (conditionMethodExists) {
+                console.log(code.includes(conditionMethod), code.search(conditionMethod), 224224);
               }
 
               code += `${conditionMethod}`;
@@ -248,11 +248,13 @@ const setConditionsInArray = (
                 }
               );
 
-              code += `
-                  );
-                }
-              }; `;
-              console.log(code);
+              if (!conditionMethodExists) {
+                code += `
+                    );
+                  }
+                }; `;
+              }
+              
               _conditionMethods.push(value.id);
             }
           }
