@@ -210,7 +210,9 @@ const setConditionsInArray = (
             if (array) {
               const controlsToAdd = setArrayControlsToAdd(value.id);
               const iterationsToAdd = setArrayIndexesToAdd(value.id);
-              const conditionMethod = `setConditionIn${TextTransformation.pascalfy(value.conditions.elements[0].key)} = (${iterationsToAdd}index: number | undefined = undefined, checked: boolean = true) => { if (typeof index === "number") {`;
+              const conditionMethod = `setConditionIn${TextTransformation.pascalfy(value.conditions.elements[0].key)}`;
+              const stringToSplit = `setConditionIn${TextTransformation.pascalfy(value.conditions.elements[0].key)} = (${iterationsToAdd}index: number | undefined = undefined, checked: boolean = true) => { if (typeof index === "number") {`;
+              const stringToSplitExists = code.includes(stringToSplit);
               const conditionMethodExists = code.includes(conditionMethod);
 
               let conditionMethodCode = `this.${value.name ? value.name : value.id}FormCondition[index] = (`;
@@ -232,12 +234,14 @@ const setConditionsInArray = (
                 }
               );
 
-              if (conditionMethodExists) {
-                const codeSplited = code.split(conditionMethod);
-                codeSplited.splice(1, 0, `${conditionMethod} ${conditionMethodCode});`);
+              if (stringToSplitExists) {
+                const codeSplited = code.split(stringToSplit);
+                codeSplited.splice(1, 0, `${stringToSplit} ${conditionMethodCode});`);
                 code = codeSplited.join('');
               } else {
-                code += `${conditionMethod} ${conditionMethodCode}); } };`
+                if (!conditionMethodExists) {
+                  code += `${stringToSplit} ${conditionMethodCode}); } };`
+                }
               }
 
               _conditionMethods.push(value.id);
