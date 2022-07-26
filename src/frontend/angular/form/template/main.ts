@@ -47,7 +47,7 @@ const setFormTemplate = (object: MainInterface): string => {
   _arrayLayer = JSON.parse(
     process.env.ARRAY_LAYER!
   );
-  
+
   object.form.elements.forEach((element) => {
     _specificStructure += setSpecificStructureOverFormElement(object, element);
     verifyFormElement(element);
@@ -106,17 +106,21 @@ const setSpecificStructureOverFormElement = (
 
     if (element.input.type === FormInputTypeEnum.File) {
       code += `
-      <mat-form-field  ${conditions}>
-        <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload multiple>
+        <input type="file" class="file-input" (change)="on${TextTransformation.capitalization(element.input.name)}FileSelected($event)" #fileUpload multiple>
         <div class="file-upload">
-            {{fileName || "Escolha arquivo para enviar"}}
-        
-            <button mat-mini-fab color="primary" class="upload-btn"
-                (click)="fileUpload.click()">
+            <button type="button" mat-raised-button color="primary" (click)="fileUpload.click()">
                 <mat-icon>attach_file</mat-icon>
+                Enviar arquivo
             </button>
         </div>
-      </mat-form-field>
+        <mat-list>
+          <mat-list-item *ngFor="let file of ${object.form?.id}Form.value.${element.input.name}; index as i;">
+            {{file.name}}
+            <button mat-icon-button type="button" (click)="delete${TextTransformation.capitalization(element.input.name)}File(i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-list-item>
+        </mat-list>
       `;
     } else if (element.input.isMultipleLines) {
       code += `
@@ -238,7 +242,7 @@ const setSpecificStructureOverFormElement = (
       }
       setCondition += `"`;
     }
-    
+
     code += `
     <mat-form-field ${conditions}>
       <mat-label>${element.select.label}</mat-label>
@@ -282,13 +286,13 @@ const setSpecificStructureOverFormElement = (
     let arrayIndexesToAdd = setArrayIndexesToAdd(element.array.id);
     let arrayCurrentIndex: any;
     let arrayFlowIdentifier = setArrayFlowIdentifier(element.array.id) ? setArrayFlowIdentifier(element.array.id) : `this.${object.form?.id}Form`;
-    
+
     _arrayLayer?.forEach(array => {
       if (array.name === element.array?.id) {
         arrayCurrentIndex = array.indexIdentifier;
       }
     });
-    
+
     element.array.elements.forEach((arrayElement) => {
       arrayStructure += setSpecificStructureOverFormElement(
         object,
@@ -300,9 +304,8 @@ const setSpecificStructureOverFormElement = (
     code += `
     <div ${conditions}>
       <ng-container formArrayName="${element.array?.id}">
-        <mat-list *ngFor="let _${element.array?.id} of get${
-          TextTransformation.pascalfy(element.array?.id)
-        }(${arrayFlowIdentifier}); index as ${arrayCurrentIndex}">
+        <mat-list *ngFor="let _${element.array?.id} of get${TextTransformation.pascalfy(element.array?.id)
+      }(${arrayFlowIdentifier}); index as ${arrayCurrentIndex}">
           <ng-container [formGroupName]="${arrayCurrentIndex}">
             <mat-list-item>
               ${element.array?.title} {{1 + ${arrayCurrentIndex}}}
@@ -345,11 +348,10 @@ const setFormTemplateArchitectureAndWriteToFile = (
     return "";
   }
 
-  const filePath = `${
-    object.projectPath
-  }/src/app/components/${TextTransformation.kebabfy(
-    object.form.id
-  )}/${TextTransformation.kebabfy(object.form.id)}.component.html`;
+  const filePath = `${object.projectPath
+    }/src/app/components/${TextTransformation.kebabfy(
+      object.form.id
+    )}/${TextTransformation.kebabfy(object.form.id)}.component.html`;
 
   try {
     fs.writeFileSync(filePath, code);

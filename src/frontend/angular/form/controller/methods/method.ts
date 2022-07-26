@@ -9,13 +9,13 @@ const setMethod = (
   object: MainInterface
 ): string => {
   let code = ``;
-  
+
   if (!object.form) {
     return code;
   }
-  
+
   code += setFormMethodsByElements(object, object.form.elements);
-  
+
   return code;
 };
 
@@ -23,33 +23,36 @@ const setMethod = (
 const setFormMethodsByElements = (
   object: MainInterface,
   elements: Array<FormElementInterface>,
-  array: ArrayInterface | undefined = undefined, 
+  array: ArrayInterface | undefined = undefined,
 ): string => {
   let code = ``;
-  elements.forEach(element => {    
+  elements.forEach(element => {
     if (element.input?.type === FormInputTypeEnum.File) {
       code += `
-      onFileSelected(event: any) {
+      on${TextTransformation.capitalization(element.input.name)}FileSelected(event: any) {
         if (event.target.files.length > 0) {
+          let files = this.${object.form?.id}Form.value.${element.input.name} || [];
           const file = event.target.files[0];
-          this.fileName = file.name;
-          const formData = new FormData();
-      
-          this.fileFormForm.get("${element.input.name}")?.setValue(file);
+          files.push(file);
+          this.${object.form?.id}Form.get("${element.input.name}")?.setValue(files);
         }
+      }
+      delete${TextTransformation.capitalization(element.input.name)}File(index: number) {
+        let files = this.${object.form?.id}Form.value.image;
+        files.splice(index, 1);
+        this.${object.form?.id}Form.get("${element.input.name}")?.setValue(files);
       }
       `;
     }
-    
+
     if (element.select?.optionsApi) {
       code += `
       set${TextTransformation.pascalfy(
         element.select?.name
       )}SelectObject = async () => {
         try {
-          const array: any = await this._${object.form?.id}Service.${
-        element.select.name
-      }SelectObjectGetAll();
+          const array: any = await this._${object.form?.id}Service.${element.select.name
+        }SelectObjectGetAll();
           if (array.data?.result) {
             array.data?.result.map((object: any) => {
               this.${element.select?.name}SelectObject.push({
@@ -67,22 +70,22 @@ const setFormMethodsByElements = (
       };
       `;
     }
-  
+
     if (element.autocomplete) {
       code += setAutocompleteMethod(object, element, array);
     }
-  
+
     if (element.array) {
       code += setArrayMethod(object, element.array);
     }
-  
+
     if (element.tabs) {
       element.tabs.forEach((form) => {
         code += setFormMethodsByElements(object, form.elements);
       });
     }
   });
-  
+
   return code;
 };
 
