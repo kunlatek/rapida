@@ -24,6 +24,10 @@ const setModelImports = (object: MainInterface): string => {
 
   additionalLoopbackRepositoriesImportMethods = [...new Set(additionalLoopbackRepositoriesImportMethods)];
 
+  _importsDefault = [
+    ...new Set(`${_importsDefault}`.split(",").map((el) => el.trim())),
+  ].join(",");
+
   let code = `
   import {model, property, ${additionalLoopbackRepositoriesImportMethods.join(',')}} from '@loopback/repository';
   import {${_importsDefault}__Default} from '.';

@@ -174,29 +174,29 @@ export const DAXTV_CLIENT_PERSON_FORM: MainInterface = {
                   name: "packageId",
                   type: FormInputTypeEnum.Text,
                   optionsApi: {
-                    endpoint: "daxtvPackages",
+                    endpoint: "daxtv-packages",
                     labelField: "name",
-                    valueField: "_id",                    
+                    valueField: "_id",
                   }
                 }
               },
-              {
-                select: {
-                  label: "Extras",
-                  name: "extraId",
-                  type: FormInputTypeEnum.Text,
-                  optionsApi: {
-                    endpoint: "daxtvExtras",
-                    labelField: "name",
-                    valueField: "_id",                    
-                  },
-                  isMultiple: true
-                }
-              },
+              // {
+              //   select: {
+              //     label: "Extras",
+              //     name: "extraId",
+              //     type: FormInputTypeEnum.Text,
+              //     optionsApi: {
+              //       endpoint: "daxtv-extras",
+              //       labelField: "name",
+              //       valueField: "_id",
+              //     },
+              //     isMultiple: true
+              //   }
+              // },
               {
                 button: {
                   label: "Criar",
-                  type: FormButtonTypeEnum.Submit,          
+                  type: FormButtonTypeEnum.Submit,
                 }
               },
             ],

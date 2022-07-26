@@ -2,11 +2,13 @@ import pluralize = require("pluralize");
 
 export class TextTransformation {
   static pascalfy(text: string): string {
-    const pascalCase = text
-      .replace(/([A-Z])/g, '$1')
-      .replace(/^./, function (str) {
-        return str.toUpperCase();
-      });
+
+    let textArray = text.split(' ');
+    textArray.forEach((term, termIndex) => {
+      textArray[termIndex] = this.capitalization(term);
+    })
+
+    const pascalCase = textArray.join('');
 
     return pascalCase;
   }
@@ -118,5 +120,13 @@ export class TextTransformation {
     }
 
     return className;
+  }
+
+  static capitalization(term: string): string {
+    return term
+      .replace(/([A-Z])/g, '$1')
+      .replace(/^./, function (str: string) {
+        return str.toUpperCase();
+      });
   }
 }
