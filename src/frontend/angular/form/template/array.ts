@@ -108,7 +108,7 @@ const setArrayIndexesToAdd = (arrayId: string): string => {
   return code;
 }
 
-const setArraysInAFlow = (arrayId: string) => { 
+const setArraysInAFlow = (arrayId: string) => {
   _arrayLayer?.forEach(array => {
     if (array.name === arrayId) {
       if (_arraysInAFlow.indexOf(array) === -1) {

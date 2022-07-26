@@ -39,7 +39,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
   const code = `
   ${
     _hasCondition
-      ? `setCondition = (index: number | undefined = undefined, checked: boolean = true) => {
+      ? `setCondition = () => {
         ${_conditionsMethods}        
       };
       

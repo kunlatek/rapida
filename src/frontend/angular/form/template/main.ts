@@ -145,7 +145,7 @@ const setSpecificStructureOverFormElement = (
   }
 
   if (element.autocomplete) {
-    setAutocomplete(element, conditions);
+    code += setAutocomplete(element, conditions);
   }
 
   if (element.button) {
@@ -230,7 +230,7 @@ const setSpecificStructureOverFormElement = (
       setCondition += `(selectionChange)="`;
 
       if (array) {
-        setCondition += `setConditionIn${TextTransformation.pascalfy(element.select.name)}(${setArrayIndexes(element.select.name)})`;
+        setCondition += `setConditionIn${TextTransformation.pascalfy(element.select.name)}(${setArrayIndexes(array)})`;
       }
 
       if (!array) {
@@ -252,7 +252,7 @@ const setSpecificStructureOverFormElement = (
   }
 
   if (element.slide) {
-    const setCondition = element.slide.isTriggerToCondition ? `(change)="setCondition(i, true)"` : "";
+    const setCondition = element.slide.isTriggerToCondition ? `(change)="setCondition()"` : "";
     code += `
     <mat-slide-toggle formControlName="${element.slide.name}" ${conditions} ${setCondition}>
       ${element.slide.label}

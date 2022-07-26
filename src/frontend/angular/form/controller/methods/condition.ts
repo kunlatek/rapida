@@ -2,7 +2,7 @@ import { ConditionEnum } from "../../../../../enums/form";
 import { ConditionElementInterface, FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
-import { setArrayControlsToAdd, setArrayIndexesToAdd } from "./array";
+import { setArrayControlsToAdd, setArrayIndexes } from "./array";
 
 let _conditionMethods: Array<string> = [];
 let _conditionMethodsOverEdition: Array<string> = [];
@@ -208,14 +208,14 @@ const setConditionsInArray = (
         if (value.conditions.type === ConditionEnum.Form) {
           if (!_conditionMethods.includes(value.name ? value.name : value.id)) {
             if (array) {
-              const controlsToAdd = setArrayControlsToAdd(value.id);
-              const iterationsToAdd = setArrayIndexesToAdd(value.id);
+              const controlsToAdd = setArrayControlsToAdd(array);
+              const iterations = setArrayIndexes(array);
               const conditionMethod = `setConditionIn${TextTransformation.pascalfy(value.conditions.elements[0].key)}`;
-              const stringToSplit = `setConditionIn${TextTransformation.pascalfy(value.conditions.elements[0].key)} = (${iterationsToAdd}index: number | undefined = undefined, checked: boolean = true) => { if (typeof index === "number") {`;
+              const stringToSplit = `setConditionIn${TextTransformation.pascalfy(value.conditions.elements[0].key)} = (${iterations}) => { if (typeof i === "number") {`;
               const stringToSplitExists = code.includes(stringToSplit);
               const conditionMethodExists = code.includes(conditionMethod);
-
-              let conditionMethodCode = `this.${value.name ? value.name : value.id}FormCondition[index] = (`;
+              
+              let conditionMethodCode = `this.${value.name ? value.name : value.id}FormCondition[${iterations.split(": any")[iterations.split(": any").length - 2].replace(", ", "")}] = (`;
 
               value.conditions.elements.forEach(
                 (condition: any, index: number) => {
@@ -227,7 +227,7 @@ const setConditionsInArray = (
                   }
 
                   conditionMethodCode += `(this.${object.form!.id
-                    }Form.get([${controlsToAdd ? controlsToAdd : `"${array}"`}])?.value[index]?.${condition.key} ${condition.comparisonOperator
+                    }Form.get([${controlsToAdd ? controlsToAdd : `"${array}"`}])?.value[${iterations.split(": any")[iterations.split(": any").length - 2].replace(", ", "")}]?.${condition.key} ${condition.comparisonOperator
                       ? ` ${condition.comparisonOperator} `
                       : ` === `
                     } ${(typeof condition.value !== "string") ? condition.value : `"${condition.value}"`})`;

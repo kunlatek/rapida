@@ -502,7 +502,6 @@ export const COMPONENT_FORM: MainInterface = {
                         label: "Title",
                         name: "arrayTitle",
                         type: FormInputTypeEnum.Text,
-                        isRequired: true,
                         conditions: {
                           type: ConditionEnum.Form,
                           elements: [
@@ -519,7 +518,6 @@ export const COMPONENT_FORM: MainInterface = {
                         label: "Id",
                         name: "arrayId",
                         type: FormInputTypeEnum.Text,
-                        isRequired: true,
                         conditions: {
                           type: ConditionEnum.Form,
                           elements: [
@@ -1170,6 +1168,7 @@ export const COMPONENT_FORM: MainInterface = {
                         name: "tableRowField",
                         type: FormInputTypeEnum.Text,
                         placeholder: "Campo de BD que preenche linha",
+                        isRequired: true,
                       },
                     },
                     {
