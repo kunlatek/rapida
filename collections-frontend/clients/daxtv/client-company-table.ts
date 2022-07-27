@@ -111,7 +111,7 @@ export const DAXTV_CLIENT_COMPANY_TABLE: MainInterface = {
     ],
     service: {
       baseUrl: "http://localhost:3000",
-      endpoint: "daxtvClientCompanies",
+      endpoint: "daxtv-client-companies",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

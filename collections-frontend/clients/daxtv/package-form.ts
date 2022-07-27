@@ -126,7 +126,7 @@ export const DAXTV_PACKAGE_FORM: MainInterface = {
     ],
     service: {
       baseUrl: "http://localhost:3000",
-      endpoint: "daxtvPackages",
+      endpoint: "daxtv-packages",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

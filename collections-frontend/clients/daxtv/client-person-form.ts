@@ -73,6 +73,7 @@ export const DAXTV_CLIENT_PERSON_FORM: MainInterface = {
                   type: FormInputTypeEnum.Text,
                   placeholder: "(00) 0 0000-0000",
                   isRequired: true,
+                  mask: "(00) 0 0000-0000",
                 }
               },
               {
@@ -192,21 +193,21 @@ export const DAXTV_CLIENT_PERSON_FORM: MainInterface = {
               //     },
               //     isMultiple: true
               //   }
-              // },
-              {
-                button: {
-                  label: "Criar",
-                  type: FormButtonTypeEnum.Submit,
-                }
-              },
+              // },              
             ],
           },
         ]
-      }
+      },
+      {
+        button: {
+          label: "Criar",
+          type: FormButtonTypeEnum.Submit,
+        }
+      },
     ],
     service: {
       baseUrl: "http://localhost:3000",
-      endpoint: "daxtvClientPeople",
+      endpoint: "daxtv-client-people",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

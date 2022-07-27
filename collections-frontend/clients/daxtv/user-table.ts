@@ -103,7 +103,7 @@ export const DAXTV_USER_TABLE: MainInterface = {
     ],
     service: {
       baseUrl: "http://localhost:3000",
-      endpoint: "daxtvUsers",
+      endpoint: "daxtv-users",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

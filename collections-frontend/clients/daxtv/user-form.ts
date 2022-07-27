@@ -1,4 +1,4 @@
-import { FormInputTypeEnum, ServiceFunctionsEnum } from "../../../src/enums/form";
+import { FormButtonTypeEnum, FormInputTypeEnum, ServiceFunctionsEnum } from "../../../src/enums/form";
 import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/main";
 import { MainInterface } from "../../../src/interfaces/main";
 
@@ -73,6 +73,7 @@ export const DAXTV_USER_FORM: MainInterface = {
                   type: FormInputTypeEnum.Text,
                   placeholder: "(00) 0 0000-0000",
                   isRequired: true,
+                  mask: "(00) 0 0000-0000",
                 }
               },
               {
@@ -194,11 +195,17 @@ export const DAXTV_USER_FORM: MainInterface = {
             ],
           },
         ]
-      }
+      },
+      {
+        button: {
+          label: "Criar",
+          type: FormButtonTypeEnum.Submit,
+        }
+      },
     ],
     service: {
       baseUrl: "http://localhost:3000",
-      endpoint: "daxtvUsers",
+      endpoint: "daxtv-users",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

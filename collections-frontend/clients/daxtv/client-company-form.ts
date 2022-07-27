@@ -66,6 +66,7 @@ export const DAXTV_CLIENT_COMPANY_FORM: MainInterface = {
                   type: FormInputTypeEnum.Text,
                   placeholder: "(00) 0 0000-0000",
                   isRequired: true,
+                  mask: "(00) 0 0000-0000",
                 }
               },
               {
@@ -194,21 +195,21 @@ export const DAXTV_CLIENT_COMPANY_FORM: MainInterface = {
                   placeholder: "Contas por plano",
                   isRequired: true,
                 }
-              },
-              {
-                button: {
-                  label: "Criar",
-                  type: FormButtonTypeEnum.Submit,
-                }
-              },
+              },              
             ],
           },
         ]
-      }
+      },
+      {
+        button: {
+          label: "Criar",
+          type: FormButtonTypeEnum.Submit,
+        }
+      },
     ],
     service: {
       baseUrl: "http://localhost:3000",
-      endpoint: "daxtvClientCompanies",
+      endpoint: "daxtv-client-companies",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

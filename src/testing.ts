@@ -121,6 +121,9 @@ const array = [
   // CHARACTER_TABLE,
   // CHARACTER,
 
+  /**
+   * RAPIDA
+   */
   PROJECT_FORM,
   PROJECT_TABLE,
   PROJECT,
@@ -133,6 +136,9 @@ const array = [
   MODULE_TABLE, 
   MODULE,
 
+  /**
+   * DAXTV
+   */
   // DAXTV_CLIENT_COMPANY,
   // DAXTV_CLIENT_COMPANY_FORM,
   // DAXTV_CLIENT_COMPANY_TABLE,
