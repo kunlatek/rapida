@@ -6,9 +6,7 @@ import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 import {
   setArrayControls,
-  setArrayControlsToAdd,
   setArrayIndexes,
-  setArrayIndexesToAdd,
 } from "./array";
 
 const setAutocompleteMethod = (
@@ -82,7 +80,7 @@ const setAutocompleteMethod = (
     };
     `;
   }
-
+  
   code += `
   displayFnTo${TextTransformation.pascalfy(
     element.autocomplete.name
@@ -164,8 +162,8 @@ const setAutocompleteMethod = (
       );
       this.sendErrorMessage(message);
     };
-};
-callSetFiltered${TextTransformation.pascalfy(
+  };
+  callSetFiltered${TextTransformation.pascalfy(
     element.autocomplete.name
   )} = MyPerformance.debounce((${iterations ? iterations : ""}) => this.setFiltered${TextTransformation.pascalfy(
     element.autocomplete.name

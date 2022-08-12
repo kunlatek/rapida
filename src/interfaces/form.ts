@@ -63,8 +63,9 @@ export interface ArrayInterface {
 export interface ButtonInterface {
   type: FormButtonTypeEnum;
   label: string;
-  dialog?: DialogInterface;
   name?: string;
+  dialog?: DialogInterface;
+  tooltip?: string;
   isAutofocus?: boolean;
   isDisabled?: boolean;
   isFormNoValidate?: boolean;
@@ -93,6 +94,7 @@ export interface InputInterface {
   label: string;
   name: string;
   placeholder?: string;
+  tooltip?: string;
   conditions?: ConditionInterface;
   mask?: string; // Over ngx-mask patterns
   isAutoFocus?: boolean; // Specifies that an <input> element should automatically get focus when the page loads
@@ -157,6 +159,7 @@ export interface OptionApiInterface {
   endpoint: string;
   labelField: string;
   valueField: string;
+  externalApiUrlBase?: string;
   isDisabled?: boolean;
   isSelected?: boolean;
   todo?: string;
@@ -179,6 +182,7 @@ export interface SelectInterface {
   type: FormInputTypeEnum;
   name: string;
   label: string;
+  tooltip?: string;
   isTriggerToCondition?: boolean;
   conditions?: ConditionInterface;
   optgroups?: Array<OptgroupInterface>;
@@ -198,6 +202,7 @@ export interface AutocompleteInterface {
   name: string;
   label: string;
   placeholder?: string;
+  tooltip?: string;
   conditions?: ConditionInterface;
   optgroups?: Array<OptgroupInterface>;
   optionsApi: AutocompleteApiInterface;

@@ -3,23 +3,22 @@ import { FrontendFrameworkEnum } from "../../../src/enums/main";
 import { RequestTypeEnum } from "../../../src/enums/request";
 import { MainInterface } from "../../../src/interfaces/main";
 
-
-export const USERS_GROUP_TABLE: MainInterface = {
+export const PERMISSION_TABLE: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
   table: {
-    id: "usersGroupTable",
-    title: "Grupos de usuários",
+    title: "Permissões",
+    id: "permissionTable",
     data: {
-      type: RequestTypeEnum.Object,
+      type: RequestTypeEnum.Object
     },
     elements: [
       {
         column: {
-          label: "Nome",
+          label: "Grupo de permissão"
         },
         row: {
-          field: "name",
-        },
+          field: "groupNameId"
+        }
       },
       {
         column: {
@@ -32,35 +31,35 @@ export const USERS_GROUP_TABLE: MainInterface = {
             {
               action: {
                 type: RequestTypeEnum.Link,
-                url: "/main/users-group",
-                param: "uuid",
+                url: "/main/permission",
+                param: "_id",
               },
               label: "Editar",
             },
             {
               action: {
                 type: RequestTypeEnum.Dialog,
-                param: "uuid",
+                param: "_id",
               },
               label: "Remover",
               dialog: {
                 templateFolder: "remove-confirmation-dialog",
                 id: "removeConfirmationDialog",
               },
-            },
-          ],
-        },
-      },
+            }
+          ]
+        }
+      }
     ],
     service: {
-        baseUrl: "http://devbackadmin.lpsbr.com/api/v1",
-        endpoint: "user-groups",
+        baseUrl: "http://localhost:3000",
+        endpoint: "__permissions",
         hasAuthorization: true,
         methods: [
             ServiceFunctionsEnum.Get,
             ServiceFunctionsEnum.Delete,
             ServiceFunctionsEnum.Find,
         ],
-    },
-  },
-};
+    }
+  }
+}

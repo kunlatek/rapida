@@ -1,4 +1,5 @@
 import {
+  ConditionEnum,
   FormButtonTypeEnum,
   FormInputTypeEnum,
   ServiceFunctionsEnum,
@@ -6,56 +7,72 @@ import {
 import { FrontendFrameworkEnum } from "../../../src/enums/main";
 import { MainInterface } from "../../../src/interfaces/main";
 
-export const USERS_GROUP_FORM: MainInterface = {
+export const RELATED_USER_FORM: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
   form: {
-    title: "Grupo de usuários",
-    id: "usersGroupForm",
+    title: "Usuário relacionado",
+    id: "relatedUserForm",
     elements: [
+      {
+        input: {
+          label: "E-mail",
+          name: "email",
+          type: FormInputTypeEnum.Email,
+          isRequired: true,
+          isDisabled: true,
+        },
+      },
       {
         input: {
           label: "Nome",
           name: "name",
-          placeholder: "Nome do grupo",
           type: FormInputTypeEnum.Text,
           isRequired: true,
+          isDisabled: true,
         },
       },
       {
         input: {
-          label: "Descrição",
-          name: "description",
-          placeholder: "Descrição do grupo",
+          label: "CPF/CNPJ",
+          name: "uniqueId",
           type: FormInputTypeEnum.Text,
           isRequired: true,
+          isDisabled: true,
+        },
+      },
+      {
+        input: {
+          label: "Nome fantasia",
+          name: "businessName",
+          type: FormInputTypeEnum.Text,
+          isRequired: true,
+          isDisabled: true,
         },
       },
       {
         autocomplete: {
-          label: "Usuários",
-          name: "users",
-          placeholder: "Usuários relacionados",
+          label: "Grupo de permissões relacionado",
+          name: "permissionGroupId",
           type: FormInputTypeEnum.Text,
           optionsApi: {
-            endpoint: "users",
+            endpoint: "__permission-groups",
             labelField: "name",
-            valueField: "uuid",
-            paramsToFilter: ["name"]
+            valueField: "_id",
+            paramsToFilter: ["name"],
           },
           isRequired: true,
-          isMultiple: true,
         }
       },
       {
         button: {
           label: "Criar",
-          type: FormButtonTypeEnum.Submit,          
-        }
-      }
+          type: FormButtonTypeEnum.Submit,
+        },
+      },
     ],
     service: {
-      baseUrl: "http://devbackadmin.lpsbr.com/api/v1",
-      endpoint: "user-groups",
+      baseUrl: "http://localhost:3000",
+      endpoint: "__related-users",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

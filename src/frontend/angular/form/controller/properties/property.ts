@@ -51,14 +51,19 @@ const setFormPropertiesByElements = (
     }
   
     if (element.autocomplete) {
+      code += `
+      filtered${TextTransformation.pascalfy(element.autocomplete.name)}: Array<any> = [];
+      `;
+
+      if (element.autocomplete.isMultiple) {
         code += `
         ${element.autocomplete.name}SeparatorKeysCodes: number[] = [ENTER, COMMA];
-        filtered${TextTransformation.pascalfy(element.autocomplete.name)}: Array<any> = [];
         chosen${TextTransformation.pascalfy(element.autocomplete.name)}View: string[] = [];
         chosen${TextTransformation.pascalfy(element.autocomplete.name)}Value: string[] = [];
-        
+      
         @ViewChild('${element.autocomplete.name}Input') ${element.autocomplete.name}Input!: ElementRef<HTMLInputElement>;
         `;
+      }
     }
   
     if (element.checkbox) {

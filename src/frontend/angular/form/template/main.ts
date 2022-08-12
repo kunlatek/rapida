@@ -62,7 +62,7 @@ const setFormTemplate = (object: MainInterface): string => {
     : "";
 
   let code = `
-  <mat-card>
+  <mat-card *ngIf="(isAddModule && updateOnePermission) || (!isAddModule && createOnePermission)">
     <mat-card-header>
       ${hasFormTitle}
       ${hasFormSubtitle}
@@ -101,12 +101,16 @@ const setSpecificStructureOverFormElement = (
     const placeholder = element.input.placeholder
       ? `placeholder="${element.input.placeholder}"`
       : "";
+    
+    const tooltip = element.input.tooltip
+      ? `matTooltip="${element.input.tooltip}"`
+      : "";
     const required = element.input.isRequired ? "required" : "";
     const mask = element.input.mask ? `mask="${element.input.mask}"` : "";
 
     if (element.input.type === FormInputTypeEnum.File) {
       code += `
-        <input type="file" class="file-input" (change)="on${TextTransformation.capitalization(element.input.name)}FileSelected($event)" #fileUpload multiple>
+        <input type="file" class="file-input" (change)="on${TextTransformation.capitalization(element.input.name)}FileSelected($event)" ${tooltip} #fileUpload multiple>
         <div class="file-upload">
             <button type="button" mat-raised-button color="primary" (click)="fileUpload.click()">
                 <mat-icon>attach_file</mat-icon>
@@ -126,14 +130,14 @@ const setSpecificStructureOverFormElement = (
       code += `
       <mat-form-field class="full-width" ${conditions}>
         <mat-label>${element.input.label}</mat-label>
-          <textarea matInput formControlName="${element.input.name}" ${placeholder} ${required}>
+          <textarea matInput formControlName="${element.input.name}" ${placeholder} ${tooltip} ${required}>
         </textarea>
       </mat-form-field>
       `;
     } else if (element.input.type === FormInputTypeEnum.Date) {
       code += `
       <mat-form-field ${conditions}>
-        <input matInput formControlName="${element.input.name}" ${placeholder ? placeholder : `placeholder="${element.input.label}"`} ${required} ${mask} [matDatepicker]="${element.input.name}Picker" [disabled]="true">
+        <input matInput formControlName="${element.input.name}" ${placeholder ? placeholder : `placeholder="${element.input.label}"`} ${tooltip} ${required} ${mask} [matDatepicker]="${element.input.name}Picker" [disabled]="true">
         <mat-datepicker-toggle matSuffix [for]="${element.input.name}Picker"></mat-datepicker-toggle>
         <mat-datepicker #${element.input.name}Picker [disabled]="false"></mat-datepicker>
       </mat-form-field>
@@ -142,7 +146,7 @@ const setSpecificStructureOverFormElement = (
       code += `
       <mat-form-field ${conditions}>
         <mat-label>${element.input.label}</mat-label>
-        <input matInput type="${element.input.type}" formControlName="${element.input.name}" ${placeholder} ${required} ${mask} autocomplete="new-password">
+        <input matInput type="${element.input.type}" formControlName="${element.input.name}" ${placeholder} ${tooltip} ${required} ${mask} autocomplete="new-password">
       </mat-form-field>
       `;
     }
@@ -227,6 +231,9 @@ const setSpecificStructureOverFormElement = (
   }
 
   if (element.select) {
+    const tooltip = element.select.tooltip
+      ? `matTooltip="${element.select.tooltip}"`
+      : "";
     const multiple = element.select.isMultiple ? "multiple" : "";
     const required = element.select.isRequired ? "required" : "";
     let setCondition = "";
@@ -246,7 +253,7 @@ const setSpecificStructureOverFormElement = (
     code += `
     <mat-form-field ${conditions}>
       <mat-label>${element.select.label}</mat-label>
-      <mat-select formControlName="${element.select.name}" ${required} ${multiple} ${setCondition}>
+      <mat-select formControlName="${element.select.name}" ${tooltip} ${required} ${multiple} ${setCondition}>
         <mat-option *ngFor="let ${element.select.name}Item of ${element.select.name}SelectObject" [value]="${element.select.name}Item.value">
           {{${element.select.name}Item.label}}
         </mat-option>

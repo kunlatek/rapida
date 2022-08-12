@@ -208,7 +208,7 @@ const setArrayMethod = (
   ${add}(${iterationsToAdd}) {
     const control = <FormArray>this.${
       object.form?.id
-    }Form.get([${controlsToAdd}]);
+    }Form.get([${controlsToAdd}]) as FormArray;
     control.push(this.${initArray}());
   };
 
@@ -219,7 +219,7 @@ const setArrayMethod = (
   ${remove}(${iterations}) {
     const control = <FormArray>this.${
       object.form?.id
-    }Form.get([${controls}]);
+    }Form.get([${controls}]) as FormArray;
     control.removeAt(${arrayCurrentIndex});
   };
   `;

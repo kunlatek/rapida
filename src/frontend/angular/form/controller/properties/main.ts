@@ -14,6 +14,10 @@ const setFormControllerProperties = (object: MainInterface): string => {
   ${object.form?.id}ToEdit: any;
   isAddModule: boolean = true;
   isLoading: boolean = false;
+  
+  permissionsToCheck = JSON.parse(sessionStorage.getItem("permission")!)[0].modulePermissions;
+  updateOnePermission: any;
+  createOnePermission: any;
   `;
 
   code += setCondition(object);

@@ -1,58 +1,33 @@
 import { ServiceFunctionsEnum } from "../../../src/enums/form";
-import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/main";
+import { FrontendFrameworkEnum } from "../../../src/enums/main";
 import { RequestTypeEnum } from "../../../src/enums/request";
 import { MainInterface } from "../../../src/interfaces/main";
 
-export const DAXTV_PACKAGE_TABLE: MainInterface = {
+export const BACKEND_FRAMEWORK_TABLE: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
-  backendFramework: BackendFrameworkEnum.Loopback,
   table: {
-    title: "Pacotes",
-    id: "daxtvPackageTable",
-    subtitle: "Listagem de pacotes",
+    title: "Frameworks de backend",
+    id: "backendFrameworkTable",
+    subtitle: "Frameworks de backend de dados que alimentarão as options do select de elementos no backoffice rapida",
     data: {
       type: RequestTypeEnum.Object,
     },
     elements: [
       {
         column: {
-          label: "Nome",
+          label: "Label"
         },
         row: {
-          field: "name",
-        },
+          field: "label"
+        }
       },
       {
         column: {
-          label: "Canais",
+          label: "Value"
         },
         row: {
-          field: "channelQuantity",
-        },
-      },
-      {
-        column: {
-          label: "Valor",
-        },
-        row: {
-          field: "price",
-        },
-      },
-      {
-        column: {
-          label: "Gravação",
-        },
-        row: {
-          field: "recordingTime",
-        },
-      },
-      {
-        column: {
-          label: "YouCast",
-        },
-        row: {
-          field: "package",
-        },
+          field: "value"
+        }
       },
       {
         column: {
@@ -65,7 +40,7 @@ export const DAXTV_PACKAGE_TABLE: MainInterface = {
             {
               action: {
                 type: RequestTypeEnum.Link,
-                url: "/main/daxtv-package",
+                url: "/main/backend-framework",
                 param: "_id",
               },
               label: "Editar",
@@ -87,7 +62,7 @@ export const DAXTV_PACKAGE_TABLE: MainInterface = {
     ],
     service: {
       baseUrl: "http://localhost:3000",
-      endpoint: "daxtv-packages",
+      endpoint: "backend-frameworks",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

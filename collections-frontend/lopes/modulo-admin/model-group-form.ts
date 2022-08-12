@@ -6,17 +6,17 @@ import {
 import { FrontendFrameworkEnum } from "../../../src/enums/main";
 import { MainInterface } from "../../../src/interfaces/main";
 
-export const USERS_GROUP_FORM: MainInterface = {
+export const MODEL_GROUP_FORM: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
   form: {
-    title: "Grupo de usuários",
-    id: "usersGroupForm",
+    title: "Módulos",
+    id: "modelGroupForm",
     elements: [
       {
         input: {
           label: "Nome",
           name: "name",
-          placeholder: "Nome do grupo",
+          placeholder: "Nome do modelo",
           type: FormInputTypeEnum.Text,
           isRequired: true,
         },
@@ -25,25 +25,34 @@ export const USERS_GROUP_FORM: MainInterface = {
         input: {
           label: "Descrição",
           name: "description",
-          placeholder: "Descrição do grupo",
+          placeholder: "Descrição do modelo",
           type: FormInputTypeEnum.Text,
           isRequired: true,
         },
       },
       {
-        autocomplete: {
-          label: "Usuários",
-          name: "users",
-          placeholder: "Usuários relacionados",
+        select: {
+          label: "Módulo",
+          name: "moduleId",
           type: FormInputTypeEnum.Text,
           optionsApi: {
-            endpoint: "users",
+            endpoint: "modules",
             labelField: "name",
             valueField: "uuid",
-            paramsToFilter: ["name"]
           },
           isRequired: true,
-          isMultiple: true,
+        }
+      },
+      {
+        select: {
+          label: "Aplicações",
+          name: "applications",
+          type: FormInputTypeEnum.Text,
+          optionsApi: {
+            endpoint: "applications",
+            labelField: "name",
+            valueField: "uuid"
+          }
         }
       },
       {
@@ -55,7 +64,7 @@ export const USERS_GROUP_FORM: MainInterface = {
     ],
     service: {
       baseUrl: "http://devbackadmin.lpsbr.com/api/v1",
-      endpoint: "user-groups",
+      endpoint: "model-groups",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

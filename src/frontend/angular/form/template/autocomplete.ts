@@ -11,6 +11,9 @@ const setAutocomplete = (element: FormElementInterface, conditions: string) => {
   const placeholder = element.autocomplete.placeholder
     ? `placeholder="${element.autocomplete.placeholder}"`
     : "";
+  const tooltip = element.autocomplete.tooltip
+    ? `matTooltip="${element.autocomplete.tooltip}"`
+    : "";
   const required = element.autocomplete.isRequired ? "required" : "";
 
   if (element.autocomplete.isMultiple) {
@@ -35,7 +38,7 @@ const setAutocomplete = (element: FormElementInterface, conditions: string) => {
             </button>
           </mat-chip>
           <input 
-            ${placeholder} 
+            ${placeholder} ${tooltip} 
             type="${element.autocomplete.type}" 
             formControlName="${element.autocomplete.name}" 
             matInput 
@@ -84,7 +87,7 @@ const setAutocomplete = (element: FormElementInterface, conditions: string) => {
         <mat-label>${element.autocomplete.label}</mat-label>
         <input 
               type="${element.autocomplete.type}" 
-              ${placeholder} 
+              ${placeholder} ${tooltip} 
               aria-label="${element.autocomplete.label}" 
               formControlName="${element.autocomplete.name}" 
               matInput 

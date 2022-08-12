@@ -23,6 +23,10 @@ const setFormControllerConstructorArguments = (
 
   const code = `
   try {
+    const modulePermissionToCheck: any = this.permissionsToCheck.find((item: any) => item.module.name === "${object.form.title}")
+    this.updateOnePermission = modulePermissionToCheck.permissionActions.filter((item: any) => item.name === "updateOne").length > 0;
+    this.createOnePermission = modulePermissionToCheck.permissionActions.filter((item: any) => item.name === "createOne").length > 0;
+
     this._activatedRoute.params.subscribe(async (routeParams) => {
         this.${object.form.id}Id = routeParams["id"];
         this.isAddModule = !this.${object.form.id}Id;

@@ -16,80 +16,111 @@ export const environment = {
 
 const envBackend = `
 PORT=3000
-SERVER_ROOT_URI=http://localhost
+SERVER_ROOT_URI=http://localhost:3000
 CLIENT_REDIRECT_URI=http://localhost:4200
 MONGO_URL=mongodb+srv://kunlatek:Kunlatek751@cluster0.b0pfr.mongodb.net/?authSource=admin&replicaSet=atlas-zft6fn-shard-0&readPreference=primary&ssl=true
-DB=rapida
-NODEMAILER_USER=
-NODEMAILER_PASS=
-ADMIN_USERS=
+DB=animation
+NODEMAILER_USER=administrativo@kunlatek.com
+NODEMAILER_PASS=yetyxhgzjzktuwef
+ADMIN_USERS=rabbadesalman@gmail.com
 `;
 
 /**
-* LOPES API
-*/
+ * LOPES API
+ */
 // const envFrontDev = `
 // export const envFrontProd = {
-//     firebase: {
-//         projectId: 'kunlatek-quickstart',
-//         appId: '1:61322235717:web:2c454bc7bd593cc6d3f82c',
-//         storageBucket: 'kunlatek-quickstart.appspot.com',
-//         apiKey: 'AIzaSyCLOB3dc091tFAuj9LEsarILOBVzL-dqhQ',
-//         authDomain: 'kunlatek-quickstart.firebaseapp.com',
-//         messagingSenderId: '61322235717',
-//         measurementId: 'G-V8W65TSX41',
-//     },
-//     baseUrl: 'https://devapilogin.lpsbr.com/api/v1',
-//     clientId: '3bb9f7e7-a96f-4657-8039-4755de62a233',
-//     clientSecret: 'b80a0043-c89d-4571-bb96-515e27a4808f',
+//     baseUrl: "https://devapilogin.lpsbr.com/api/v1",
+//     clientId: "3bb9f7e7-a96f-4657-8039-4755de62a233",
+//     clientSecret: "b80a0043-c89d-4571-bb96-515e27a4808f",
 //     production: false
 // };`;
- 
+
 // const envFrontProd = `
 // export const environment = {
-//     firebase: {
-//         projectId: 'kunlatek-quickstart',
-//         appId: '1:61322235717:web:2c454bc7bd593cc6d3f82c',
-//         storageBucket: 'kunlatek-quickstart.appspot.com',
-//         apiKey: 'AIzaSyCLOB3dc091tFAuj9LEsarILOBVzL-dqhQ',
-//         authDomain: 'kunlatek-quickstart.firebaseapp.com',
-//         messagingSenderId: '61322235717',
-//         measurementId: 'G-V8W65TSX41',
-//     },
-//     baseUrl: '????',
-//     clientId: '3bb9f7e7-a96f-4657-8039-4755de62a233',
-//     clientSecret: 'b80a0043-c89d-4571-bb96-515e27a4808f',
+//     baseUrl: "????",
+//     clientId: "3bb9f7e7-a96f-4657-8039-4755de62a233",
+//     clientSecret: "b80a0043-c89d-4571-bb96-515e27a4808f",
 //     production: true
 // };`;
 
-// const cloneFrontendPath = 'https://github.com/ryzzan/new-lopes-quickstart';
+// const cloneFrontendPath = "https://github.com/ryzzan/new-lopes-quickstart";
 
-
-const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart";
+const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitation-and-permission";
 const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api";
-const projectPath = "/home/ryzzan/Projects/rapida-backoffice";
+const projectPath = "/home/ryzzan/Projects/animation";
 
+/**
+ * ANIMATION
+ */
+import { ANIMATION_FORM } from "../collections-frontend/example/animation/animation-form";
+import { ANIMATION_TABLE } from "../collections-frontend/example/animation/animation-table";
+import { ANIMATION } from "../collections-frontend/example/animation/animation";
 
-// import { ANIMATION_FORM } from "../collections-frontend/example/animation/animation-form";
-// import { ANIMATION_TABLE } from "../collections-frontend/example/animation/animation-table";
-// import { ANIMATION } from "../collections-frontend/example/animation/animation";
+import { CHARACTER_FORM } from "../collections-frontend/example/animation/character-form";
+import { CHARACTER_TABLE } from "../collections-frontend/example/animation/character-table";
+import { CHARACTER } from "../collections-frontend/example/animation/character";
 
-// import { CHARACTER_FORM } from "../collections-frontend/example/animation/character-form";
-// import { CHARACTER_TABLE } from "../collections-frontend/example/animation/character-table";
-// import { CHARACTER } from "../collections-frontend/example/animation/character";
+/**
+ * RAPIDA BACKOFFICE
+ */
+// import { PROJECT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/project-form";
+// import { PROJECT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/project-table";
+// import { PROJECT } from "../collections-frontend/kunlatek/rapida-backoffice/project";
 
-import { PROJECT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/project-form";
-import { PROJECT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/project-table";
-import { PROJECT } from "../collections-frontend/kunlatek/rapida-backoffice/project";
+// import { COMPONENT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/component-form";
+// import { COMPONENT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/component-table";
+// import { COMPONENT } from "../collections-frontend/kunlatek/rapida-backoffice/component";
 
-import { COMPONENT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/component-form";
-import { COMPONENT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/component-table";
-import { COMPONENT } from "../collections-frontend/kunlatek/rapida-backoffice/component";
+// import { MODULE_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/module-form";
+// import { MODULE_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/module-table";
+// import { MODULE } from "../collections-frontend/kunlatek/rapida-backoffice/module";
 
-import { MODULE_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/module-form";
-import { MODULE_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/module-table";
-import { MODULE } from "../collections-frontend/kunlatek/rapida-backoffice/module";
+/**
+ * RAPIDA FUNDAMENTO
+ */
+// import { FORM_ELEMENT } from "../collections-frontend/kunlatek/rapida-fundamento/form-element";
+// import { FORM_ELEMENT_FORM } from "../collections-frontend/kunlatek/rapida-fundamento/form-element-form";
+// import { FORM_ELEMENT_TABLE } from "../collections-frontend/kunlatek/rapida-fundamento/form-element-table";
 
+// import { DATA_TYPE } from "../collections-frontend/kunlatek/rapida-fundamento/data-type";
+// import { DATA_TYPE_FORM } from "../collections-frontend/kunlatek/rapida-fundamento/data-type-form";
+// import { DATA_TYPE_TABLE } from "../collections-frontend/kunlatek/rapida-fundamento/data-type-table";
+
+// import { QUICKSTART_FRONTEND_REPOSITORY } from "../collections-frontend/kunlatek/rapida-fundamento/quickstart-frontend-repository";
+// import { QUICKSTART_FRONTEND_REPOSITORY_FORM } from "../collections-frontend/kunlatek/rapida-fundamento/quickstart-frontend-repository-form";
+// import { QUICKSTART_FRONTEND_REPOSITORY_TABLE } from "../collections-frontend/kunlatek/rapida-fundamento/quickstart-frontend-repository-table";
+
+// import { QUICKSTART_BACKEND_REPOSITORY } from "../collections-frontend/kunlatek/rapida-fundamento/quickstart-backend-repository";
+// import { QUICKSTART_BACKEND_REPOSITORY_FORM } from "../collections-frontend/kunlatek/rapida-fundamento/quickstart-backend-repository-form";
+// import { QUICKSTART_BACKEND_REPOSITORY_TABLE } from "../collections-frontend/kunlatek/rapida-fundamento/quickstart-backend-repository-table";
+
+// import { FRONTEND_FRAMEWORK } from "../collections-frontend/kunlatek/rapida-fundamento/frontend-framework";
+// import { FRONTEND_FRAMEWORK_FORM } from "../collections-frontend/kunlatek/rapida-fundamento/frontend-framework-form";
+// import { FRONTEND_FRAMEWORK_TABLE } from "../collections-frontend/kunlatek/rapida-fundamento/frontend-framework-table";
+
+// import { BACKEND_FRAMEWORK } from "../collections-frontend/kunlatek/rapida-fundamento/backend-framework";
+// import { BACKEND_FRAMEWORK_FORM } from "../collections-frontend/kunlatek/rapida-fundamento/backend-framework-form";
+// import { BACKEND_FRAMEWORK_TABLE } from "../collections-frontend/kunlatek/rapida-fundamento/backend-framework-table";
+
+/**
+ * KUNLATEK-QUICKSTART-INVITATION
+ */
+// import { INVITATION_FORM } from "../collections-frontend/kunlatek/kunlatek-quickstart-invitation-and-permission/invitation-form";
+// import { INVITATION_TABLE } from "../collections-frontend/kunlatek/kunlatek-quickstart-invitation-and-permission/invitation-table";
+// import { INVITATION } from "../collections-frontend/kunlatek/kunlatek-quickstart-invitation-and-permission/invitation";
+
+// import { PERMISSION_FORM } from "../collections-frontend/kunlatek/kunlatek-quickstart-invitation-and-permission/permission-form";
+// import { PERMISSION_TABLE } from "../collections-frontend/kunlatek/kunlatek-quickstart-invitation-and-permission/permission-table";
+// import { PERMISSION } from "../collections-frontend/kunlatek/kunlatek-quickstart-invitation-and-permission/permission";
+
+// import { RELATED_USER } from "../collections-frontend/kunlatek/kunlatek-quickstart-invitation-and-permission/related-user";
+// import { RELATED_USER_FORM } from "../collections-frontend/kunlatek/kunlatek-quickstart-invitation-and-permission/related-user-form";
+// import { RELATED_USER_TABLE } from "../collections-frontend/kunlatek/kunlatek-quickstart-invitation-and-permission/related-user-table";
+
+/**
+ * DAXTV
+ */
 // import { DAXTV_CLIENT_COMPANY } from "../collections-frontend/clients/daxtv/client-company";
 // import { DAXTV_CLIENT_COMPANY_FORM } from "../collections-frontend/clients/daxtv/client-company-form";
 // import { DAXTV_CLIENT_COMPANY_TABLE } from "../collections-frontend/clients/daxtv/client-company-table";
@@ -102,39 +133,82 @@ import { MODULE } from "../collections-frontend/kunlatek/rapida-backoffice/modul
 // import { DAXTV_PACKAGE_FORM } from "../collections-frontend/clients/daxtv/package-form";
 // import { DAXTV_PACKAGE_TABLE } from "../collections-frontend/clients/daxtv/package-table";
 
-// import { DAXTV_USER } from "../collections-frontend/clients/daxtv/user";
-// import { DAXTV_USER_FORM } from "../collections-frontend/clients/daxtv/user-form";
-// import { DAXTV_USER_TABLE } from "../collections-frontend/clients/daxtv/user-table";
+/**
+ * MODULO ADMIN
+ */
+// import { USERS_GROUP } from "../collections-frontend/lopes/modulo-admin/user-group";
+// import { USERS_GROUP_FORM } from "../collections-frontend/lopes/modulo-admin/user-group-form";
+// import { USERS_GROUP_TABLE } from "../collections-frontend/lopes/modulo-admin/user-group-table";
 
+// import { MODULE } from "../collections-frontend/lopes/modulo-admin/module";
+// import { MODULE_FORM } from "../collections-frontend/lopes/modulo-admin/module-form";
+// import { MODULE_TABLE } from "../collections-frontend/lopes/modulo-admin/module-table";R_TABLE } from "../collections-frontend/kunlatek/kunlatek-quickstart-invitation-and-permission/related-user-table";
 //////////////////////////////////////////////////////////
 
 const array = [
   /**
    * ANIMATION
    */
+  ANIMATION_FORM,
+  ANIMATION_TABLE,
+  ANIMATION,
 
-  // ANIMATION_FORM,
-  // ANIMATION_TABLE,
-  // ANIMATION,
-
-  // CHARACTER_FORM,
-  // CHARACTER_TABLE,
-  // CHARACTER,
+  CHARACTER_FORM,
+  CHARACTER_TABLE,
+  CHARACTER,
 
   /**
-   * RAPIDA
+   * RAPIDA BACKOFFICE
    */
-  PROJECT_FORM,
-  PROJECT_TABLE,
-  PROJECT,
+  // PROJECT_FORM,
+  // PROJECT_TABLE,
+  // PROJECT,
 
-  COMPONENT_FORM,
-  COMPONENT_TABLE,
-  COMPONENT,
+  // COMPONENT_FORM,
+  // COMPONENT_TABLE,
+  // COMPONENT,
 
-  MODULE_FORM, 
-  MODULE_TABLE, 
-  MODULE,
+  // MODULE_FORM,
+  // MODULE_TABLE,
+  // MODULE,
+
+  /**
+   * RAPIDA FUNDAMENTO
+   */
+  // FORM_ELEMENT,
+  // FORM_ELEMENT_FORM,
+  // FORM_ELEMENT_TABLE,
+
+  // DATA_TYPE,
+  // DATA_TYPE_FORM,
+  // DATA_TYPE_TABLE,
+
+  // QUICKSTART_FRONTEND_REPOSITORY,
+  // QUICKSTART_FRONTEND_REPOSITORY_FORM,
+  // QUICKSTART_FRONTEND_REPOSITORY_TABLE,
+
+  // QUICKSTART_BACKEND_REPOSITORY,
+  // QUICKSTART_BACKEND_REPOSITORY_FORM,
+  // QUICKSTART_BACKEND_REPOSITORY_TABLE,
+
+  // FRONTEND_FRAMEWORK,
+  // FRONTEND_FRAMEWORK_FORM,
+  // FRONTEND_FRAMEWORK_TABLE,
+
+  // BACKEND_FRAMEWORK,
+  // BACKEND_FRAMEWORK_FORM,
+  // BACKEND_FRAMEWORK_TABLE,
+
+  /**
+   * KUNLATEK-QUICKSTART-INVITATION
+   */
+  // INVITATION_FORM,
+  // INVITATION_TABLE,
+  // INVITATION,
+
+  // PERMISSION_FORM,
+  // PERMISSION_TABLE,
+  // PERMISSION,
 
   /**
    * DAXTV
@@ -142,7 +216,7 @@ const array = [
   // DAXTV_CLIENT_COMPANY,
   // DAXTV_CLIENT_COMPANY_FORM,
   // DAXTV_CLIENT_COMPANY_TABLE,
-  
+
   // DAXTV_CLIENT_PERSON,
   // DAXTV_CLIENT_PERSON_FORM,
   // DAXTV_CLIENT_PERSON_TABLE,
@@ -151,9 +225,20 @@ const array = [
   // DAXTV_PACKAGE_FORM,
   // DAXTV_PACKAGE_TABLE,
 
-  // DAXTV_USER,
-  // DAXTV_USER_FORM,
-  // DAXTV_USER_TABLE,
+  /**
+   * MODULO ADMIN
+   */
+  // USERS_GROUP,
+  // USERS_GROUP_FORM,
+  // USERS_GROUP_TABLE,
+
+  // MODULE,
+  // MODULE_FORM,
+  // MODULE_TABLE,
+
+  // RELATED_USER,
+  // RELATED_USER_FORM,
+  // RELATED_USER_TABLE,
 ];
 
 array.forEach((object) => {
