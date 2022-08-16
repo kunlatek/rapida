@@ -34,7 +34,7 @@ const setRepositoryConstructorArgumentsByElement = (
 
   let code = ``;
 
-  if (value.optionsApi) {
+  if (value.optionsApi && value.optionsApi.endpoint) {
     const className = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
     const propertyName = TextTransformation.setIdToPropertyName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
 

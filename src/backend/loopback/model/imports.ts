@@ -46,7 +46,7 @@ const setImportsDefaultByElement = (
 
   let code = ``;
 
-  if (value.optionsApi) {
+  if (value.optionsApi && value.optionsApi.endpoint) {
     const propertyName = TextTransformation.setIdToClassName(
       TextTransformation.pascalfy(
         TextTransformation.singularize(
@@ -71,7 +71,7 @@ const setImportsRelatedRepositoriesByElement = (
 
   let code = ``;
 
-  if (value.optionsApi) {
+  if (value.optionsApi && value.optionsApi.endpoint) {
     const className = TextTransformation.setIdToClassName(
       TextTransformation.pascalfy(
         TextTransformation.singularize(
@@ -97,7 +97,7 @@ const getAdditionalLoopbackRepositoriesImportMethods = (
 
   const value = Object.values(element)[0];
 
-  if (value.optionsApi) {
+  if (value.optionsApi && value.optionsApi.endpoint) {
     if (value.isMultiple) additionalLoopbackRepositoriesImportMethods.push('hasMany')
     else additionalLoopbackRepositoriesImportMethods.push('belongsTo');
   }

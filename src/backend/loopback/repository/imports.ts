@@ -69,7 +69,7 @@ const setModelImportsByElement = (
 
   let code = ``;
 
-  if (value.optionsApi) {
+  if (value.optionsApi && value.optionsApi.endpoint) {
     const className = TextTransformation.setIdToClassName(
       TextTransformation.pascalfy(
         TextTransformation.singularize(
@@ -93,7 +93,7 @@ const setRepositoryImportsByElement = (
 
   let code = ``;
 
-  if (value.optionsApi) {
+  if (value.optionsApi && value.optionsApi.endpoint) {
     const className = TextTransformation.setIdToClassName(
       TextTransformation.pascalfy(
         TextTransformation.singularize(
@@ -119,7 +119,7 @@ const getAdditionalLoopbackCoreAndRepositoriesImportMethods = (
 
   const value = Object.values(element)[0];
 
-  if (value.optionsApi) {
+  if (value.optionsApi && value.optionsApi.endpoint) {
     additionalLoopbackCoreAndRepositoriesImportMethods['core'].push('Getter')
     additionalLoopbackCoreAndRepositoriesImportMethods['repositories'] = additionalLoopbackCoreAndRepositoriesImportMethods['repositories'].concat(['repository'])
     if (value.isMultiple) {
