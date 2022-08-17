@@ -34,7 +34,7 @@ const setConstructorParamsByElement = (
 
   let code = ``;
 
-  if (value.optionsApi) {
+  if (value.optionsApi && value.optionsApi.endpoint) {
     const modelNameClass = TextTransformation.setIdToClassName(modelName);
     const className = TextTransformation.setIdToClassName(
       TextTransformation.pascalfy(

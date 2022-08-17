@@ -48,7 +48,7 @@ const setRelatedPropertiesByElement = (
 
   let code = ``;
 
-  if (value.optionsApi) {
+  if (value.optionsApi && value.optionsApi.endpoint) {
     const className = TextTransformation.setIdToClassName(
       TextTransformation.pascalfy(
         TextTransformation.singularize(

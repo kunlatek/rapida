@@ -402,7 +402,7 @@ const setPropertiesToFindByElement = (
 
   const value = Object.values(element)[0];
 
-  if (value.optionsApi) {
+  if (value.optionsApi && value.optionsApi.endpoint) {
     const propertyName = TextTransformation.setIdToPropertyName(
       TextTransformation.pascalfy(
         TextTransformation.singularize(
@@ -425,7 +425,7 @@ const setCreateAllMethodsByElement = (
   const modelName: string = object.form!.id.replace("Form", "");
   const value = Object.values(element)[0];
 
-  if (value.optionsApi) {
+  if (value.optionsApi && value.optionsApi.endpoint) {
     const className = TextTransformation.setIdToClassName(
       TextTransformation.pascalfy(
         TextTransformation.singularize(
@@ -450,7 +450,7 @@ const setDeleteAllMethodsByElement = (
   const modelName: string = object.form!.id.replace("Form", "");
   const value = Object.values(element)[0];
 
-  if (value.optionsApi) {
+  if (value.optionsApi && value.optionsApi.endpoint) {
     const className = TextTransformation.setIdToClassName(
       TextTransformation.pascalfy(
         TextTransformation.singularize(

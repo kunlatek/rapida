@@ -51,7 +51,7 @@ const setRepositoriesImportsByElement = (
   const modelName = object.form!.id.replace("Form", "");
   const value = Object.values(element)[0];
 
-  if (value.optionsApi) {
+  if (value.optionsApi && value.optionsApi.endpoint) {
     const className = TextTransformation.setIdToClassName(
       TextTransformation.pascalfy(
         TextTransformation.singularize(
