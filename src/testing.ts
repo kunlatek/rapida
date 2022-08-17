@@ -62,6 +62,16 @@ import { CHARACTER_TABLE } from "../collections-frontend/example/animation/chara
 import { CHARACTER } from "../collections-frontend/example/animation/character";
 
 /**
+ * PAGO BACOKOFFICE
+ */
+// import { BOLETO_COMPANY_FORM } from "../collections-frontend/kunlatek/pago-backoffice/boleto-company-form";
+// import { BOLETO_COMPANY_TABLE } from "../collections-frontend/kunlatek/pago-backoffice/boleto-company-table";
+// import { BOLETO_COMPANY } from "../collections-frontend/kunlatek/pago-backoffice/boleto-company";
+
+// import { BOLETO_PERSON_FORM } from "../collections-frontend/kunlatek/pago-backoffice/boleto-person-form";
+// import { BOLETO_PERSON_TABLE } from "../collections-frontend/kunlatek/pago-backoffice/boleto-person-table";
+// import { BOLETO_PERSON } from "../collections-frontend/kunlatek/pago-backoffice/boleto-person";
+/**
  * RAPIDA BACKOFFICE
  */
 // import { PROJECT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/project-form";
@@ -156,6 +166,19 @@ const array = [
   CHARACTER_FORM,
   CHARACTER_TABLE,
   CHARACTER,
+
+  /**
+   * PAGO BACKOFFICE
+   */
+  // BOLETO_COMPANY_FORM,
+  // BOLETO_COMPANY_TABLE,
+  
+  // BOLETO_PERSON_FORM,
+  // BOLETO_PERSON_TABLE,
+
+  // BOLETO_COMPANY,
+
+  // BOLETO_PERSON,
 
   /**
    * RAPIDA BACKOFFICE

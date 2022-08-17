@@ -159,7 +159,6 @@ export interface OptionApiInterface {
   endpoint: string;
   labelField: string;
   valueField: string;
-  externalApiUrlBase?: string;
   isDisabled?: boolean;
   isSelected?: boolean;
   todo?: string;
