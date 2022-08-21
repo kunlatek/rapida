@@ -2,7 +2,7 @@ import { FormInputTypeEnum } from "../../../../../enums/form";
 import { ArrayInterface, FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
-import { setArrayMethod } from "./array";
+import { setArrayIndexes, setArrayMethod } from "./array";
 import { setAutocompleteMethod } from "./autocomplete";
 
 const setMethod = (
@@ -25,6 +25,8 @@ const setFormMethodsByElements = (
   elements: Array<FormElementInterface>,
   array: ArrayInterface | undefined = undefined,
 ): string => {
+  const iterations = array ? setArrayIndexes(array.id) : undefined;
+
   let code = ``;
   elements.forEach(element => {
     if (element.input?.type === FormInputTypeEnum.File) {
@@ -42,6 +44,35 @@ const setFormMethodsByElements = (
         files.splice(index, 1);
         this.${object.form?.id}Form.get("${element.input.name}")?.setValue(files);
       }
+      `;
+    }
+
+    if (element.input?.apiRequest) {
+      code += `
+      set${TextTransformation.pascalfy(
+        element.input.name
+      )}InputRequestToFind = async (param: string) => {
+        try {
+          const array: any = await this._${object.form?.id}Service.${element.input.name
+        }InputRequestToFind(param);
+          if (array.data?.result) {
+            console.log(array.data.result);
+          }
+        } catch (error: any) {
+          const message = this._errorHandler.apiErrorMessage(
+            error.error.message
+          );
+          this.sendErrorMessage(message);
+        };
+      };
+
+      callSet${TextTransformation.pascalfy(
+        element.input.name
+      )}InputRequestToFind = MyPerformance.debounce((${
+        iterations ? iterations : ""
+      }) => this.set${TextTransformation.pascalfy(
+        element.input.name
+      )}InputRequestToFind(${iterations ? iterations?.replace(": any", "") : ""}));
       `;
     }
 

@@ -15,11 +15,12 @@ export const environment = {
 `;
 
 const envBackend = `
+AUTH_DB=kunlatekAutentikigo
 PORT=3000
 SERVER_ROOT_URI=http://localhost:3000
-CLIENT_REDIRECT_URI=http://localhost:4200
+CLIENT_REDIRECT_URI=http://localhost:4201
 MONGO_URL=mongodb+srv://kunlatek:Kunlatek751@cluster0.b0pfr.mongodb.net/?authSource=admin&replicaSet=atlas-zft6fn-shard-0&readPreference=primary&ssl=true
-DB=animation
+DB=kliento
 NODEMAILER_USER=administrativo@kunlatek.com
 NODEMAILER_PASS=yetyxhgzjzktuwef
 ADMIN_USERS=rabbadesalman@gmail.com
@@ -48,18 +49,18 @@ ADMIN_USERS=rabbadesalman@gmail.com
 
 const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitation-and-permission";
 const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api";
-const projectPath = "/home/ryzzan/Projects/animation";
+const projectPath = "/home/ryzzan/Projects/kliento";
 
 /**
  * ANIMATION
  */
-import { ANIMATION_FORM } from "../collections-frontend/example/animation/animation-form";
-import { ANIMATION_TABLE } from "../collections-frontend/example/animation/animation-table";
-import { ANIMATION } from "../collections-frontend/example/animation/animation";
+// import { ANIMATION_FORM } from "../collections-frontend/example/animation/animation-form";
+// import { ANIMATION_TABLE } from "../collections-frontend/example/animation/animation-table";
+// import { ANIMATION } from "../collections-frontend/example/animation/animation";
 
-import { CHARACTER_FORM } from "../collections-frontend/example/animation/character-form";
-import { CHARACTER_TABLE } from "../collections-frontend/example/animation/character-table";
-import { CHARACTER } from "../collections-frontend/example/animation/character";
+// import { CHARACTER_FORM } from "../collections-frontend/example/animation/character-form";
+// import { CHARACTER_TABLE } from "../collections-frontend/example/animation/character-table";
+// import { CHARACTER } from "../collections-frontend/example/animation/character";
 
 /**
  * PAGO BACOKOFFICE
@@ -129,6 +130,20 @@ import { CHARACTER } from "../collections-frontend/example/animation/character";
 // import { RELATED_USER_TABLE } from "../collections-frontend/kunlatek/kunlatek-quickstart-invitation-and-permission/related-user-table";
 
 /**
+ * KLIENTO FUNDAMENTO
+ */
+// import { CONTACT_TYPE_FORM } from "../collections-frontend/kunlatek/kliento-fundamento/contact-type-form";
+// import { CONTACT_TYPE_TABLE } from "../collections-frontend/kunlatek/kliento-fundamento/contact-type-table";
+// import { CONTACT_TYPE } from "../collections-frontend/kunlatek/kliento-fundamento/contact-type";
+
+/**
+ * KLIENTO
+ */
+import { CLIENT_PERSON_FORM } from "../collections-frontend/kunlatek/kliento/client-person-form";
+import { CLIENT_PERSON_TABLE } from "../collections-frontend/kunlatek/kliento/client-person-table";
+import { CLIENT_PERSON } from "../collections-frontend/kunlatek/kliento/client-person";
+
+/**
  * DAXTV
  */
 // import { DAXTV_CLIENT_COMPANY } from "../collections-frontend/clients/daxtv/client-company";
@@ -159,13 +174,13 @@ const array = [
   /**
    * ANIMATION
    */
-  ANIMATION_FORM,
-  ANIMATION_TABLE,
-  ANIMATION,
+  // ANIMATION_FORM,
+  // ANIMATION_TABLE,
+  // ANIMATION,
 
-  CHARACTER_FORM,
-  CHARACTER_TABLE,
-  CHARACTER,
+  // CHARACTER_FORM,
+  // CHARACTER_TABLE,
+  // CHARACTER,
 
   /**
    * PAGO BACKOFFICE
@@ -221,6 +236,22 @@ const array = [
   // BACKEND_FRAMEWORK,
   // BACKEND_FRAMEWORK_FORM,
   // BACKEND_FRAMEWORK_TABLE,
+
+  /**
+   * KLIENTO FUNDAMENTO
+   */
+  // CONTACT_TYPE_FORM,
+  // CONTACT_TYPE_TABLE,
+
+  // CONTACT_TYPE,
+
+  /**
+   * KLIENTO
+   */
+  CLIENT_PERSON_FORM,
+  CLIENT_PERSON_TABLE,
+
+  CLIENT_PERSON,
 
   /**
    * KUNLATEK-QUICKSTART-INVITATION

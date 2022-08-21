@@ -97,6 +97,7 @@ export interface InputInterface {
   tooltip?: string;
   conditions?: ConditionInterface;
   mask?: string; // Over ngx-mask patterns
+  apiRequest?: ApiFormRequest;
   isAutoFocus?: boolean; // Specifies that an <input> element should automatically get focus when the page loads
   isChecked?: boolean; // Specifies that an <input> element should be pre-selected when the page loads (for type="checkbox" or type="radio")
   isDisabled?: boolean;
@@ -155,8 +156,20 @@ export interface OptionInterface {
   todo?: string;
 }
 
+export interface ApiFormRequest {
+  endpoint?: string;
+  externalEndpoint?: string;
+  formFieldsFilledByApiResponse: Array<
+    {
+      formFieldName: string,
+      propertyFromApiToFillFormField: string;
+    }
+  >;
+}
+
 export interface OptionApiInterface {
-  endpoint: string;
+  endpoint?: string;
+  externalEndpoint?: string;
   labelField: string;
   valueField: string;
   isDisabled?: boolean;
@@ -165,7 +178,8 @@ export interface OptionApiInterface {
 }
 
 export interface AutocompleteApiInterface {
-  endpoint: string;
+  endpoint?: string;
+  externalEndpoint?: string;
   labelField: string;
   valueField: string;
   paramsToFilter: Array<string>;

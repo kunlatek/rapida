@@ -21,7 +21,7 @@ const setTableControllerImports = (object: MainInterface): string => {
   import { Component, } from "@angular/core";
   import { ActivatedRoute, Router } from "@angular/router";
   import { MatSnackBar } from "@angular/material/snack-bar";
-  ${_hasDialog ? `import { MatDialog } from "@angular/material/dialog";` : ``};
+  ${_hasDialog ? `import { MatDialog } from "@angular/material/dialog";` : ``}
   ${
     _hasRemoveConfirmationDialog
       ? `import { RemoveConfirmationDialogComponent } from "../remove-confirmation-dialog/remove-confirmation-dialog.component";`

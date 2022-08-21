@@ -96,8 +96,11 @@ const setSpecificStructureOverFormElement = (
 ): string => {
   let code = ``;
   let conditions = setConditions(element, array, arrayCurrentIndexAsParam);
-
+  
   if (element.input) {
+    const callMethod = element.input.apiRequest 
+      ? `(keyup)="callSet${TextTransformation.pascalfy(element.input.name)}InputRequestToFind()"` 
+      : "";
     const placeholder = element.input.placeholder
       ? `placeholder="${element.input.placeholder}"`
       : "";
@@ -137,7 +140,7 @@ const setSpecificStructureOverFormElement = (
     } else if (element.input.type === FormInputTypeEnum.Date) {
       code += `
       <mat-form-field ${conditions}>
-        <input matInput formControlName="${element.input.name}" ${placeholder ? placeholder : `placeholder="${element.input.label}"`} ${tooltip} ${required} ${mask} [matDatepicker]="${element.input.name}Picker" [disabled]="true">
+        <input matInput formControlName="${element.input.name}" ${placeholder ? placeholder : `placeholder="${element.input.label}"`} ${tooltip} ${required} ${mask} ${callMethod} [matDatepicker]="${element.input.name}Picker" [disabled]="true">
         <mat-datepicker-toggle matSuffix [for]="${element.input.name}Picker"></mat-datepicker-toggle>
         <mat-datepicker #${element.input.name}Picker [disabled]="false"></mat-datepicker>
       </mat-form-field>
@@ -146,7 +149,7 @@ const setSpecificStructureOverFormElement = (
       code += `
       <mat-form-field ${conditions}>
         <mat-label>${element.input.label}</mat-label>
-        <input matInput type="${element.input.type}" formControlName="${element.input.name}" ${placeholder} ${tooltip} ${required} ${mask} autocomplete="new-password">
+        <input matInput type="${element.input.type}" formControlName="${element.input.name}" ${placeholder} ${tooltip} ${required} ${mask} ${callMethod} autocomplete="new-password">
       </mat-form-field>
       `;
     }

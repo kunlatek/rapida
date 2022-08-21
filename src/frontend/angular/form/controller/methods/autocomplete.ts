@@ -4,10 +4,7 @@ import {
 } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
-import {
-  setArrayControls,
-  setArrayIndexes,
-} from "./array";
+import { setArrayControls, setArrayIndexes } from "./array";
 
 const setAutocompleteMethod = (
   object: MainInterface,
@@ -80,7 +77,7 @@ const setAutocompleteMethod = (
     };
     `;
   }
-  
+
   code += `
   displayFnTo${TextTransformation.pascalfy(
     element.autocomplete.name
@@ -88,11 +85,25 @@ const setAutocompleteMethod = (
     const otherValue = this.${
       object.form?.id
     }ToEdit?.data?.${TextTransformation.setIdToPropertyName(
-    TextTransformation.singularize(element.autocomplete.optionsApi.endpoint)
+    TextTransformation.singularize(
+      element.autocomplete.optionsApi.endpoint
+        ? element.autocomplete.optionsApi.endpoint
+        : element.autocomplete.optionsApi.externalEndpoint!.split("/")[
+            element.autocomplete.optionsApi.externalEndpoint!.split("/")
+              .length - 1
+          ]
+    )
   )} ? this.${
     object.form?.id
   }ToEdit.data.${TextTransformation.setIdToPropertyName(
-    TextTransformation.singularize(element.autocomplete.optionsApi.endpoint)
+    TextTransformation.singularize(
+      element.autocomplete.optionsApi.endpoint
+        ? element.autocomplete.optionsApi.endpoint
+        : element.autocomplete.optionsApi.externalEndpoint!.split("/")[
+            element.autocomplete.optionsApi.externalEndpoint!.split("/")
+              .length - 1
+          ]
+    )
   )} : null;
     if (value === otherValue?.${element.autocomplete.optionsApi.valueField}) {
       return otherValue.${element.autocomplete.optionsApi.labelField};
@@ -165,7 +176,9 @@ const setAutocompleteMethod = (
   };
   callSetFiltered${TextTransformation.pascalfy(
     element.autocomplete.name
-  )} = MyPerformance.debounce((${iterations ? iterations : ""}) => this.setFiltered${TextTransformation.pascalfy(
+  )} = MyPerformance.debounce((${
+    iterations ? iterations : ""
+  }) => this.setFiltered${TextTransformation.pascalfy(
     element.autocomplete.name
   )}(${iterations ? iterations?.replace(": any", "") : ""}));
   `;
