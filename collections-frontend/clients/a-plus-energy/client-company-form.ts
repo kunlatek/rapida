@@ -62,7 +62,7 @@ export const CLIENT_COMPANY_FORM: MainInterface = {
               {
                 array: {
                   title: "Contato",
-                  id: "contactArray",
+                  id: "contacts",
                   elements: [
                     {
                       select: {
@@ -123,7 +123,7 @@ export const CLIENT_COMPANY_FORM: MainInterface = {
             elements: [
               {
                 array: {
-                  id: "addressArray",
+                  id: "addresses",
                   title: "Endereço",
                   elements: [
                     {
@@ -234,7 +234,7 @@ export const CLIENT_COMPANY_FORM: MainInterface = {
             elements: [
               {
                 array: {
-                  id: "settlementArray",
+                  id: "settlements",
                   title: "Instalação",
                   elements: [
                     {

@@ -48,7 +48,7 @@ ADMIN_USERS=rabbadesalman@gmail.com
 
 const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitation-and-permission";
 const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api";
-const projectPath = "/home/ryzzan/Projects/a-plus-energy";
+const projectPath = "/home/lopes/Projects/a-plus-energy";
 
 /**
  * ANIMATION
@@ -149,12 +149,22 @@ const projectPath = "/home/ryzzan/Projects/a-plus-energy";
 import { CLIENT_PERSON_FORM } from "../collections-frontend/clients/a-plus-energy/client-person-form";
 import { CLIENT_PERSON_TABLE } from "../collections-frontend/clients/a-plus-energy/client-person-table";
 
-import { CLIENT_PERSON } from "../collections-frontend/clients/a-plus-energy/client-person";
-
 import { CLIENT_COMPANY_FORM } from "../collections-frontend/clients/a-plus-energy/client-company-form";
 import { CLIENT_COMPANY_TABLE } from "../collections-frontend/clients/a-plus-energy/client-company-table";
 
+import { CLIENT_MANUFACTURER_FORM } from "../collections-frontend/clients/a-plus-energy/client-manufacturer-form";
+import { CLIENT_MANUFACTURER_TABLE } from "../collections-frontend/clients/a-plus-energy/client-manufacturer-table";
+
+import { CLIENT_PRODUCT_FORM } from "../collections-frontend/clients/a-plus-energy/client-product-form";
+import { CLIENT_PRODUCT_TABLE } from "../collections-frontend/clients/a-plus-energy/client-product-table";
+
+import { CLIENT_PERSON } from "../collections-frontend/clients/a-plus-energy/client-person";
+
 import { CLIENT_COMPANY } from "../collections-frontend/clients/a-plus-energy/client-company";
+
+import { CLIENT_MANUFACTURER } from "../collections-frontend/clients/a-plus-energy/client-manufacturer";
+
+import { CLIENT_PRODUCT } from "../collections-frontend/clients/a-plus-energy/client-product";
 
 /**
  * MODULO ADMIN
@@ -248,13 +258,23 @@ const array = [
    */
   CLIENT_PERSON_FORM,
   CLIENT_PERSON_TABLE,
-
-  CLIENT_PERSON,
-
+  
   CLIENT_COMPANY_FORM,
   CLIENT_COMPANY_TABLE,
 
+  CLIENT_MANUFACTURER_FORM,
+  CLIENT_MANUFACTURER_TABLE,
+
+  CLIENT_PRODUCT_FORM,
+  CLIENT_PRODUCT_TABLE,
+
+  CLIENT_PERSON,
+
   CLIENT_COMPANY,
+
+  CLIENT_MANUFACTURER,
+
+  CLIENT_PRODUCT,
 
   /**
    * KUNLATEK-QUICKSTART-INVITATION

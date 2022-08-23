@@ -66,7 +66,7 @@ const setBaseProject = (object: MainInterface) => {
     console.info(`Folder ${nodeModulePath} already exists.`);
   } catch (error) {
     console.info(`Folder node_module isn't created. Running npm install.`);
-    chp.execSync(`npm install`, { cwd: projectPath });
+    chp.execSync(`npm install --save --legacy-peer-deps`, { cwd: projectPath });
   }
 };
 

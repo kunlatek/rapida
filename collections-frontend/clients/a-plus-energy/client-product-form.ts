@@ -20,7 +20,7 @@ export const CLIENT_PRODUCT_FORM: MainInterface = {
                   label: "Nome",
                   name: "name",
                   type: FormInputTypeEnum.Text,
-                  placeholder: `Ex.: Seagate Spinpoint Internal Hard Drive 2.5 1 TB`,
+                  placeholder: "Ex.: Seagate Spinpoint Internal Hard Drive 2.5'' 1 TB",
                   tooltip: "Nome que será utilizado como referência na busca do produto",
                   isRequired: true,
                 }
@@ -73,7 +73,7 @@ export const CLIENT_PRODUCT_FORM: MainInterface = {
                   name: "ean14",
                   type: FormInputTypeEnum.Text,
                   placeholder: "Ex.: C7872G14AA1FXP",
-                  tooltip: "Código padrão 13 dígitos",
+                  tooltip: "Código padrão 14 dígitos",
                   maxLength: 14,
                 }
               },

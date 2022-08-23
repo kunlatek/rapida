@@ -69,7 +69,7 @@ export const CLIENT_PERSON_FORM: MainInterface = {
               {
                 array: {
                   title: "Contato",
-                  id: "contactArray",
+                  id: "contacts",
                   elements: [
                     {
                       select: {
@@ -130,7 +130,7 @@ export const CLIENT_PERSON_FORM: MainInterface = {
             elements: [
               {
                 array: {
-                  id: "addressArray",
+                  id: "addresses",
                   title: "Endereço",
                   elements: [
                     {

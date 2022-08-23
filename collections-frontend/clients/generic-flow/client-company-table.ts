@@ -41,7 +41,7 @@ export const CLIENT_COMPANY_TABLE: MainInterface = {
             {
               action: {
                 type: RequestTypeEnum.Link,
-                url: "/main/person",
+                url: "/main/client-company",
                 param: "_id",
               },
               label: "Editar",

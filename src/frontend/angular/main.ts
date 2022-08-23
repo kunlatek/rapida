@@ -24,7 +24,6 @@ const createAngularProject = (
   object: MainInterface,
   index: number
 ): BuildedFrontendCode => {
-  console.log(process.env.ARRAY_LAYER, 1616);
   process.env.ARRAY_LAYER = "[]";
   process.env.ARRAYS_IN_A_FLOW = "[]";
   
@@ -128,7 +127,7 @@ const setBaseProject = (object: MainInterface) => {
     console.info(`Folder ${nodeModulePath} already exists.`);
   } catch (error) {
     console.info(`Folder node_module isn't created. Running npm install.`);
-    chp.execSync(`npm install`, { cwd: projectPath });
+    chp.execSync(`npm install --save --legacy-peer-deps`, { cwd: projectPath });
   }
 };
 
