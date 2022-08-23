@@ -15,12 +15,11 @@ export const environment = {
 `;
 
 const envBackend = `
-AUTH_DB=kunlatekAutentikigo
 PORT=3000
 SERVER_ROOT_URI=http://localhost:3000
 CLIENT_REDIRECT_URI=http://localhost:4201
 MONGO_URL=mongodb+srv://kunlatek:Kunlatek751@cluster0.b0pfr.mongodb.net/?authSource=admin&replicaSet=atlas-zft6fn-shard-0&readPreference=primary&ssl=true
-DB=kliento
+DB=aPlusEnergy
 NODEMAILER_USER=administrativo@kunlatek.com
 NODEMAILER_PASS=yetyxhgzjzktuwef
 ADMIN_USERS=rabbadesalman@gmail.com
@@ -49,7 +48,7 @@ ADMIN_USERS=rabbadesalman@gmail.com
 
 const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitation-and-permission";
 const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api";
-const projectPath = "/home/ryzzan/Projects/kliento";
+const projectPath = "/home/ryzzan/Projects/a-plus-energy";
 
 /**
  * ANIMATION
@@ -139,24 +138,23 @@ const projectPath = "/home/ryzzan/Projects/kliento";
 /**
  * KLIENTO
  */
-import { CLIENT_PERSON_FORM } from "../collections-frontend/kunlatek/kliento/client-person-form";
-import { CLIENT_PERSON_TABLE } from "../collections-frontend/kunlatek/kliento/client-person-table";
-import { CLIENT_PERSON } from "../collections-frontend/kunlatek/kliento/client-person";
+// import { CLIENT_PERSON_FORM } from "../collections-frontend/kunlatek/kliento/client-person-form";
+// import { CLIENT_PERSON_TABLE } from "../collections-frontend/kunlatek/kliento/client-person-table";
+
+// import { CLIENT_PERSON } from "../collections-frontend/kunlatek/kliento/client-person";
 
 /**
- * DAXTV
+ * A+
  */
-// import { DAXTV_CLIENT_COMPANY } from "../collections-frontend/clients/daxtv/client-company";
-// import { DAXTV_CLIENT_COMPANY_FORM } from "../collections-frontend/clients/daxtv/client-company-form";
-// import { DAXTV_CLIENT_COMPANY_TABLE } from "../collections-frontend/clients/daxtv/client-company-table";
+import { CLIENT_PERSON_FORM } from "../collections-frontend/clients/a-plus-energy/client-person-form";
+import { CLIENT_PERSON_TABLE } from "../collections-frontend/clients/a-plus-energy/client-person-table";
 
-// import { DAXTV_CLIENT_PERSON } from "../collections-frontend/clients/daxtv/client-person";
-// import { DAXTV_CLIENT_PERSON_FORM } from "../collections-frontend/clients/daxtv/client-person-form";
-// import { DAXTV_CLIENT_PERSON_TABLE } from "../collections-frontend/clients/daxtv/client-person-table";
+import { CLIENT_PERSON } from "../collections-frontend/clients/a-plus-energy/client-person";
 
-// import { DAXTV_PACKAGE } from "../collections-frontend/clients/daxtv/package";
-// import { DAXTV_PACKAGE_FORM } from "../collections-frontend/clients/daxtv/package-form";
-// import { DAXTV_PACKAGE_TABLE } from "../collections-frontend/clients/daxtv/package-table";
+import { CLIENT_COMPANY_FORM } from "../collections-frontend/clients/a-plus-energy/client-company-form";
+import { CLIENT_COMPANY_TABLE } from "../collections-frontend/clients/a-plus-energy/client-company-table";
+
+import { CLIENT_COMPANY } from "../collections-frontend/clients/a-plus-energy/client-company";
 
 /**
  * MODULO ADMIN
@@ -252,6 +250,11 @@ const array = [
   CLIENT_PERSON_TABLE,
 
   CLIENT_PERSON,
+
+  CLIENT_COMPANY_FORM,
+  CLIENT_COMPANY_TABLE,
+
+  CLIENT_COMPANY,
 
   /**
    * KUNLATEK-QUICKSTART-INVITATION

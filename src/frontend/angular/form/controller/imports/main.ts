@@ -7,6 +7,7 @@ let _hasValidator: boolean = false;
 let _hasAutocompleteMultiple: boolean = false;
 let _hasAutocomplete: boolean = false;
 let _hasCondition: boolean = false;
+let _hasInputApiRequest: boolean = false;
 
 const setFormControllerImports = (object: MainInterface): string => {
   if (!object.form) {
@@ -19,6 +20,7 @@ const setFormControllerImports = (object: MainInterface): string => {
   _hasAutocompleteMultiple = false;
   _hasAutocomplete = false;
   _hasCondition = false;
+  _hasInputApiRequest = false;
 
   object.form.elements.map((element) => {
     verifyFormElement(element);
@@ -34,7 +36,7 @@ const setFormControllerImports = (object: MainInterface): string => {
   import { ActivatedRoute, Router } from "@angular/router";
   import { MatSnackBar } from "@angular/material/snack-bar";
   ${
-    _hasAutocomplete
+    (_hasAutocomplete || _hasInputApiRequest)
       ? `import { MyPerformance } from "src/app/utils/performance";`
       : ``
   }
@@ -84,8 +86,8 @@ const verifyFormElement = (element: FormElementInterface): void => {
 
   if (element.autocomplete) {
     _hasAutocomplete = true;
-    console.log(value, 87878787);
-    if (value.isMultiple) { console.log(8888);
+    
+    if (value.isMultiple) {
       _hasAutocompleteMultiple = true;
     }
   }
@@ -101,6 +103,9 @@ const verifyFormElement = (element: FormElementInterface): void => {
       if (value.validators.length > 0) {
         _hasValidator = true;
       }
+    }
+    if (value.apiRequest) {
+      _hasInputApiRequest = true;
     }
   }
 };

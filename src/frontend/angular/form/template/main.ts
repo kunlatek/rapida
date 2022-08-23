@@ -12,6 +12,7 @@ import { TextTransformation } from "../../../../utils/text.transformation";
 import { setArrayFlowIdentifier, setArrayIndexes, setArrayIndexesToAdd, setArrayLayer } from "./array";
 import { setConditions } from "./condition";
 import { setAutocomplete } from "./autocomplete";
+import { setInput } from "./input";
 require('dotenv').config();
 
 export interface ArrayFeaturesInterface {
@@ -25,8 +26,6 @@ export interface ArrayFeaturesInterface {
 let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
   process.env.ARRAY_LAYER!
 );
-let _hasCondition: boolean = false;
-let _hasConditionInArray: boolean = false;
 
 /**
  * SET CODE
@@ -98,61 +97,7 @@ const setSpecificStructureOverFormElement = (
   let conditions = setConditions(element, array, arrayCurrentIndexAsParam);
   
   if (element.input) {
-    const callMethod = element.input.apiRequest 
-      ? `(keyup)="callSet${TextTransformation.pascalfy(element.input.name)}InputRequestToFind()"` 
-      : "";
-    const placeholder = element.input.placeholder
-      ? `placeholder="${element.input.placeholder}"`
-      : "";
-    
-    const tooltip = element.input.tooltip
-      ? `matTooltip="${element.input.tooltip}"`
-      : "";
-    const required = element.input.isRequired ? "required" : "";
-    const mask = element.input.mask ? `mask="${element.input.mask}"` : "";
-
-    if (element.input.type === FormInputTypeEnum.File) {
-      code += `
-        <input type="file" class="file-input" (change)="on${TextTransformation.capitalization(element.input.name)}FileSelected($event)" ${tooltip} #fileUpload multiple>
-        <div class="file-upload">
-            <button type="button" mat-raised-button color="primary" (click)="fileUpload.click()">
-                <mat-icon>attach_file</mat-icon>
-                Enviar arquivo
-            </button>
-        </div>
-        <mat-list>
-          <mat-list-item *ngFor="let file of ${object.form?.id}Form.value.${element.input.name}; index as i;">
-            {{file.name}}
-            <button mat-icon-button type="button" (click)="delete${TextTransformation.capitalization(element.input.name)}File(i)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </mat-list-item>
-        </mat-list>
-      `;
-    } else if (element.input.isMultipleLines) {
-      code += `
-      <mat-form-field class="full-width" ${conditions}>
-        <mat-label>${element.input.label}</mat-label>
-          <textarea matInput formControlName="${element.input.name}" ${placeholder} ${tooltip} ${required}>
-        </textarea>
-      </mat-form-field>
-      `;
-    } else if (element.input.type === FormInputTypeEnum.Date) {
-      code += `
-      <mat-form-field ${conditions}>
-        <input matInput formControlName="${element.input.name}" ${placeholder ? placeholder : `placeholder="${element.input.label}"`} ${tooltip} ${required} ${mask} ${callMethod} [matDatepicker]="${element.input.name}Picker" [disabled]="true">
-        <mat-datepicker-toggle matSuffix [for]="${element.input.name}Picker"></mat-datepicker-toggle>
-        <mat-datepicker #${element.input.name}Picker [disabled]="false"></mat-datepicker>
-      </mat-form-field>
-      `;
-    } else {
-      code += `
-      <mat-form-field ${conditions}>
-        <mat-label>${element.input.label}</mat-label>
-        <input matInput type="${element.input.type}" formControlName="${element.input.name}" ${placeholder} ${tooltip} ${required} ${mask} ${callMethod} autocomplete="new-password">
-      </mat-form-field>
-      `;
-    }
+    code += setInput(object, element, conditions, arrayCurrentIndexAsParam);
   }
 
   if (element.autocomplete) {

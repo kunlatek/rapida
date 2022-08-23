@@ -7,8 +7,8 @@ export const CLIENT_COMPANY_TABLE: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
   backendFramework: BackendFrameworkEnum.Loopback,
   table: {
-    title: "Pessoas",
-    subtitle: "Listagem de pessoas",
+    title: "Empresas",
+    subtitle: "Listagem de empresas",
     id: "clientCompanyTable",
     data: {
       type: RequestTypeEnum.Object,
@@ -24,58 +24,10 @@ export const CLIENT_COMPANY_TABLE: MainInterface = {
       },
       {
         column: {
-          label: "Celular",
+          label: "CNPJ",
         },
         row: {
-          field: "mobile",
-        },
-      },
-      {
-        column: {
-          label: "E-mail",
-        },
-        row: {
-          field: "email",
-        },
-      },
-      {
-        column: {
-          label: "Cidade",
-        },
-        row: {
-          field: "city",
-        },
-      },
-      {
-        column: {
-          label: "Estado",
-        },
-        row: {
-          field: "state",
-        },
-      },
-      {
-        column: {
-          label: "Valor",
-        },
-        row: {
-          field: "price",
-        },
-      },
-      {
-        column: {
-          label: "Plano",
-        },
-        row: {
-          field: "packageId",
-        },
-      },
-      {
-        column: {
-          label: "Extras",
-        },
-        row: {
-          field: "extraId",
+          field: "cnpj",
         },
       },
       {

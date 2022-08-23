@@ -18,10 +18,16 @@ import { setTableTemplate } from "./table/template/main";
 import { setModuleController } from "./module/controller/main";
 import { setModuleTemplate } from "./module/template/main";
 
+require("dotenv").config();
+
 const createAngularProject = (
   object: MainInterface,
   index: number
 ): BuildedFrontendCode => {
+  console.log(process.env.ARRAY_LAYER, 1616);
+  process.env.ARRAY_LAYER = "[]";
+  process.env.ARRAYS_IN_A_FLOW = "[]";
+  
   let response: BuildedFrontendCode = {
     component: "",
     module: "",

@@ -110,11 +110,99 @@ export const CLIENT_PERSON_FORM: MainInterface = {
                   label: "CEP",
                   name: "zipCode",
                   type: FormInputTypeEnum.Text,
-                  placeholder: "Código postal",
-                  tooltip: "Código postal relacionado ao cliente",
+                  placeholder: "00.000-000",
+                  isRequired: true,
+                  mask: "00.000-000",
+                  apiRequest: {
+                    endpoint: "__external-api/address",
+                    formFieldsFilledByApiResponse: [
+                      {
+                        formFieldName: "address",
+                        propertyFromApiToFillFormField: "address"
+                      },
+                      {
+                        formFieldName: "district",
+                        propertyFromApiToFillFormField: "neighborhood"
+                      },
+                      {
+                        formFieldName: "city",
+                        propertyFromApiToFillFormField: "city"
+                      },
+                      {
+                        formFieldName: "state",
+                        propertyFromApiToFillFormField: "state"
+                      },
+                      {
+                        formFieldName: "country",
+                        propertyFromApiToFillFormField: "country"
+                      },
+                    ]
+                  }
                 }
-              }
-            ]
+              },
+              {
+                input: {
+                  label: "Logradouro",
+                  name: "address",
+                  type: FormInputTypeEnum.Text,
+                  placeholder: "Nome da Rua, Avenida, Travessa etc.",
+                  isRequired: true,
+                }
+              },
+              {
+                input: {
+                  label: "Número",
+                  name: "number",
+                  type: FormInputTypeEnum.Text,
+                  placeholder: "Número da localização",
+                  isRequired: true,
+                }
+              },
+              {
+                input: {
+                  label: "Bairro",
+                  name: "district",
+                  type: FormInputTypeEnum.Text,
+                  placeholder: "Distrito do logradouro",
+                  isRequired: true,
+                }
+              },
+              {
+                input: {
+                  label: "Complemento",
+                  name: "complement",
+                  type: FormInputTypeEnum.Text,
+                  placeholder: "Mais informações que ajudem a achar seu endereço",
+                }
+              },
+              {
+                input: {
+                  label: "País",
+                  name: "country",
+                  type: FormInputTypeEnum.Text,
+                  placeholder: "País do seu endereço",
+                  isRequired: true,
+                }
+              },
+              {
+                input: {
+                  label: "Estado",
+                  name: "state",
+                  type: FormInputTypeEnum.Text,
+                  placeholder: "Estado do seu endereço",
+                  isRequired: true,
+                }
+              },
+              {
+                input: {
+                  label: "Cidade",
+                  name: "city",
+                  type: FormInputTypeEnum.Text,
+                  placeholder: "Município do seu endereço",
+                  isRequired: true,
+                }
+              },
+            ],
           }
         ]
       },      

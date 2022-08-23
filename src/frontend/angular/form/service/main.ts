@@ -190,9 +190,9 @@ const setFormServiceServicesOverFormElement = (
     if (element.input.apiRequest) {
       if (element.input.apiRequest.endpoint) {
         code += `
-          ${element.input.name}InputRequestToFind(filter: string = "") {
+          ${element.input.name}InputRequestToFind(param: string) {
             return this._httpClient.get(
-              \`\${this.BASE_URL}/${element.input.apiRequest.endpoint}\${filter}\`, {
+              \`\${this.BASE_URL}/${element.input.apiRequest.endpoint}/\${param}\`, {
               headers: {
                 ${hasAuthorization}
               }

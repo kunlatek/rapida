@@ -17,6 +17,14 @@ const setArrayLayer = (
   const iterationsIds = ["i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t"];
   const newIndex = index + 1;
 
+  _arrayLayer = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
+
+  _arraysInAFlow = JSON.parse(
+    process.env.ARRAYS_IN_A_FLOW!
+  );
+
   let hasArray = false;
   let arraysInThisLayer: Array<{
     id: string;

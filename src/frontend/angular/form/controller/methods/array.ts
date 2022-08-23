@@ -1,4 +1,3 @@
-import { ConditionEnum } from "../../../../../enums/form";
 import {
   ArrayInterface,
   FormElementInterface,
@@ -15,7 +14,6 @@ let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
 let _arraysInAFlow: Array<ArrayFeaturesInterface> = JSON.parse(
   process.env.ARRAYS_IN_A_FLOW!
 );
-let _conditionMethods: Array<string> = [];
 
 const setArray = (object: MainInterface) => {
   let code = ``;
@@ -23,6 +21,14 @@ const setArray = (object: MainInterface) => {
   if (!object.form) {
     return code;
   }
+
+  _arrayLayer = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
+
+  _arraysInAFlow = JSON.parse(
+    process.env.ARRAYS_IN_A_FLOW!
+  );
 
   setArrayLayer(object.form.elements);
 

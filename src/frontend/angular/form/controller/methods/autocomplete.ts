@@ -147,8 +147,8 @@ const setAutocompleteMethod = (
         })}]}\`;
         
         this._${object.form?.id}Service.${
-    element.autocomplete.name
-  }SelectObjectGetAll(filter.replace("},]", "}]"))
+          element.autocomplete.name
+        }SelectObjectGetAll(filter.replace("},]", "}]"))
         .then((result: any) => {
           this.filtered${TextTransformation.pascalfy(
             element.autocomplete.name

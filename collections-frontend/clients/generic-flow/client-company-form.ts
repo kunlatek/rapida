@@ -6,7 +6,7 @@ export const CLIENT_COMPANY_FORM: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
   backendFramework: BackendFrameworkEnum.Loopback,
   form: {
-    title: "Empresa",
+    title: "Cliente empresa",
     subtitle: "Utilize as abas abaixo para cadastrar o cliente, seu plano e os eventuais produtos extras.",
     id: "clientCompanyForm",
     elements: [
@@ -60,102 +60,172 @@ export const CLIENT_COMPANY_FORM: MainInterface = {
             id: "contactsTab",
             elements: [
               {
-                input: {
-                  label: "Celular",
-                  name: "mobile",
-                  type: FormInputTypeEnum.Text,
-                  placeholder: "(00) 0 0000-0000",
-                  isRequired: true,
-                  mask: "(00) 0 0000-0000",
-                }
-              },
-              {
-                input: {
-                  label: "E-mail",
-                  name: "email",
-                  type: FormInputTypeEnum.Email,
-                  placeholder: "E-mail",
-                  isRequired: true,
+                array: {
+                  title: "Contato",
+                  id: "contactArray",
+                  elements: [
+                    {
+                      select: {
+                        label: "Tipo de contato",
+                        name: "contactType",
+                        type: FormInputTypeEnum.Text,
+                        optionsObject: [
+                          {
+                            label: "Celular",
+                            value: "mobile",
+                          },
+                          {
+                            label: "E-mail",
+                            value: "email",
+                          },
+                          {
+                            label: "Linkedin",
+                            value: "linkedin",
+                          },
+                          {
+                            label: "Instagram",
+                            value: "instagram",
+                          },
+                          {
+                            label: "Facebook",
+                            value: "facebook",
+                          },
+                        ]
+                      }
+                    },
+                    {
+                      input: {
+                        label: "Valor",
+                        name: "contactValue",
+                        type: FormInputTypeEnum.Text,
+                        placeholder: "Ex.: email@email.com | (88) 98888-8888",
+                        tooltip: "Valor de acordo com o tipo de contato",
+                      }
+                    },
+                    {
+                      input: {
+                        label: "Comentário",
+                        name: "contactComment",
+                        type: FormInputTypeEnum.Text,
+                        placeholder: "Ex.: E-mail comercial | Telefone do vizinho",
+                        tooltip: "Informação adicional acerca do contato",
+                        isMultipleLines: true,
+                      }
+                    },
+                  ]
                 }
               },
             ],
           },
           {
-            title: "Endereços",
+            title: "Endereços para contato",
             id: "addressesTab",
             elements: [
               {
-                input: {
-                  label: "CEP",
-                  name: "zipCode",
-                  type: FormInputTypeEnum.Text,
-                  placeholder: "00.000-000",
-                  isRequired: true,
-                  mask: "00.000-000",
+                array: {
+                  id: "addressArray",
+                  title: "Endereço",
+                  elements: [
+                    {
+                      input: {
+                        label: "CEP",
+                        name: "zipCode",
+                        type: FormInputTypeEnum.Text,
+                        placeholder: "00.000-000",
+                        isRequired: true,
+                        mask: "00.000-000",
+                        apiRequest: {
+                          endpoint: "__external-api/address",
+                          formFieldsFilledByApiResponse: [
+                            {
+                              formFieldName: "address",
+                              propertyFromApiToFillFormField: "address"
+                            },
+                            {
+                              formFieldName: "district",
+                              propertyFromApiToFillFormField: "neighborhood"
+                            },
+                            {
+                              formFieldName: "city",
+                              propertyFromApiToFillFormField: "city"
+                            },
+                            {
+                              formFieldName: "state",
+                              propertyFromApiToFillFormField: "state"
+                            },
+                            {
+                              formFieldName: "country",
+                              propertyFromApiToFillFormField: "country"
+                            },
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      input: {
+                        label: "Logradouro",
+                        name: "address",
+                        type: FormInputTypeEnum.Text,
+                        placeholder: "Nome da Rua, Avenida, Travessa etc.",
+                        isRequired: true,
+                      }
+                    },
+                    {
+                      input: {
+                        label: "Número",
+                        name: "number",
+                        type: FormInputTypeEnum.Text,
+                        placeholder: "Número da localização",
+                        isRequired: true,
+                      }
+                    },
+                    {
+                      input: {
+                        label: "Bairro",
+                        name: "district",
+                        type: FormInputTypeEnum.Text,
+                        placeholder: "Distrito do logradouro",
+                        isRequired: true,
+                      }
+                    },
+                    {
+                      input: {
+                        label: "Complemento",
+                        name: "complement",
+                        type: FormInputTypeEnum.Text,
+                        placeholder: "Mais informações que ajudem a achar seu endereço",
+                      }
+                    },
+                    {
+                      input: {
+                        label: "País",
+                        name: "country",
+                        type: FormInputTypeEnum.Text,
+                        placeholder: "País do seu endereço",
+                        isRequired: true,
+                      }
+                    },
+                    {
+                      input: {
+                        label: "Estado",
+                        name: "state",
+                        type: FormInputTypeEnum.Text,
+                        placeholder: "Estado do seu endereço",
+                        isRequired: true,
+                      }
+                    },
+                    {
+                      input: {
+                        label: "Cidade",
+                        name: "city",
+                        type: FormInputTypeEnum.Text,
+                        placeholder: "Município do seu endereço",
+                        isRequired: true,
+                      }
+                    },
+                  ],
                 }
-              },
-              {
-                input: {
-                  label: "Logradouro",
-                  name: "address",
-                  type: FormInputTypeEnum.Text,
-                  placeholder: "Nome da Rua, Avenida, Travessa etc.",
-                  isRequired: true,
-                }
-              },
-              {
-                input: {
-                  label: "Número",
-                  name: "number",
-                  type: FormInputTypeEnum.Text,
-                  placeholder: "Número da localização",
-                  isRequired: true,
-                }
-              },
-              {
-                input: {
-                  label: "Bairro",
-                  name: "district",
-                  type: FormInputTypeEnum.Text,
-                  placeholder: "Distrito do logradouro",
-                  isRequired: true,
-                }
-              },
-              {
-                input: {
-                  label: "Complemento",
-                  name: "complement",
-                  type: FormInputTypeEnum.Text,
-                  placeholder: "Mais informações que ajudem a achar seu endereço",
-                }
-              },
-              {
-                input: {
-                  label: "País",
-                  name: "country",
-                  type: FormInputTypeEnum.Text,
-                  placeholder: "País do seu endereço",
-                  isRequired: true,
-                }
-              },
-              {
-                input: {
-                  label: "Estado",
-                  name: "state",
-                  type: FormInputTypeEnum.Text,
-                  placeholder: "Estado do seu endereço",
-                  isRequired: true,
-                }
-              },
-              {
-                input: {
-                  label: "Cidade",
-                  name: "city",
-                  type: FormInputTypeEnum.Text,
-                  placeholder: "Município do seu endereço",
-                  isRequired: true,
-                }
-              },
+              },              
             ],
           },
         ]
