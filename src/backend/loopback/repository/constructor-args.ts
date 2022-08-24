@@ -45,8 +45,8 @@ const setRepositoryConstructorArgumentsByElement = (
         `;
     } else {
       code += `
-        this.${propertyName} = this.createBelongsToAccessorFor('${propertyName}', ${propertyName}RepositoryGetter,);
-        this.registerInclusionResolver('${propertyName}', this.${propertyName}.inclusionResolver);
+        this.${value.name.slice(0, -2)} = this.createBelongsToAccessorFor('${value.name.slice(0, -2)}', ${modelName.toLowerCase() === className.toLowerCase() ? 'Getter.fromValue(this)' : `${propertyName}RepositoryGetter`},);
+        this.registerInclusionResolver('${value.name.slice(0, -2)}', this.${value.name.slice(0, -2)}.inclusionResolver);
         `;
     }
   }

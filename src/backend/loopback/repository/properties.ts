@@ -41,7 +41,7 @@ const setRepositoryPropertiesByElement = (
         >;
         `;
     } else {
-      code += `public readonly ${propertyName}: BelongsToAccessor<${className}, typeof ${TextTransformation.pascalfy(modelName)}.prototype._id>;`;
+      code += `public readonly ${value.name.slice(0, -2)}: BelongsToAccessor<${className}, typeof ${TextTransformation.pascalfy(modelName)}.prototype._id>;`;
     }
   }
 

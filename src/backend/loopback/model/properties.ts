@@ -85,7 +85,7 @@ const setByElement = (
     } else {
       code += `
         @belongsTo(() => ${className})
-        ${propertyName}Id: String;
+        ${value.name}?: String;
         `;
     }
   } else {

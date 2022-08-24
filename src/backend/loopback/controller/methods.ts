@@ -410,7 +410,10 @@ const setPropertiesToFindByElement = (
         )
       )
     );
-    code += `'${propertyName}',`;
+    if (value.isMultiple)
+      code += `'${propertyName}',`;
+    else
+      code += `'${value.name.slice(0, -2)}',`;
   }
 
   return code;
