@@ -93,12 +93,22 @@ const setByElementInArrayType = (
     )
 
   code += `
-      @property({
-          type: '${propertyType}',
-          ${value.isMultiple ? "itemType: 'any'," : 'jsonSchema: {nullable: true},'}
-      })
-      ${value.name}?: ${value.isMultiple ? 'any[]' : propertyType};
-      `;
+  @property({
+      type: '${propertyType}',
+      ${value.isMultiple ? "itemType: 'any'," : 'jsonSchema: {nullable: true},'}
+  })
+  ${value.name}?: ${value.isMultiple ? 'any[]' : propertyType};
+  `;
+
+  if (type === 'autocomplete') {
+    code += `
+    @property({
+        type: 'any',
+        jsonSchema: {nullable: true},
+    })
+    ${value.name.slice(0, -2)}?: any;
+    `;
+  }
 
   return code;
 }

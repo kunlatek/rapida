@@ -37,6 +37,7 @@ const setControllerImports = (object: MainInterface): string => {
   )}.repository';
   import {ChartService} from '../services';
   import {serverMessages} from '../utils/server-messages';
+  import {getRelatedElements} from '../utils/general-functions';
   ${_relatedRepositoriesImports ? `import {${_relatedRepositoriesImports}} from '../repositories';` : ''}
   `;
 

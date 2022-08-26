@@ -3,6 +3,41 @@ import { MainInterface } from "../../../interfaces/main";
 import { TextTransformation } from "../../../utils/text.transformation";
 import { getAllElements } from "../main";
 
+const setGetRelatedElementsInArrayType = (object: MainInterface): string => {
+  if (!object.form) {
+    console.info("Only forms set here");
+    return ``;
+  }
+
+  let _findRelatedElements = ``;
+
+  const elements: Array<FormElementInterface> = getAllElements(object.form.elements);
+
+  elements.forEach((element) => {
+    const type = Object.keys(element)[0];
+    if (type === 'array') {
+      const value = Object.values(element)[0];
+      const relatedType = TextTransformation.setIdToClassName(value.id);
+
+      value.elements?.forEach((elementProperty: FormElementInterface) => {
+        if (elementProperty.autocomplete) {
+          const collection = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(elementProperty.autocomplete?.optionsApi?.endpoint?.split('-').join(' ') || '')));
+          _findRelatedElements +=
+            `
+          const related${relatedType}Data = await getRelatedElements('${collection}', data['${value.id}']?.map(el => el['${elementProperty.autocomplete.name}']) || []);
+          data['${value.id}'] = data['${value.id}']?.map(el => {
+              el['${elementProperty.autocomplete.name.slice(0, -2)}'] = related${relatedType}Data.find(childEl => childEl._id.toString() === el['${elementProperty.autocomplete.name}'])
+              return el
+          });
+          `;
+        }
+      });
+    }
+  });
+
+  return _findRelatedElements;
+};
+
 const setControllerMethods = (object: MainInterface): string => {
   if (!object.form) {
     console.info("Only forms set here");
@@ -12,7 +47,6 @@ const setControllerMethods = (object: MainInterface): string => {
   const modelName: string = object.form.id.replace("Form", "");
 
   let _propertiesRelatedFind: string = ``;
-  // let _relatedElementsInFindById: string = ``;
   let _createRelated: string = ``;
   let _deleteRelated: string = ``;
 
@@ -145,6 +179,8 @@ const setControllerMethods = (object: MainInterface): string => {
               include: [${_propertiesRelatedFind}],
           });
           if (!data) throw new Error(serverMessages['httpResponse']['notFoundError'][locale ?? LocaleEnum['pt-BR']]);
+
+          ${setGetRelatedElementsInArrayType(object)}
       
           return HttpResponseToClient.okHttpResponse({
               data,
@@ -419,33 +455,6 @@ const setPropertiesToFindByElement = (
 
   return code;
 };
-
-// const setGetRelatedElementToFindByIdMethod = (
-//   element: FormElementInterface
-// ): string => {
-//   let code = ``;
-
-//   const value = Object.values(element)[0];
-
-//   if (value.optionsApi && value.optionsApi.endpoint) {
-//     const propertyName = TextTransformation.setIdToPropertyName(
-//       TextTransformation.pascalfy(
-//         TextTransformation.singularize(
-//           value.optionsApi.endpoint.split("-").join(" ")
-//         )
-//       )
-//     );
-//     code += `
-//       const relatedData = await getRelatedElements('ClientProduct', data.inputs?.map(input => input.productId) || []);
-//       data['inputs'] = data['inputs']?.map(el => {
-//           el['product'] = relatedData.find(childEl => childEl._id.toString() === el['productId'])
-//           return el
-//       });
-//       `;
-//   }
-
-//   return code;
-// };
 
 const setCreateAllMethodsByElement = (
   object: MainInterface,
