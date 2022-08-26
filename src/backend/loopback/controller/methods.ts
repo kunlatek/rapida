@@ -12,6 +12,7 @@ const setControllerMethods = (object: MainInterface): string => {
   const modelName: string = object.form.id.replace("Form", "");
 
   let _propertiesRelatedFind: string = ``;
+  // let _relatedElementsInFindById: string = ``;
   let _createRelated: string = ``;
   let _deleteRelated: string = ``;
 
@@ -139,7 +140,7 @@ const setControllerMethods = (object: MainInterface): string => {
   ): Promise<IHttpResponse> {
       try {
   
-          const data = await this.repository.findOne({
+          let data = await this.repository.findOne({
               where: {and: [{_id: id}, {_deletedAt: {eq: null}}]},
               include: [${_propertiesRelatedFind}],
           });
@@ -418,6 +419,33 @@ const setPropertiesToFindByElement = (
 
   return code;
 };
+
+// const setGetRelatedElementToFindByIdMethod = (
+//   element: FormElementInterface
+// ): string => {
+//   let code = ``;
+
+//   const value = Object.values(element)[0];
+
+//   if (value.optionsApi && value.optionsApi.endpoint) {
+//     const propertyName = TextTransformation.setIdToPropertyName(
+//       TextTransformation.pascalfy(
+//         TextTransformation.singularize(
+//           value.optionsApi.endpoint.split("-").join(" ")
+//         )
+//       )
+//     );
+//     code += `
+//       const relatedData = await getRelatedElements('ClientProduct', data.inputs?.map(input => input.productId) || []);
+//       data['inputs'] = data['inputs']?.map(el => {
+//           el['product'] = relatedData.find(childEl => childEl._id.toString() === el['productId'])
+//           return el
+//       });
+//       `;
+//   }
+
+//   return code;
+// };
 
 const setCreateAllMethodsByElement = (
   object: MainInterface,

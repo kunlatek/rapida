@@ -29,7 +29,7 @@ const setModelImports = (object: MainInterface): string => {
   ].join(",");
 
   let code = `
-  import {model, property, ${additionalLoopbackRepositoriesImportMethods.join(',')}} from '@loopback/repository';
+  import {model, property, Entity, ${additionalLoopbackRepositoriesImportMethods.join(',')}} from '@loopback/repository';
   import {${_importsDefault}__Default} from '.';
   ${_importsRelatedRepositories ? `import {${_importsRelatedRepositories}} from '../repositories/';` : ""}
   `;

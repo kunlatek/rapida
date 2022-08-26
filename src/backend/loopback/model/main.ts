@@ -6,19 +6,22 @@ import { TextTransformation } from "../../../utils/text.transformation";
 import { setModelConstructorParams } from "./constructor-params";
 import { setModelConstructorArguments } from "./contructor-args";
 import { setModelImports } from "./imports";
-import { setModelProperties } from "./properties";
+import { setArrayTypeModels, setModelProperties } from "./properties";
 
 const modelMain = (
   object: MainInterface
 ): string => {
   const modelName: string = object.form!.id.replace("Form", "");
   let _imports: string = setModelImports(object);
+  let _arrayTypeModels: string = setArrayTypeModels(object);
   let _properties: string = setModelProperties(object);
   let _constructorArguments: string = setModelConstructorArguments(object);
   let _constructorParams: string = setModelConstructorParams(object);
 
   let code = `
   ${_imports}
+
+  ${_arrayTypeModels}
 
   @model()
   export class ${TextTransformation.pascalfy(modelName)} extends __Default {
@@ -47,15 +50,14 @@ const modelMain = (
  * @param object
  * @param code
  */
- const setModelArchitectureAndWriteToFile = (
+const setModelArchitectureAndWriteToFile = (
   object: MainInterface,
   code: string
 ) => {
-  const componentFilePath = `${
-    object.projectPath
-  }-api/src/models/${TextTransformation.kebabfy(
-    object.form?.id.replace("Form", "")!
-  )}.model.ts`;
+  const componentFilePath = `${object.projectPath
+    }-api/src/models/${TextTransformation.kebabfy(
+      object.form?.id.replace("Form", "")!
+    )}.model.ts`;
   const componentIndexFilePath = `${object.projectPath}-api/src/models/index.ts`;
 
   try {

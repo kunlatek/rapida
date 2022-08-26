@@ -98,6 +98,8 @@ const getAllElements = (
     "textarea",
     "text",
     "autocomplete",
+
+    'array',
   ];
 
   elementList.forEach(element => {
@@ -113,24 +115,25 @@ const getAllElements = (
         elementsToReturn = getAllElements(tab.elements, elementsToReturn);
       });
 
-    } else if (type === "array") {
-
-      if (element.array?.elements) {
-        elementsToReturn = [
-          {
-            select: {
-              label: element.array?.title,
-              name: element.array?.id,
-              isMultiple: true,
-              type: FormInputTypeEnum.Text,
-            },
-          },
-          ...getAllElements(element.array?.elements, elementsToReturn),
-        ];
-
-      }
-
     }
+    // else if (type === "array") {
+
+    //   if (element.array?.elements) {
+    //     elementsToReturn = [
+    //       {
+    //         select: {
+    //           label: element.array?.title,
+    //           name: element.array?.id,
+    //           isMultiple: true,
+    //           type: FormInputTypeEnum.Text,
+    //         },
+    //       },
+    //       ...getAllElements(element.array?.elements, elementsToReturn),
+    //     ];
+
+    //   }
+
+    // }
 
   })
 
