@@ -103,10 +103,10 @@ const setByElementInArrayType = (
   if (type === 'autocomplete') {
     code += `
     @property({
-        type: 'any',
+        type: 'object',
         jsonSchema: {nullable: true},
     })
-    ${value.name.slice(0, -2)}?: any;
+    ${value.name.slice(0, -2)}?: object;
     `;
   }
 
