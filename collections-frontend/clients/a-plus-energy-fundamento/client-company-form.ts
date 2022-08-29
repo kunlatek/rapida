@@ -310,37 +310,37 @@ export const CLIENT_COMPANY_FORM: MainInterface = {
                         isRequired: true,
                       }
                     },
-                    // {
-                    //   array: {
-                    //     id: "modules",
-                    //     title: "Módulos",
-                    //     elements: [
-                    //       {
-                    //         autocomplete: {
-                    //           label: "Módulo",
-                    //           name: "settlementModule",
-                    //           type: FormInputTypeEnum.Text,
-                    //           placeholder: "Ex.: Trina",
-                    //           optionsApi: {
-                    //             endpoint: "client-products",
-                    //             labelField: "name",
-                    //             valueField: "_id",
-                    //             paramsToFilter: ["name", "ean13", "ean14"]
-                    //           }
-                    //         }
-                    //       },
-                    //       {
-                    //         input: {
-                    //           label: "Número de série",
-                    //           name: "settlementModuleSerialNumber",
-                    //           type: FormInputTypeEnum.Text,
-                    //           placeholder: "Ex.: Trina-09765-ZY",
-                    //           tooltip: "Identificação única do produto",
-                    //         }
-                    //       },
-                    //     ]
-                    //   }
-                    // },
+                    {
+                      array: {
+                        id: "modules",
+                        title: "Módulos",
+                        elements: [
+                          {
+                            autocomplete: {
+                              label: "Módulo",
+                              name: "settlementModule",
+                              type: FormInputTypeEnum.Text,
+                              placeholder: "Ex.: Trina",
+                              optionsApi: {
+                                endpoint: "client-products",
+                                labelField: "name",
+                                valueField: "_id",
+                                paramsToFilter: ["name", "ean13", "ean14"]
+                              }
+                            }
+                          },
+                          {
+                            input: {
+                              label: "Número de série",
+                              name: "settlementModuleSerialNumber",
+                              type: FormInputTypeEnum.Text,
+                              placeholder: "Ex.: Trina-09765-ZY",
+                              tooltip: "Identificação única do produto",
+                            }
+                          },
+                        ]
+                      }
+                    },
                     {
                       input: {
                         label: "KVA transformador",
