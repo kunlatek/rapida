@@ -45,7 +45,7 @@ export const PROJECT_FORM: MainInterface = {
                   name: "cloneFrontendPath",
                   type: FormInputTypeEnum.Text,
                   optionsApi: {
-                    endpoint: "quickstart-frontend-repositories",
+                    externalEndpoint: "http://localhost:3001/quickstart-frontend-repositories",
                     labelField: "label",
                     valueField: "value",
                   },
@@ -58,7 +58,7 @@ export const PROJECT_FORM: MainInterface = {
                   name: "frontendFramework",
                   type: FormInputTypeEnum.Text,
                   optionsApi: {
-                    endpoint: "frontend-frameworks",
+                    externalEndpoint: "http://localhost:3001/frontend-frameworks",
                     labelField: "label",
                     valueField: "value",
                   },
@@ -95,7 +95,7 @@ export const PROJECT_FORM: MainInterface = {
                   name: "cloneBackendPath",
                   type: FormInputTypeEnum.Text,
                   optionsApi: {
-                    endpoint: "quickstart-backend-repositories",
+                    externalEndpoint: "http://localhost:3001/quickstart-backend-repositories",
                     labelField: "label",
                     valueField: "value",
                   },
@@ -108,7 +108,7 @@ export const PROJECT_FORM: MainInterface = {
                   name: "backendFramework",
                   type: FormInputTypeEnum.Text,
                   optionsApi: {
-                    endpoint: "backend-frameworks",
+                    externalEndpoint: "http://localhost:3001/backend-frameworks",
                     labelField: "label",
                     valueField: "value",
                   },

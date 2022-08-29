@@ -3,31 +3,31 @@ import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/
 import { RequestTypeEnum } from "../../../src/enums/request";
 import { MainInterface } from "../../../src/interfaces/main";
 
-export const CLIENT_COMPANY_TABLE: MainInterface = {
+export const CLIENT_PERSON_TABLE: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
   backendFramework: BackendFrameworkEnum.Loopback,
   table: {
-    title: "Empresas",
-    subtitle: "Listagem de empresas",
-    id: "clientCompanyTable",
+    title: "Clientes pessoas",
+    subtitle: "Listagem de pessoas",
+    id: "clientPersonTable",
     data: {
       type: RequestTypeEnum.Object,
     },
     elements: [
       {
         column: {
-          label: "Nome fantasia",
+          label: "Nome",
         },
         row: {
-          field: "businessName",
+          field: "name",
         },
       },
       {
         column: {
-          label: "CNPJ",
+          label: "CPF",
         },
         row: {
-          field: "cnpj",
+          field: "cpf",
         },
       },
       {
@@ -41,7 +41,7 @@ export const CLIENT_COMPANY_TABLE: MainInterface = {
             {
               action: {
                 type: RequestTypeEnum.Link,
-                url: "/main/client-company",
+                url: "/main/client-person",
                 param: "_id",
               },
               label: "Editar",
@@ -62,8 +62,8 @@ export const CLIENT_COMPANY_TABLE: MainInterface = {
       },
     ],
     service: {
-      baseUrl: "http://localhost:3000",
-      endpoint: "client-companies",
+      baseUrl: "http://localhost:3001",
+      endpoint: "client-people",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

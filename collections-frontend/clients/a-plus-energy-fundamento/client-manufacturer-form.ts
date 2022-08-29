@@ -1256,7 +1256,7 @@ export const CLIENT_MANUFACTURER_FORM: MainInterface = {
       },
     ],
     service: {
-      baseUrl: "http://localhost:3000",
+      baseUrl: "http://localhost:3001",
       endpoint: "client-manufacturers",
       hasAuthorization: true,
       methods: [

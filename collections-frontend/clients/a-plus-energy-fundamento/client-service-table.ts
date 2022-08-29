@@ -1,25 +1,26 @@
 import { ServiceFunctionsEnum } from "../../../src/enums/form";
-import { FrontendFrameworkEnum } from "../../../src/enums/main";
+import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/main";
 import { RequestTypeEnum } from "../../../src/enums/request";
 import { MainInterface } from "../../../src/interfaces/main";
 
-export const DATA_TYPE_TABLE: MainInterface = {
+export const CLIENT_SERVICE_TABLE: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
+  backendFramework: BackendFrameworkEnum.Loopback,
   table: {
-    title: "Tipos de dados",
-    id: "dataTypeTable",
-    subtitle: "Listagem de tipos de dados que alimentarão as options do select de elementos no backoffice rapida",
+    title: "Serviços",
+    subtitle: "Listagem de serviços",
+    id: "clientServiceTable",
     data: {
       type: RequestTypeEnum.Object,
     },
     elements: [
       {
         column: {
-          label: "Nome"
+          label: "Nome",
         },
         row: {
-          field: "name"
-        }
+          field: "name",
+        },
       },
       {
         column: {
@@ -32,7 +33,7 @@ export const DATA_TYPE_TABLE: MainInterface = {
             {
               action: {
                 type: RequestTypeEnum.Link,
-                url: "/main/data-type",
+                url: "/main/client-service",
                 param: "_id",
               },
               label: "Editar",
@@ -54,7 +55,7 @@ export const DATA_TYPE_TABLE: MainInterface = {
     ],
     service: {
       baseUrl: "http://localhost:3001",
-      endpoint: "data-types",
+      endpoint: "client-services",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

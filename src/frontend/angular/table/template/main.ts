@@ -115,9 +115,19 @@ const setSpecificStructureOverTableElement = (
   }
 
   if (!element.row.menu) {
-    columnContent = `
-    {{element.${element.row.field}}}
-    `;
+    if (element.row.fieldProperties) {
+      element.row.fieldProperties.forEach((property: string, index: number) => {
+        columnContent += `
+        ${index > 0 ? " | " :  ""}{{element.${element.row.field}.${property}}}
+        `;
+      });
+    }
+
+    if (!element.row.fieldProperties) {
+      columnContent = `
+      {{element.${element.row.field}}}
+      `;
+    }
   }
 
   code += `
@@ -197,15 +207,6 @@ const setSpecificStructureOverRowMenuItems = (
   if (hasMenuParam) {
     code += `</ng-template>`;
   }
-
-  return code;
-};
-
-const setSpecificStructureOverFormElement = (
-  object: MainInterface,
-  element: FormElementInterface
-) => {
-  let code = ``;
 
   return code;
 };

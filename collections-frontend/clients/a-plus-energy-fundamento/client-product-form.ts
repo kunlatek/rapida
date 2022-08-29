@@ -205,7 +205,7 @@ export const CLIENT_PRODUCT_FORM: MainInterface = {
       },
     ],
     service: {
-      baseUrl: "http://localhost:3000",
+      baseUrl: "http://localhost:3001",
       endpoint: "client-products",
       hasAuthorization: true,
       methods: [

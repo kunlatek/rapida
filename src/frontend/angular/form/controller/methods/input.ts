@@ -2,7 +2,6 @@ import { FormInputTypeEnum } from "../../../../../enums/form";
 import {
   ArrayInterface,
   FormElementInterface,
-  InputInterface,
 } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
@@ -58,7 +57,7 @@ const setInputMethod = (
     }InputRequestToFind(this.${object.form?.id}Form.
           ${
             array
-              ? `get([${controls}, ${iterations?.replace(": any", "")}, "${element.input.name}"])?.value);`
+              ? `get([${controls}, ${iterations?.replace(/: any/g, "")}, "${element.input.name}"])?.value);`
               : `value.${element.input.name});`
           }
         if (array.data) {
@@ -79,7 +78,7 @@ const setInputMethod = (
     }) => this.set${TextTransformation.pascalfy(
       element.input.name
     )}InputRequestToFind(${
-      iterations ? iterations?.replace(": any", "") : ""
+      iterations ? iterations?.replace(/: any/g, "") : ""
     }));
     `;
   }
@@ -101,7 +100,7 @@ const fillFieldsOverApiRequest = (
       code += `this.${object.form?.id}Form.
       ${
         array
-          ? `get([${controls}, ${iterations?.replace(": any", "")}, "${e.formFieldName}"])?.`
+          ? `get([${controls}, ${iterations?.replace(/: any/g, "")}, "${e.formFieldName}"])?.`
           : `get("${e.formFieldName}")?.`
       }
       setValue(array.data.${e.propertyFromApiToFillFormField});`;

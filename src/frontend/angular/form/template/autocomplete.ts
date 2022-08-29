@@ -1,9 +1,13 @@
 import { FormElementInterface } from "../../../../interfaces/form";
 import { TextTransformation } from "../../../../utils/text.transformation";
 
-const setAutocomplete = (element: FormElementInterface, conditions: string) => {
+const setAutocomplete = (
+  element: FormElementInterface,
+  conditions: string,
+  arrayCurrentIndexAsParam: string | undefined = undefined
+) => {
   let code = ``;
-  
+
   if (!element.autocomplete) {
     return code;
   }
@@ -54,7 +58,7 @@ const setAutocomplete = (element: FormElementInterface, conditions: string) => {
             )}($event)" 
             (keyup)="callSetFiltered${TextTransformation.pascalfy(
               element.autocomplete.name
-            )}()" 
+            )}(${arrayCurrentIndexAsParam})" 
             #${element.autocomplete.name}Input 
             ${required}
           >
@@ -96,7 +100,7 @@ const setAutocomplete = (element: FormElementInterface, conditions: string) => {
               )}" 
               (keyup)="callSetFiltered${TextTransformation.pascalfy(
                 element.autocomplete.name
-              )}()" 
+              )}(${arrayCurrentIndexAsParam})" 
               ${required}
         >
         <mat-autocomplete 
@@ -126,6 +130,4 @@ const setAutocomplete = (element: FormElementInterface, conditions: string) => {
   return code;
 };
 
-export {
-  setAutocomplete
-}
+export { setAutocomplete };

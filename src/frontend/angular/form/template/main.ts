@@ -101,7 +101,7 @@ const setSpecificStructureOverFormElement = (
   }
 
   if (element.autocomplete) {
-    code += setAutocomplete(element, conditions);
+    code += setAutocomplete(element, conditions, arrayCurrentIndexAsParam);
   }
 
   if (element.button) {
@@ -364,16 +364,6 @@ const verifyFormElement = (
     element.array.elements.forEach((arrayElement) => {
       verifyFormElement(arrayElement, true);
     });
-  }
-
-  if (formElements.includes(type)) {
-    if (value.conditions) {
-      _hasCondition = true;
-
-      if (isArray) {
-        _hasConditionInArray = true;
-      }
-    }
   }
 };
 

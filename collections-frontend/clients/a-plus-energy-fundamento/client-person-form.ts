@@ -279,28 +279,34 @@ export const CLIENT_PERSON_FORM: MainInterface = {
                       }
                     },
                     {
-                      select: {
-                        label: "Marca do inversor",
-                        name: "settlementInverter",
-                        type: FormInputTypeEnum.Text,
-                        optionsObject: [
+                      array: {
+                        id: "inverters",
+                        title: "Inversor",
+                        elements: [
                           {
-                            label: "SMA",
-                            value: "sma",
+                            autocomplete: {
+                              label: "Inversor",
+                              name: "settlementInverter",
+                              type: FormInputTypeEnum.Text,
+                              placeholder: "Ex.: SMA",
+                              optionsApi: {
+                                endpoint: "client-products",
+                                labelField: "name",
+                                valueField: "_id",
+                                paramsToFilter: ["name", "ean13", "ean14"]
+                              }
+                            }
                           },
                           {
-                            label: "Growatt",
-                            value: "growatt",
-                          }
+                            input: {
+                              label: "Número de série",
+                              name: "settlementInverterSerialNumber",
+                              type: FormInputTypeEnum.Text,
+                              placeholder: "Ex.: SMA-09765-ZY",
+                              tooltip: "Identificação única do produto",
+                            }
+                          },
                         ]
-                      }
-                    },
-                    {
-                      input: {
-                        label: "Quantidade de inversores",
-                        name: "settlementInverterQuantity",
-                        type: FormInputTypeEnum.Number,
-                        isRequired: true,
                       }
                     },
                     {
@@ -311,38 +317,40 @@ export const CLIENT_PERSON_FORM: MainInterface = {
                         isRequired: true,
                       }
                     },
-                    {
-                      select: {
-                        label: "Marca do módulo",
-                        name: "settlementModule",
-                        type: FormInputTypeEnum.Text,
-                        optionsObject: [
-                          {
-                            label: "Trina",
-                            value: "tina",
-                          }
-                        ]
-                      }
-                    },
+                    // {
+                    //   array: {
+                    //     id: "modules",
+                    //     title: "Módulos",
+                    //     elements: [
+                    //       {
+                    //         autocomplete: {
+                    //           label: "Módulo",
+                    //           name: "settlementModule",
+                    //           type: FormInputTypeEnum.Text,
+                    //           placeholder: "Ex.: Trina",
+                    //           optionsApi: {
+                    //             endpoint: "client-products",
+                    //             labelField: "name",
+                    //             valueField: "_id",
+                    //             paramsToFilter: ["name", "ean13", "ean14"]
+                    //           }
+                    //         }
+                    //       },
+                    //       {
+                    //         input: {
+                    //           label: "Número de série",
+                    //           name: "settlementModuleSerialNumber",
+                    //           type: FormInputTypeEnum.Text,
+                    //           placeholder: "Ex.: Trina-09765-ZY",
+                    //           tooltip: "Identificação única do produto",
+                    //         }
+                    //       },
+                    //     ]
+                    //   }
+                    // },
                     {
                       input: {
-                        label: "Quantidade de módulos",
-                        name: "settlementModuleQuantity",
-                        type: FormInputTypeEnum.Number,
-                        isRequired: true,
-                      }
-                    },
-                    {
-                      input: {
-                        label: "Wp de módulos",
-                        name: "settlementModuleWap",
-                        type: FormInputTypeEnum.Number,
-                        isRequired: true,
-                      }
-                    },
-                    {
-                      input: {
-                        label: "KVA tranformador",
+                        label: "KVA transformador",
                         name: "settlementKvaConverter",
                         type: FormInputTypeEnum.Number,
                         isRequired: true,
@@ -523,7 +531,7 @@ export const CLIENT_PERSON_FORM: MainInterface = {
                     {
                       input: {
                         label: "Retorno do investimento",
-                        name: "settlementInvestmentRetirn",
+                        name: "settlementInvestmentReturn",
                         placeholder: "Em meses",
                         type: FormInputTypeEnum.Number,
                         isDisabled: true,
@@ -544,7 +552,7 @@ export const CLIENT_PERSON_FORM: MainInterface = {
       },
     ],
     service: {
-      baseUrl: "http://localhost:3000",
+      baseUrl: "http://localhost:3001",
       endpoint: "client-people",
       hasAuthorization: true,
       methods: [

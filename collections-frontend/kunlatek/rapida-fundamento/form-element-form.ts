@@ -12,16 +12,8 @@ export const FORM_ELEMENT_FORM: MainInterface = {
     elements: [
       {
         input: {
-          label: "Label",
-          name: "label",
-          type: FormInputTypeEnum.Text,
-          isRequired: true,
-        }
-      },
-      {
-        input: {
-          label: "Value",
-          name: "value",
+          label: "Nome",
+          name: "name",
           type: FormInputTypeEnum.Text,
           isRequired: true,
         }
@@ -34,7 +26,7 @@ export const FORM_ELEMENT_FORM: MainInterface = {
       },
     ],
     service: {
-      baseUrl: "http://localhost:3000",
+      baseUrl: "http://localhost:3001",
       endpoint: "form-elements",
       hasAuthorization: true,
       methods: [

@@ -15,18 +15,10 @@ export const QUICKSTART_BACKEND_REPOSITORY_TABLE: MainInterface = {
     elements: [
       {
         column: {
-          label: "Label"
+          label: "Nome"
         },
         row: {
-          field: "label"
-        }
-      },
-      {
-        column: {
-          label: "Value"
-        },
-        row: {
-          field: "value"
+          field: "name"
         }
       },
       {
@@ -61,7 +53,7 @@ export const QUICKSTART_BACKEND_REPOSITORY_TABLE: MainInterface = {
       },
     ],
     service: {
-      baseUrl: "http://localhost:3000",
+      baseUrl: "http://localhost:3001",
       endpoint: "quickstart-backend-repositories",
       hasAuthorization: true,
       methods: [

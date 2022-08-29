@@ -128,7 +128,7 @@ const setAutocompleteMethod = (
       if(this.${object.form?.id}Form.
       ${
         array
-          ? `get([${controls}, "${element.autocomplete.name}"])?.value`
+          ? `get([${controls}, ${iterations?.split(",")[iterations.split(",").length - 1].replace(/: any/g, "")}, "${element.autocomplete.name}"])?.value`
           : `value.${element.autocomplete.name}`
       }
       .length > 0) {
@@ -138,7 +138,7 @@ const setAutocompleteMethod = (
               this.${object.form?.id}Form.
               ${
                 array
-                  ? `get([${controls}, "${element.autocomplete.name}"])?.value`
+                  ? `get([${controls}, ${iterations?.split(",")[iterations.split(",").length - 1].replace(/: any/g, "")}, "${element.autocomplete.name}"])?.value`
                   : `value.${element.autocomplete.name}`
               }
             }", "options": "i"}}\`
@@ -160,7 +160,7 @@ const setAutocompleteMethod = (
               await this.refreshToken();
               this.setFiltered${TextTransformation.pascalfy(
                 element.autocomplete.name
-              )}(${iterations ? iterations?.replace(": any", "") : ""});
+              )}(${iterations ? iterations?.replace(/: any/g, "") : ""});
             } else {
                 const message = this._errorHandler.apiErrorMessage(err.error.message);
                 this.sendErrorMessage(message);
@@ -180,7 +180,7 @@ const setAutocompleteMethod = (
     iterations ? iterations : ""
   }) => this.setFiltered${TextTransformation.pascalfy(
     element.autocomplete.name
-  )}(${iterations ? iterations?.replace(": any", "") : ""}));
+  )}(${iterations ? iterations?.replace(/: any/g, "") : ""}));
   `;
 
   return code;

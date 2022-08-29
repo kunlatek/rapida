@@ -22,6 +22,7 @@ export interface TableElementInterface {
   row: {
     comment?: string;
     field?: string;
+    fieldProperties?: Array<string>; //If field is an object, list properties to show 
     filter?: FilterInterface;
     icon?: string;
     menu?: Array<RowMenuElementInterface>;
