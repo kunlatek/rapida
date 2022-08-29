@@ -21,15 +21,11 @@ const numberTypes = ["number"];
 
 const booleanTypes = ["slide"];
 
-const setArrayTypeModels = (object: MainInterface): string => {
-  if (!object.form) {
-    console.info("Only forms set here");
-    return ``;
-  }
+const setArrayTypeModels = (formElements: Array<FormElementInterface>): string => {
 
   let code = ``;
 
-  const elements: Array<FormElementInterface> = getAllElements(object.form.elements);
+  const elements: Array<FormElementInterface> = getAllElements(formElements);
 
   elements.forEach((element) => {
     const type = Object.keys(element)[0];
@@ -39,14 +35,54 @@ const setArrayTypeModels = (object: MainInterface): string => {
 
       let _properties = ``;
       let _relatedProperties = '';
-      value.elements?.forEach((elementProperty: FormElementInterface) => {
-        _properties += setByElementInArrayType(elementProperty);
 
-        if (elementProperty.autocomplete) {
-          const collection = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(elementProperty.autocomplete?.optionsApi?.endpoint?.split('-').join(' ') || '')));
-          _relatedProperties += `{ Collection: '${collection}', attr: '${elementProperty.autocomplete.name}' },`;
+      const createProperties = (elements: Array<FormElementInterface>) => {
+        let _propertiesToReturn = ``;
+        let _relatedPropertiesToReturn = '';
+        elements?.forEach((elementProperty: FormElementInterface) => {
+          _propertiesToReturn += setByElementInArrayType(elementProperty);
+
+          if (elementProperty.array) {
+            const _relatedTypeInMultidimensionalArray = TextTransformation.setIdToClassName(elementProperty.array.id);
+            const _propertiesCreatedInMultidimensionalArray = createProperties(elementProperty.array.elements);
+
+            const _arrayOfRelatedPropertiesInMultidimensionalArray = _propertiesCreatedInMultidimensionalArray._relatedProperties.length ?
+              `
+            @property({
+              type: 'array',
+              itemType: 'object',
+              jsonSchema: {nullable: true},
+              default: [${_propertiesCreatedInMultidimensionalArray._relatedProperties}]
+            })
+            __relatedAttributes?: object[];
+            `
+              : ``
+
+            code = `
+              @model()
+              class ${_relatedTypeInMultidimensionalArray} extends Entity {
+                ${_propertiesCreatedInMultidimensionalArray._properties}
+        
+                ${_arrayOfRelatedPropertiesInMultidimensionalArray}
+              }
+
+              ${code}
+            `
+          } else if (elementProperty.autocomplete) {
+            const collection = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(elementProperty.autocomplete?.optionsApi?.endpoint?.split('-').join(' ') || '')));
+            _relatedPropertiesToReturn += `{ Collection: '${collection}', attr: '${elementProperty.autocomplete.name}' },`;
+          }
+        });
+
+        return {
+          _properties: _propertiesToReturn,
+          _relatedProperties: _relatedPropertiesToReturn,
         }
-      });
+      }
+
+      const _propertiesCreated = createProperties(value.elements);
+      _properties += _propertiesCreated._properties;
+      _relatedProperties += _propertiesCreated._relatedProperties;
 
       const _arrayOfRelatedProperties = _relatedProperties.length ?
         `
@@ -92,13 +128,25 @@ const setByElementInArrayType = (
         )
     )
 
-  code += `
-  @property({
-      type: '${propertyType}',
-      ${value.isMultiple ? "itemType: 'any'," : 'jsonSchema: {nullable: true},'}
-  })
-  ${value.name}?: ${value.isMultiple ? 'any[]' : propertyType};
-  `;
+  if (type === 'array') {
+    const relatedType = TextTransformation.setIdToClassName(value.id);
+
+    code += `
+        @property({
+            type: '${propertyType}',
+            itemType: ${relatedType},
+        })
+        ${value.id}?: ${relatedType}[];
+        `;
+  } else {
+    code += `
+      @property({
+          type: '${propertyType}',
+          ${value.isMultiple ? "itemType: 'any'," : 'jsonSchema: {nullable: true},'}
+      })
+      ${value.name}?: ${value.isMultiple ? 'any[]' : propertyType};
+      `;
+  }
 
   if (type === 'autocomplete') {
     code += `

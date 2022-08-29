@@ -24,7 +24,7 @@ export const CLIENT_ACTION_FORM: MainInterface = {
                   name: "servicesId",
                   type: FormInputTypeEnum.Text,
                   optionsApi: {
-                    endpoint: "services",
+                    endpoint: "client-services",
                     labelField: "name",
                     valueField: "_id",
                     paramsToFilter: ["name"],

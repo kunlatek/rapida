@@ -48,7 +48,7 @@ ADMIN_USERS=rabbadesalman@gmail.com
 
 const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitation-and-permission";
 const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api";
-const projectPath = "/home/lopes/Projects/a-plus-energy-fundamento";
+const projectPath = "/Users/alexisbarros/Documents/projects/kunlatek/rapida-projects/a-plus-energy";
 
 /**
  * ANIMATION
@@ -205,7 +205,7 @@ const array = [
    */
   // BOLETO_COMPANY_FORM,
   // BOLETO_COMPANY_TABLE,
-  
+
   // BOLETO_PERSON_FORM,
   // BOLETO_PERSON_TABLE,
 
@@ -218,13 +218,13 @@ const array = [
    */
   // PROJECT_FORM,
   // PROJECT_TABLE,
-  
+
   // COMPONENT_FORM,
   // COMPONENT_TABLE,
-  
+
   // MODULE_FORM,
   // MODULE_TABLE,
-  
+
   // COMPONENT,
   // PROJECT,
   // MODULE,
@@ -269,7 +269,7 @@ const array = [
    */
   CLIENT_PERSON_FORM,
   CLIENT_PERSON_TABLE,
-  
+
   CLIENT_COMPANY_FORM,
   CLIENT_COMPANY_TABLE,
 

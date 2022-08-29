@@ -19,19 +19,39 @@ const setGetRelatedElementsInArrayType = (object: MainInterface): string => {
       const value = Object.values(element)[0];
       const relatedType = TextTransformation.setIdToClassName(value.id);
 
-      value.elements?.forEach((elementProperty: FormElementInterface) => {
-        if (elementProperty.autocomplete) {
-          const collection = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(elementProperty.autocomplete?.optionsApi?.endpoint?.split('-').join(' ') || '')));
-          _findRelatedElements +=
-            `
-          const related${relatedType}Data = await getRelatedElements('${collection}', data['${value.id}']?.map(el => el['${elementProperty.autocomplete.name}']) || []);
-          data['${value.id}'] = data['${value.id}']?.map(el => {
-              el['${elementProperty.autocomplete.name.slice(0, -2)}'] = related${relatedType}Data.find(childEl => childEl._id.toString() === el['${elementProperty.autocomplete.name}'])
-              return el
-          });
-          `;
-        }
-      });
+      const createMultidimensionalArrayFindRelatedCode = (elements: Array<FormElementInterface>, relatedId: string, isFirstArray: boolean) => {
+        let _findRelatedElementsToReturn = ``;
+        elements?.forEach((elementProperty: FormElementInterface) => {
+
+          if (elementProperty.autocomplete || elementProperty.array) {
+
+            if (elementProperty.autocomplete) {
+              const collection = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(elementProperty.autocomplete?.optionsApi?.endpoint?.split('-').join(' ') || '')));
+              _findRelatedElementsToReturn +=
+                `
+                const relatedData_${relatedType}_${value.id} = await getRelatedElements('${collection}', ${isFirstArray ? 'data' : TextTransformation.singularize(value.id)}?.${relatedId}?.map(el => el.${elementProperty.autocomplete.name}) || []);
+                ${TextTransformation.singularize(relatedId)}.${elementProperty.autocomplete.name.slice(0, -2)} = relatedData_${relatedType}_${value.id}.find(childEl => childEl._id.toString() === ${TextTransformation.singularize(relatedId)}.${elementProperty.autocomplete.name})
+              `;
+            } else if (elementProperty.array) {
+              _findRelatedElementsToReturn +=
+                `
+                ${TextTransformation.singularize(value.id)}?.${elementProperty.array?.id}?.forEach(async ${TextTransformation.singularize(elementProperty.array?.id!)} => {
+                  ${createMultidimensionalArrayFindRelatedCode(elementProperty.array?.elements!, elementProperty.array?.id!, false)}
+                });
+              `;
+            }
+          }
+        });
+
+        return _findRelatedElementsToReturn;
+      }
+
+      _findRelatedElements +=
+        `
+        data.${value.id}?.forEach(async ${TextTransformation.singularize(value.id)} => {
+          ${createMultidimensionalArrayFindRelatedCode(value.elements, value.id, true)}
+        });
+      `
     }
   });
 
@@ -282,7 +302,7 @@ const setControllerMethods = (object: MainInterface): string => {
           const dataWithoutNullProperties = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null));
   
           await this.repository.updateById(id, dataWithoutNullProperties);
-;
+
           const idToWorkInRelation = dataToWorkInRelation._id;
           dataToWorkInRelation = JSON.parse(JSON.stringify(data));
           ${_createRelated}

@@ -232,7 +232,7 @@ export const CLIENT_PERSON_FORM: MainInterface = {
                     },
                   ],
                 }
-              },              
+              },
             ],
           },
           {
@@ -286,7 +286,7 @@ export const CLIENT_PERSON_FORM: MainInterface = {
                           {
                             autocomplete: {
                               label: "Inversor",
-                              name: "settlementInverter",
+                              name: "settlementInverterId",
                               type: FormInputTypeEnum.Text,
                               placeholder: "Ex.: SMA",
                               optionsApi: {
@@ -325,7 +325,7 @@ export const CLIENT_PERSON_FORM: MainInterface = {
                           {
                             autocomplete: {
                               label: "Módulo",
-                              name: "settlementModule",
+                              name: "settlementModuleId",
                               type: FormInputTypeEnum.Text,
                               placeholder: "Ex.: Trina",
                               optionsApi: {
