@@ -19,7 +19,12 @@ const setGetRelatedElementsInArrayType = (object: MainInterface): string => {
       const value = Object.values(element)[0];
       const relatedType = TextTransformation.setIdToClassName(value.id);
 
-      const createMultidimensionalArrayFindRelatedCode = (elements: Array<FormElementInterface>, relatedId: string, isFirstArray: boolean) => {
+      const createMultidimensionalArrayFindRelatedCode = (
+        elements: Array<FormElementInterface>,
+        relatedId: string,
+        isFirstArray: boolean,
+      ) => {
+
         let _findRelatedElementsToReturn = ``;
         elements?.forEach((elementProperty: FormElementInterface) => {
 
@@ -35,9 +40,12 @@ const setGetRelatedElementsInArrayType = (object: MainInterface): string => {
             } else if (elementProperty.array) {
               _findRelatedElementsToReturn +=
                 `
-                ${TextTransformation.singularize(value.id)}?.${elementProperty.array?.id}?.forEach(async ${TextTransformation.singularize(elementProperty.array?.id!)} => {
+                for(let ${elementProperty.array?.id}Index = 0; ${elementProperty.array?.id}Index < ${TextTransformation.singularize(value.id)}?.${elementProperty.array?.id}?.length!; ${elementProperty.array?.id}Index++){
+                  
+                  const ${TextTransformation.singularize(elementProperty.array?.id)} = ${TextTransformation.singularize(value.id)}?.${elementProperty.array?.id}![${elementProperty.array?.id}Index];
+                  
                   ${createMultidimensionalArrayFindRelatedCode(elementProperty.array?.elements!, elementProperty.array?.id!, false)}
-                });
+                };
               `;
             }
           }
@@ -48,9 +56,11 @@ const setGetRelatedElementsInArrayType = (object: MainInterface): string => {
 
       _findRelatedElements +=
         `
-        data.${value.id}?.forEach(async ${TextTransformation.singularize(value.id)} => {
+        for(let ${value.id}Index = 0; ${value.id}Index < data.${value.id}?.length!; ${value.id}Index++){
+          const ${TextTransformation.singularize(value.id)} = data.${value.id}![${value.id}Index];
+          
           ${createMultidimensionalArrayFindRelatedCode(value.elements, value.id, true)}
-        });
+        }
       `
     }
   });
