@@ -25,7 +25,7 @@ const setControllerImports = (object: MainInterface): string => {
   import {del, get, param, patch, post, put, Request, requestBody, response, Response, RestBindings} from '@loopback/rest';
   import {SecurityBindings, securityId, UserProfile} from '@loopback/security';
   import {LocaleEnum} from '../enums/locale.enum';
-  import {HttpDocumentation, HttpResponseToClient} from '../implementations/index';
+  import {HttpDocumentation, HttpResponseToClient, Autentikigo} from '../implementations/index';
   import {IHttpResponse} from '../interfaces/http.interface';
   import {${TextTransformation.pascalfy(
     modelName
@@ -37,6 +37,7 @@ const setControllerImports = (object: MainInterface): string => {
   )}.repository';
   import {ChartService} from '../services';
   import {serverMessages} from '../utils/server-messages';
+  import {getRelatedElements} from '../utils/general-functions';
   ${_relatedRepositoriesImports ? `import {${_relatedRepositoriesImports}} from '../repositories';` : ''}
   `;
 

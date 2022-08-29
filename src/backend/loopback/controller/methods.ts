@@ -3,6 +3,41 @@ import { MainInterface } from "../../../interfaces/main";
 import { TextTransformation } from "../../../utils/text.transformation";
 import { getAllElements } from "../main";
 
+const setGetRelatedElementsInArrayType = (object: MainInterface): string => {
+  if (!object.form) {
+    console.info("Only forms set here");
+    return ``;
+  }
+
+  let _findRelatedElements = ``;
+
+  const elements: Array<FormElementInterface> = getAllElements(object.form.elements);
+
+  elements.forEach((element) => {
+    const type = Object.keys(element)[0];
+    if (type === 'array') {
+      const value = Object.values(element)[0];
+      const relatedType = TextTransformation.setIdToClassName(value.id);
+
+      value.elements?.forEach((elementProperty: FormElementInterface) => {
+        if (elementProperty.autocomplete) {
+          const collection = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(elementProperty.autocomplete?.optionsApi?.endpoint?.split('-').join(' ') || '')));
+          _findRelatedElements +=
+            `
+          const related${relatedType}Data = await getRelatedElements('${collection}', data['${value.id}']?.map(el => el['${elementProperty.autocomplete.name}']) || []);
+          data['${value.id}'] = data['${value.id}']?.map(el => {
+              el['${elementProperty.autocomplete.name.slice(0, -2)}'] = related${relatedType}Data.find(childEl => childEl._id.toString() === el['${elementProperty.autocomplete.name}'])
+              return el
+          });
+          `;
+        }
+      });
+    }
+  });
+
+  return _findRelatedElements;
+};
+
 const setControllerMethods = (object: MainInterface): string => {
   if (!object.form) {
     console.info("Only forms set here");
@@ -55,8 +90,11 @@ const setControllerMethods = (object: MainInterface): string => {
           const dataToWorkInRelation = data;
           const idToWorkInRelation = dataCreated._id;
           ${_createRelated}
+          const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+
           return HttpResponseToClient.createHttpResponse({
               data: dataCreated,
+              tokens,
               locale,
               request: this.httpRequest,
               response: this.httpResponse,
@@ -101,9 +139,12 @@ const setControllerMethods = (object: MainInterface): string => {
           const result = await this.repository.find({...filters, include: [${_propertiesRelatedFind}]});
       
           const total = await this.repository.count(filters['where']);
-      
+
+          const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+
           return HttpResponseToClient.okHttpResponse({
               data: {total: total?.count, result},
+              tokens,
               locale,
               request: this.httpRequest,
               response: this.httpResponse,
@@ -139,14 +180,19 @@ const setControllerMethods = (object: MainInterface): string => {
   ): Promise<IHttpResponse> {
       try {
   
-          const data = await this.repository.findOne({
+          let data = await this.repository.findOne({
               where: {and: [{_id: id}, {_deletedAt: {eq: null}}]},
               include: [${_propertiesRelatedFind}],
           });
           if (!data) throw new Error(serverMessages['httpResponse']['notFoundError'][locale ?? LocaleEnum['pt-BR']]);
+
+          ${setGetRelatedElementsInArrayType(object)}
+
+          const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
       
           return HttpResponseToClient.okHttpResponse({
               data,
+              tokens,
               locale,
               request: this.httpRequest,
               response: this.httpResponse,
@@ -191,8 +237,10 @@ const setControllerMethods = (object: MainInterface): string => {
           const idToWorkInRelation = dataToWorkInRelation._id;
           dataToWorkInRelation = JSON.parse(JSON.stringify(data));
           ${_createRelated}
+          const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
       
           return HttpResponseToClient.noContentHttpResponse({
+              tokens,
               locale,
               request: this.httpRequest,
               response: this.httpResponse,
@@ -238,8 +286,11 @@ const setControllerMethods = (object: MainInterface): string => {
           const idToWorkInRelation = dataToWorkInRelation._id;
           dataToWorkInRelation = JSON.parse(JSON.stringify(data));
           ${_createRelated}
+
+          const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
       
           return HttpResponseToClient.noContentHttpResponse({
+              tokens,
               locale,
               request: this.httpRequest,
               response: this.httpResponse,
@@ -273,8 +324,11 @@ const setControllerMethods = (object: MainInterface): string => {
           const dataToDelete = await this.repository.findById(id);
       
           await this.repository.updateById(id, {...dataToDelete, _deletedAt: new Date()});
-      
+
+          const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+
           return HttpResponseToClient.noContentHttpResponse({
+              tokens,
               locale,
               request: this.httpRequest,
               response: this.httpResponse,
@@ -328,8 +382,11 @@ const setControllerMethods = (object: MainInterface): string => {
 
       const data = await this.chartService.getChartDatasets(result, this.httpRequest.url);
 
+      const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+      
       return HttpResponseToClient.okHttpResponse({
         data,
+        tokens,
         locale,
         request: this.httpRequest,
         response: this.httpResponse,
@@ -375,8 +432,11 @@ const setControllerMethods = (object: MainInterface): string => {
 
       const data = await this.chartService.getChartDetails(result, this.httpRequest.url);
 
+      const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+
       return HttpResponseToClient.okHttpResponse({
         data,
+        tokens,
         locale,
         request: this.httpRequest,
         response: this.httpResponse,
