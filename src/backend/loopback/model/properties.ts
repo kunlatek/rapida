@@ -24,6 +24,7 @@ const booleanTypes = ["slide"];
 const setArrayTypeModels = (formElements: Array<FormElementInterface>): string => {
 
   let code = ``;
+  let arrayTypeModels = ``;
 
   const elements: Array<FormElementInterface> = getAllElements(formElements);
 
@@ -34,12 +35,15 @@ const setArrayTypeModels = (formElements: Array<FormElementInterface>): string =
       const relatedType = TextTransformation.setIdToClassName(value.id);
 
       let _properties = ``;
-      let _relatedProperties = '';
+      let _relatedProperties = ``;
 
       const createProperties = (elements: Array<FormElementInterface>) => {
         let _propertiesToReturn = ``;
-        let _relatedPropertiesToReturn = '';
-        elements?.forEach((elementProperty: FormElementInterface) => {
+        let _relatedPropertiesToReturn = ``;
+
+        for (let elementPropertyIndex = 0; elementPropertyIndex < elements?.length; elementPropertyIndex++) {
+          const elementProperty = elements[elementPropertyIndex];
+
           _propertiesToReturn += setByElementInArrayType(elementProperty);
 
           if (elementProperty.array) {
@@ -58,21 +62,30 @@ const setArrayTypeModels = (formElements: Array<FormElementInterface>): string =
             `
               : ``
 
-            code = `
-              @model()
-              class ${_relatedTypeInMultidimensionalArray} extends Entity {
-                ${_propertiesCreatedInMultidimensionalArray._properties}
-        
-                ${_arrayOfRelatedPropertiesInMultidimensionalArray}
-              }
+            // code = `
+            //   @model()
+            //   class ${_relatedTypeInMultidimensionalArray} extends Entity {
+            //     ${_propertiesCreatedInMultidimensionalArray._properties}
 
-              ${code}
-            `
+            //     ${_arrayOfRelatedPropertiesInMultidimensionalArray}
+            //   }
+
+            //   ${code}
+            // `
+
+            arrayTypeModels += `
+            @model()
+            class ${_relatedTypeInMultidimensionalArray} extends Entity {
+              ${_propertiesCreatedInMultidimensionalArray._properties}
+      
+              ${_arrayOfRelatedPropertiesInMultidimensionalArray}
+            }
+          `
           } else if (elementProperty.autocomplete) {
             const collection = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(elementProperty.autocomplete?.optionsApi?.endpoint?.split('-').join(' ') || '')));
             _relatedPropertiesToReturn += `{ Collection: '${collection}', attr: '${elementProperty.autocomplete.name}' },`;
           }
-        });
+        }
 
         return {
           _properties: _propertiesToReturn,
@@ -97,6 +110,7 @@ const setArrayTypeModels = (formElements: Array<FormElementInterface>): string =
         : ``
 
       code += `
+      ${arrayTypeModels}
       @model()
       class ${relatedType} extends Entity {
         ${_properties}
@@ -104,6 +118,8 @@ const setArrayTypeModels = (formElements: Array<FormElementInterface>): string =
         ${_arrayOfRelatedProperties}
       }
       `
+
+      console.log(arrayTypeModels)
     }
   });
 
