@@ -40,9 +40,13 @@ const setGetRelatedElementsInArrayType = (object: MainInterface): string => {
             } else if (elementProperty.array) {
               _findRelatedElementsToReturn +=
                 `
-                for(let ${elementProperty.array?.id}Index = 0; ${elementProperty.array?.id}Index < ${TextTransformation.singularize(value.id)}?.${elementProperty.array?.id}?.length!; ${elementProperty.array?.id}Index++){
+                for(
+                  let ${elementProperty.array?.id}Index = 0; 
+                  ${elementProperty.array?.id}Index < ${TextTransformation.singularize(relatedId)}?.${elementProperty.array?.id}?.length!; 
+                  ${elementProperty.array?.id}Index++
+                ){
                   
-                  const ${TextTransformation.singularize(elementProperty.array?.id)} = ${TextTransformation.singularize(value.id)}?.${elementProperty.array?.id}![${elementProperty.array?.id}Index];
+                  const ${TextTransformation.singularize(elementProperty.array?.id)} = ${TextTransformation.singularize(relatedId)}?.${elementProperty.array?.id}![${elementProperty.array?.id}Index];
                   
                   ${createMultidimensionalArrayFindRelatedCode(elementProperty.array?.elements!, elementProperty.array?.id!, false)}
                 };
