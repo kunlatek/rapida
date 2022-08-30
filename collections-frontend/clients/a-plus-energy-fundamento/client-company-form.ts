@@ -303,14 +303,6 @@ export const CLIENT_COMPANY_FORM: MainInterface = {
                       }
                     },
                     {
-                      input: {
-                        label: "KW Inversor",
-                        name: "settlementInverterKw",
-                        type: FormInputTypeEnum.Number,
-                        isRequired: true,
-                      }
-                    },
-                    {
                       array: {
                         id: "modules",
                         title: "Módulos",
