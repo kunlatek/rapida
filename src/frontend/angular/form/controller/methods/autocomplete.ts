@@ -84,27 +84,9 @@ const setAutocompleteMethod = (
   )} = (value?: any) => {
     const otherValue = this.${
       object.form?.id
-    }ToEdit?.data?.${TextTransformation.setIdToPropertyName(
-    TextTransformation.singularize(
-      element.autocomplete.optionsApi.endpoint
-        ? element.autocomplete.optionsApi.endpoint
-        : element.autocomplete.optionsApi.externalEndpoint!.split("/")[
-            element.autocomplete.optionsApi.externalEndpoint!.split("/")
-              .length - 1
-          ]
-    )
-  )} ? this.${
+    }ToEdit?.data?.${element.autocomplete.name.substring(0, element.autocomplete.name.length - 2)} ? this.${
     object.form?.id
-  }ToEdit.data.${TextTransformation.setIdToPropertyName(
-    TextTransformation.singularize(
-      element.autocomplete.optionsApi.endpoint
-        ? element.autocomplete.optionsApi.endpoint
-        : element.autocomplete.optionsApi.externalEndpoint!.split("/")[
-            element.autocomplete.optionsApi.externalEndpoint!.split("/")
-              .length - 1
-          ]
-    )
-  )} : null;
+  }ToEdit.data.${element.autocomplete.name.substring(0, element.autocomplete.name.length - 2)} : null;
     if (value === otherValue?.${element.autocomplete.optionsApi.valueField}) {
       return otherValue.${element.autocomplete.optionsApi.labelField};
     }
@@ -169,7 +151,7 @@ const setAutocompleteMethod = (
       }
     } catch (error: any) {
       const message = this._errorHandler.apiErrorMessage(
-        error.error.message
+        error.message
       );
       this.sendErrorMessage(message);
     };

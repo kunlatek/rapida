@@ -81,11 +81,11 @@ const setFormControllerMethods = (object: MainInterface): string => {
         
         this.isLoading = false;
       } catch (error: any) {
-        if (error.error.logMessage === 'jwt expired') {
+        if (error.logMessage === 'jwt expired') {
           await this.refreshToken();
           this.${object.form.id}Submit(${object.form?.id}Directive);
         } else {
-          const message = this._errorHandler.apiErrorMessage(error.error.message);
+          const message = this._errorHandler.apiErrorMessage(error.message);
           this.isLoading = false;
           this.sendErrorMessage(message);
         }
@@ -102,7 +102,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
           sessionStorage.setItem('refreshToken', res?.data.authRefreshToken);
         }
       } catch (error: any) {
-        const message = this._errorHandler.apiErrorMessage(error.error.message);
+        const message = this._errorHandler.apiErrorMessage(error.message);
         this.isLoading = false;
         this.sendErrorMessage(message);
         sessionStorage.clear();

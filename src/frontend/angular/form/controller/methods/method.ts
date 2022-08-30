@@ -53,7 +53,7 @@ const setFormMethodsByElements = (
           }
         } catch (error: any) {
           const message = this._errorHandler.apiErrorMessage(
-            error.error.message
+            error.message
           );
           this.sendErrorMessage(message);
         };

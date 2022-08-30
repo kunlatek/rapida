@@ -2,24 +2,25 @@ import { createProject } from "./index";
 
 const envFrontDev = `
 export const environment = {
-  baseUrl: "http://localhost:3001",
+  baseUrl: "http://localhost:3000",
   production: false,
 };
 `;
 
 const envFrontProd = `
 export const environment = {
-  baseUrl: "http://localhost:3001",
+  baseUrl: "http://localhost:3000",
   production: true,
 };
 `;
 
 const envBackend = `
-PORT=3001
-SERVER_ROOT_URI=http://localhost:3001
-CLIENT_REDIRECT_URI=http://localhost:4201
+AUTH_DB=rapidaFundamento
+PORT=3000
+SERVER_ROOT_URI=http://localhost:3000
+CLIENT_REDIRECT_URI=http://localhost:4200
 MONGO_URL=mongodb+srv://kunlatek:Kunlatek751@cluster0.b0pfr.mongodb.net/?authSource=admin&replicaSet=atlas-zft6fn-shard-0&readPreference=primary&ssl=true
-DB=aPlusEnergyFundamento
+DB=rapidaBackoffice
 NODEMAILER_USER=administrativo@kunlatek.com
 NODEMAILER_PASS=yetyxhgzjzktuwef
 ADMIN_USERS=rabbadesalman@gmail.com
@@ -48,7 +49,7 @@ ADMIN_USERS=rabbadesalman@gmail.com
 
 const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitation-and-permission";
 const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api";
-const projectPath = "/Users/alexisbarros/Documents/projects/kunlatek/rapida-projects/a-plus-energy";
+const projectPath = "/home/ryzzan/Projects/rapida-backoffice";
 
 /**
  * ANIMATION
@@ -74,17 +75,17 @@ const projectPath = "/Users/alexisbarros/Documents/projects/kunlatek/rapida-proj
 /**
  * RAPIDA BACKOFFICE
  */
-// import { PROJECT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/project-form";
-// import { PROJECT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/project-table";
-// import { PROJECT } from "../collections-frontend/kunlatek/rapida-backoffice/project";
+import { PROJECT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/project-form";
+import { PROJECT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/project-table";
+import { PROJECT } from "../collections-frontend/kunlatek/rapida-backoffice/project";
 
-// import { COMPONENT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/component-form";
-// import { COMPONENT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/component-table";
-// import { COMPONENT } from "../collections-frontend/kunlatek/rapida-backoffice/component";
+import { COMPONENT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/component-form";
+import { COMPONENT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/component-table";
+import { COMPONENT } from "../collections-frontend/kunlatek/rapida-backoffice/component";
 
-// import { MODULE_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/module-form";
-// import { MODULE_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/module-table";
-// import { MODULE } from "../collections-frontend/kunlatek/rapida-backoffice/module";
+import { MODULE_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/module-form";
+import { MODULE_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/module-table";
+import { MODULE } from "../collections-frontend/kunlatek/rapida-backoffice/module";
 
 /**
  * RAPIDA FUNDAMENTO
@@ -146,35 +147,35 @@ const projectPath = "/Users/alexisbarros/Documents/projects/kunlatek/rapida-proj
 /**
  * A+ FUNDAMENTO
  */
-import { CLIENT_PERSON_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-person-form";
-import { CLIENT_PERSON_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-person-table";
+// import { CLIENT_PERSON_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-person-form";
+// import { CLIENT_PERSON_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-person-table";
 
-import { CLIENT_COMPANY_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-company-form";
-import { CLIENT_COMPANY_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-company-table";
+// import { CLIENT_COMPANY_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-company-form";
+// import { CLIENT_COMPANY_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-company-table";
 
-import { CLIENT_MANUFACTURER_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-manufacturer-form";
-import { CLIENT_MANUFACTURER_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-manufacturer-table";
+// import { CLIENT_MANUFACTURER_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-manufacturer-form";
+// import { CLIENT_MANUFACTURER_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-manufacturer-table";
 
-import { CLIENT_PRODUCT_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-product-form";
-import { CLIENT_PRODUCT_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-product-table";
+// import { CLIENT_PRODUCT_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-product-form";
+// import { CLIENT_PRODUCT_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-product-table";
 
-import { CLIENT_SERVICE_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-service-form";
-import { CLIENT_SERVICE_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-service-table";
+// import { CLIENT_SERVICE_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-service-form";
+// import { CLIENT_SERVICE_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-service-table";
 
-import { CLIENT_ACTION_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-action-form";
-import { CLIENT_ACTION_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-action-table";
+// import { CLIENT_ACTION_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-action-form";
+// import { CLIENT_ACTION_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-action-table";
 
-import { CLIENT_PERSON } from "../collections-frontend/clients/a-plus-energy-fundamento/client-person";
+// import { CLIENT_PERSON } from "../collections-frontend/clients/a-plus-energy-fundamento/client-person";
 
-import { CLIENT_COMPANY } from "../collections-frontend/clients/a-plus-energy-fundamento/client-company";
+// import { CLIENT_COMPANY } from "../collections-frontend/clients/a-plus-energy-fundamento/client-company";
 
-import { CLIENT_MANUFACTURER } from "../collections-frontend/clients/a-plus-energy-fundamento/client-manufacturer";
+// import { CLIENT_MANUFACTURER } from "../collections-frontend/clients/a-plus-energy-fundamento/client-manufacturer";
 
-import { CLIENT_PRODUCT } from "../collections-frontend/clients/a-plus-energy-fundamento/client-product";
+// import { CLIENT_PRODUCT } from "../collections-frontend/clients/a-plus-energy-fundamento/client-product";
 
-import { CLIENT_SERVICE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-service";
+// import { CLIENT_SERVICE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-service";
 
-import { CLIENT_ACTION } from "../collections-frontend/clients/a-plus-energy-fundamento/client-action";
+// import { CLIENT_ACTION } from "../collections-frontend/clients/a-plus-energy-fundamento/client-action";
 
 /**
  * MODULO ADMIN
@@ -216,18 +217,18 @@ const array = [
   /**
    * RAPIDA BACKOFFICE
    */
-  // PROJECT_FORM,
-  // PROJECT_TABLE,
+  PROJECT_FORM,
+  PROJECT_TABLE,
 
-  // COMPONENT_FORM,
-  // COMPONENT_TABLE,
+  COMPONENT_FORM,
+  COMPONENT_TABLE,
 
-  // MODULE_FORM,
-  // MODULE_TABLE,
+  MODULE_FORM,
+  MODULE_TABLE,
 
-  // COMPONENT,
-  // PROJECT,
-  // MODULE,
+  COMPONENT,
+  PROJECT,
+  MODULE,
 
   /**
    * RAPIDA FUNDAMENTO
@@ -267,35 +268,35 @@ const array = [
   /**
    * A+ FUNDAMENTO
    */
-  CLIENT_PERSON_FORM,
-  CLIENT_PERSON_TABLE,
+  // CLIENT_PERSON_FORM,
+  // CLIENT_PERSON_TABLE,
 
-  CLIENT_COMPANY_FORM,
-  CLIENT_COMPANY_TABLE,
+  // CLIENT_COMPANY_FORM,
+  // CLIENT_COMPANY_TABLE,
 
-  CLIENT_MANUFACTURER_FORM,
-  CLIENT_MANUFACTURER_TABLE,
+  // CLIENT_MANUFACTURER_FORM,
+  // CLIENT_MANUFACTURER_TABLE,
 
-  CLIENT_PRODUCT_FORM,
-  CLIENT_PRODUCT_TABLE,
+  // CLIENT_PRODUCT_FORM,
+  // CLIENT_PRODUCT_TABLE,
 
-  CLIENT_SERVICE_FORM,
-  CLIENT_SERVICE_TABLE,
+  // CLIENT_SERVICE_FORM,
+  // CLIENT_SERVICE_TABLE,
 
-  CLIENT_ACTION_FORM,
-  CLIENT_ACTION_TABLE,
+  // CLIENT_ACTION_FORM,
+  // CLIENT_ACTION_TABLE,
 
-  CLIENT_PERSON,
+  // CLIENT_PERSON,
 
-  CLIENT_COMPANY,
+  // CLIENT_COMPANY,
 
-  CLIENT_MANUFACTURER,
+  // CLIENT_MANUFACTURER,
 
-  CLIENT_PRODUCT,
+  // CLIENT_PRODUCT,
 
-  CLIENT_SERVICE,
+  // CLIENT_SERVICE,
 
-  CLIENT_ACTION,
+  // CLIENT_ACTION,
 
   /**
    * KUNLATEK-QUICKSTART-INVITATION

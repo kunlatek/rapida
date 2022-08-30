@@ -49,7 +49,7 @@ const setFormControllerConstructorArguments = (
         );
     });
   } catch(error: any) {
-    const message = this._errorHandler.apiErrorMessage(error.error.message);
+    const message = this._errorHandler.apiErrorMessage(error.message);
     this.sendErrorMessage(message);
   };
 

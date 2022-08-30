@@ -72,8 +72,9 @@ export const COMPONENT_FORM: MainInterface = {
                   type: ConditionEnum.Form,
                   elements: [
                     {
-                      key: "elementType",
-                      value: "62f2a53f564a1a9274f87f35",
+                      key: "optionOrigin",
+                      value: "optionsApi",
+                      logicalOperator: FilterLogicalOperatorEnum.And,
                     },
                     {
                       key: "elementType",
@@ -81,9 +82,8 @@ export const COMPONENT_FORM: MainInterface = {
                       logicalOperator: FilterLogicalOperatorEnum.Or,
                     },
                     {
-                      key: "optionOrigin",
-                      value: "optionsApi",
-                      logicalOperator: FilterLogicalOperatorEnum.And,
+                      key: "elementType",
+                      value: "62f2a53f564a1a9274f87f35",
                     },
                   ]
                 }
@@ -100,8 +100,9 @@ export const COMPONENT_FORM: MainInterface = {
                   type: ConditionEnum.Form,
                   elements: [
                     {
-                      key: "elementType",
-                      value: "62f2a53f564a1a9274f87f35",
+                      key: "optionOrigin",
+                      value: "optionsApi",
+                      logicalOperator: FilterLogicalOperatorEnum.And,
                     },
                     {
                       key: "elementType",
@@ -109,9 +110,8 @@ export const COMPONENT_FORM: MainInterface = {
                       logicalOperator: FilterLogicalOperatorEnum.Or,
                     },
                     {
-                      key: "optionOrigin",
-                      value: "optionsApi",
-                      logicalOperator: FilterLogicalOperatorEnum.And,
+                      key: "elementType",
+                      value: "62f2a53f564a1a9274f87f35",
                     },
                   ]
                 }
@@ -128,8 +128,9 @@ export const COMPONENT_FORM: MainInterface = {
                   type: ConditionEnum.Form,
                   elements: [
                     {
-                      key: "elementType",
-                      value: "62f2a53f564a1a9274f87f35",
+                      key: "optionOrigin",
+                      value: "optionsApi",
+                      logicalOperator: FilterLogicalOperatorEnum.And,
                     },
                     {
                       key: "elementType",
@@ -137,9 +138,8 @@ export const COMPONENT_FORM: MainInterface = {
                       logicalOperator: FilterLogicalOperatorEnum.Or,
                     },
                     {
-                      key: "optionOrigin",
-                      value: "optionsApi",
-                      logicalOperator: FilterLogicalOperatorEnum.And,
+                      key: "elementType",
+                      value: "62f2a53f564a1a9274f87f35",
                     },
                   ]
                 }
@@ -173,8 +173,9 @@ export const COMPONENT_FORM: MainInterface = {
                   type: ConditionEnum.Form,
                   elements: [
                     {
-                      key: "elementType",
-                      value: "62f2a53f564a1a9274f87f35",
+                      key: "optionOrigin",
+                      value: "optionsObject",
+                      logicalOperator: FilterLogicalOperatorEnum.And,
                     },
                     {
                       key: "elementType",
@@ -182,9 +183,8 @@ export const COMPONENT_FORM: MainInterface = {
                       logicalOperator: FilterLogicalOperatorEnum.Or,
                     },
                     {
-                      key: "optionOrigin",
-                      value: "optionsObject",
-                      logicalOperator: FilterLogicalOperatorEnum.And,
+                      key: "elementType",
+                      value: "62f2a53f564a1a9274f87f35",
                     },
                   ]
                 }
@@ -253,8 +253,9 @@ export const COMPONENT_FORM: MainInterface = {
                         type: ConditionEnum.Form,
                         elements: [
                           {
-                            key: "elementTypeTab",
-                            value: "62f2a53f564a1a9274f87f35",
+                            key: "optionOriginTab",
+                            value: "optionsApi",
+                            logicalOperator: FilterLogicalOperatorEnum.And,
                           },
                           {
                             key: "elementTypeTab",
@@ -262,9 +263,8 @@ export const COMPONENT_FORM: MainInterface = {
                             logicalOperator: FilterLogicalOperatorEnum.Or,
                           },
                           {
-                            key: "optionOriginTab",
-                            value: "optionsApi",
-                            logicalOperator: FilterLogicalOperatorEnum.And,
+                            key: "elementTypeTab",
+                            value: "62f2a53f564a1a9274f87f35",
                           },
                         ]
                       }
@@ -281,8 +281,9 @@ export const COMPONENT_FORM: MainInterface = {
                         type: ConditionEnum.Form,
                         elements: [
                           {
-                            key: "elementTypeTab",
-                            value: "62f2a53f564a1a9274f87f35",
+                            key: "optionOriginTab",
+                            value: "optionsApi",
+                            logicalOperator: FilterLogicalOperatorEnum.And,
                           },
                           {
                             key: "elementTypeTab",
@@ -290,9 +291,8 @@ export const COMPONENT_FORM: MainInterface = {
                             logicalOperator: FilterLogicalOperatorEnum.Or,
                           },
                           {
-                            key: "optionOriginTab",
-                            value: "optionsApi",
-                            logicalOperator: FilterLogicalOperatorEnum.And,
+                            key: "elementTypeTab",
+                            value: "62f2a53f564a1a9274f87f35",
                           },
                         ]
                       }
@@ -309,8 +309,9 @@ export const COMPONENT_FORM: MainInterface = {
                         type: ConditionEnum.Form,
                         elements: [
                           {
-                            key: "elementTypeTab",
-                            value: "62f2a53f564a1a9274f87f35",
+                            key: "optionOriginTab",
+                            value: "optionsApi",
+                            logicalOperator: FilterLogicalOperatorEnum.And,
                           },
                           {
                             key: "elementTypeTab",
@@ -318,9 +319,8 @@ export const COMPONENT_FORM: MainInterface = {
                             logicalOperator: FilterLogicalOperatorEnum.Or,
                           },
                           {
-                            key: "optionOriginTab",
-                            value: "optionsApi",
-                            logicalOperator: FilterLogicalOperatorEnum.And,
+                            key: "elementTypeTab",
+                            value: "62f2a53f564a1a9274f87f35",
                           },
                         ]
                       }
@@ -354,8 +354,9 @@ export const COMPONENT_FORM: MainInterface = {
                         type: ConditionEnum.Form,
                         elements: [
                           {
-                            key: "elementTypeTab",
-                            value: "62f2a53f564a1a9274f87f35",
+                            key: "optionOriginTab",
+                            value: "optionsObject",
+                            logicalOperator: FilterLogicalOperatorEnum.And,
                           },
                           {
                             key: "elementTypeTab",
@@ -363,9 +364,8 @@ export const COMPONENT_FORM: MainInterface = {
                             logicalOperator: FilterLogicalOperatorEnum.Or,
                           },
                           {
-                            key: "optionOriginTab",
-                            value: "optionsObject",
-                            logicalOperator: FilterLogicalOperatorEnum.And,
+                            key: "elementTypeTab",
+                            value: "62f2a53f564a1a9274f87f35",
                           },
                         ]
                       }
@@ -434,8 +434,9 @@ export const COMPONENT_FORM: MainInterface = {
                               type: ConditionEnum.Form,
                               elements: [
                                 {
-                                  key: "elementTypeArrayTab",
-                                  value: "62f2a53f564a1a9274f87f35",
+                                  key: "optionOriginArrayTab",
+                                  value: "optionsApi",
+                                  logicalOperator: FilterLogicalOperatorEnum.And,
                                 },
                                 {
                                   key: "elementTypeArrayTab",
@@ -443,9 +444,8 @@ export const COMPONENT_FORM: MainInterface = {
                                   logicalOperator: FilterLogicalOperatorEnum.Or,
                                 },
                                 {
-                                  key: "optionOriginArrayTab",
-                                  value: "optionsApi",
-                                  logicalOperator: FilterLogicalOperatorEnum.And,
+                                  key: "elementTypeArrayTab",
+                                  value: "62f2a53f564a1a9274f87f35",
                                 },
                               ]
                             }
@@ -462,8 +462,9 @@ export const COMPONENT_FORM: MainInterface = {
                               type: ConditionEnum.Form,
                               elements: [
                                 {
-                                  key: "elementTypeArrayTab",
-                                  value: "62f2a53f564a1a9274f87f35",
+                                  key: "optionOriginArrayTab",
+                                  value: "optionsApi",
+                                  logicalOperator: FilterLogicalOperatorEnum.And,
                                 },
                                 {
                                   key: "elementTypeArrayTab",
@@ -471,9 +472,8 @@ export const COMPONENT_FORM: MainInterface = {
                                   logicalOperator: FilterLogicalOperatorEnum.Or,
                                 },
                                 {
-                                  key: "optionOriginArrayTab",
-                                  value: "optionsApi",
-                                  logicalOperator: FilterLogicalOperatorEnum.And,
+                                  key: "elementTypeArrayTab",
+                                  value: "62f2a53f564a1a9274f87f35",
                                 },
                               ]
                             }
@@ -490,8 +490,9 @@ export const COMPONENT_FORM: MainInterface = {
                               type: ConditionEnum.Form,
                               elements: [
                                 {
-                                  key: "elementTypeArrayTab",
-                                  value: "62f2a53f564a1a9274f87f35",
+                                  key: "optionOriginArrayTab",
+                                  value: "optionsApi",
+                                  logicalOperator: FilterLogicalOperatorEnum.And,
                                 },
                                 {
                                   key: "elementTypeArrayTab",
@@ -499,9 +500,8 @@ export const COMPONENT_FORM: MainInterface = {
                                   logicalOperator: FilterLogicalOperatorEnum.Or,
                                 },
                                 {
-                                  key: "optionOriginArrayTab",
-                                  value: "optionsApi",
-                                  logicalOperator: FilterLogicalOperatorEnum.And,
+                                  key: "elementTypeArrayTab",
+                                  value: "62f2a53f564a1a9274f87f35",
                                 },
                               ]
                             }
@@ -535,8 +535,9 @@ export const COMPONENT_FORM: MainInterface = {
                               type: ConditionEnum.Form,
                               elements: [
                                 {
-                                  key: "elementTypeArrayTab",
-                                  value: "62f2a53f564a1a9274f87f35",
+                                  key: "optionOriginArrayTab",
+                                  value: "optionsObject",
+                                  logicalOperator: FilterLogicalOperatorEnum.And,
                                 },
                                 {
                                   key: "elementTypeArrayTab",
@@ -544,9 +545,8 @@ export const COMPONENT_FORM: MainInterface = {
                                   logicalOperator: FilterLogicalOperatorEnum.Or,
                                 },
                                 {
-                                  key: "optionOriginArrayTab",
-                                  value: "optionsObject",
-                                  logicalOperator: FilterLogicalOperatorEnum.And,
+                                  key: "elementTypeArrayTab",
+                                  value: "62f2a53f564a1a9274f87f35",
                                 },
                               ]
                             }
@@ -990,8 +990,9 @@ export const COMPONENT_FORM: MainInterface = {
                         type: ConditionEnum.Form,
                         elements: [
                           {
-                            key: "elementTypeArray",
-                            value: "62f2a53f564a1a9274f87f35",
+                            key: "optionOriginArray",
+                            value: "optionsApi",
+                            logicalOperator: FilterLogicalOperatorEnum.And,
                           },
                           {
                             key: "elementTypeArray",
@@ -999,9 +1000,8 @@ export const COMPONENT_FORM: MainInterface = {
                             logicalOperator: FilterLogicalOperatorEnum.Or,
                           },
                           {
-                            key: "optionOriginArray",
-                            value: "optionsApi",
-                            logicalOperator: FilterLogicalOperatorEnum.And,
+                            key: "elementTypeArray",
+                            value: "62f2a53f564a1a9274f87f35",
                           },
                         ]
                       }
@@ -1018,8 +1018,9 @@ export const COMPONENT_FORM: MainInterface = {
                         type: ConditionEnum.Form,
                         elements: [
                           {
-                            key: "elementTypeArray",
-                            value: "62f2a53f564a1a9274f87f35",
+                            key: "optionOriginArray",
+                            value: "optionsApi",
+                            logicalOperator: FilterLogicalOperatorEnum.And,
                           },
                           {
                             key: "elementTypeArray",
@@ -1027,9 +1028,8 @@ export const COMPONENT_FORM: MainInterface = {
                             logicalOperator: FilterLogicalOperatorEnum.Or,
                           },
                           {
-                            key: "optionOriginArray",
-                            value: "optionsApi",
-                            logicalOperator: FilterLogicalOperatorEnum.And,
+                            key: "elementTypeArray",
+                            value: "62f2a53f564a1a9274f87f35",
                           },
                         ]
                       }
@@ -1046,8 +1046,9 @@ export const COMPONENT_FORM: MainInterface = {
                         type: ConditionEnum.Form,
                         elements: [
                           {
-                            key: "elementTypeArray",
-                            value: "62f2a53f564a1a9274f87f35",
+                            key: "optionOriginArray",
+                            value: "optionsApi",
+                            logicalOperator: FilterLogicalOperatorEnum.And,
                           },
                           {
                             key: "elementTypeArray",
@@ -1055,9 +1056,8 @@ export const COMPONENT_FORM: MainInterface = {
                             logicalOperator: FilterLogicalOperatorEnum.Or,
                           },
                           {
-                            key: "optionOriginArray",
-                            value: "optionsApi",
-                            logicalOperator: FilterLogicalOperatorEnum.And,
+                            key: "elementTypeArray",
+                            value: "62f2a53f564a1a9274f87f35",
                           },
                         ]
                       }
@@ -1091,8 +1091,9 @@ export const COMPONENT_FORM: MainInterface = {
                         type: ConditionEnum.Form,
                         elements: [
                           {
-                            key: "elementTypeArray",
-                            value: "62f2a53f564a1a9274f87f35",
+                            key: "optionOriginArray",
+                            value: "optionsObject",
+                            logicalOperator: FilterLogicalOperatorEnum.And,
                           },
                           {
                             key: "elementTypeArray",
@@ -1100,9 +1101,8 @@ export const COMPONENT_FORM: MainInterface = {
                             logicalOperator: FilterLogicalOperatorEnum.Or,
                           },
                           {
-                            key: "optionOriginArray",
-                            value: "optionsObject",
-                            logicalOperator: FilterLogicalOperatorEnum.And,
+                            key: "elementTypeArray",
+                            value: "62f2a53f564a1a9274f87f35",
                           },
                         ]
                       }
