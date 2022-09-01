@@ -4,6 +4,7 @@ import {
 } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
+import { setFormBuilderByElements } from "../properties/form-builder";
 import { ArrayFeaturesInterface } from "./interfaces";
 import { setFormMethodsByElements } from "./method";
 require("dotenv").config();
@@ -93,7 +94,7 @@ const setArrayLayer = (
       setArrayLayer(element.elements, newIndex, element.id);
     });
   }
-  
+
   process.env.ARRAY_LAYER = JSON.stringify(_arrayLayer);
 };
 
@@ -181,7 +182,7 @@ const setArraysInAFlow = (arrayId: string) => {
 };
 
 const setArrayMethod = (
-  object: MainInterface, 
+  object: MainInterface,
   array: ArrayInterface
 ): string => {
   let code = ``;
@@ -198,7 +199,7 @@ const setArrayMethod = (
   const controls = setArrayControls(array.id);
   const controlsToAdd = setArrayControlsToAdd(array.id);
   let arrayCurrentIndex;
-  
+
   _arrayLayer?.forEach((arrayLayer: any) => {
     if (arrayLayer.name === array.id) {
       arrayCurrentIndex = arrayLayer.indexIdentifier;
@@ -207,12 +208,12 @@ const setArrayMethod = (
 
   code += `
   ${initArray}() { 
-    return this._formBuilder.group(this.${array.id}Builder)
+    // return this._formBuilder.group(this.${array.id}Builder)
+    return this._formBuilder.group({${setFormBuilderByElements(array.elements)}})
   };
   
   ${add}(${iterationsToAdd}) {
-    const control = <FormArray>this.${
-      object.form?.id
+    const control = <FormArray>this.${object.form?.id
     }Form.get([${controlsToAdd}]) as FormArray;
     control.push(this.${initArray}());
   };
@@ -222,15 +223,14 @@ const setArrayMethod = (
   };
 
   ${remove}(${iterations}) {
-    const control = <FormArray>this.${
-      object.form?.id
+    const control = <FormArray>this.${object.form?.id
     }Form.get([${controls}]) as FormArray;
     control.removeAt(${arrayCurrentIndex});
   };
   `;
 
   code += setFormMethodsByElements(object, array.elements, array);
-  
+
   return code;
 };
 

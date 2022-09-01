@@ -6,7 +6,7 @@ const setFormBuilderProperty = (
   object: MainInterface
 ): string => {
   let code = ``;
-  
+
   if (!object.form) {
     return code;
   }
@@ -25,22 +25,22 @@ const setFormArrayBuilderByElementsProperty = (
   let code = ``;
   for (let index = 0; index < formElements.length; index++) {
     const element = formElements[index];
-    
+
     if (element.array) {
-      code += `${element.array.id}Builder = { 
-        ${setFormBuilderByElements(element.array.elements)}
-      };`;
+      // code += `${element.array.id}Builder = { 
+      //   ${setFormBuilderByElements(element.array.elements)}
+      // };`;
 
       code += setFormArrayBuilderByElementsProperty(element.array.elements);
     }
-  
+
     if (element.tabs) {
       element.tabs.forEach((tab) => {
         code += setFormArrayBuilderByElementsProperty(tab.elements);
       });
     }
   }
-  
+
   return code;
 }
 
@@ -50,9 +50,9 @@ const setFormBuilderByElements = (
 ) => {
   let code = ``;
 
-  formElements.forEach(element => {    
+  formElements.forEach(element => {
     if (element.input) {
-      if (!isInArray) {        
+      if (!isInArray) {
         code += `
         ${element.input.name}:[
           {
@@ -79,7 +79,7 @@ const setFormBuilderByElements = (
         `;
       }
     }
-  
+
     if (element.select) {
       if (!isInArray) {
         code += `
@@ -105,7 +105,7 @@ const setFormBuilderByElements = (
         `;
       }
     }
-  
+
     if (element.autocomplete) {
       if (!isInArray) {
         code += `
@@ -131,7 +131,7 @@ const setFormBuilderByElements = (
         `;
       }
     }
-  
+
     if (element.checkbox) {
       if (!isInArray) {
         code += `
@@ -148,7 +148,7 @@ const setFormBuilderByElements = (
             return `Validators.${validator},`;
           });
         }
-    
+
         if (element.checkbox.isRequired) {
           code += `Validators.required,`;
         }
@@ -158,7 +158,7 @@ const setFormBuilderByElements = (
         `;
       }
     }
-  
+
     if (element.radio) {
       if (!isInArray) {
         code += `
@@ -175,7 +175,7 @@ const setFormBuilderByElements = (
             return `Validators.${validator},`;
           });
         }
-    
+
         if (element.radio.isRequired) {
           code += `Validators.required,`;
         }
@@ -185,7 +185,7 @@ const setFormBuilderByElements = (
         `;
       }
     }
-  
+
     if (element.slide) {
       if (!isInArray) {
         code += `
@@ -196,7 +196,7 @@ const setFormBuilderByElements = (
         `;
       }
     }
-  
+
     if (element.array) {
       code += `
       ${element.array.id}: this._formBuilder.array([]),
@@ -204,7 +204,7 @@ const setFormBuilderByElements = (
 
       code += setFormBuilderByElements(element.array.elements, true);
     }
-  
+
     if (element.tabs) {
       element.tabs.forEach((form) => {
         code += setFormBuilderByElements(form.elements);
@@ -217,5 +217,6 @@ const setFormBuilderByElements = (
 
 export {
   setFormBuilderProperty,
-  setFormArrayBuilderByElementsProperty
+  setFormArrayBuilderByElementsProperty,
+  setFormBuilderByElements,
 };
