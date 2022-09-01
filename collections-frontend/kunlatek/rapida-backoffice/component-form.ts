@@ -196,190 +196,23 @@ export const COMPONENT_FORM: MainInterface = {
                 id: "tabArray",
                 elements: [
                   {
-                    select: {
-                      label: "Tipo de elemento",
-                      name: "elementTypeTab",
-                      type: FormInputTypeEnum.Text,
-                      optionsApi: {
-                        externalEndpoint: "http://localhost:3001/form-elements",
-                        labelField: "label",
-                        valueField: "value",
-                      },
-                      isTriggerToCondition: true,
-                      isRequired: true,
-                    }
-                  },
-                  {
-                    select: {
-                      label: "Origem da option",
-                      name: "optionOriginTab",
-                      type: FormInputTypeEnum.Text,
-                      optionsObject: [
-                        {
-                          label: "API",
-                          value: "optionsApi",
-                          isSelected: true,
-                        },
-                        {
-                          label: "Manual",
-                          value: "optionsObject"
-                        },
-                      ],
-                      isTriggerToCondition: true,
-                      conditions: {
-                        type: ConditionEnum.Form,
-                        elements: [
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a53f564a1a9274f87f35",
-                          },
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a55f564a1a9274f87f39",
-                            logicalOperator: FilterLogicalOperatorEnum.Or,
-                          }
-                        ]
-                      }
-                    },
-                  },
-                  {
                     input: {
-                      label: "Endpoint",
-                      name: "optionApiEndpointTab",
+                      label: "Tab title",
+                      name: "tabTitle",
                       type: FormInputTypeEnum.Text,
-                      placeholder: "Ex.: animations",
-                      tooltip: "Endpoint com dados para option",
-                      conditions: {
-                        type: ConditionEnum.Form,
-                        elements: [
-                          {
-                            key: "optionOriginTab",
-                            value: "optionsApi",
-                            logicalOperator: FilterLogicalOperatorEnum.And,
-                          },
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a55f564a1a9274f87f39",
-                            logicalOperator: FilterLogicalOperatorEnum.Or,
-                          },
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a53f564a1a9274f87f35",
-                          },
-                        ]
-                      }
+                      placeholder: "Ex.: Dados principais",
+                      tooltip: "Nome mostrado na aba"
                     }
-                  },
-                  {
-                    input: {
-                      label: "Label",
-                      name: "optionApiLabelFieldTab",
-                      type: FormInputTypeEnum.Text,
-                      placeholder: "Ex.: name",
-                      tooltip: "Campo que preencherá o label da option",
-                      conditions: {
-                        type: ConditionEnum.Form,
-                        elements: [
-                          {
-                            key: "optionOriginTab",
-                            value: "optionsApi",
-                            logicalOperator: FilterLogicalOperatorEnum.And,
-                          },
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a55f564a1a9274f87f39",
-                            logicalOperator: FilterLogicalOperatorEnum.Or,
-                          },
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a53f564a1a9274f87f35",
-                          },
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    input: {
-                      label: "Value",
-                      name: "optionApiValueFieldTab",
-                      type: FormInputTypeEnum.Text,
-                      placeholder: "Ex.: _id",
-                      tooltip: "Campo que preencherá o value da option",
-                      conditions: {
-                        type: ConditionEnum.Form,
-                        elements: [
-                          {
-                            key: "optionOriginTab",
-                            value: "optionsApi",
-                            logicalOperator: FilterLogicalOperatorEnum.And,
-                          },
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a55f564a1a9274f87f39",
-                            logicalOperator: FilterLogicalOperatorEnum.Or,
-                          },
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a53f564a1a9274f87f35",
-                          },
-                        ]
-                      }
-                    }
-                  },
+                  },                  
                   {
                     array: {
-                      title: "Opção manual",
-                      id: "manualOptionArrayTab",
-                      elements: [
-                        {
-                          input: {
-                            label: "Label",
-                            name: "optionObjectLabelFieldTab",
-                            type: FormInputTypeEnum.Text,
-                            placeholder: "Ex.: Masculino",
-                            tooltip: "String que preencherá o label da option",
-                          }
-                        },
-                        {
-                          input: {
-                            label: "Value",
-                            name: "optionObjectValueFieldTab",
-                            type: FormInputTypeEnum.Text,
-                            placeholder: "Ex.: male",
-                            tooltip: "String que preencherá o value da option",
-                          }
-                        },
-                      ],
-                      conditions: {
-                        type: ConditionEnum.Form,
-                        elements: [
-                          {
-                            key: "optionOriginTab",
-                            value: "optionsObject",
-                            logicalOperator: FilterLogicalOperatorEnum.And,
-                          },
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a55f564a1a9274f87f39",
-                            logicalOperator: FilterLogicalOperatorEnum.Or,
-                          },
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a53f564a1a9274f87f35",
-                          },
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    array: {
-                      title: "Array element",
-                      id: "arrayArrayTab",
+                      title: "Elemento",
+                      id: "elementArrayTab",
                       elements: [
                         {
                           select: {
                             label: "Tipo de elemento",
-                            name: "elementTypeArrayTab",
+                            name: "elementTypeTab",
                             type: FormInputTypeEnum.Text,
                             optionsApi: {
                               externalEndpoint: "http://localhost:3001/form-elements",
@@ -393,7 +226,7 @@ export const COMPONENT_FORM: MainInterface = {
                         {
                           select: {
                             label: "Origem da option",
-                            name: "optionOriginArrayTab",
+                            name: "optionOriginTab",
                             type: FormInputTypeEnum.Text,
                             optionsObject: [
                               {
@@ -411,11 +244,11 @@ export const COMPONENT_FORM: MainInterface = {
                               type: ConditionEnum.Form,
                               elements: [
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a53f564a1a9274f87f35",
                                 },
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a55f564a1a9274f87f39",
                                   logicalOperator: FilterLogicalOperatorEnum.Or,
                                 }
@@ -426,7 +259,7 @@ export const COMPONENT_FORM: MainInterface = {
                         {
                           input: {
                             label: "Endpoint",
-                            name: "optionApiEndpointArrayTab",
+                            name: "optionApiEndpointTab",
                             type: FormInputTypeEnum.Text,
                             placeholder: "Ex.: animations",
                             tooltip: "Endpoint com dados para option",
@@ -434,17 +267,17 @@ export const COMPONENT_FORM: MainInterface = {
                               type: ConditionEnum.Form,
                               elements: [
                                 {
-                                  key: "optionOriginArrayTab",
+                                  key: "optionOriginTab",
                                   value: "optionsApi",
                                   logicalOperator: FilterLogicalOperatorEnum.And,
                                 },
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a55f564a1a9274f87f39",
                                   logicalOperator: FilterLogicalOperatorEnum.Or,
                                 },
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a53f564a1a9274f87f35",
                                 },
                               ]
@@ -454,7 +287,7 @@ export const COMPONENT_FORM: MainInterface = {
                         {
                           input: {
                             label: "Label",
-                            name: "optionApiLabelFieldArrayTab",
+                            name: "optionApiLabelFieldTab",
                             type: FormInputTypeEnum.Text,
                             placeholder: "Ex.: name",
                             tooltip: "Campo que preencherá o label da option",
@@ -462,17 +295,17 @@ export const COMPONENT_FORM: MainInterface = {
                               type: ConditionEnum.Form,
                               elements: [
                                 {
-                                  key: "optionOriginArrayTab",
+                                  key: "optionOriginTab",
                                   value: "optionsApi",
                                   logicalOperator: FilterLogicalOperatorEnum.And,
                                 },
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a55f564a1a9274f87f39",
                                   logicalOperator: FilterLogicalOperatorEnum.Or,
                                 },
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a53f564a1a9274f87f35",
                                 },
                               ]
@@ -482,7 +315,7 @@ export const COMPONENT_FORM: MainInterface = {
                         {
                           input: {
                             label: "Value",
-                            name: "optionApiValueFieldArrayTab",
+                            name: "optionApiValueFieldTab",
                             type: FormInputTypeEnum.Text,
                             placeholder: "Ex.: _id",
                             tooltip: "Campo que preencherá o value da option",
@@ -490,17 +323,17 @@ export const COMPONENT_FORM: MainInterface = {
                               type: ConditionEnum.Form,
                               elements: [
                                 {
-                                  key: "optionOriginArrayTab",
+                                  key: "optionOriginTab",
                                   value: "optionsApi",
                                   logicalOperator: FilterLogicalOperatorEnum.And,
                                 },
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a55f564a1a9274f87f39",
                                   logicalOperator: FilterLogicalOperatorEnum.Or,
                                 },
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a53f564a1a9274f87f35",
                                 },
                               ]
@@ -510,12 +343,12 @@ export const COMPONENT_FORM: MainInterface = {
                         {
                           array: {
                             title: "Opção manual",
-                            id: "manualOptionArrayArrayTab",
+                            id: "manualOptionArrayTab",
                             elements: [
                               {
                                 input: {
                                   label: "Label",
-                                  name: "optionObjectLabelFieldArrayTab",
+                                  name: "optionObjectLabelFieldTab",
                                   type: FormInputTypeEnum.Text,
                                   placeholder: "Ex.: Masculino",
                                   tooltip: "String que preencherá o label da option",
@@ -524,7 +357,7 @@ export const COMPONENT_FORM: MainInterface = {
                               {
                                 input: {
                                   label: "Value",
-                                  name: "optionObjectValueFieldArrayTab",
+                                  name: "optionObjectValueFieldTab",
                                   type: FormInputTypeEnum.Text,
                                   placeholder: "Ex.: male",
                                   tooltip: "String que preencherá o value da option",
@@ -535,17 +368,17 @@ export const COMPONENT_FORM: MainInterface = {
                               type: ConditionEnum.Form,
                               elements: [
                                 {
-                                  key: "optionOriginArrayTab",
+                                  key: "optionOriginTab",
                                   value: "optionsObject",
                                   logicalOperator: FilterLogicalOperatorEnum.And,
                                 },
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a55f564a1a9274f87f39",
                                   logicalOperator: FilterLogicalOperatorEnum.Or,
                                 },
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a53f564a1a9274f87f35",
                                 },
                               ]
@@ -553,9 +386,377 @@ export const COMPONENT_FORM: MainInterface = {
                           }
                         },
                         {
+                          array: {
+                            title: "Array element",
+                            id: "arrayArrayTab",
+                            elements: [
+                              {
+                                select: {
+                                  label: "Tipo de elemento",
+                                  name: "elementTypeArrayTab",
+                                  type: FormInputTypeEnum.Text,
+                                  optionsApi: {
+                                    externalEndpoint: "http://localhost:3001/form-elements",
+                                    labelField: "label",
+                                    valueField: "value",
+                                  },
+                                  isTriggerToCondition: true,
+                                  isRequired: true,
+                                }
+                              },
+                              {
+                                select: {
+                                  label: "Origem da option",
+                                  name: "optionOriginArrayTab",
+                                  type: FormInputTypeEnum.Text,
+                                  optionsObject: [
+                                    {
+                                      label: "API",
+                                      value: "optionsApi",
+                                      isSelected: true,
+                                    },
+                                    {
+                                      label: "Manual",
+                                      value: "optionsObject"
+                                    },
+                                  ],
+                                  isTriggerToCondition: true,
+                                  conditions: {
+                                    type: ConditionEnum.Form,
+                                    elements: [
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a53f564a1a9274f87f35",
+                                      },
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a55f564a1a9274f87f39",
+                                        logicalOperator: FilterLogicalOperatorEnum.Or,
+                                      }
+                                    ]
+                                  }
+                                },
+                              },
+                              {
+                                input: {
+                                  label: "Endpoint",
+                                  name: "optionApiEndpointArrayTab",
+                                  type: FormInputTypeEnum.Text,
+                                  placeholder: "Ex.: animations",
+                                  tooltip: "Endpoint com dados para option",
+                                  conditions: {
+                                    type: ConditionEnum.Form,
+                                    elements: [
+                                      {
+                                        key: "optionOriginArrayTab",
+                                        value: "optionsApi",
+                                        logicalOperator: FilterLogicalOperatorEnum.And,
+                                      },
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a55f564a1a9274f87f39",
+                                        logicalOperator: FilterLogicalOperatorEnum.Or,
+                                      },
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a53f564a1a9274f87f35",
+                                      },
+                                    ]
+                                  }
+                                }
+                              },
+                              {
+                                input: {
+                                  label: "Label",
+                                  name: "optionApiLabelFieldArrayTab",
+                                  type: FormInputTypeEnum.Text,
+                                  placeholder: "Ex.: name",
+                                  tooltip: "Campo que preencherá o label da option",
+                                  conditions: {
+                                    type: ConditionEnum.Form,
+                                    elements: [
+                                      {
+                                        key: "optionOriginArrayTab",
+                                        value: "optionsApi",
+                                        logicalOperator: FilterLogicalOperatorEnum.And,
+                                      },
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a55f564a1a9274f87f39",
+                                        logicalOperator: FilterLogicalOperatorEnum.Or,
+                                      },
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a53f564a1a9274f87f35",
+                                      },
+                                    ]
+                                  }
+                                }
+                              },
+                              {
+                                input: {
+                                  label: "Value",
+                                  name: "optionApiValueFieldArrayTab",
+                                  type: FormInputTypeEnum.Text,
+                                  placeholder: "Ex.: _id",
+                                  tooltip: "Campo que preencherá o value da option",
+                                  conditions: {
+                                    type: ConditionEnum.Form,
+                                    elements: [
+                                      {
+                                        key: "optionOriginArrayTab",
+                                        value: "optionsApi",
+                                        logicalOperator: FilterLogicalOperatorEnum.And,
+                                      },
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a55f564a1a9274f87f39",
+                                        logicalOperator: FilterLogicalOperatorEnum.Or,
+                                      },
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a53f564a1a9274f87f35",
+                                      },
+                                    ]
+                                  }
+                                }
+                              },
+                              {
+                                array: {
+                                  title: "Opção manual",
+                                  id: "manualOptionArrayArrayTab",
+                                  elements: [
+                                    {
+                                      input: {
+                                        label: "Label",
+                                        name: "optionObjectLabelFieldArrayTab",
+                                        type: FormInputTypeEnum.Text,
+                                        placeholder: "Ex.: Masculino",
+                                        tooltip: "String que preencherá o label da option",
+                                      }
+                                    },
+                                    {
+                                      input: {
+                                        label: "Value",
+                                        name: "optionObjectValueFieldArrayTab",
+                                        type: FormInputTypeEnum.Text,
+                                        placeholder: "Ex.: male",
+                                        tooltip: "String que preencherá o value da option",
+                                      }
+                                    },
+                                  ],
+                                  conditions: {
+                                    type: ConditionEnum.Form,
+                                    elements: [
+                                      {
+                                        key: "optionOriginArrayTab",
+                                        value: "optionsObject",
+                                        logicalOperator: FilterLogicalOperatorEnum.And,
+                                      },
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a55f564a1a9274f87f39",
+                                        logicalOperator: FilterLogicalOperatorEnum.Or,
+                                      },
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a53f564a1a9274f87f35",
+                                      },
+                                    ]
+                                  }
+                                }
+                              },
+                              {
+                                input: {
+                                  label: "Label",
+                                  name: "labelArrayTab",
+                                  type: FormInputTypeEnum.Text,
+                                  placeholder: "Ex.: Animação",
+                                  tooltip: "Legenda principal do elemento de formulário",
+                                  conditions: {
+                                    type: ConditionEnum.Form,
+                                    elements: [
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a56d564a1a9274f87f3b",
+                                        comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
+                                      },
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a526564a1a9274f87f34",
+                                        comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
+                                        logicalOperator: FilterLogicalOperatorEnum.And,
+                                      },
+                                    ]
+                                  },
+                                  isRequired: true,
+                                }
+                              },
+                              {
+                                input: {
+                                  label: "Name",
+                                  name: "nameArrayTab",
+                                  type: FormInputTypeEnum.Text,
+                                  placeholder: "Ex.: animation",
+                                  tooltip: "Identificação referência para tratamento do dado",
+                                  conditions: {
+                                    type: ConditionEnum.Form,
+                                    elements: [
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a56d564a1a9274f87f3b",
+                                        comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
+                                      },
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a526564a1a9274f87f34",
+                                        comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
+                                        logicalOperator: FilterLogicalOperatorEnum.And,
+                                      },
+                                    ]
+                                  },
+                                  isRequired: true,
+                                }
+                              },
+                              {
+                                select: {
+                                  label: "Tipo de dado",
+                                  name: "typeArrayTab",
+                                  type: FormInputTypeEnum.Text,
+                                  optionsApi: {
+                                    externalEndpoint: "http://localhost:3001/data-types",
+                                    labelField: "label",
+                                    valueField: "value",
+                                  },
+                                  conditions: {
+                                    type: ConditionEnum.Form,
+                                    elements: [
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a56d564a1a9274f87f3b",
+                                        comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
+                                      },
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a526564a1a9274f87f34",
+                                        comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
+                                        logicalOperator: FilterLogicalOperatorEnum.And,
+                                      },
+                                    ]
+                                  },
+                                  isRequired: true,
+                                }
+                              },
+                              {
+                                input: {
+                                  label: "Placeholder",
+                                  name: "placeholderArrayTab",
+                                  type: FormInputTypeEnum.Text,
+                                  placeholder: "Ex.: Ex.: The Simpsons",
+                                  tooltip: "Legenda secundária do elemento de formulário",
+                                  conditions: {
+                                    type: ConditionEnum.Form,
+                                    elements: [
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a56d564a1a9274f87f3b",
+                                        comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
+                                      },
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a526564a1a9274f87f34",
+                                        comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
+                                        logicalOperator: FilterLogicalOperatorEnum.And,
+                                      },
+                                    ]
+                                  },
+                                }
+                              },
+                              {
+                                input: {
+                                  label: "Tooltip",
+                                  name: "tooltipArrayTab",
+                                  type: FormInputTypeEnum.Text,
+                                  placeholder: "Ex.: Nome da animação",
+                                  tooltip: "Legenda de reforço do elemento de formulário",
+                                  conditions: {
+                                    type: ConditionEnum.Form,
+                                    elements: [
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a56d564a1a9274f87f3b",
+                                        comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
+                                      },
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a526564a1a9274f87f34",
+                                        comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
+                                        logicalOperator: FilterLogicalOperatorEnum.And,
+                                      },
+                                    ]
+                                  },
+                                }
+                              },
+                              {
+                                slide: {
+                                  label: "Required",
+                                  name: "isRequiredArrayTab",
+                                  conditions: {
+                                    type: ConditionEnum.Form,
+                                    elements: [
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a56d564a1a9274f87f3b",
+                                        comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
+                                      },
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a526564a1a9274f87f34",
+                                        comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
+                                        logicalOperator: FilterLogicalOperatorEnum.And,
+                                      },
+                                    ]
+                                  },
+                                }
+                              },
+                              {
+                                slide: {
+                                  label: "Disabled",
+                                  name: "isDisabledArrayTab",
+                                  conditions: {
+                                    type: ConditionEnum.Form,
+                                    elements: [
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a56d564a1a9274f87f3b",
+                                        comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
+                                      },
+                                      {
+                                        key: "elementTypeArrayTab",
+                                        value: "62f2a526564a1a9274f87f34",
+                                        comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
+                                        logicalOperator: FilterLogicalOperatorEnum.And,
+                                      },
+                                    ]
+                                  },
+                                }
+                              },
+                            ],
+                            conditions: {
+                              type: ConditionEnum.Form,
+                              elements: [
+                                {
+                                  key: "elementTypeTab",
+                                  value: "62f2a526564a1a9274f87f34",
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
                           input: {
                             label: "Label",
-                            name: "labelArrayTab",
+                            name: "labelTab",
                             type: FormInputTypeEnum.Text,
                             placeholder: "Ex.: Animação",
                             tooltip: "Legenda principal do elemento de formulário",
@@ -563,12 +764,12 @@ export const COMPONENT_FORM: MainInterface = {
                               type: ConditionEnum.Form,
                               elements: [
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a56d564a1a9274f87f3b",
                                   comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
                                 },
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a526564a1a9274f87f34",
                                   comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
                                   logicalOperator: FilterLogicalOperatorEnum.And,
@@ -581,7 +782,7 @@ export const COMPONENT_FORM: MainInterface = {
                         {
                           input: {
                             label: "Name",
-                            name: "nameArrayTab",
+                            name: "nameTab",
                             type: FormInputTypeEnum.Text,
                             placeholder: "Ex.: animation",
                             tooltip: "Identificação referência para tratamento do dado",
@@ -589,12 +790,12 @@ export const COMPONENT_FORM: MainInterface = {
                               type: ConditionEnum.Form,
                               elements: [
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a56d564a1a9274f87f3b",
                                   comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
                                 },
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a526564a1a9274f87f34",
                                   comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
                                   logicalOperator: FilterLogicalOperatorEnum.And,
@@ -607,7 +808,7 @@ export const COMPONENT_FORM: MainInterface = {
                         {
                           select: {
                             label: "Tipo de dado",
-                            name: "typeArrayTab",
+                            name: "typeTab",
                             type: FormInputTypeEnum.Text,
                             optionsApi: {
                               externalEndpoint: "http://localhost:3001/data-types",
@@ -618,12 +819,12 @@ export const COMPONENT_FORM: MainInterface = {
                               type: ConditionEnum.Form,
                               elements: [
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a56d564a1a9274f87f3b",
                                   comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
                                 },
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a526564a1a9274f87f34",
                                   comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
                                   logicalOperator: FilterLogicalOperatorEnum.And,
@@ -636,7 +837,7 @@ export const COMPONENT_FORM: MainInterface = {
                         {
                           input: {
                             label: "Placeholder",
-                            name: "placeholderArrayTab",
+                            name: "placeholderTab",
                             type: FormInputTypeEnum.Text,
                             placeholder: "Ex.: Ex.: The Simpsons",
                             tooltip: "Legenda secundária do elemento de formulário",
@@ -644,12 +845,12 @@ export const COMPONENT_FORM: MainInterface = {
                               type: ConditionEnum.Form,
                               elements: [
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a56d564a1a9274f87f3b",
                                   comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
                                 },
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a526564a1a9274f87f34",
                                   comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
                                   logicalOperator: FilterLogicalOperatorEnum.And,
@@ -661,7 +862,7 @@ export const COMPONENT_FORM: MainInterface = {
                         {
                           input: {
                             label: "Tooltip",
-                            name: "tooltipArrayTab",
+                            name: "tooltipTab",
                             type: FormInputTypeEnum.Text,
                             placeholder: "Ex.: Nome da animação",
                             tooltip: "Legenda de reforço do elemento de formulário",
@@ -669,12 +870,12 @@ export const COMPONENT_FORM: MainInterface = {
                               type: ConditionEnum.Form,
                               elements: [
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a56d564a1a9274f87f3b",
                                   comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
                                 },
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a526564a1a9274f87f34",
                                   comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
                                   logicalOperator: FilterLogicalOperatorEnum.And,
@@ -686,17 +887,17 @@ export const COMPONENT_FORM: MainInterface = {
                         {
                           slide: {
                             label: "Required",
-                            name: "isRequiredArrayTab",
+                            name: "isRequiredTab",
                             conditions: {
                               type: ConditionEnum.Form,
                               elements: [
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a56d564a1a9274f87f3b",
                                   comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
                                 },
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a526564a1a9274f87f34",
                                   comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
                                   logicalOperator: FilterLogicalOperatorEnum.And,
@@ -708,17 +909,17 @@ export const COMPONENT_FORM: MainInterface = {
                         {
                           slide: {
                             label: "Disabled",
-                            name: "isDisabledArrayTab",
+                            name: "isDisabledTab",
                             conditions: {
                               type: ConditionEnum.Form,
                               elements: [
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a56d564a1a9274f87f3b",
                                   comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
                                 },
                                 {
-                                  key: "elementTypeArrayTab",
+                                  key: "elementTypeTab",
                                   value: "62f2a526564a1a9274f87f34",
                                   comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
                                   logicalOperator: FilterLogicalOperatorEnum.And,
@@ -727,194 +928,9 @@ export const COMPONENT_FORM: MainInterface = {
                             },
                           }
                         },
-                      ],
-                      conditions: {
-                        type: ConditionEnum.Form,
-                        elements: [
-                          {
-                            key: "elementType",
-                            value: "62f2a526564a1a9274f87f34",
-                          }
-                        ]
-                      }
+                      ]
                     }
-                  },
-                  {
-                    input: {
-                      label: "Label",
-                      name: "labelTab",
-                      type: FormInputTypeEnum.Text,
-                      placeholder: "Ex.: Animação",
-                      tooltip: "Legenda principal do elemento de formulário",
-                      conditions: {
-                        type: ConditionEnum.Form,
-                        elements: [
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a56d564a1a9274f87f3b",
-                            comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
-                          },
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a526564a1a9274f87f34",
-                            comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
-                            logicalOperator: FilterLogicalOperatorEnum.And,
-                          },
-                        ]
-                      },
-                      isRequired: true,
-                    }
-                  },
-                  {
-                    input: {
-                      label: "Name",
-                      name: "nameTab",
-                      type: FormInputTypeEnum.Text,
-                      placeholder: "Ex.: animation",
-                      tooltip: "Identificação referência para tratamento do dado",
-                      conditions: {
-                        type: ConditionEnum.Form,
-                        elements: [
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a56d564a1a9274f87f3b",
-                            comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
-                          },
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a526564a1a9274f87f34",
-                            comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
-                            logicalOperator: FilterLogicalOperatorEnum.And,
-                          },
-                        ]
-                      },
-                      isRequired: true,
-                    }
-                  },
-                  {
-                    select: {
-                      label: "Tipo de dado",
-                      name: "typeTab",
-                      type: FormInputTypeEnum.Text,
-                      optionsApi: {
-                        externalEndpoint: "http://localhost:3001/data-types",
-                        labelField: "label",
-                        valueField: "value",
-                      },
-                      conditions: {
-                        type: ConditionEnum.Form,
-                        elements: [
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a56d564a1a9274f87f3b",
-                            comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
-                          },
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a526564a1a9274f87f34",
-                            comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
-                            logicalOperator: FilterLogicalOperatorEnum.And,
-                          },
-                        ]
-                      },
-                      isRequired: true,
-                    }
-                  },
-                  {
-                    input: {
-                      label: "Placeholder",
-                      name: "placeholderTab",
-                      type: FormInputTypeEnum.Text,
-                      placeholder: "Ex.: Ex.: The Simpsons",
-                      tooltip: "Legenda secundária do elemento de formulário",
-                      conditions: {
-                        type: ConditionEnum.Form,
-                        elements: [
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a56d564a1a9274f87f3b",
-                            comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
-                          },
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a526564a1a9274f87f34",
-                            comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
-                            logicalOperator: FilterLogicalOperatorEnum.And,
-                          },
-                        ]
-                      },
-                    }
-                  },
-                  {
-                    input: {
-                      label: "Tooltip",
-                      name: "tooltipTab",
-                      type: FormInputTypeEnum.Text,
-                      placeholder: "Ex.: Nome da animação",
-                      tooltip: "Legenda de reforço do elemento de formulário",
-                      conditions: {
-                        type: ConditionEnum.Form,
-                        elements: [
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a56d564a1a9274f87f3b",
-                            comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
-                          },
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a526564a1a9274f87f34",
-                            comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
-                            logicalOperator: FilterLogicalOperatorEnum.And,
-                          },
-                        ]
-                      },
-                    }
-                  },
-                  {
-                    slide: {
-                      label: "Required",
-                      name: "isRequiredTab",
-                      conditions: {
-                        type: ConditionEnum.Form,
-                        elements: [
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a56d564a1a9274f87f3b",
-                            comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
-                          },
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a526564a1a9274f87f34",
-                            comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
-                            logicalOperator: FilterLogicalOperatorEnum.And,
-                          },
-                        ]
-                      },
-                    }
-                  },
-                  {
-                    slide: {
-                      label: "Disabled",
-                      name: "isDisabledTab",
-                      conditions: {
-                        type: ConditionEnum.Form,
-                        elements: [
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a56d564a1a9274f87f3b",
-                            comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
-                          },
-                          {
-                            key: "elementTypeTab",
-                            value: "62f2a526564a1a9274f87f34",
-                            comparisonOperator: FilterComparisonOperatorEnum.NotEqual,
-                            logicalOperator: FilterLogicalOperatorEnum.And,
-                          },
-                        ]
-                      },
-                    }
-                  },
-
+                  }
                 ],
                 conditions: {
                   type: ConditionEnum.Form,

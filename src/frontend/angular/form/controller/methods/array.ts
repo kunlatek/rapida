@@ -148,10 +148,10 @@ const setArrayIndexesToAdd = (arrayId: string): string => {
 
   _arraysInAFlow = [];
   setArraysInAFlow(arrayId);
-
-  _arraysInAFlow?.forEach((element: any, index: number) => {
+  const arrayReversed = _arraysInAFlow.reverse();
+  arrayReversed.forEach((element: any, index: number) => {
     if (_arraysInAFlow.length > 1) {
-      if (index > 0) {
+      if (index < (_arraysInAFlow.length - 1)) {
         code += element.indexIdentifier + ": any,";
       }
     }
@@ -197,7 +197,6 @@ const setArrayMethod = (
   const iterationsToAdd = setArrayIndexesToAdd(array.id);
   const controls = setArrayControls(array.id);
   const controlsToAdd = setArrayControlsToAdd(array.id);
-  
   let arrayCurrentIndex;
   
   _arrayLayer?.forEach((arrayLayer: any) => {

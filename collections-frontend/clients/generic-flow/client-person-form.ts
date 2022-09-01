@@ -25,7 +25,7 @@ export const CLIENT_PERSON_FORM: MainInterface = {
                   mask: "000.000.000-00",
                   isRequired: true,
                 }
-              },
+              },              
               {
                 input: {
                   label: "Nome",
@@ -61,6 +61,39 @@ export const CLIENT_PERSON_FORM: MainInterface = {
                 }
               },
             ],
+          },
+          {
+            title: "Dados profissionais",
+            id: "professionalTab",
+            elements: [
+              {
+                input: {
+                  label: "CRM",
+                  name: "crm",
+                  type: FormInputTypeEnum.Number,
+                  placeholder: "Apenas números",
+                  isRequired: true,
+                }
+              },
+              {
+                array: {
+                  id: "specialities",
+                  title: "Especialidade",
+                  elements: [
+                    {
+                      input: {
+                        label: "Nome",
+                        name: "specialityName",
+                        type: FormInputTypeEnum.Text,
+                        placeholder: "Ex.: Dermatologia",
+                        tooltip: "As especialidades do médico",
+                        isRequired: true,
+                      }
+                    },
+                  ]
+                }
+              }
+            ]
           },
           {
             title: "Contatos",
