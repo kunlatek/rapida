@@ -62,17 +62,6 @@ const setArrayTypeModels = (formElements: Array<FormElementInterface>): string =
             `
               : ``
 
-            // code = `
-            //   @model()
-            //   class ${_relatedTypeInMultidimensionalArray} extends Entity {
-            //     ${_propertiesCreatedInMultidimensionalArray._properties}
-
-            //     ${_arrayOfRelatedPropertiesInMultidimensionalArray}
-            //   }
-
-            //   ${code}
-            // `
-
             arrayTypeModels += `
             @model()
             class ${_relatedTypeInMultidimensionalArray} extends Entity {
@@ -118,8 +107,6 @@ const setArrayTypeModels = (formElements: Array<FormElementInterface>): string =
         ${_arrayOfRelatedProperties}
       }
       `
-
-      console.log(arrayTypeModels)
     }
   });
 
@@ -150,7 +137,7 @@ const setByElementInArrayType = (
     code += `
         @property({
             type: '${propertyType}',
-            itemType: ${relatedType},
+            itemType: 'any',
         })
         ${value.id}?: ${relatedType}[];
         `;
