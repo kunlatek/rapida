@@ -1,4 +1,4 @@
-import { ConditionEnum, FormInputTypeEnum, ServiceFunctionsEnum } from "../../../src/enums/form";
+import { ConditionEnum, FormButtonTypeEnum, FormInputTypeEnum, ServiceFunctionsEnum } from "../../../src/enums/form";
 import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/main";
 import { FilterComparisonOperatorEnum, FilterLogicalOperatorEnum } from "../../../src/enums/request";
 import { MainInterface } from "../../../src/interfaces/main";
@@ -10,6 +10,26 @@ export const COMPONENT_FORM: MainInterface = {
     title: "Componente",
     id: "componentForm",
     elements: [
+      {
+        input: {
+          label: "Título",
+          name: "title",
+          type: FormInputTypeEnum.Text,
+          placeholder: "Ex.: Animação",
+          tooltip: "Título que aparece no card que reúne os elementos do componente",
+          isRequired: true,
+        }
+      },
+      {
+        input: {
+          label: "Identificador",
+          name: "id",
+          type: FormInputTypeEnum.Text,
+          placeholder: "Ex.: animation",
+          tooltip: "Identificador quer servirá como base pra montar pastas e nomear variáveis referentes ao componente",
+          isRequired: true,
+        }
+      },
       {
         array: {
           title: "Elemento",
@@ -571,7 +591,7 @@ export const COMPONENT_FORM: MainInterface = {
                                   label: "Label",
                                   name: "labelArrayTab",
                                   type: FormInputTypeEnum.Text,
-                                  placeholder: "Ex.: Animação",
+                                  placeholder: "Ex.: Nome",
                                   tooltip: "Legenda principal do elemento de formulário",
                                   conditions: {
                                     type: ConditionEnum.Form,
@@ -597,7 +617,7 @@ export const COMPONENT_FORM: MainInterface = {
                                   label: "Name",
                                   name: "nameArrayTab",
                                   type: FormInputTypeEnum.Text,
-                                  placeholder: "Ex.: animation",
+                                  placeholder: "Ex.: name",
                                   tooltip: "Identificação referência para tratamento do dado",
                                   conditions: {
                                     type: ConditionEnum.Form,
@@ -758,7 +778,7 @@ export const COMPONENT_FORM: MainInterface = {
                             label: "Label",
                             name: "labelTab",
                             type: FormInputTypeEnum.Text,
-                            placeholder: "Ex.: Animação",
+                            placeholder: "Ex.: Nome",
                             tooltip: "Legenda principal do elemento de formulário",
                             conditions: {
                               type: ConditionEnum.Form,
@@ -784,7 +804,7 @@ export const COMPONENT_FORM: MainInterface = {
                             label: "Name",
                             name: "nameTab",
                             type: FormInputTypeEnum.Text,
-                            placeholder: "Ex.: animation",
+                            placeholder: "Ex.: name",
                             tooltip: "Identificação referência para tratamento do dado",
                             conditions: {
                               type: ConditionEnum.Form,
@@ -1129,7 +1149,7 @@ export const COMPONENT_FORM: MainInterface = {
                       label: "Label",
                       name: "labelArray",
                       type: FormInputTypeEnum.Text,
-                      placeholder: "Ex.: Animação",
+                      placeholder: "Ex.: Nome",
                       tooltip: "Legenda principal do elemento de formulário",
                       conditions: {
                         type: ConditionEnum.Form,
@@ -1155,7 +1175,7 @@ export const COMPONENT_FORM: MainInterface = {
                       label: "Name",
                       name: "nameArray",
                       type: FormInputTypeEnum.Text,
-                      placeholder: "Ex.: animation",
+                      placeholder: "Ex.: name",
                       tooltip: "Identificação referência para tratamento do dado",
                       conditions: {
                         type: ConditionEnum.Form,
@@ -1316,7 +1336,7 @@ export const COMPONENT_FORM: MainInterface = {
                 label: "Label",
                 name: "label",
                 type: FormInputTypeEnum.Text,
-                placeholder: "Ex.: Animação",
+                placeholder: "Ex.: Nome",
                 tooltip: "Legenda principal do elemento de formulário",
                 conditions: {
                   type: ConditionEnum.Form,
@@ -1342,7 +1362,7 @@ export const COMPONENT_FORM: MainInterface = {
                 label: "Name",
                 name: "name",
                 type: FormInputTypeEnum.Text,
-                placeholder: "Ex.: animation",
+                placeholder: "Ex.: name",
                 tooltip: "Identificação referência para tratamento do dado",
                 conditions: {
                   type: ConditionEnum.Form,
@@ -1487,6 +1507,12 @@ export const COMPONENT_FORM: MainInterface = {
               }
             },
           ]
+        }
+      },
+      {
+        button: {
+          label: "Criar",
+          type: FormButtonTypeEnum.Submit,
         }
       }
     ],    
