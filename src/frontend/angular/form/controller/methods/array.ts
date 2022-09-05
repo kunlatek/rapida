@@ -4,7 +4,7 @@ import {
 } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
-import { setFormBuilderByElements } from "../constructor-args/form-builder";
+import { setFormBuilderByElements } from "../properties/form-builder";
 import { ArrayFeaturesInterface } from "./interfaces";
 import { setFormMethodsByElements } from "./method";
 require("dotenv").config();
@@ -12,7 +12,9 @@ require("dotenv").config();
 let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
   process.env.ARRAY_LAYER!
 );
-let _arraysInAFlow: Array<ArrayFeaturesInterface> = [];
+let _arraysInAFlow: Array<ArrayFeaturesInterface> = JSON.parse(
+  process.env.ARRAYS_IN_A_FLOW!
+);
 
 const setArray = (object: MainInterface) => {
   let code = ``;
@@ -20,6 +22,14 @@ const setArray = (object: MainInterface) => {
   if (!object.form) {
     return code;
   }
+
+  _arrayLayer = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
+
+  _arraysInAFlow = JSON.parse(
+    process.env.ARRAYS_IN_A_FLOW!
+  );
 
   setArrayLayer(object.form.elements);
 
@@ -84,7 +94,7 @@ const setArrayLayer = (
       setArrayLayer(element.elements, newIndex, element.id);
     });
   }
-  
+
   process.env.ARRAY_LAYER = JSON.stringify(_arrayLayer);
 };
 
@@ -128,24 +138,21 @@ const setArrayIndexes = (arrayId: string): string => {
   const arrayReversed = _arraysInAFlow.reverse();
 
   arrayReversed.forEach((array, index) => {
-    code +=
-      array.indexIdentifier +
-      ": any" +
-      (arrayReversed.length > index + 1 ? ", " : "");
+    code += array.indexIdentifier + ": any" + ((arrayReversed.length > (index + 1)) ? ", " : "");
   });
 
   return code;
-};
+}
 
 const setArrayIndexesToAdd = (arrayId: string): string => {
   let code = ``;
 
   _arraysInAFlow = [];
   setArraysInAFlow(arrayId);
-
-  _arraysInAFlow?.forEach((element: any, index: number) => {
+  const arrayReversed = _arraysInAFlow.reverse();
+  arrayReversed.forEach((element: any, index: number) => {
     if (_arraysInAFlow.length > 1) {
-      if (index > 0) {
+      if (index < (_arraysInAFlow.length - 1)) {
         code += element.indexIdentifier + ": any,";
       }
     }
@@ -175,7 +182,7 @@ const setArraysInAFlow = (arrayId: string) => {
 };
 
 const setArrayMethod = (
-  object: MainInterface, 
+  object: MainInterface,
   array: ArrayInterface
 ): string => {
   let code = ``;
@@ -191,29 +198,22 @@ const setArrayMethod = (
   const iterationsToAdd = setArrayIndexesToAdd(array.id);
   const controls = setArrayControls(array.id);
   const controlsToAdd = setArrayControlsToAdd(array.id);
-
-  let formBuilderElements = ``;
   let arrayCurrentIndex;
-  
+
   _arrayLayer?.forEach((arrayLayer: any) => {
     if (arrayLayer.name === array.id) {
       arrayCurrentIndex = arrayLayer.indexIdentifier;
     }
   });
 
-  formBuilderElements += setFormBuilderByElements(array.elements);
-
   code += `
-  ${initArray}() { 
-    return this._formBuilder.group({
-      ${formBuilderElements}
-    })
+  ${initArray}() {
+    return this._formBuilder.group({${setFormBuilderByElements(array.elements)}})
   };
   
   ${add}(${iterationsToAdd}) {
-    const control = <FormArray>this.${
-      object.form?.id
-    }Form.get([${controlsToAdd}]);
+    const control = <FormArray>this.${object.form?.id
+    }Form.get([${controlsToAdd}]) as FormArray;
     control.push(this.${initArray}());
   };
 
@@ -222,15 +222,14 @@ const setArrayMethod = (
   };
 
   ${remove}(${iterations}) {
-    const control = <FormArray>this.${
-      object.form?.id
-    }Form.get([${controls}]);
+    const control = <FormArray>this.${object.form?.id
+    }Form.get([${controls}]) as FormArray;
     control.removeAt(${arrayCurrentIndex});
   };
   `;
 
   code += setFormMethodsByElements(object, array.elements, array);
-  
+
   return code;
 };
 

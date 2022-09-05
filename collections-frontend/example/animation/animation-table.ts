@@ -82,7 +82,7 @@ export const ANIMATION_TABLE: MainInterface = {
     },
     service: {
         baseUrl: "http://localhost:3000",
-        endPoint: "animations",
+        endpoint: "animations",
         hasAuthorization: true,
         methods: [
             ServiceFunctionsEnum.Get,

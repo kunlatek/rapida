@@ -20,7 +20,7 @@ export const CHARACTER_FORM: MainInterface = {
             id: "mainTab",
             elements: [
               {
-                autocomplete: {
+                autocomplete: {                  
                   label: "Animação",
                   placeholder: "Animação do personagem",
                   name: "animationId",
@@ -51,41 +51,28 @@ export const CHARACTER_FORM: MainInterface = {
             elements: [
               {
                 array: {
-                  title: "Dado aleatório importante",
+                  title: "Dado genérico",
                   id: "genericDataArray",
                   elements: [
                     {
                       input: {
-                        label: "Identificador do dado",
-                        name: "genericDataKey",
+                        label: "Atributo",
+                        name: "genericAttribute",
                         type: FormInputTypeEnum.Text,
-                        placeholder: "Chave para o dado"
+                        placeholder: "Ex.: gender",
+                        tooltip: "Um atributo qualquer para melhor especificar a personagem"
                       }
                     },
                     {
                       input: {
-                        label: "Conteúdo do dado",
-                        name: "genericDataValue",
+                        label: "Valor",
+                        name: "genericValue",
                         type: FormInputTypeEnum.Text,
-                        placeholder: "Valor para o dado"
+                        placeholder: "Ex.: Masculino",
+                        tooltip: "Um valor qualquer acerca do atributo pré definido"
                       }
-                    }
+                    },                    
                   ],
-                },
-              },
-              {
-                autocomplete: {
-                  label: "Personagens relacionados",
-                  placeholder: "Nome de personagem",
-                  name: "characterId",
-                  type: FormInputTypeEnum.Text,
-                  optionsApi: {
-                    endpoint: "characters",
-                    labelField: "name",
-                    valueField: "_id",
-                    paramsToFilter: ["name"],
-                  },
-                  isMultiple: true,
                 },
               },
               {
@@ -96,8 +83,44 @@ export const CHARACTER_FORM: MainInterface = {
                   type: FormInputTypeEnum.Text,
                   isMultipleLines: true,
                 }
-              }
+              },
             ],
+          },
+          {
+            title: "Área de teste",
+            id: "testTab",
+            elements: [
+              {
+                array: {
+                  title: "Array dentro de tab",
+                  id: "arrayTabArray",
+                  elements: [
+                    {
+                      input: {
+                        label: "Label de array de tab",
+                        name: "inputArrayTab",
+                        type: FormInputTypeEnum.Text,
+                      }
+                    },
+                    {
+                      array: {
+                        title: "Array dentro de array dentro de tab",
+                        id: "arrayArrayTabArray",
+                        elements: [
+                          {
+                            input: {
+                              label: "Input no rolê",
+                              name: "inputArrayArrayTab",
+                              type: FormInputTypeEnum.Text
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           },
         ],
       },
@@ -110,7 +133,7 @@ export const CHARACTER_FORM: MainInterface = {
     ],
     service: {
       baseUrl: "http://localhost:3000",
-      endPoint: "characters",
+      endpoint: "characters",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

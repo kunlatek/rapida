@@ -86,7 +86,7 @@ const setTableControllerMethods = (object: MainInterface): string => {
               this.isLoading = false;
             } catch (error: any) {
               const message = this._errorHandler.apiErrorMessage(
-                error.error.message
+                error.message
               );
               this.sendErrorMessage(message);
             }
@@ -108,7 +108,7 @@ const setTableControllerMethods = (object: MainInterface): string => {
           sessionStorage.setItem("refreshToken", res?.data.authRefreshToken);
         }
       } catch (error: any) {
-        const message = this._errorHandler.apiErrorMessage(error.error.message);
+        const message = this._errorHandler.apiErrorMessage(error.message);
         this.isLoading = false;
         this.sendErrorMessage(message);
         sessionStorage.clear();

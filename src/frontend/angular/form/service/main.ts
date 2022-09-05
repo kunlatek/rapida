@@ -82,7 +82,7 @@ const setFormServiceServices = (
         code += `
         getAll(filter: string = "") {
           return this._httpClient.get(
-            \`\${this.BASE_URL}/${service.endPoint}\${filter}\`, {
+            \`\${this.BASE_URL}/${service.endpoint}\${filter}\`, {
               headers: {
                 ${hasAuthorization}
               }
@@ -96,7 +96,7 @@ const setFormServiceServices = (
         code += `
         find(id: string) {
           return this._httpClient.get(
-            \`\${this.BASE_URL}/${service.endPoint}/\${id}\`,
+            \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
             {
               headers: {
                 ${hasAuthorization}
@@ -111,7 +111,7 @@ const setFormServiceServices = (
         code += `
         save(body: any) {
           return this._httpClient.post(
-          \`\${this.BASE_URL}/${service.endPoint}\`, 
+          \`\${this.BASE_URL}/${service.endpoint}\`, 
           body,
           {
             headers: {
@@ -127,7 +127,7 @@ const setFormServiceServices = (
         code += `
         update(body: any, id: string) {
           return this._httpClient.put(
-            \`\${this.BASE_URL}/${service.endPoint}/\${id}\`, 
+            \`\${this.BASE_URL}/${service.endpoint}/\${id}\`, 
             body,
             {
               headers: {
@@ -143,7 +143,7 @@ const setFormServiceServices = (
         code += `
         delete(id: string) {
           return this._httpClient.delete(
-            \`\${this.BASE_URL}/${service.endPoint}/\${id}\`,
+            \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
             {
               headers: {
                 ${hasAuthorization}
@@ -158,7 +158,7 @@ const setFormServiceServices = (
         code += `
         softDelete(id: string) {
           return this._httpClient.put(
-            \`\${this.BASE_URL}/${service.endPoint}/\${id}\`,
+            \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
             {
               headers: {
                 ${hasAuthorization}
@@ -186,34 +186,99 @@ const setFormServiceServicesOverFormElement = (
   }
   let code = ``;
 
+  if (element.input) {
+    if (element.input.apiRequest) {
+      if (element.input.apiRequest.endpoint) {
+        code += `
+          ${element.input.name}InputRequestToFind(param: string) {
+            return this._httpClient.get(
+              \`\${this.BASE_URL}/${element.input.apiRequest.endpoint}/\${param}\`, {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+            ).toPromise();
+        }
+        `;
+      }
+
+      if (element.input.apiRequest.externalEndpoint) {
+        code += `
+          ${element.input.name}InputRequestToFind(filter: string = "") {
+            return this._httpClient.get(
+              \`${element.input.apiRequest.externalEndpoint}\${filter}\`, {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+            ).toPromise();
+        }
+        `;
+      }
+    }
+  }
+
   if (element.autocomplete) {
     if (element.autocomplete.optionsApi) {
-      code += `
-      ${element.autocomplete.name}SelectObjectGetAll(filter: string = "") {
-        return this._httpClient.get(
-          \`\${this.BASE_URL}/${element.autocomplete.optionsApi.endpoint}\${filter}\`, {
-          headers: {
-            ${hasAuthorization}
-          }
+      if (element.autocomplete.optionsApi.endpoint) {
+        code += `
+          ${element.autocomplete.name}SelectObjectGetAll(filter: string = "") {
+            return this._httpClient.get(
+              \`\${this.BASE_URL}/${element.autocomplete.optionsApi.endpoint}\${filter}\`, {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+            ).toPromise();
         }
-        ).toPromise();
-    }
-    `;
+        `;
+      }
+
+      if (element.autocomplete.optionsApi.externalEndpoint) {
+        code += `
+          ${element.autocomplete.name}SelectObjectGetAll(filter: string = "") {
+            return this._httpClient.get(
+              \`${element.autocomplete.optionsApi.externalEndpoint}\${filter}\`, {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+            ).toPromise();
+        }
+        `;
+      }
     }
   }
 
   if (element.select) {
     if (element.select.optionsApi) {
-      code += `
-      ${element.select.name}SelectObjectGetAll() {
-        return this._httpClient.get(
-          \`\${this.BASE_URL}/${element.select.optionsApi.endpoint}\`, {
-          headers: {
-            ${hasAuthorization}
+      if (element.select.optionsApi.endpoint) {
+        code += `
+        ${element.select.name}SelectObjectGetAll() {
+          return this._httpClient.get(
+            \`\${this.BASE_URL}/${element.select.optionsApi.endpoint}\`, {
+            headers: {
+              ${hasAuthorization}
+            }
           }
+          ).toPromise();
         }
-        ).toPromise();
-      }`;
+        `;
+      }
+
+      if (element.select.optionsApi.externalEndpoint) {
+        code += `
+        ${element.select.name}SelectObjectGetAll() {
+          return this._httpClient.get(
+            \`${element.select.optionsApi.externalEndpoint}\`, {
+            headers: {
+              ${hasAuthorization}
+            }
+          }
+          ).toPromise();
+        }
+        `;
+      }
     }
   }
 

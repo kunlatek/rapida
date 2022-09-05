@@ -2,6 +2,7 @@ import { FormInputTypeEnum } from "../../../../../enums/form";
 import { FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
+import { setFormBuilderProperty } from "./form-builder";
 
 const setProperty = (
   object: MainInterface
@@ -13,6 +14,7 @@ const setProperty = (
   }
   
   code += setFormPropertiesByElements(object, object.form.elements);
+  code += setFormBuilderProperty(object);
 
   return code;
 };
@@ -44,19 +46,24 @@ const setFormPropertiesByElements = (
         }
   
         if (element.select.optionsApi) {
-            code += `${element.select.name}SelectObject: Array<SelectObjectInterface> = [];`;
+            code += `${element.select.name}SelectObject: Array<any> = [];`;
         }
     }
   
     if (element.autocomplete) {
+      code += `
+      filtered${TextTransformation.pascalfy(element.autocomplete.name)}: Array<any> = [];
+      `;
+
+      if (element.autocomplete.isMultiple) {
         code += `
         ${element.autocomplete.name}SeparatorKeysCodes: number[] = [ENTER, COMMA];
-        filtered${TextTransformation.pascalfy(element.autocomplete.name)}: Array<any> = [];
         chosen${TextTransformation.pascalfy(element.autocomplete.name)}View: string[] = [];
         chosen${TextTransformation.pascalfy(element.autocomplete.name)}Value: string[] = [];
-        
+      
         @ViewChild('${element.autocomplete.name}Input') ${element.autocomplete.name}Input!: ElementRef<HTMLInputElement>;
         `;
+      }
     }
   
     if (element.checkbox) {

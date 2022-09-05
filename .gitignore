@@ -146,3 +146,4 @@ dist
 
 #collections
 !*.collections-frontend/example
+!*.collections-frontend/kunlatek/rapida-backoffice

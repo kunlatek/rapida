@@ -1,6 +1,8 @@
 import { ConditionEnum } from "../../../../../enums/form";
 import { ConditionElementInterface, FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
+import { TextTransformation } from "../../../../../utils/text.transformation";
+import { setArrayControlsToAdd, setArrayIndexes } from "./array";
 
 let _conditionMethods: Array<string> = [];
 let _conditionMethodsOverEdition: Array<string> = [];
@@ -37,19 +39,16 @@ const setCondition = (
               value.conditions.elements.forEach(
                 (condition: any, index: number) => {
                   if (index > 0) {
-                    code += `${
-                      condition.logicalOperator
-                        ? ` ${condition.logicalOperator} `
-                        : ` && `
-                    }`;
+                    code += `${condition.logicalOperator
+                      ? ` ${condition.logicalOperator} `
+                      : ` && `
+                      }`;
                   }
-                  code += `(this.${object.form!.id}Form.get("${
-                    condition.key
-                  }")?.value ${
-                    condition.comparisonOperator
+                  code += `(this.${object.form!.id}Form.get("${condition.key
+                    }")?.value ${condition.comparisonOperator
                       ? ` ${condition.comparisonOperator} `
                       : ` === `
-                  } "${condition.value}")`;
+                    } "${condition.value}")`;
                 }
               );
               code += `);`;
@@ -65,17 +64,15 @@ const setCondition = (
               (condition: any, index: number) => {
                 if (!array) {
                   if (index > 0) {
-                    code += `${
-                      condition.logicalOperator
-                        ? ` ${condition.logicalOperator} `
-                        : ` && `
-                    }`;
+                    code += `${condition.logicalOperator
+                      ? ` ${condition.logicalOperator} `
+                      : ` && `
+                      }`;
                   }
-                  code += `(this.${condition.key} ${
-                    condition.comparisonOperator
-                      ? ` ${condition.comparisonOperator} `
-                      : ` === `
-                  } "${condition.value}");`;
+                  code += `(this.${condition.key} ${condition.comparisonOperator
+                    ? ` ${condition.comparisonOperator} `
+                    : ` === `
+                    } "${condition.value}");`;
                 }
                 code += `)`;
 
@@ -121,7 +118,7 @@ const setConditionOverEdition = (
   elements.forEach((element) => {
     const type = Object.keys(element)[0];
     const value = Object.values(element)[0];
-    
+
     if (formElements.includes(type)) {
       if (value.conditions) {
         if (value.conditions.type === ConditionEnum.Form) {
@@ -142,18 +139,16 @@ const setConditionOverEdition = (
                 conditionId = `${value.name ? value.name : value.id}FormCondition`;
                 if (array) {
                   if (index > 0) {
-                    code += `${
-                      condition.logicalOperator
-                        ? ` ${condition.logicalOperator} `
-                        : ` && `
-                    }`;
+                    code += `${condition.logicalOperator
+                      ? ` ${condition.logicalOperator} `
+                      : ` && `
+                      }`;
                   }
                   code += `_${array}.${condition.key}`
-                  code += `${
-                    condition.comparisonOperator
-                      ? ` ${condition.comparisonOperator} `
-                      : ` === `
-                  } "${condition.value}"`;
+                  code += `${condition.comparisonOperator
+                    ? ` ${condition.comparisonOperator} `
+                    : ` === `
+                    } "${condition.value}"`;
                 }
 
                 _conditionMethodsOverEdition.push(value.name ? value.name : value.id);
@@ -181,7 +176,7 @@ const setConditionOverEdition = (
       code += setConditionOverEdition(object, element.array.elements, element.array.id);
     }
   });
-  
+
   return code;
 };
 
@@ -202,6 +197,7 @@ const setConditionsInArray = (
   ];
 
   let code = ``;
+  let substring = ``;
 
   elements.forEach((element) => {
     const type = Object.keys(element)[0];
@@ -212,29 +208,41 @@ const setConditionsInArray = (
         if (value.conditions.type === ConditionEnum.Form) {
           if (!_conditionMethods.includes(value.name ? value.name : value.id)) {
             if (array) {
-              code += `this.${value.name ? value.name : value.id}FormCondition[index] = (`;
+              const controlsToAdd = setArrayControlsToAdd(array);
+              const iterations = setArrayIndexes(array);
+              const conditionMethod = `setConditionIn${TextTransformation.pascalfy(value.conditions.elements[0].key)}`;
+              const stringToSplit = `setConditionIn${TextTransformation.pascalfy(value.conditions.elements[0].key)} = (${iterations}) => { if (typeof i === "number") {`;
+              const stringToSplitExists = code.includes(stringToSplit);
+              const conditionMethodExists = code.includes(conditionMethod);
+              
+              let conditionMethodCode = `this.${value.name ? value.name : value.id}FormCondition[${iterations.split(": any")[iterations.split(": any").length - 2].replace(", ", "")}] = (`;
 
               value.conditions.elements.forEach(
                 (condition: any, index: number) => {
                   if (index > 0) {
-                    code += `${
-                      condition.logicalOperator
-                        ? ` ${condition.logicalOperator} `
-                        : ` && `
-                    }`;
+                    conditionMethodCode += `${condition.logicalOperator
+                      ? ` ${condition.logicalOperator} `
+                      : ` && `
+                      }`;
                   }
-                  
-                  code += `(this.${
-                    object.form!.id
-                  }Form.get("${array}")?.value[index]?.${condition.key} ${
-                    condition.comparisonOperator
+
+                  conditionMethodCode += `(this.${object.form!.id
+                    }Form.get([${controlsToAdd ? controlsToAdd : `"${array}"`}])?.value[${iterations.split(": any")[iterations.split(": any").length - 2].replace(", ", "")}]?.${condition.key} ${condition.comparisonOperator
                       ? ` ${condition.comparisonOperator} `
                       : ` === `
-                  } ${(typeof condition.value !== "string") ? condition.value :  `"${condition.value}"`})`;
+                    } ${(typeof condition.value !== "string") ? condition.value : `"${condition.value}"`})`;
                 }
               );
 
-              code += `);`;
+              if (stringToSplitExists) {
+                const codeSplited = code.split(stringToSplit);
+                codeSplited.splice(1, 0, `${stringToSplit} ${conditionMethodCode});`);
+                code = codeSplited.join('');
+              } else {
+                if (!conditionMethodExists) {
+                  code += `${stringToSplit} ${conditionMethodCode}); } };`
+                }
+              }
 
               _conditionMethods.push(value.id);
             }

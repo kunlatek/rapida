@@ -18,10 +18,15 @@ import { setTableTemplate } from "./table/template/main";
 import { setModuleController } from "./module/controller/main";
 import { setModuleTemplate } from "./module/template/main";
 
+require("dotenv").config();
+
 const createAngularProject = (
   object: MainInterface,
   index: number
 ): BuildedFrontendCode => {
+  process.env.ARRAY_LAYER = "[]";
+  process.env.ARRAYS_IN_A_FLOW = "[]";
+  
   let response: BuildedFrontendCode = {
     component: "",
     module: "",
@@ -122,7 +127,7 @@ const setBaseProject = (object: MainInterface) => {
     console.info(`Folder ${nodeModulePath} already exists.`);
   } catch (error) {
     console.info(`Folder node_module isn't created. Running npm install.`);
-    chp.execSync(`npm install`, { cwd: projectPath });
+    chp.execSync(`npm install --save --legacy-peer-deps`, { cwd: projectPath });
   }
 };
 

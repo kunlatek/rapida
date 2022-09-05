@@ -1,19 +1,8 @@
 import { FormElementInterface } from "../../../interfaces/form";
 import { MainInterface } from "../../../interfaces/main";
 import { TextTransformation } from "../../../utils/text.transformation";
+import { getAllElements } from "../main";
 
-const validTypes = [
-  "checkbox",
-  "radio",
-  "datalist",
-  "fieldset",
-  "input",
-  "select",
-  "slide",
-  "textarea",
-  "text",
-  "autocomplete",
-];
 const setModelImports = (object: MainInterface): string => {
   if (!object.form) {
     console.info("Only forms set here");
@@ -24,7 +13,9 @@ const setModelImports = (object: MainInterface): string => {
 
   let additionalLoopbackRepositoriesImportMethods: string[] = [];
 
-  object.form.elements.forEach((element) => {
+  const elements: Array<FormElementInterface> = getAllElements(object.form?.elements);
+
+  elements.forEach((element) => {
     _importsDefault += setImportsDefaultByElement(object, element);
     _importsRelatedRepositories += setImportsRelatedRepositoriesByElement(object, element);
 
@@ -33,8 +24,12 @@ const setModelImports = (object: MainInterface): string => {
 
   additionalLoopbackRepositoriesImportMethods = [...new Set(additionalLoopbackRepositoriesImportMethods)];
 
+  _importsDefault = [
+    ...new Set(`${_importsDefault}`.split(",").map((el) => el.trim())),
+  ].join(",");
+
   let code = `
-  import {model, property, ${additionalLoopbackRepositoriesImportMethods.join(',')}} from '@loopback/repository';
+  import {model, property, Entity, ${additionalLoopbackRepositoriesImportMethods.join(',')}} from '@loopback/repository';
   import {${_importsDefault}__Default} from '.';
   ${_importsRelatedRepositories ? `import {${_importsRelatedRepositories}} from '../repositories/';` : ""}
   `;
@@ -47,36 +42,21 @@ const setImportsDefaultByElement = (
   element: FormElementInterface
 ): string => {
   const modelName = object.form!.id.replace("Form", "");
-  const type = Object.keys(element)[0];
   const value = Object.values(element)[0];
 
   let code = ``;
 
-  if (validTypes.includes(type)) {
-    if (value.optionsApi) {
-      const propertyName = TextTransformation.setIdToClassName(
-        TextTransformation.pascalfy(
-          TextTransformation.singularize(
-            value.optionsApi.endpoint.split("-").join(" ")
-          )
+  if (value.optionsApi && value.optionsApi.endpoint) {
+    const propertyName = TextTransformation.setIdToClassName(
+      TextTransformation.pascalfy(
+        TextTransformation.singularize(
+          value.optionsApi.endpoint.split("-").join(" ")
         )
-      );
-      const modelNameClass = TextTransformation.setIdToClassName(modelName);
+      )
+    );
+    const modelNameClass = TextTransformation.setIdToClassName(modelName);
 
-      code += modelNameClass !== propertyName ? `${propertyName}, ` : "";
-    }
-  } else if (type === "tabs") {
-    element.tabs?.forEach((tab) => {
-      tab.elements.forEach((tabElement) => {
-        code += setImportsDefaultByElement(object, tabElement);
-      });
-    });
-  } else if (type === 'array') {
-    if (element.array?.elements) {
-      element.array?.elements?.forEach(arrayElement => {
-        code += setImportsDefaultByElement(object, arrayElement);
-      })
-    }
+    code += modelNameClass !== propertyName ? `${propertyName}, ` : "";
   }
 
   return code;
@@ -87,38 +67,22 @@ const setImportsRelatedRepositoriesByElement = (
   element: FormElementInterface
 ): string => {
   const modelName = object.form!.id.replace("Form", "");
-  const type = Object.keys(element)[0];
   const value = Object.values(element)[0];
 
   let code = ``;
 
-  if (validTypes.includes(type)) {
-
-    if (value.optionsApi) {
-      const className = TextTransformation.setIdToClassName(
-        TextTransformation.pascalfy(
-          TextTransformation.singularize(
-            value.optionsApi.endpoint.split("-").join(" ")
-          )
+  if (value.optionsApi && value.optionsApi.endpoint) {
+    const className = TextTransformation.setIdToClassName(
+      TextTransformation.pascalfy(
+        TextTransformation.singularize(
+          value.optionsApi.endpoint.split("-").join(" ")
         )
-      );
-      const modelNameClass = TextTransformation.setIdToClassName(modelName);
+      )
+    );
+    const modelNameClass = TextTransformation.setIdToClassName(modelName);
 
-      if (value.isMultiple) {
-        code += `${modelNameClass}Has${className}`;
-      }
-    }
-  } else if (type === "tabs") {
-    element.tabs?.forEach((tab) => {
-      tab.elements.forEach((tabElement) => {
-        code += setImportsRelatedRepositoriesByElement(object, tabElement);
-      });
-    });
-  } else if (type === 'array') {
-    if (element.array?.elements) {
-      element.array?.elements?.forEach(arrayElement => {
-        code += setImportsRelatedRepositoriesByElement(object, arrayElement);
-      })
+    if (value.isMultiple) {
+      code += `${modelNameClass}Has${className}`;
     }
   }
 
@@ -131,24 +95,11 @@ const getAdditionalLoopbackRepositoriesImportMethods = (
 
   let additionalLoopbackRepositoriesImportMethods = [];
 
-  const type = Object.keys(element)[0];
   const value = Object.values(element)[0];
 
-  if (validTypes.includes(type) && value.optionsApi) {
+  if (value.optionsApi && value.optionsApi.endpoint) {
     if (value.isMultiple) additionalLoopbackRepositoriesImportMethods.push('hasMany')
     else additionalLoopbackRepositoriesImportMethods.push('belongsTo');
-  } else if (type === "tabs") {
-    element.tabs?.forEach((tab) => {
-      tab.elements.forEach((tabElement) => {
-        additionalLoopbackRepositoriesImportMethods.push(getAdditionalLoopbackRepositoriesImportMethods(tabElement));
-      });
-    });
-  } else if (type === 'array') {
-    if (element.array?.elements) {
-      element.array?.elements?.forEach(arrayElement => {
-        additionalLoopbackRepositoriesImportMethods.push(getAdditionalLoopbackRepositoriesImportMethods(arrayElement));
-      })
-    }
   }
 
   return additionalLoopbackRepositoriesImportMethods.flat();

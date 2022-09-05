@@ -15,7 +15,7 @@ export const ANIMATION_CHART: MainInterface = {
     },
     service: {
         baseUrl: "http://localhost:3000",
-        endPoint: "animations",
+        endpoint: "animations",
         hasAuthorization: true,
         methods: [
             ServiceFunctionsEnum.Get,

@@ -32,15 +32,15 @@ export const USERS_GROUP_TABLE: MainInterface = {
             {
               action: {
                 type: RequestTypeEnum.Link,
-                url: "/main/usersGroup",
-                param: "_id",
+                url: "/main/users-group",
+                param: "uuid",
               },
               label: "Editar",
             },
             {
               action: {
                 type: RequestTypeEnum.Dialog,
-                param: "_id",
+                param: "uuid",
               },
               label: "Remover",
               dialog: {
@@ -54,7 +54,7 @@ export const USERS_GROUP_TABLE: MainInterface = {
     ],
     service: {
         baseUrl: "http://devbackadmin.lpsbr.com/api/v1",
-        endPoint: "user-groups?page=0&size=25&sort=description (asc)",
+        endpoint: "user-groups",
         hasAuthorization: true,
         methods: [
             ServiceFunctionsEnum.Get,

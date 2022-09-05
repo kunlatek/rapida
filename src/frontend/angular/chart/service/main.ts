@@ -35,7 +35,7 @@ const setChartService = (object: MainInterface): string => {
       getDetails(filter: string = "") {
         return this._httpClient
           .get(\`\${this.BASE_URL}/${
-            object.chart.service?.endPoint
+            object.chart.service?.endpoint
           }/details?\${filter}\`, {
             headers: {
               Authorization: \`Bearer \${sessionStorage.getItem("token")}\`,
@@ -100,7 +100,7 @@ const setChartServiceServicesOverChartElement = (
         code += `
         getAll(filter: string = "") {
           return this._httpClient.get(
-            \`\${this.BASE_URL}/${element.endPoint}\${filter}\`, {
+            \`\${this.BASE_URL}/${element.endpoint}\${filter}\`, {
               headers: {
                 ${hasAuthorization}
               }
@@ -114,7 +114,7 @@ const setChartServiceServicesOverChartElement = (
         code += `
         find(id: string) {
           return this._httpClient.get(
-            \`\${this.BASE_URL}/${element.endPoint}/\${id}\`,
+            \`\${this.BASE_URL}/${element.endpoint}/\${id}\`,
             {
               headers: {
                 ${hasAuthorization}
@@ -129,7 +129,7 @@ const setChartServiceServicesOverChartElement = (
         code += `
         save(body: any) {
           return this._httpClient.post(
-          \`\${this.BASE_URL}/${element.endPoint}\`, 
+          \`\${this.BASE_URL}/${element.endpoint}\`, 
           body,
           {
             headers: {
@@ -145,7 +145,7 @@ const setChartServiceServicesOverChartElement = (
         code += `
         update(body: any, id: string) {
           return this._httpClient.put(
-            \`\${this.BASE_URL}/${element.endPoint}/\${id}\`, 
+            \`\${this.BASE_URL}/${element.endpoint}/\${id}\`, 
             body,
             {
               headers: {
@@ -161,7 +161,7 @@ const setChartServiceServicesOverChartElement = (
         code += `
         delete(id: string) {
           return this._httpClient.delete(
-            \`\${this.BASE_URL}/${element.endPoint}/\${id}\`,
+            \`\${this.BASE_URL}/${element.endpoint}/\${id}\`,
             {
               headers: {
                 ${hasAuthorization}
@@ -176,7 +176,7 @@ const setChartServiceServicesOverChartElement = (
         code += `
         softDelete(id: string) {
           return this._httpClient.put(
-            \`\${this.BASE_URL}/${element.endPoint}/\${id}\`,
+            \`\${this.BASE_URL}/${element.endpoint}/\${id}\`,
             {
               headers: {
                 ${hasAuthorization}

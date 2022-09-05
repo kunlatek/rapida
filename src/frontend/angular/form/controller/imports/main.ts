@@ -7,6 +7,7 @@ let _hasValidator: boolean = false;
 let _hasAutocompleteMultiple: boolean = false;
 let _hasAutocomplete: boolean = false;
 let _hasCondition: boolean = false;
+let _hasInputApiRequest: boolean = false;
 
 const setFormControllerImports = (object: MainInterface): string => {
   if (!object.form) {
@@ -14,12 +15,19 @@ const setFormControllerImports = (object: MainInterface): string => {
     return ``;
   }
 
-  object.form?.elements.map((element) => {
+  _hasArray = false;
+  _hasValidator = false;
+  _hasAutocompleteMultiple = false;
+  _hasAutocomplete = false;
+  _hasCondition = false;
+  _hasInputApiRequest = false;
+
+  object.form.elements.map((element) => {
     verifyFormElement(element);
   });
 
   let code = `
-  import { Component, ${_hasAutocomplete ? `ElementRef, ViewChild,` : ``} ${
+  import { Component, ${_hasAutocompleteMultiple ? `ElementRef, ViewChild,` : ``} ${
     _hasCondition ? `OnChanges,` : ``
   }} from "@angular/core";
   import { FormBuilder, FormGroupDirective, FormGroup, ${
@@ -28,15 +36,15 @@ const setFormControllerImports = (object: MainInterface): string => {
   import { ActivatedRoute, Router } from "@angular/router";
   import { MatSnackBar } from "@angular/material/snack-bar";
   ${
-    _hasAutocomplete
-      ? `import { COMMA, ENTER } from "@angular/cdk/keycodes";
-    import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-    import { MyPerformance } from "src/app/utils/performance";`
+    (_hasAutocomplete || _hasInputApiRequest)
+      ? `import { MyPerformance } from "src/app/utils/performance";`
       : ``
   }
   ${
     _hasAutocompleteMultiple
-      ? `import {MatChipInputEvent} from '@angular/material/chips';`
+      ? `import { COMMA, ENTER } from "@angular/cdk/keycodes";
+      import {MatChipInputEvent} from '@angular/material/chips';
+      import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';`
       : ``
   }
   import { MyErrorHandler } from "../../utils/error-handler";
@@ -78,7 +86,7 @@ const verifyFormElement = (element: FormElementInterface): void => {
 
   if (element.autocomplete) {
     _hasAutocomplete = true;
-
+    
     if (value.isMultiple) {
       _hasAutocompleteMultiple = true;
     }
@@ -95,6 +103,9 @@ const verifyFormElement = (element: FormElementInterface): void => {
       if (value.validators.length > 0) {
         _hasValidator = true;
       }
+    }
+    if (value.apiRequest) {
+      _hasInputApiRequest = true;
     }
   }
 };

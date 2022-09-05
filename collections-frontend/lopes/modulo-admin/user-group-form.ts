@@ -3,12 +3,11 @@ import {
   FormInputTypeEnum,
   ServiceFunctionsEnum,
 } from "../../../src/enums/form";
-import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/main";
+import { FrontendFrameworkEnum } from "../../../src/enums/main";
 import { MainInterface } from "../../../src/interfaces/main";
 
 export const USERS_GROUP_FORM: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
-  backendFramework: BackendFrameworkEnum.Loopback,
   form: {
     title: "Grupo de usuários",
     id: "usersGroupForm",
@@ -17,10 +16,35 @@ export const USERS_GROUP_FORM: MainInterface = {
         input: {
           label: "Nome",
           name: "name",
-          placeholder: "Nome da animação",
+          placeholder: "Nome do grupo",
           type: FormInputTypeEnum.Text,
           isRequired: true,
         },
+      },
+      {
+        input: {
+          label: "Descrição",
+          name: "description",
+          placeholder: "Descrição do grupo",
+          type: FormInputTypeEnum.Text,
+          isRequired: true,
+        },
+      },
+      {
+        autocomplete: {
+          label: "Usuários",
+          name: "users",
+          placeholder: "Usuários relacionados",
+          type: FormInputTypeEnum.Text,
+          optionsApi: {
+            endpoint: "users",
+            labelField: "name",
+            valueField: "uuid",
+            paramsToFilter: ["name"]
+          },
+          isRequired: true,
+          isMultiple: true,
+        }
       },
       {
         button: {
@@ -31,7 +55,7 @@ export const USERS_GROUP_FORM: MainInterface = {
     ],
     service: {
       baseUrl: "http://devbackadmin.lpsbr.com/api/v1",
-      endPoint: "user-groups",
+      endpoint: "user-groups",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

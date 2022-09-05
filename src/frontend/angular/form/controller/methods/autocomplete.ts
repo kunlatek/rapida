@@ -4,12 +4,7 @@ import {
 } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
-import {
-  setArrayControls,
-  setArrayControlsToAdd,
-  setArrayIndexes,
-  setArrayIndexesToAdd,
-} from "./array";
+import { setArrayControls, setArrayIndexes } from "./array";
 
 const setAutocompleteMethod = (
   object: MainInterface,
@@ -89,13 +84,9 @@ const setAutocompleteMethod = (
   )} = (value?: any) => {
     const otherValue = this.${
       object.form?.id
-    }ToEdit?.data?.${TextTransformation.setIdToPropertyName(
-    TextTransformation.singularize(element.autocomplete.optionsApi.endpoint)
-  )} ? this.${
+    }ToEdit?.data?.${element.autocomplete.name.substring(0, element.autocomplete.name.length - 2)} ? this.${
     object.form?.id
-  }ToEdit.data.${TextTransformation.setIdToPropertyName(
-    TextTransformation.singularize(element.autocomplete.optionsApi.endpoint)
-  )} : null;
+  }ToEdit.data.${element.autocomplete.name.substring(0, element.autocomplete.name.length - 2)} : null;
     if (value === otherValue?.${element.autocomplete.optionsApi.valueField}) {
       return otherValue.${element.autocomplete.optionsApi.labelField};
     }
@@ -119,7 +110,7 @@ const setAutocompleteMethod = (
       if(this.${object.form?.id}Form.
       ${
         array
-          ? `get([${controls}, "${element.autocomplete.name}"])?.value`
+          ? `get([${controls}, ${iterations?.split(",")[iterations.split(",").length - 1].replace(/: any/g, "")}, "${element.autocomplete.name}"])?.value`
           : `value.${element.autocomplete.name}`
       }
       .length > 0) {
@@ -129,7 +120,7 @@ const setAutocompleteMethod = (
               this.${object.form?.id}Form.
               ${
                 array
-                  ? `get([${controls}, "${element.autocomplete.name}"])?.value`
+                  ? `get([${controls}, ${iterations?.split(",")[iterations.split(",").length - 1].replace(/: any/g, "")}, "${element.autocomplete.name}"])?.value`
                   : `value.${element.autocomplete.name}`
               }
             }", "options": "i"}}\`
@@ -138,8 +129,8 @@ const setAutocompleteMethod = (
         })}]}\`;
         
         this._${object.form?.id}Service.${
-    element.autocomplete.name
-  }SelectObjectGetAll(filter.replace("},]", "}]"))
+          element.autocomplete.name
+        }SelectObjectGetAll(filter.replace("},]", "}]"))
         .then((result: any) => {
           this.filtered${TextTransformation.pascalfy(
             element.autocomplete.name
@@ -151,7 +142,7 @@ const setAutocompleteMethod = (
               await this.refreshToken();
               this.setFiltered${TextTransformation.pascalfy(
                 element.autocomplete.name
-              )}(${iterations ? iterations?.replace(": any", "") : ""});
+              )}(${iterations ? iterations?.replace(/: any/g, "") : ""});
             } else {
                 const message = this._errorHandler.apiErrorMessage(err.error.message);
                 this.sendErrorMessage(message);
@@ -160,16 +151,18 @@ const setAutocompleteMethod = (
       }
     } catch (error: any) {
       const message = this._errorHandler.apiErrorMessage(
-        error.error.message
+        error.message
       );
       this.sendErrorMessage(message);
     };
-};
-callSetFiltered${TextTransformation.pascalfy(
+  };
+  callSetFiltered${TextTransformation.pascalfy(
     element.autocomplete.name
-  )} = MyPerformance.debounce((${iterations ? iterations : ""}) => this.setFiltered${TextTransformation.pascalfy(
+  )} = MyPerformance.debounce((${
+    iterations ? iterations : ""
+  }) => this.setFiltered${TextTransformation.pascalfy(
     element.autocomplete.name
-  )}(${iterations ? iterations?.replace(": any", "") : ""}));
+  )}(${iterations ? iterations?.replace(/: any/g, "") : ""}));
   `;
 
   return code;

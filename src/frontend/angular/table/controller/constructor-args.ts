@@ -18,7 +18,7 @@ const setTableControllerConstructorArguments = (
       this.${object.table.id}Id = routeParams["id"];
     });
   } catch (error: any) {
-    const message = this._errorHandler.apiErrorMessage(error.error.message);
+    const message = this._errorHandler.apiErrorMessage(error.message);
     this.sendErrorMessage(message);
   }
   this.set${TextTransformation.pascalfy(object.table.id)}Service();

@@ -54,7 +54,7 @@ export const PROJECT_TABLE: MainInterface = {
     ],
     service: {
         baseUrl: "http://localhost:3000",
-        endPoint: "projects",
+        endpoint: "projects",
         hasAuthorization: true,
         methods: [
             ServiceFunctionsEnum.Get,

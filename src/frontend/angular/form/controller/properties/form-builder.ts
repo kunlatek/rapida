@@ -1,31 +1,78 @@
 import { FormInputTypeEnum } from "../../../../../enums/form";
 import { FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
-import { TextTransformation } from "../../../../../utils/text.transformation";
+import { setArrayLayer } from "../../template/array";
+require('dotenv').config();
 
-const setFormBuilder = (
+export interface ArrayFeaturesInterface {
+  parentArray?: string;
+  layer: number;
+  arrayNumber: number;
+  indexIdentifier: string;
+  name: string;
+}
+
+let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+  process.env.ARRAY_LAYER!
+);
+
+const setFormBuilderProperty = (
   object: MainInterface
 ): string => {
   let code = ``;
-  
+
   if (!object.form) {
     return code;
   }
-  
-  code += setFormBuilderByElements(object.form.elements);
+
+  _arrayLayer = [];
+
+  setArrayLayer(object.form.elements);
+
+  _arrayLayer = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
+  code += `${object.form.id}Builder = { ${setFormBuilderByElements(object.form.elements)} };`;
+
+  code += setFormArrayBuilderByElementsProperty(object.form.elements);
+
+  return code;
+}
+
+const setFormArrayBuilderByElementsProperty = (
+  formElements: Array<FormElementInterface>
+): string => {
+  let code = ``;
+  for (let index = 0; index < formElements.length; index++) {
+    const element = formElements[index];
+
+    if (element.array) {
+      // code += `${element.array.id}Builder = { 
+      //   ${setFormBuilderByElements(element.array.elements)}
+      // };`;
+
+      code += setFormArrayBuilderByElementsProperty(element.array.elements);
+    }
+
+    if (element.tabs) {
+      element.tabs.forEach((tab) => {
+        code += setFormArrayBuilderByElementsProperty(tab.elements);
+      });
+    }
+  }
 
   return code;
 }
 
 const setFormBuilderByElements = (
   formElements: Array<FormElementInterface>,
-  isInArray: boolean = false
+  inArray: undefined | string = undefined
 ) => {
   let code = ``;
 
-  formElements.forEach(element => {    
-    if (element.input) {
-      if (!isInArray) {        
+  formElements.forEach(element => {
+    if (!inArray) {      
+      if (element.input) {
         code += `
         ${element.input.name}:[
           {
@@ -49,12 +96,10 @@ const setFormBuilderByElements = (
         code += `
           ]
         ],
-        `;
+        `;        
       }
-    }
   
-    if (element.select) {
-      if (!isInArray) {
+      if (element.select) {
         code += `
         ${element.select.name}:[
           ${(element.select.isMultiple) ? `[]` : `null`},
@@ -75,12 +120,10 @@ const setFormBuilderByElements = (
         code += `
           ]
         ],
-        `;
+        `;      
       }
-    }
   
-    if (element.autocomplete) {
-      if (!isInArray) {
+      if (element.autocomplete) {
         code += `
         ${element.autocomplete.name}:[
           ${(element.autocomplete.isMultiple) ? `[]` : `null`},
@@ -101,12 +144,10 @@ const setFormBuilderByElements = (
         code += `
           ]
         ],
-        `;
+        `;        
       }
-    }
   
-    if (element.checkbox) {
-      if (!isInArray) {
+      if (element.checkbox) {
         code += `
         ${element.checkbox.name}:[
           {
@@ -121,7 +162,7 @@ const setFormBuilderByElements = (
             return `Validators.${validator},`;
           });
         }
-    
+
         if (element.checkbox.isRequired) {
           code += `Validators.required,`;
         }
@@ -130,10 +171,8 @@ const setFormBuilderByElements = (
         ],
         `;
       }
-    }
   
-    if (element.radio) {
-      if (!isInArray) {
+      if (element.radio) {
         code += `
         ${element.radio.name}:[
           {
@@ -148,7 +187,7 @@ const setFormBuilderByElements = (
             return `Validators.${validator},`;
           });
         }
-    
+
         if (element.radio.isRequired) {
           code += `Validators.required,`;
         }
@@ -157,29 +196,36 @@ const setFormBuilderByElements = (
         ],
         `;
       }
-    }
   
-    if (element.slide) {
-      if (!isInArray) {
+      if (element.slide) {
         code += `
         ${element.slide.name}:[
           false,
           []
         ],
-        `;
+        `;        
       }
     }
-  
+    
     if (element.array) {
-      code += `
-      ${element.array.id}: this._formBuilder.array([
-        this.init${TextTransformation.pascalfy(element.array.id)}(),
-      ]),
-      `;
+      let inArrayLayer: any;
+      for (let i = 0; i < _arrayLayer.length; i++) {
+        const e = _arrayLayer[i];
+        
+        if ((e.name === inArray)) {
+          inArrayLayer = e;
+        }
+      }
+      
+      if (!inArrayLayer) {
+        code += `
+        ${element.array.id}: this._formBuilder.array([]),
+        `;
+      }
 
-      code += setFormBuilderByElements(element.array.elements, true);
+      code += setFormBuilderByElements(element.array.elements, element.array.id);
     }
-  
+
     if (element.tabs) {
       element.tabs.forEach((form) => {
         code += setFormBuilderByElements(form.elements);
@@ -191,6 +237,7 @@ const setFormBuilderByElements = (
 };
 
 export {
-  setFormBuilder,
-  setFormBuilderByElements
+  setFormBuilderProperty,
+  setFormArrayBuilderByElementsProperty,
+  setFormBuilderByElements,
 };

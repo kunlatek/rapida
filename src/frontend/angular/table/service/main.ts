@@ -62,7 +62,6 @@ const setTableServiceServices = (object: MainInterface) => {
 
   if (object.table?.service) {
     code += setTableServiceServicesOverTableElement(
-      object,
       object.table?.service
     );
   }
@@ -71,24 +70,23 @@ const setTableServiceServices = (object: MainInterface) => {
 };
 
 const setTableServiceServicesOverTableElement = (
-  object: MainInterface,
-  element: ServiceInterface
+  service: ServiceInterface
 ) => {
   let hasAuthorization = ``;
-  if (element.hasAuthorization) {
+  if (service.hasAuthorization) {
     hasAuthorization = `"Authorization": \`Bearer \${sessionStorage.getItem("token")}\``;
     _hasAuthorization = true;
   }
 
   let code = ``;
 
-  element.methods.forEach((method) => {
+  service.methods.forEach((method) => {
     switch (method) {
       case ServiceFunctionsEnum.Get:
         code += `
         getAll(filter: string = "") {
           return this._httpClient.get(
-            \`\${this.BASE_URL}/${element.endPoint}\${filter}\`, {
+            \`\${this.BASE_URL}/${service.endpoint}\${filter}\`, {
               headers: {
                 ${hasAuthorization}
               }
@@ -102,7 +100,7 @@ const setTableServiceServicesOverTableElement = (
         code += `
         find(id: string) {
           return this._httpClient.get(
-            \`\${this.BASE_URL}/${element.endPoint}/\${id}\`,
+            \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
             {
               headers: {
                 ${hasAuthorization}
@@ -117,7 +115,7 @@ const setTableServiceServicesOverTableElement = (
         code += `
         save(body: any) {
           return this._httpClient.post(
-          \`\${this.BASE_URL}/${element.endPoint}\`, 
+          \`\${this.BASE_URL}/${service.endpoint}\`, 
           body,
           {
             headers: {
@@ -133,7 +131,7 @@ const setTableServiceServicesOverTableElement = (
         code += `
         update(body: any, id: string) {
           return this._httpClient.put(
-            \`\${this.BASE_URL}/${element.endPoint}/\${id}\`, 
+            \`\${this.BASE_URL}/${service.endpoint}/\${id}\`, 
             body,
             {
               headers: {
@@ -149,7 +147,7 @@ const setTableServiceServicesOverTableElement = (
         code += `
         delete(id: string) {
           return this._httpClient.delete(
-            \`\${this.BASE_URL}/${element.endPoint}/\${id}\`,
+            \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
             {
               headers: {
                 ${hasAuthorization}
@@ -164,7 +162,7 @@ const setTableServiceServicesOverTableElement = (
         code += `
         softDelete(id: string) {
           return this._httpClient.put(
-            \`\${this.BASE_URL}/${element.endPoint}/\${id}\`,
+            \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
             {
               headers: {
                 ${hasAuthorization}

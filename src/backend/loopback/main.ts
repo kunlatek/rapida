@@ -5,6 +5,8 @@ import { BuildedBackendCode, MainInterface } from "../../interfaces/main";
 import { controllerMain } from "./controller/main";
 import { modelMain } from "./model/main";
 import { repositoryMain } from "./repository/main";
+import { FormElementInterface } from "../../interfaces/form";
+import { FormInputTypeEnum } from "../../enums/form";
 
 const createLoopbackProject = (
   object: MainInterface,
@@ -64,7 +66,7 @@ const setBaseProject = (object: MainInterface) => {
     console.info(`Folder ${nodeModulePath} already exists.`);
   } catch (error) {
     console.info(`Folder node_module isn't created. Running npm install.`);
-    chp.execSync(`npm install`, { cwd: projectPath });
+    chp.execSync(`npm install --save --legacy-peer-deps`, { cwd: projectPath });
   }
 };
 
@@ -80,4 +82,65 @@ const doesProjectFolderExists = (object: MainInterface) => {
   }
 }
 
-export { createLoopbackProject };
+const getAllElements = (
+  elementList: Array<FormElementInterface>,
+  elementsToReturn: Array<FormElementInterface> = [],
+): Array<FormElementInterface> => {
+
+  const validTypes = [
+    "checkbox",
+    "radio",
+    "datalist",
+    "fieldset",
+    "input",
+    "select",
+    "slide",
+    "textarea",
+    "text",
+    "autocomplete",
+
+    'array',
+  ];
+
+  elementList.forEach(element => {
+    const type = Object.keys(element)[0];
+
+    if (validTypes.includes(type)) {
+
+      elementsToReturn.push(element);
+
+    } else if (type === "tabs") {
+
+      element.tabs?.forEach((tab) => {
+        elementsToReturn = getAllElements(tab.elements, elementsToReturn);
+      });
+
+    }
+    // else if (type === "array") {
+
+    //   if (element.array?.elements) {
+    //     elementsToReturn = [
+    //       {
+    //         select: {
+    //           label: element.array?.title,
+    //           name: element.array?.id,
+    //           isMultiple: true,
+    //           type: FormInputTypeEnum.Text,
+    //         },
+    //       },
+    //       ...getAllElements(element.array?.elements, elementsToReturn),
+    //     ];
+
+    //   }
+
+    // }
+
+  })
+
+  return elementsToReturn;
+}
+
+export {
+  createLoopbackProject,
+  getAllElements,
+};

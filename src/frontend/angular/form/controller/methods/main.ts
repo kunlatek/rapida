@@ -25,10 +25,6 @@ const setFormControllerMethods = (object: MainInterface): string => {
     object,
     object.form.elements
   );
-  let _conditionsMethodsInArray = setConditionsInArray(
-    object,
-    object.form.elements
-  );
   let _methods = setMethod(object);
   let _fileSubmit = setFileSubmit(object);
   let _valueTreatmentBeforeSubmit = setValueBeforeSubmit(
@@ -43,13 +39,8 @@ const setFormControllerMethods = (object: MainInterface): string => {
   const code = `
   ${
     _hasCondition
-      ? `setCondition = (index: number | undefined = undefined, checked: boolean = true) => {
-        ${_conditionsMethods}
-        ${
-          _hasConditionInArray
-            ? `if (typeof index === "number") { ${_conditionsMethodsInArray} }`
-            : ""
-        }
+      ? `setCondition = () => {
+        ${_conditionsMethods}        
       };
       
       setConditionOverEdition = () => {
@@ -57,6 +48,13 @@ const setFormControllerMethods = (object: MainInterface): string => {
       };`
       : ``
   }
+
+  ${
+    _hasConditionInArray
+      ? setConditionsInArray(object, object.form.elements)
+      : ""
+  }
+
   ${_methods}
   ${object.form.id}Submit = async (
     ${object.form?.id}Directive: FormGroupDirective
@@ -83,11 +81,11 @@ const setFormControllerMethods = (object: MainInterface): string => {
         
         this.isLoading = false;
       } catch (error: any) {
-        if (error.error.logMessage === 'jwt expired') {
+        if (error.logMessage === 'jwt expired') {
           await this.refreshToken();
           this.${object.form.id}Submit(${object.form?.id}Directive);
         } else {
-          const message = this._errorHandler.apiErrorMessage(error.error.message);
+          const message = this._errorHandler.apiErrorMessage(error.message);
           this.isLoading = false;
           this.sendErrorMessage(message);
         }
@@ -104,7 +102,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
           sessionStorage.setItem('refreshToken', res?.data.authRefreshToken);
         }
       } catch (error: any) {
-        const message = this._errorHandler.apiErrorMessage(error.error.message);
+        const message = this._errorHandler.apiErrorMessage(error.message);
         this.isLoading = false;
         this.sendErrorMessage(message);
         sessionStorage.clear();

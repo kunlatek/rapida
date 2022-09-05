@@ -1,19 +1,76 @@
 import { FormElementInterface } from "../../../interfaces/form";
 import { MainInterface } from "../../../interfaces/main";
 import { TextTransformation } from "../../../utils/text.transformation";
+import { getAllElements } from "../main";
 
-const validTypes = [
-  "checkbox",
-  "radio",
-  "datalist",
-  "fieldset",
-  "input",
-  "select",
-  "slide",
-  "textarea",
-  "text",
-  "autocomplete",
-];
+const setGetRelatedElementsInArrayType = (object: MainInterface): string => {
+  if (!object.form) {
+    console.info("Only forms set here");
+    return ``;
+  }
+
+  let _findRelatedElements = ``;
+
+  const elements: Array<FormElementInterface> = getAllElements(object.form.elements);
+
+  elements.forEach((element) => {
+    const type = Object.keys(element)[0];
+    if (type === 'array') {
+      const value = Object.values(element)[0];
+      const relatedType = TextTransformation.setIdToClassName(value.id);
+
+      const createMultidimensionalArrayFindRelatedCode = (
+        elements: Array<FormElementInterface>,
+        relatedId: string,
+        isFirstArray: boolean,
+      ) => {
+
+        let _findRelatedElementsToReturn = ``;
+        elements?.forEach((elementProperty: FormElementInterface) => {
+
+          if (elementProperty.autocomplete || elementProperty.array) {
+
+            if (elementProperty.autocomplete) {
+              const collection = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(elementProperty.autocomplete?.optionsApi?.endpoint?.split('-').join(' ') || '')));
+              _findRelatedElementsToReturn +=
+                `
+                const relatedData_${relatedType}_${value.id} = await getRelatedElements('${collection}', ${isFirstArray ? 'data' : TextTransformation.singularize(value.id)}?.${relatedId}?.map(el => el.${elementProperty.autocomplete.name}) || []);
+                ${TextTransformation.singularize(relatedId)}.${elementProperty.autocomplete.name.slice(0, -2)} = relatedData_${relatedType}_${value.id}.find(childEl => childEl._id.toString() === ${TextTransformation.singularize(relatedId)}.${elementProperty.autocomplete.name})
+              `;
+            } else if (elementProperty.array) {
+              _findRelatedElementsToReturn +=
+                `
+                for(
+                  let ${elementProperty.array?.id}Index = 0; 
+                  ${elementProperty.array?.id}Index < ${TextTransformation.singularize(relatedId)}?.${elementProperty.array?.id}?.length!; 
+                  ${elementProperty.array?.id}Index++
+                ){
+                  
+                  const ${TextTransformation.singularize(elementProperty.array?.id)} = ${TextTransformation.singularize(relatedId)}?.${elementProperty.array?.id}![${elementProperty.array?.id}Index];
+                  
+                  ${createMultidimensionalArrayFindRelatedCode(elementProperty.array?.elements!, elementProperty.array?.id!, false)}
+                };
+              `;
+            }
+          }
+        });
+
+        return _findRelatedElementsToReturn;
+      }
+
+      _findRelatedElements +=
+        `
+        for(let ${value.id}Index = 0; ${value.id}Index < data.${value.id}?.length!; ${value.id}Index++){
+          const ${TextTransformation.singularize(value.id)} = data.${value.id}![${value.id}Index];
+          
+          ${createMultidimensionalArrayFindRelatedCode(value.elements, value.id, true)}
+        }
+      `
+    }
+  });
+
+  return _findRelatedElements;
+};
 
 const setControllerMethods = (object: MainInterface): string => {
   if (!object.form) {
@@ -27,7 +84,9 @@ const setControllerMethods = (object: MainInterface): string => {
   let _createRelated: string = ``;
   let _deleteRelated: string = ``;
 
-  object.form.elements.forEach((element) => {
+  const elements: Array<FormElementInterface> = getAllElements(object.form?.elements);
+
+  elements.forEach((element) => {
     _propertiesRelatedFind += setPropertiesToFindByElement(element);
     _createRelated += setCreateAllMethodsByElement(object, element);
     _deleteRelated += setDeleteAllMethodsByElement(object, element);
@@ -65,8 +124,11 @@ const setControllerMethods = (object: MainInterface): string => {
           const dataToWorkInRelation = data;
           const idToWorkInRelation = dataCreated._id;
           ${_createRelated}
+          const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+
           return HttpResponseToClient.createHttpResponse({
               data: dataCreated,
+              tokens,
               locale,
               request: this.httpRequest,
               response: this.httpResponse,
@@ -111,9 +173,12 @@ const setControllerMethods = (object: MainInterface): string => {
           const result = await this.repository.find({...filters, include: [${_propertiesRelatedFind}]});
       
           const total = await this.repository.count(filters['where']);
-      
+
+          const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+
           return HttpResponseToClient.okHttpResponse({
               data: {total: total?.count, result},
+              tokens,
               locale,
               request: this.httpRequest,
               response: this.httpResponse,
@@ -149,14 +214,19 @@ const setControllerMethods = (object: MainInterface): string => {
   ): Promise<IHttpResponse> {
       try {
   
-          const data = await this.repository.findOne({
+          let data = await this.repository.findOne({
               where: {and: [{_id: id}, {_deletedAt: {eq: null}}]},
               include: [${_propertiesRelatedFind}],
           });
           if (!data) throw new Error(serverMessages['httpResponse']['notFoundError'][locale ?? LocaleEnum['pt-BR']]);
+
+          ${setGetRelatedElementsInArrayType(object)}
+
+          const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
       
           return HttpResponseToClient.okHttpResponse({
               data,
+              tokens,
               locale,
               request: this.httpRequest,
               response: this.httpResponse,
@@ -201,8 +271,10 @@ const setControllerMethods = (object: MainInterface): string => {
           const idToWorkInRelation = dataToWorkInRelation._id;
           dataToWorkInRelation = JSON.parse(JSON.stringify(data));
           ${_createRelated}
+          const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
       
           return HttpResponseToClient.noContentHttpResponse({
+              tokens,
               locale,
               request: this.httpRequest,
               response: this.httpResponse,
@@ -244,12 +316,15 @@ const setControllerMethods = (object: MainInterface): string => {
           const dataWithoutNullProperties = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null));
   
           await this.repository.updateById(id, dataWithoutNullProperties);
-;
+
           const idToWorkInRelation = dataToWorkInRelation._id;
           dataToWorkInRelation = JSON.parse(JSON.stringify(data));
           ${_createRelated}
+
+          const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
       
           return HttpResponseToClient.noContentHttpResponse({
+              tokens,
               locale,
               request: this.httpRequest,
               response: this.httpResponse,
@@ -283,8 +358,11 @@ const setControllerMethods = (object: MainInterface): string => {
           const dataToDelete = await this.repository.findById(id);
       
           await this.repository.updateById(id, {...dataToDelete, _deletedAt: new Date()});
-      
+
+          const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+
           return HttpResponseToClient.noContentHttpResponse({
+              tokens,
               locale,
               request: this.httpRequest,
               response: this.httpResponse,
@@ -338,8 +416,11 @@ const setControllerMethods = (object: MainInterface): string => {
 
       const data = await this.chartService.getChartDatasets(result, this.httpRequest.url);
 
+      const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+      
       return HttpResponseToClient.okHttpResponse({
         data,
+        tokens,
         locale,
         request: this.httpRequest,
         response: this.httpResponse,
@@ -385,8 +466,11 @@ const setControllerMethods = (object: MainInterface): string => {
 
       const data = await this.chartService.getChartDetails(result, this.httpRequest.url);
 
+      const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+
       return HttpResponseToClient.okHttpResponse({
         data,
+        tokens,
         locale,
         request: this.httpRequest,
         response: this.httpResponse,
@@ -410,32 +494,20 @@ const setPropertiesToFindByElement = (
 ): string => {
   let code = ``;
 
-  const type = Object.keys(element)[0];
   const value = Object.values(element)[0];
 
-  if (validTypes.includes(type)) {
-    if (value.optionsApi) {
-      const propertyName = TextTransformation.setIdToPropertyName(
-        TextTransformation.pascalfy(
-          TextTransformation.singularize(
-            value.optionsApi.endpoint.split("-").join(" ")
-          )
+  if (value.optionsApi && value.optionsApi.endpoint) {
+    const propertyName = TextTransformation.setIdToPropertyName(
+      TextTransformation.pascalfy(
+        TextTransformation.singularize(
+          value.optionsApi.endpoint.split("-").join(" ")
         )
-      );
+      )
+    );
+    if (value.isMultiple)
       code += `'${propertyName}',`;
-    }
-  } else if (type === "tabs") {
-    element.tabs?.forEach((tab) => {
-      tab.elements.forEach((element) => {
-        code += setPropertiesToFindByElement(element);
-      });
-    });
-  } else if (type === "array") {
-    if (element.array?.elements) {
-      element.array?.elements.forEach((arrayElement) => {
-        code += setPropertiesToFindByElement(arrayElement);
-      });
-    }
+    else
+      code += `'${value.name.slice(0, -2)}',`;
   }
 
   return code;
@@ -448,33 +520,18 @@ const setCreateAllMethodsByElement = (
   let code = ``;
 
   const modelName: string = object.form!.id.replace("Form", "");
-  const type = Object.keys(element)[0];
   const value = Object.values(element)[0];
 
-  if (validTypes.includes(type)) {
-    if (value.optionsApi) {
-      const className = TextTransformation.setIdToClassName(
-        TextTransformation.pascalfy(
-          TextTransformation.singularize(
-            value.optionsApi.endpoint.split("-").join(" ")
-          )
+  if (value.optionsApi && value.optionsApi.endpoint) {
+    const className = TextTransformation.setIdToClassName(
+      TextTransformation.pascalfy(
+        TextTransformation.singularize(
+          value.optionsApi.endpoint.split("-").join(" ")
         )
-      );
-      if (value.isMultiple) {
-        code += createCreateAllMethods(modelName, className, value.name);
-      }
-    }
-  } else if (type === "tabs") {
-    element.tabs?.forEach((tab) => {
-      tab.elements.forEach((tabElement) => {
-        code += setCreateAllMethodsByElement(object, tabElement);
-      });
-    });
-  } else if (type === "array") {
-    if (element.array?.elements) {
-      element.array?.elements.forEach((arrayElement) => {
-        code += setCreateAllMethodsByElement(object, arrayElement);
-      });
+      )
+    );
+    if (value.isMultiple) {
+      code += createCreateAllMethods(modelName, className, value.name);
     }
   }
 
@@ -488,33 +545,18 @@ const setDeleteAllMethodsByElement = (
   let code = ``;
 
   const modelName: string = object.form!.id.replace("Form", "");
-  const type = Object.keys(element)[0];
   const value = Object.values(element)[0];
 
-  if (validTypes.includes(type)) {
-    if (value.optionsApi) {
-      const className = TextTransformation.setIdToClassName(
-        TextTransformation.pascalfy(
-          TextTransformation.singularize(
-            value.optionsApi.endpoint.split("-").join(" ")
-          )
+  if (value.optionsApi && value.optionsApi.endpoint) {
+    const className = TextTransformation.setIdToClassName(
+      TextTransformation.pascalfy(
+        TextTransformation.singularize(
+          value.optionsApi.endpoint.split("-").join(" ")
         )
-      );
-      if (value.isMultiple) {
-        code += createDeleteAllMethods(modelName, className, value.name);
-      }
-    }
-  } else if (type === "tabs") {
-    element.tabs?.forEach((tab) => {
-      tab.elements.forEach((tabElement) => {
-        code += setDeleteAllMethodsByElement(object, tabElement);
-      });
-    });
-  } else if (type === "array") {
-    if (element.array?.elements) {
-      element.array?.elements.forEach((arrayElement) => {
-        code += setDeleteAllMethodsByElement(object, arrayElement);
-      });
+      )
+    );
+    if (value.isMultiple) {
+      code += createDeleteAllMethods(modelName, className, value.name);
     }
   }
 
@@ -557,11 +599,7 @@ const createDeleteAllMethods = (
 
   return `
       if(dataToWorkInRelation.${relatedPropertyName} && (dataToWorkInRelation.${relatedPropertyName}.length > 0)){
-        await this.${mainPropertyCamelCase}Has${secondProperty}Repository.deleteAll({
-            or: (dataToWorkInRelation.${relatedPropertyName} as any[]).map(${secondPropertyCamelCase} => {
-                return {${secondPropertyCamelCase}Id: ${secondPropertyCamelCase}._id};
-            })
-        }); 
+        await this.${mainPropertyCamelCase}Has${secondProperty}Repository.deleteAll({ ${mainPropertyCamelCase}Id: id }) 
       }
   `;
 };

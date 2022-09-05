@@ -3,6 +3,8 @@ import { setFormController } from "./controller/main";
 import { setFormService } from "./service/main";
 import { setFormTemplate } from "./template/main";
 
+require("dotenv").config();
+
 const formMain = (object: MainInterface): BuildedFrontendCode => {
   let response: BuildedFrontendCode = {
     component: "",

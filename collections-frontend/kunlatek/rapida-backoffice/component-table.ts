@@ -54,7 +54,7 @@ export const COMPONENT_TABLE: MainInterface = {
     ],
     service: {
         baseUrl: "http://localhost:3000",
-        endPoint: "components",
+        endpoint: "components",
         hasAuthorization: true,
         methods: [
             ServiceFunctionsEnum.Get,

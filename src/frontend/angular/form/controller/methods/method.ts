@@ -1,46 +1,39 @@
 import { FormInputTypeEnum } from "../../../../../enums/form";
-import { ArrayInterface, FormElementInterface } from "../../../../../interfaces/form";
+import {
+  ArrayInterface,
+  FormElementInterface,
+} from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
-import { setArrayMethod } from "./array";
+import { setArrayIndexes, setArrayMethod } from "./array";
 import { setAutocompleteMethod } from "./autocomplete";
+import { setInputMethod } from "./input";
 
-const setMethod = (
-  object: MainInterface
-): string => {
+const setMethod = (object: MainInterface): string => {
   let code = ``;
-  
+
   if (!object.form) {
     return code;
   }
-  
+
   code += setFormMethodsByElements(object, object.form.elements);
-  
+
   return code;
 };
-
 
 const setFormMethodsByElements = (
   object: MainInterface,
   elements: Array<FormElementInterface>,
-  array: ArrayInterface | undefined = undefined, 
+  array: ArrayInterface | undefined = undefined
 ): string => {
+  const iterations = array ? setArrayIndexes(array.id) : undefined;
+
   let code = ``;
-  elements.forEach(element => {    
-    if (element.input?.type === FormInputTypeEnum.File) {
-      code += `
-      onFileSelected(event: any) {
-        if (event.target.files.length > 0) {
-          const file = event.target.files[0];
-          this.fileName = file.name;
-          const formData = new FormData();
-      
-          this.fileFormForm.get("${element.input.name}")?.setValue(file);
-        }
-      }
-      `;
+  elements.forEach((element) => {
+    if (element.input) {
+      code += setInputMethod(object, element, array);
     }
-    
+
     if (element.select?.optionsApi) {
       code += `
       set${TextTransformation.pascalfy(
@@ -60,38 +53,36 @@ const setFormMethodsByElements = (
           }
         } catch (error: any) {
           const message = this._errorHandler.apiErrorMessage(
-            error.error.message
+            error.message
           );
           this.sendErrorMessage(message);
         };
       };
       `;
     }
-  
+
     if (element.autocomplete) {
       code += setAutocompleteMethod(object, element, array);
     }
-  
+
     if (element.array) {
       code += setArrayMethod(object, element.array);
     }
-  
+
     if (element.tabs) {
       element.tabs.forEach((form) => {
         code += setFormMethodsByElements(object, form.elements);
       });
     }
   });
-  
+
   return code;
 };
 
-const setFileSubmit = (
-  object: MainInterface
-) => {
+const setFileSubmit = (object: MainInterface) => {
   let code = ``;
 
-  object.form?.elements.forEach(element => {
+  object.form?.elements.forEach((element) => {
     if (element.input?.type === FormInputTypeEnum.File) {
       code += `
       const formData = new FormData();
@@ -109,21 +100,21 @@ const setValueBeforeSubmit = (
 ): string => {
   let code = ``;
 
-  elements.forEach(element => {
+  elements.forEach((element) => {
     if (element.input) {
-      if (element.input.type === FormInputTypeEnum.Date) {
-        code += `this.${object.form!.id}Form.get("${
-          element.input.name
-        }")?.value
-        ? this.${object.form!.id}Form.get("${
-          element.input.name
-        }")?.setValue(this.${object.form!.id}Form.get("${
-          element.input.name
-        }")?.value.toISOString().split("T")[0])
-        : this.${object.form!.id}Form.get("${
-          element.input.name
-        }");`;
-      }
+      // if (element.input.type === FormInputTypeEnum.Date) {
+      //   code += `this.${object.form!.id}Form.get("${
+      //     element.input.name
+      //   }")?.value
+      //   ? this.${object.form!.id}Form.get("${
+      //     element.input.name
+      //   }")?.setValue(this.${object.form!.id}Form.get("${
+      //     element.input.name
+      //   }")?.value.toISOString().split("T")[0])
+      //   : this.${object.form!.id}Form.get("${
+      //     element.input.name
+      //   }");`;
+      // }
     }
   });
 
@@ -134,5 +125,5 @@ export {
   setMethod,
   setFormMethodsByElements,
   setFileSubmit,
-  setValueBeforeSubmit
-}
+  setValueBeforeSubmit,
+};

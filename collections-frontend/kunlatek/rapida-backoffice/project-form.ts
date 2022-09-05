@@ -44,10 +44,11 @@ export const PROJECT_FORM: MainInterface = {
                   label: "Clone base",
                   name: "cloneFrontendPath",
                   type: FormInputTypeEnum.Text,
-                  optionsObject: [{
-                    label: "Kunlatek Quickstart",
-                    value: "kunlatekQuickstart"
-                  }],
+                  optionsApi: {
+                    externalEndpoint: "http://localhost:3001/quickstart-frontend-repositories",
+                    labelField: "label",
+                    valueField: "value",
+                  },
                   isRequired: true,
                 },
               },
@@ -56,10 +57,11 @@ export const PROJECT_FORM: MainInterface = {
                   label: "Framework base",
                   name: "frontendFramework",
                   type: FormInputTypeEnum.Text,
-                  optionsObject: [{
-                    label: "Angular",
-                    value: "angular"
-                  }],
+                  optionsApi: {
+                    externalEndpoint: "http://localhost:3001/frontend-frameworks",
+                    labelField: "label",
+                    valueField: "value",
+                  },
                   isRequired: true,
                 },
               },
@@ -92,10 +94,11 @@ export const PROJECT_FORM: MainInterface = {
                   label: "Clone do backend",
                   name: "cloneBackendPath",
                   type: FormInputTypeEnum.Text,
-                  optionsObject: [{
-                    label: "Kunlatek Quickstart API",
-                    value: "https://github.com/kunlabori-teknologio/quickstart-api"
-                  }],
+                  optionsApi: {
+                    externalEndpoint: "http://localhost:3001/quickstart-backend-repositories",
+                    labelField: "label",
+                    valueField: "value",
+                  },
                   isRequired: true,
                 },
               },
@@ -104,10 +107,11 @@ export const PROJECT_FORM: MainInterface = {
                   label: "Framework base",
                   name: "backendFramework",
                   type: FormInputTypeEnum.Text,
-                  optionsObject: [{
-                    label: "Loopback",
-                    value: "loopback"
-                  }],
+                  optionsApi: {
+                    externalEndpoint: "http://localhost:3001/backend-frameworks",
+                    labelField: "label",
+                    valueField: "value",
+                  },
                   isRequired: true,
                 },
               },
@@ -193,7 +197,7 @@ export const PROJECT_FORM: MainInterface = {
     ],
     service: {
       baseUrl: "http://localhost:3000",
-      endPoint: "projects",
+      endpoint: "projects",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

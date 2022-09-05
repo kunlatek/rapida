@@ -1,6 +1,7 @@
 import { FormElementInterface } from "../../../interfaces/form";
 import { MainInterface } from "../../../interfaces/main";
 import { TextTransformation } from "../../../utils/text.transformation";
+import { getAllElements } from "../main";
 
 const setControllerConstructorParams = (object: MainInterface): string => {
   if (!object.form) {
@@ -11,9 +12,13 @@ const setControllerConstructorParams = (object: MainInterface): string => {
   const modelName: string = object.form.id.replace("Form", "");
 
   let _relatedProperties = ``;
-  object.form.elements.forEach((element) => {
+
+  const elements: Array<FormElementInterface> = getAllElements(object.form?.elements);
+
+  elements.forEach((element) => {
     _relatedProperties += setRelatedPropertiesByElement(object, element);
   });
+
   let code = `
   @repository(${TextTransformation.pascalfy(
     modelName
@@ -37,52 +42,23 @@ const setRelatedPropertiesByElement = (
   object: MainInterface,
   element: FormElementInterface
 ) => {
-  const validTypes = [
-    "checkbox",
-    "radio",
-    "datalist",
-    "fieldset",
-    "input",
-    "select",
-    "slide",
-    "textarea",
-    "autocomplete",
-  ];
+
   const modelName = object.form!.id.replace("Form", "");
-  const type = Object.keys(element)[0];
   const value = Object.values(element)[0];
 
   let code = ``;
 
-  if (validTypes.includes(type)) {
-    if (value.optionsApi) {
-      const className = TextTransformation.setIdToClassName(
-        TextTransformation.pascalfy(
-          TextTransformation.singularize(
-            value.optionsApi.endpoint.split("-").join(" ")
-          )
+  if (value.optionsApi && value.optionsApi.endpoint) {
+    const className = TextTransformation.setIdToClassName(
+      TextTransformation.pascalfy(
+        TextTransformation.singularize(
+          value.optionsApi.endpoint.split("-").join(" ")
         )
-      );
+      )
+    );
 
-      if (value.isMultiple) {
-        code += createProperties(modelName, className);
-      }
-    }
-  } else if (type === "tabs") {
-    element.tabs?.forEach((tab) => {
-      tab.elements.forEach(tabElement => {
-        code += setRelatedPropertiesByElement(
-          object, tabElement
-        );
-      });
-    });
-  } else if (type === "array") {
-    if (element.array?.elements) {
-      element.array?.elements?.forEach((arrayElement) => {
-        code += setRelatedPropertiesByElement(
-          object, arrayElement
-        );
-      });
+    if (value.isMultiple) {
+      code += createProperties(modelName, className);
     }
   }
 

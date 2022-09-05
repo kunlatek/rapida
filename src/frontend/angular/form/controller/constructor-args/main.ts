@@ -1,7 +1,6 @@
 import { FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
-import { setFormBuilder } from "./form-builder";
 import { setFormSelectOptions } from "./form-select-options";
 
 let _hasCondition = false;
@@ -13,8 +12,7 @@ const setFormControllerConstructorArguments = (
     console.info("Only forms set here");
     return ``;
   }
-
-  let _formBuilderElements: string = setFormBuilder(object);
+  
   let _optionsCreation: string = setFormSelectOptions(object);
   let _patchArrayValues = setJsonToPatchValue(object, object.form.elements);
   let _autocompleteToEdit = setAutocompleteToEdit(object, object.form.elements);
@@ -25,6 +23,10 @@ const setFormControllerConstructorArguments = (
 
   const code = `
   try {
+    const modulePermissionToCheck: any = this.permissionsToCheck.find((item: any) => item.module.name === "${object.form.title}")
+    this.updateOnePermission = modulePermissionToCheck.permissionActions.filter((item: any) => item.name === "updateOne").length > 0;
+    this.createOnePermission = modulePermissionToCheck.permissionActions.filter((item: any) => item.name === "createOne").length > 0;
+
     this._activatedRoute.params.subscribe(async (routeParams) => {
         this.${object.form.id}Id = routeParams["id"];
         this.isAddModule = !this.${object.form.id}Id;
@@ -47,14 +49,12 @@ const setFormControllerConstructorArguments = (
         );
     });
   } catch(error: any) {
-    const message = this._errorHandler.apiErrorMessage(error.error.message);
+    const message = this._errorHandler.apiErrorMessage(error.message);
     this.sendErrorMessage(message);
   };
 
 
-  this.${object.form.id}Form = this._formBuilder.group({
-    ${_formBuilderElements}
-  });
+  this.${object.form.id}Form = this._formBuilder.group(this.${object.form.id}Builder);
   `;
 
   return code;
