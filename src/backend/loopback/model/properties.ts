@@ -24,11 +24,11 @@ const booleanTypes = ["slide"];
 const setArrayTypeModels = (formElements: Array<FormElementInterface>): string => {
 
   let code = ``;
-  let arrayTypeModels = ``;
 
   const elements: Array<FormElementInterface> = getAllElements(formElements);
 
   elements.forEach((element) => {
+    let arrayTypeModels = ``;
     const type = Object.keys(element)[0];
     if (type === 'array') {
       const value = Object.values(element)[0];
