@@ -207,8 +207,7 @@ const setArrayMethod = (
   });
 
   code += `
-  ${initArray}() { 
-    // return this._formBuilder.group(this.${array.id}Builder)
+  ${initArray}() {
     return this._formBuilder.group({${setFormBuilderByElements(array.elements)}})
   };
   
