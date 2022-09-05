@@ -527,6 +527,44 @@ export const CLIENT_COMPANY_FORM: MainInterface = {
               }
             ],
           },
+          {
+            title: "Registro de contas",
+            id: "billsTab",
+            elements: [
+              {
+                array: {
+                  id: "bills",
+                  title: "Conta",
+                  elements: [
+                    {
+                      input: {
+                        label: "Leitura atual",
+                        name: "referenceDate",
+                        type: FormInputTypeEnum.Date,
+                        tooltip: "Data referência para o cálculo atual",
+                      }
+                    },
+                    {
+                      input: {
+                        label: "Leitura anterior",
+                        name: "lastDate",
+                        type: FormInputTypeEnum.Date,
+                        tooltip: "Data referência para o cálculo anterior",
+                      }
+                    },
+                    {
+                      input: {
+                        label: "Preço",
+                        name: "billPrice",
+                        placeholder: "Em R$",
+                        type: FormInputTypeEnum.Number,
+                      }
+                    },
+                  ]
+                }
+              },
+            ]
+          },
         ]
       },
       {
