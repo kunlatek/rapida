@@ -133,11 +133,10 @@ const setConditionOverEdition = (
               ) => {
                 if(
               `;
-            }
-            value.conditions.elements.forEach(
-              (condition: ConditionElementInterface, index: number) => {
-                conditionId = `${value.name ? value.name : value.id}FormCondition`;
-                if (array) {
+
+              value.conditions.elements.forEach(
+                (condition: ConditionElementInterface, index: number) => {
+                  conditionId = `${value.name ? value.name : value.id}FormCondition`;
                   if (index > 0) {
                     code += `${condition.logicalOperator
                       ? ` ${condition.logicalOperator} `
@@ -149,17 +148,44 @@ const setConditionOverEdition = (
                     ? ` ${condition.comparisonOperator} `
                     : ` === `
                     } "${condition.value}"`;
+
+                  _conditionMethodsOverEdition.push(value.name ? value.name : value.id);
                 }
+              );
 
-                _conditionMethodsOverEdition.push(value.name ? value.name : value.id);
-              }
-            );
-
-            if (array) {
               code += `) {
                 this.${conditionId}[index] = true;
               }
               })`;
+            }
+
+            if (!array) {
+              code += `              
+                if(
+              `;
+
+              value.conditions.elements.forEach(
+                (condition: ConditionElementInterface, index: number) => {
+                  conditionId = `${value.name ? value.name : value.id}FormCondition`;
+                  if (index > 0) {
+                    code += `${condition.logicalOperator
+                      ? ` ${condition.logicalOperator} `
+                      : ` && `
+                      }`;
+                  }
+                  code += `this.${object.form?.id}Form.get("${condition.key}")?.value`
+                  code += `${condition.comparisonOperator
+                    ? ` ${condition.comparisonOperator} `
+                    : ` === `
+                    } "${condition.value}"`;
+
+                  _conditionMethodsOverEdition.push(value.name ? value.name : value.id);
+                }
+              );
+
+              code += `) {
+                this.${conditionId} = true;
+              }`;
             }
           }
         }

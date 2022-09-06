@@ -52,7 +52,7 @@ export const COMPONENT_FORM: MainInterface = {
           label: "Identificador",
           name: "id",
           type: FormInputTypeEnum.Text,
-          placeholder: "Ex.: animation",
+          placeholder: "Ex.: animationForm",
           tooltip: "Identificador quer servirá como base pra montar pastas e nomear variáveis referentes ao componente",
           isRequired: true,
         }
