@@ -45,7 +45,7 @@ const setConditionByElements = (
         if (!_conditionProperties.includes(value.name ? value.name : value.id)) {
           if (value.conditions.type === ConditionEnum.Form) {
             if (!isArray) {            
-              code += `${value.name}FormCondition: boolean = false;`;
+              code += `${value.name ? value.name : value.id}FormCondition: boolean = false;`;
             }
   
             if (isArray) {
@@ -54,7 +54,7 @@ const setConditionByElements = (
           }
     
           if (value.conditions.type === ConditionEnum.Code) {
-            code += `${value.name}CodeCondition: boolean = false;`;
+            code += `${value.name ? value.name : value.id}CodeCondition: boolean = false;`;
           }
         }
   
