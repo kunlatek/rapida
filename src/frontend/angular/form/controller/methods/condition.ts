@@ -33,8 +33,9 @@ const setCondition = (
       if (value.conditions) {
         if (value.conditions.type === ConditionEnum.Form) {
           if (!_conditionMethods.includes(value.name ? value.name : value.id)) {
+            console.log(value.id, array, 3434);
             if (!array) {
-              code += `this.${value.name}FormCondition = (`;
+              code += `this.${value.name ? value.name : value.id}FormCondition = (`;
 
               value.conditions.elements.forEach(
                 (condition: any, index: number) => {
@@ -58,7 +59,7 @@ const setCondition = (
 
         if (value.conditions.type === ConditionEnum.Code) {
           if (!_conditionMethods.includes(value.name ? value.name : value.id)) {
-            code += `this.${value.name}CodeCondition = (`;
+            code += `this.${value.name ? value.name : value.id}CodeCondition = (`;
 
             value.conditions.elements.forEach(
               (condition: any, index: number) => {
@@ -76,7 +77,7 @@ const setCondition = (
                 }
                 code += `)`;
 
-                _conditionMethods.push(value.name);
+                _conditionMethods.push(value.name ? value.name : value.id);
               }
             );
           }

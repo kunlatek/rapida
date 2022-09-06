@@ -11,6 +11,33 @@ export const COMPONENT_FORM: MainInterface = {
     id: "componentForm",
     elements: [
       {
+        select: {
+          label: "Tipo de component",
+          name: "componentType",
+          type: FormInputTypeEnum.Text,
+          optionsObject: [
+            {
+              label: "Formulário",
+              value: "form"
+            },
+            {
+              label: "Tabela",
+              value: "table"
+            },
+            {
+              label: "Gráfico",
+              value: "chart"
+            },
+            {
+              label: "Listagem",
+              value: "list"
+            },
+          ],
+          isTriggerToCondition: true,
+          isRequired: true,
+        }
+      },
+      {
         input: {
           label: "Título",
           name: "title",
@@ -1506,7 +1533,16 @@ export const COMPONENT_FORM: MainInterface = {
                 },
               }
             },
-          ]
+          ],
+          conditions: {
+            type: ConditionEnum.Form,
+            elements: [
+              {
+                key: "componentType",
+                value: "form",
+              }
+            ]
+          }
         }
       },
       {
