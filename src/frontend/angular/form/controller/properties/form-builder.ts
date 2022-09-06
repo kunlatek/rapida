@@ -217,10 +217,18 @@ const setFormBuilderByElements = (
         }
       }
       
-      if (!inArrayLayer) {
+      if (!inArray && !inArrayLayer) {
+        console.log(element.array.id, 221);
         code += `
         ${element.array.id}: this._formBuilder.array([]),
         `;
+      }
+
+      if (inArrayLayer) {
+        // console.log(inArrayLayer, 227);
+        // code += `
+        // ${element.array.id}: this._formBuilder.array([]),
+        // `;
       }
 
       code += setFormBuilderByElements(element.array.elements, element.array.id);
