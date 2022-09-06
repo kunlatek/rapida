@@ -137,7 +137,7 @@ const setByElementInArrayType = (
     code += `
         @property({
             type: '${propertyType}',
-            itemType: 'any',
+            itemType: ${relatedType},
         })
         ${value.id}?: ${relatedType}[];
         `;
