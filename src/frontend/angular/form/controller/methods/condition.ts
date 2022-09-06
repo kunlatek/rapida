@@ -33,7 +33,6 @@ const setCondition = (
       if (value.conditions) {
         if (value.conditions.type === ConditionEnum.Form) {
           if (!_conditionMethods.includes(value.name ? value.name : value.id)) {
-            console.log(value.id, array, 3434);
             if (!array) {
               code += `this.${value.name ? value.name : value.id}FormCondition = (`;
 
