@@ -15,12 +15,11 @@ export const environment = {
 `;
 
 const envBackend = `
-AUTH_DB=rapidaFundamento
 PORT=3000
 SERVER_ROOT_URI=http://localhost:3000
 CLIENT_REDIRECT_URI=http://localhost:4200
 MONGO_URL=mongodb+srv://kunlatek:Kunlatek751@cluster0.b0pfr.mongodb.net/?authSource=admin&replicaSet=atlas-zft6fn-shard-0&readPreference=primary&ssl=true
-DB=rapida
+DB=animation
 NODEMAILER_USER=administrativo@kunlatek.com
 NODEMAILER_PASS=yetyxhgzjzktuwef
 ADMIN_USERS=rabbadesalman@gmail.com
@@ -28,40 +27,33 @@ ADMIN_USERS=rabbadesalman@gmail.com
 
 const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitation-and-permission";
 const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api";
-const projectPath = "/home/ryzzan/Projects/rapida-backoffice";
+const projectPath = "/home/ryzzan/Projects/animation";
 
 /**
- * RAPIDA BACKOFFICE
+ * ANIMATION
  */
-import { COMPONENT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/component-form";
-import { COMPONENT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/component-table";
-import { COMPONENT } from "../collections-frontend/kunlatek/rapida-backoffice/component";
+import { ANIMATION_FORM } from "../collections-frontend/example/animation/animation-form";
+import { ANIMATION_TABLE } from "../collections-frontend/example/animation/animation-table";
+import { ANIMATION } from "../collections-frontend/example/animation/animation";
 
-import { MODULE_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/module-form";
-import { MODULE_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/module-table";
-import { MODULE } from "../collections-frontend/kunlatek/rapida-backoffice/module";
+import { CHARACTER_FORM } from "../collections-frontend/example/animation/character-form";
+import { CHARACTER_TABLE } from "../collections-frontend/example/animation/character-table";
+import { CHARACTER } from "../collections-frontend/example/animation/character";
 
-import { PROJECT_FORM } from "../collections-frontend/kunlatek/rapida-backoffice/project-form";
-import { PROJECT_TABLE } from "../collections-frontend/kunlatek/rapida-backoffice/project-table";
-import { PROJECT } from "../collections-frontend/kunlatek/rapida-backoffice/project";
 
 //////////////////////////////////////////////////////////
 
 const array = [
   /**
-   * RAPIDA BACKOFFICE
+   * ANIMATION
    */
-  COMPONENT_FORM,
-  COMPONENT_TABLE,
-  COMPONENT,
+  ANIMATION_FORM,
+  ANIMATION_TABLE,
+  ANIMATION,
 
-  MODULE_FORM,
-  MODULE_TABLE,
-  MODULE,
-
-  PROJECT_FORM,
-  PROJECT_TABLE,
-  PROJECT,
+  CHARACTER_FORM,
+  CHARACTER_TABLE,
+  CHARACTER,
 ];
 
 array.forEach((object) => {
