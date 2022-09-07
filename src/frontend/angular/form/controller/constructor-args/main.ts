@@ -32,6 +32,7 @@ const setFormControllerConstructorArguments = (
         this.isAddModule = !this.${object.form.id}Id;
     
         if (this.${object.form.id}Id) {
+          this.isLoading = true;
           this.${object.form.id}ToEdit = await this._${object.form.id}Service.find(this.${object.form.id}Id);
           this.${object.form.id}Form.patchValue(this.${object.form.id}ToEdit.data);
 
