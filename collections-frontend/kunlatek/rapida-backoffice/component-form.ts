@@ -105,7 +105,8 @@ export const COMPONENT_FORM: MainInterface = {
                       logicalOperator: FilterLogicalOperatorEnum.Or,
                     }
                   ]
-                }
+                },
+                isTriggerToCondition: true,
               },
             },
             {
