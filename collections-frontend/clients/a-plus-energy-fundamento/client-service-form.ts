@@ -51,7 +51,7 @@ export const CLIENT_SERVICE_FORM: MainInterface = {
       },
     ],
     service: {
-      baseUrl: "http://localhost:3001",
+      baseUrl: "http://localhost:3000",
       endpoint: "client-services",
       hasAuthorization: true,
       methods: [

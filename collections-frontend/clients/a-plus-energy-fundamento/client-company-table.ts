@@ -62,7 +62,7 @@ export const CLIENT_COMPANY_TABLE: MainInterface = {
       },
     ],
     service: {
-      baseUrl: "http://localhost:3001",
+      baseUrl: "http://localhost:3000",
       endpoint: "client-companies",
       hasAuthorization: true,
       methods: [
