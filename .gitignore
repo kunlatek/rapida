@@ -144,6 +144,5 @@ dist
 
 # End of https://www.toptal.com/developers/gitignore/api/node
 
-#collections
-!*.collections-frontend/example
-!*.collections-frontend/kunlatek/rapida-backoffice
+#collection
+src/testing.ts

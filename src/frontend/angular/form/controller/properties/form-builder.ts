@@ -217,7 +217,7 @@ const setFormBuilderByElements = (
         }
       }
       
-      if (!inArrayLayer) {
+      if (!inArray && !inArrayLayer) {
         code += `
         ${element.array.id}: this._formBuilder.array([]),
         `;

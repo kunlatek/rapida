@@ -34,7 +34,7 @@ const setCondition = (
         if (value.conditions.type === ConditionEnum.Form) {
           if (!_conditionMethods.includes(value.name ? value.name : value.id)) {
             if (!array) {
-              code += `this.${value.name}FormCondition = (`;
+              code += `this.${value.name ? value.name : value.id}FormCondition = (`;
 
               value.conditions.elements.forEach(
                 (condition: any, index: number) => {
@@ -58,7 +58,7 @@ const setCondition = (
 
         if (value.conditions.type === ConditionEnum.Code) {
           if (!_conditionMethods.includes(value.name ? value.name : value.id)) {
-            code += `this.${value.name}CodeCondition = (`;
+            code += `this.${value.name ? value.name : value.id}CodeCondition = (`;
 
             value.conditions.elements.forEach(
               (condition: any, index: number) => {
@@ -76,7 +76,7 @@ const setCondition = (
                 }
                 code += `)`;
 
-                _conditionMethods.push(value.name);
+                _conditionMethods.push(value.name ? value.name : value.id);
               }
             );
           }
@@ -133,11 +133,10 @@ const setConditionOverEdition = (
               ) => {
                 if(
               `;
-            }
-            value.conditions.elements.forEach(
-              (condition: ConditionElementInterface, index: number) => {
-                conditionId = `${value.name ? value.name : value.id}FormCondition`;
-                if (array) {
+
+              value.conditions.elements.forEach(
+                (condition: ConditionElementInterface, index: number) => {
+                  conditionId = `${value.name ? value.name : value.id}FormCondition`;
                   if (index > 0) {
                     code += `${condition.logicalOperator
                       ? ` ${condition.logicalOperator} `
@@ -149,17 +148,44 @@ const setConditionOverEdition = (
                     ? ` ${condition.comparisonOperator} `
                     : ` === `
                     } "${condition.value}"`;
+
+                  _conditionMethodsOverEdition.push(value.name ? value.name : value.id);
                 }
+              );
 
-                _conditionMethodsOverEdition.push(value.name ? value.name : value.id);
-              }
-            );
-
-            if (array) {
               code += `) {
                 this.${conditionId}[index] = true;
               }
               })`;
+            }
+
+            if (!array) {
+              code += `              
+                if(
+              `;
+
+              value.conditions.elements.forEach(
+                (condition: ConditionElementInterface, index: number) => {
+                  conditionId = `${value.name ? value.name : value.id}FormCondition`;
+                  if (index > 0) {
+                    code += `${condition.logicalOperator
+                      ? ` ${condition.logicalOperator} `
+                      : ` && `
+                      }`;
+                  }
+                  code += `this.${object.form?.id}Form.get("${condition.key}")?.value`
+                  code += `${condition.comparisonOperator
+                    ? ` ${condition.comparisonOperator} `
+                    : ` === `
+                    } "${condition.value}"`;
+
+                  _conditionMethodsOverEdition.push(value.name ? value.name : value.id);
+                }
+              );
+
+              code += `) {
+                this.${conditionId} = true;
+              }`;
             }
           }
         }
