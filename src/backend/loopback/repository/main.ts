@@ -10,10 +10,11 @@ import { setRepositoryMethods } from "./methods";
 import { setRepositoryProperties } from "./properties";
 
 const repositoryMain = (
-  object: MainInterface
+  object: MainInterface,
+  index: number,
 ): string => {
   const modelName: string = object.form!.id.replace("Form", "");
-  
+
   let _imports: string = setRepositoryImports(object);
   let _properties: string = setRepositoryProperties(object);
   let _constructorArguments: string = setRepositoryConstructorArguments(object);
@@ -37,6 +38,7 @@ const repositoryMain = (
   }
   ${_methods}
   /* moduleName->${object.form?.title}<- */
+  /* moduleIndex->${index}<- */
   `;
 
   setRepositoryArchitectureAndWriteToFile(object, code);
@@ -48,15 +50,14 @@ const repositoryMain = (
  * @param object
  * @param code
  */
- const setRepositoryArchitectureAndWriteToFile = (
+const setRepositoryArchitectureAndWriteToFile = (
   object: MainInterface,
   code: string
 ) => {
-  const componentFilePath = `${
-    object.projectPath
-  }-api/src/repositories/${TextTransformation.kebabfy(
-    object.form?.id.replace("Form", "")!
-  )}.repository.ts`;
+  const componentFilePath = `${object.projectPath
+    }-api/src/repositories/${TextTransformation.kebabfy(
+      object.form?.id.replace("Form", "")!
+    )}.repository.ts`;
   const componentIndexFilePath = `${object.projectPath}-api/src/repositories/index.ts`;
 
   try {

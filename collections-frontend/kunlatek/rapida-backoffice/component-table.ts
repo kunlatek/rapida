@@ -15,10 +15,18 @@ export const COMPONENT_TABLE: MainInterface = {
     elements: [
       {
         column: {
+          label: "Identificador"
+        },
+        row: {
+          field: "id"
+        }
+      },
+      {
+        column: {
           label: "Título"
         },
         row: {
-          field: "collectionTitle"
+          field: "title"
         }
       },
       {

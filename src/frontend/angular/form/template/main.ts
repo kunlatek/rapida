@@ -193,7 +193,7 @@ const setSpecificStructureOverFormElement = (
       }
 
       if (!array) {
-        setCondition += `setCondition()"`
+        setCondition += `setCondition()`
       }
       setCondition += `"`;
     }

@@ -113,6 +113,21 @@ export const CHARACTER_FORM: MainInterface = {
                               name: "inputArrayArrayTab",
                               type: FormInputTypeEnum.Text
                             }
+                          },
+                          {
+                            array: {
+                              title: "Array dentro de array dentro de array dentro de tab",
+                              id: "arrayArrayArrayTabArray",
+                              elements: [
+                                {
+                                  input: {
+                                    label: "Input no rolê",
+                                    name: "inputArrayArrayArrayTab",
+                                    type: FormInputTypeEnum.Text
+                                  }
+                                },
+                              ]
+                            }
                           }
                         ]
                       }
