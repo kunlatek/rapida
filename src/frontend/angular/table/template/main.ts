@@ -44,21 +44,24 @@ const setTableTemplate = (object: MainInterface): string => {
     </mat-card-header>
 
     <mat-card-actions>
-      <form id="${object.table.id}" #${object.table.id}Directive="ngForm" 
-      [formGroup]="${object.table.id}SearchForm" 
-      (ngSubmit)="${object.table.id}Search(${object.table.id}Directive)">
-        <mat-form-field appearance="standard">
-          <mat-label>Filtro</mat-label>
-          <input matInput formControlName="searchInput" 
-          placeholder="Procure qualquer coisa">
-        </mat-form-field>
-        <button mat-raised-button color="primary">
-          <mat-icon>search</mat-icon> Filtrar
-        </button>
+    <div class="flex-row">
+        <form id="${object.table.id}" #${object.table.id}Directive="ngForm" 
+        [formGroup]="${object.table.id}SearchForm" 
+        (ngSubmit)="${object.table.id}Search(${object.table.id}Directive)">
+          <mat-form-field appearance="standard">
+            <mat-label>Filtro</mat-label>
+            <input matInput formControlName="searchInput" 
+            placeholder="Procure qualquer coisa">
+          </mat-form-field>
+          <button mat-raised-button color="primary">
+            <mat-icon>search</mat-icon> Filtrar
+          </button>        
+        </form>
         <button mat-raised-button color="primary" (click)="createXls(${object.table.id}DataSource)">
+          <mat-icon>format_list_bulleted</mat-icon>
           Baixar XLS
         </button>
-      </form>
+      </div>
     </mat-card-actions>
 
     <mat-card-content class="table-container">
