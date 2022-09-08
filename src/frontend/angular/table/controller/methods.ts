@@ -122,16 +122,42 @@ const setTableControllerMethods = (object: MainInterface): string => {
   ${
     _hasRemoveConfirmationDialog
       ? `
-    redirectTo = (uri: string) => {
-      this._router
-        .navigateByUrl("/main", { skipLocationChange: true })
-        .then(() => {
-          this._router.navigate([uri]);
-        });
-    };
-    `
+      redirectTo = (uri: string) => {
+        this._router
+          .navigateByUrl("/main", { skipLocationChange: true })
+          .then(() => {
+            this._router.navigate([uri]);
+          });
+      };
+      `
       : ``
   }
+
+  createXls = (objects: any) => {
+    let data = objects.map((object: any) => {
+      return this.setNewObject(object);
+    });
+    const fileName = "download";
+    const exportType =  exportFromJSON.types.xls;
+
+    exportFromJSON({ data, fileName, exportType });
+  };
+
+  setNewObject = (object: any) => {
+    const newObject: any = {};
+    for (const key in object) {
+      if (Object.prototype.hasOwnProperty.call(object, key)) {
+        const value = object[key];
+        this.${object.table.id}DisplayedColumns.map(property => {
+          if (property === key) {
+            newObject[property] = value;
+          }
+        })
+      }
+    }
+    
+    return newObject;
+  };
 
   sendErrorMessage = (errorMessage: string) => {
     this._snackbar.open(errorMessage, undefined, { duration: 4 * 1000 });

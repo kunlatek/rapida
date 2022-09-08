@@ -27,6 +27,7 @@ const setTableControllerImports = (object: MainInterface): string => {
       ? `import { RemoveConfirmationDialogComponent } from "../remove-confirmation-dialog/remove-confirmation-dialog.component";`
       : ``
   }
+  import exportFromJSON from "export-from-json";
   import { MyErrorHandler } from "../../utils/error-handler";
   import { ${TextTransformation.pascalfy(
     object.table.id
