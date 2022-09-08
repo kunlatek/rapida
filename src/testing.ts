@@ -2,22 +2,22 @@ import { createProject } from "./index";
 
 const envFrontDev = `
 export const environment = {
-  baseUrl: "http://localhost:3001",
+  baseUrl: "http://localhost:3000",
   production: false,
 };
 `;
 
 const envFrontProd = `
 export const environment = {
-  baseUrl: "http://localhost:3001",
+  baseUrl: "http://localhost:3000",
   production: true,
 };
 `;
 
 const envBackend = `
-PORT=3001
-SERVER_ROOT_URI=http://localhost:3001
-CLIENT_REDIRECT_URI=http://localhost:4201
+PORT=3000
+SERVER_ROOT_URI=http://localhost:3000
+CLIENT_REDIRECT_URI=http://localhost:4200
 MONGO_URL=mongodb+srv://kunlatek:Kunlatek751@cluster0.b0pfr.mongodb.net/?authSource=admin&replicaSet=atlas-zft6fn-shard-0&readPreference=primary&ssl=true
 DB=aPlusEnergyFundamento
 NODEMAILER_USER=administrativo@kunlatek.com
