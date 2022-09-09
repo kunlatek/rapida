@@ -305,7 +305,7 @@ export const CLIENT_COMPANY_FORM: MainInterface = {
                     {
                       array: {
                         id: "modules",
-                        title: "Módulos",
+                        title: "Módulo",
                         elements: [
                           {
                             autocomplete: {
@@ -331,6 +331,143 @@ export const CLIENT_COMPANY_FORM: MainInterface = {
                             }
                           },
                         ]
+                      }
+                    },
+                    {
+                      array: {
+                        title: "Endereços beneficiados",
+                        id: "benefitedAddresses",
+                        elements: [
+                          {
+                            input: {
+                              label: "CEP",
+                              name: "benefitedZipCode",
+                              type: FormInputTypeEnum.Text,
+                              placeholder: "00.000-000",
+                              isRequired: true,
+                              mask: "00.000-000",
+                              apiRequest: {
+                                endpoint: "__external-api/address",
+                                formFieldsFilledByApiResponse: [
+                                  {
+                                    formFieldName: "address",
+                                    propertyFromApiToFillFormField: "address"
+                                  },
+                                  {
+                                    formFieldName: "district",
+                                    propertyFromApiToFillFormField: "neighborhood"
+                                  },
+                                  {
+                                    formFieldName: "city",
+                                    propertyFromApiToFillFormField: "city"
+                                  },
+                                  {
+                                    formFieldName: "state",
+                                    propertyFromApiToFillFormField: "state"
+                                  },
+                                  {
+                                    formFieldName: "country",
+                                    propertyFromApiToFillFormField: "country"
+                                  },
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            input: {
+                              label: "Logradouro",
+                              name: "benefitedAddress",
+                              type: FormInputTypeEnum.Text,
+                              placeholder: "Nome da Rua, Avenida, Travessa etc.",
+                              isRequired: true,
+                            }
+                          },
+                          {
+                            input: {
+                              label: "Número",
+                              name: "benefitedNumber",
+                              type: FormInputTypeEnum.Text,
+                              placeholder: "Número da localização",
+                              isRequired: true,
+                            }
+                          },
+                          {
+                            input: {
+                              label: "Bairro",
+                              name: "benefitedDistrict",
+                              type: FormInputTypeEnum.Text,
+                              placeholder: "Distrito do logradouro",
+                              isRequired: true,
+                            }
+                          },
+                          {
+                            input: {
+                              label: "Complemento",
+                              name: "benefitedComplement",
+                              type: FormInputTypeEnum.Text,
+                              placeholder: "Mais informações que ajudem a achar seu endereço",
+                            }
+                          },
+                          {
+                            input: {
+                              label: "País",
+                              name: "benefitedCountry",
+                              type: FormInputTypeEnum.Text,
+                              placeholder: "País do seu endereço",
+                              isRequired: true,
+                            }
+                          },
+                          {
+                            input: {
+                              label: "Estado",
+                              name: "benefitedState",
+                              type: FormInputTypeEnum.Text,
+                              placeholder: "Estado do seu endereço",
+                              isRequired: true,
+                            }
+                          },
+                          {
+                            input: {
+                              label: "Cidade",
+                              name: "benefitedCity",
+                              type: FormInputTypeEnum.Text,
+                              placeholder: "Município do seu endereço",
+                              isRequired: true,
+                            }
+                          },
+                          {
+                            array: {
+                              id: "bills",
+                              title: "Conta de energia",
+                              elements: [
+                                {
+                                  input: {
+                                    label: "Leitura atual",
+                                    name: "referenceDate",
+                                    type: FormInputTypeEnum.Date,
+                                    tooltip: "Data referência para o cálculo atual",
+                                  }
+                                },
+                                {
+                                  input: {
+                                    label: "Leitura anterior",
+                                    name: "lastDate",
+                                    type: FormInputTypeEnum.Date,
+                                    tooltip: "Data referência para o cálculo anterior",
+                                  }
+                                },
+                                {
+                                  input: {
+                                    label: "Preço",
+                                    name: "billPrice",
+                                    placeholder: "Em R$",
+                                    type: FormInputTypeEnum.Number,
+                                  }
+                                },
+                              ]
+                            }
+                          },
+                        ],
                       }
                     },
                     {
@@ -504,66 +641,28 @@ export const CLIENT_COMPANY_FORM: MainInterface = {
                         isRequired: true,
                       }
                     },
-                    {
-                      input: {
-                        label: "Investimenot total",
-                        name: "settlementTotalPrice",
-                        placeholder: "Em R$",
-                        type: FormInputTypeEnum.Number,
-                        isDisabled: true,
-                      }
-                    },
-                    {
-                      input: {
-                        label: "Retorno do investimento",
-                        name: "settlementInvestmentReturn",
-                        placeholder: "Em meses",
-                        type: FormInputTypeEnum.Number,
-                        isDisabled: true,
-                      }
-                    },
+                    // {
+                    //   input: {
+                    //     label: "Investimento total",
+                    //     name: "settlementTotalPrice",
+                    //     placeholder: "Em R$",
+                    //     type: FormInputTypeEnum.Number,
+                    //     isDisabled: true,
+                    //   }
+                    // },
+                    // {
+                    //   input: {
+                    //     label: "Retorno do investimento",
+                    //     name: "settlementInvestmentReturn",
+                    //     placeholder: "Em meses",
+                    //     type: FormInputTypeEnum.Number,
+                    //     isDisabled: true,
+                    //   }
+                    // },
                   ]
                 }
               }
             ],
-          },
-          {
-            title: "Registro de contas",
-            id: "billsTab",
-            elements: [
-              {
-                array: {
-                  id: "bills",
-                  title: "Conta",
-                  elements: [
-                    {
-                      input: {
-                        label: "Leitura atual",
-                        name: "referenceDate",
-                        type: FormInputTypeEnum.Date,
-                        tooltip: "Data referência para o cálculo atual",
-                      }
-                    },
-                    {
-                      input: {
-                        label: "Leitura anterior",
-                        name: "lastDate",
-                        type: FormInputTypeEnum.Date,
-                        tooltip: "Data referência para o cálculo anterior",
-                      }
-                    },
-                    {
-                      input: {
-                        label: "Preço",
-                        name: "billPrice",
-                        placeholder: "Em R$",
-                        type: FormInputTypeEnum.Number,
-                      }
-                    },
-                  ]
-                }
-              },
-            ]
           },
         ]
       },
@@ -575,7 +674,7 @@ export const CLIENT_COMPANY_FORM: MainInterface = {
       },
     ],
     service: {
-      baseUrl: "http://localhost:3001",
+      baseUrl: "http://localhost:3000",
       endpoint: "client-companies",
       hasAuthorization: true,
       methods: [
