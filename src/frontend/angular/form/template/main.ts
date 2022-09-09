@@ -32,7 +32,7 @@ let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
  * @param object
  * @returns
  */
-const setFormTemplate = (object: MainInterface): string => {
+const setFormTemplate = (object: MainInterface, mainArray: Array<MainInterface> | undefined = undefined,): string => {
   if (!object.form) {
     console.info("Only forms set here");
     return ``;

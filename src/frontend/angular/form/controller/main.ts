@@ -17,7 +17,7 @@ import { FormElementInterface } from "../../../../interfaces/form";
 
 let _hasCondition = false;
 
-const setFormController = (object: MainInterface): string => {
+const setFormController = (object: MainInterface, mainArray: Array<MainInterface> | undefined = undefined,): string => {
   if (!object.form) {
     console.info("Only forms set here");
     return ``;

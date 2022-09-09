@@ -10,7 +10,7 @@ let _specificStructure: string = "";
  * @param object
  * @returns
  */
-const setChartTemplate = (object: MainInterface): string => {
+const setChartTemplate = (object: MainInterface, mainArray: Array<MainInterface> | undefined = undefined,): string => {
   if (!object.chart) {
     console.info("Only charts set here");
     return ``;

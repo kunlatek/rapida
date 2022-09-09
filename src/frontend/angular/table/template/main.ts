@@ -14,7 +14,7 @@ import { RequestTypeEnum } from "../../../../enums/request";
  * @param object
  * @returns
  */
-const setTableTemplate = (object: MainInterface): string => {
+const setTableTemplate = (object: MainInterface, mainArray: Array<MainInterface> | undefined = undefined,): string => {
   if (!object.table) {
     console.info("Only tables set here");
     return ``;
