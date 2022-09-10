@@ -11,6 +11,7 @@ export interface TableInterface {
   subtitle?: string;
   title?: string;
   service?: ServiceInterface;
+  infiniteScroll?: boolean;
 }
 
 export interface TableElementInterface {

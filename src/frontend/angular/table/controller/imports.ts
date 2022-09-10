@@ -1,4 +1,3 @@
-import { FormElementInterface } from "../../../../interfaces/form";
 import { MainInterface } from "../../../../interfaces/main";
 import { TableElementInterface } from "../../../../interfaces/table";
 import { TextTransformation } from "../../../../utils/text.transformation";
@@ -7,47 +6,44 @@ let _hasArray: boolean = false;
 let _hasDialog: boolean = false;
 let _hasRemoveConfirmationDialog: boolean = false;
 
-const setTableControllerImports = (object: MainInterface): string => {
-  if (!object.table) {
+const setTableControllerImports = ({ table }: MainInterface): string => {
+  if (!table) {
     console.info("Only tables set here");
     return ``;
   }
 
-  object.table.elements.forEach((element) => {
-    verifyTableElement(object, element);
+  const hasInfiniteScroll = table.infiniteScroll;
+
+  table.elements.forEach((element) => {
+    verifyTableElement(element);
   });
 
   const code = `
-  import { Component, } from "@angular/core";
+  import { Component, ViewChild, OnInit } from "@angular/core";
   import { ActivatedRoute, Router } from "@angular/router";
   import { MatSnackBar } from "@angular/material/snack-bar";
+  import { MyErrorHandler } from "../../utils/error-handler";
   ${_hasDialog ? `import { MatDialog } from "@angular/material/dialog";` : ``}
-  ${
-    _hasRemoveConfirmationDialog
+  ${_hasRemoveConfirmationDialog
       ? `import { RemoveConfirmationDialogComponent } from "../remove-confirmation-dialog/remove-confirmation-dialog.component";`
       : ``
-  }
-  import { MyErrorHandler } from "../../utils/error-handler";
+    }
   import { ${TextTransformation.pascalfy(
-    object.table.id
-  )}Service } from "./${TextTransformation.kebabfy(object.table.id)}.service";
-  import { FormBuilder, FormGroupDirective, FormGroup, ${
-    _hasArray ? `FormArray,` : ``
-  } } from "@angular/forms";
+      table.id
+    )}Service } from "./${TextTransformation.kebabfy(table.id)}.service";
+  import { FormBuilder, FormGroupDirective, FormGroup, ${_hasArray ? `FormArray,` : ``
+    } } from "@angular/forms";
+  ${hasInfiniteScroll ?
+      `import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
+      import { MatSort } from "@angular/material/sort";
+      import { distinctUntilChanged, map } from "rxjs/operators";
+      import { InfiniteScrollTableDataSource } from "./${TextTransformation.kebabfy(table.id)}-infinite-scroll.service";` : ''} 
   `;
 
   return code;
 };
 
-const verifyTableElement = (
-  object: MainInterface,
-  element: TableElementInterface
-) => {
-  if (!object.table) {
-    console.info("Only tables set here");
-    return ``;
-  }
-
+const verifyTableElement = (element: TableElementInterface) => {
   let code = ``;
 
   if (element.row.menu) {

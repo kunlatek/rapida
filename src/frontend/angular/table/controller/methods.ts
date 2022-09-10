@@ -4,29 +4,30 @@ import { TextTransformation } from "../../../../utils/text.transformation";
 
 let _hasRemoveConfirmationDialog: boolean = false;
 
-const setTableControllerMethods = (object: MainInterface): string => {
-  if (!object.table) {
+const setTableControllerMethods = ({ table }: MainInterface): string => {
+  if (!table) {
     console.info("Only tables set here");
     return ``;
   }
 
+  const hasInfiniteScroll = table.infiniteScroll;
   let _methods = ``;
 
-  object.table.elements.forEach((element) => {
-    verifyTableElement(object, element);
+  table.elements.forEach((element) => {
+    verifyTableElement(element);
   });
 
   let code = `
   ${_methods}
   
-  ${object.table.id}Search(${object.table.id}Directive: FormGroupDirective) {
+  ${table.id}Search(${table.id}Directive: FormGroupDirective) {
     this.isLoading = true;
     const filter = \`?filter={"or":[\${
-      this.${object.table.id}DisplayedColumns.map(
+      this.${table.id}DisplayedColumns.map(
         (element: string) => {
           if (element !== "undefined") {
             return \`{"\${element}":{"like": "\${
-              this.${object.table.id}SearchForm.value.searchInput
+              this.${table.id}SearchForm.value.searchInput
             }", "options": "i"}}\`;
           }
           return "";
@@ -35,26 +36,30 @@ const setTableControllerMethods = (object: MainInterface): string => {
     }]}\`;
 
     this.set${TextTransformation.pascalfy(
-      object.table.id
-    )}Service(filter.replace("},]", "}]"));
+    table.id
+  )}Service(filter.replace("},]", "}]"));
 
-    this.${object.table.id}SearchForm.reset();
-    ${object.table.id}Directive.resetForm();
+    this.${table.id}SearchForm.reset();
+    ${table.id}Directive.resetForm();
   };
 
   set${TextTransformation.pascalfy(
-    object.table.id
+    table.id
   )}Service = (filter: string = "") => {
-    this._${object.table.id}Service
+    this._${table.id}Service
       .getAll(filter)
       .then((result: any) => {
-        this.${object.table.id}DataSource = result.data.result;
+        ${hasInfiniteScroll ? `
+        this.dataSource.matTableDataSource.data = [...this.dataSource.matTableDataSource.data,...result.data.result];
+        this.dataSource.pages = (result.data.total/50) + 1;
+        `
+      : `this.${table.id}DataSource = result.data.result;`}
         this.isLoading = false;
       })
       .catch(async (err: any) => {
         if (err.error.logMessage === "jwt expired") {
           await this.refreshToken();
-          this.set${TextTransformation.pascalfy(object.table.id)}Service();
+          this.set${TextTransformation.pascalfy(table.id)}Service();
         } else {
           const message = this._errorHandler.apiErrorMessage(err.error.message);
           this.isLoading = false;
@@ -63,8 +68,7 @@ const setTableControllerMethods = (object: MainInterface): string => {
       });
   };
 
-  ${
-    _hasRemoveConfirmationDialog
+  ${_hasRemoveConfirmationDialog
       ? `
     removeConfirmationDialogOpenDialog = (id: string) => {
       const removeConfirmationDialogDialogRef = this._dialog.open(
@@ -77,11 +81,11 @@ const setTableControllerMethods = (object: MainInterface): string => {
           if (res) {
             try {
               const routeToGo =
-                this.${object.table.id}Id !== ""
-                  ? this._router.url.split(\`/\${this.${object.table.id}Id}\`)[0]
+                this.${table.id}Id !== ""
+                  ? this._router.url.split(\`/\${this.${table.id}Id}\`)[0]
                   : this._router.url;
               this.isLoading = true;
-              await this._${object.table.id}Service.delete(res.id);
+              await this._${table.id}Service.delete(res.id);
               this.redirectTo(routeToGo);
               this.isLoading = false;
             } catch (error: any) {
@@ -95,14 +99,13 @@ const setTableControllerMethods = (object: MainInterface): string => {
     };
     `
       : ``
-  }
+    }
 
-  ${
-    object.table.service?.hasAuthorization
+  ${table.service?.hasAuthorization
       ? `
     refreshToken = async () => {
       try {
-        const res: any = await this._${object.table.id}Service.refreshToken();
+        const res: any = await this._${table.id}Service.refreshToken();
         if (res) {
           sessionStorage.setItem("token", res?.data.authToken);
           sessionStorage.setItem("refreshToken", res?.data.authRefreshToken);
@@ -117,10 +120,9 @@ const setTableControllerMethods = (object: MainInterface): string => {
     };
     `
       : ""
-  }
+    }
 
-  ${
-    _hasRemoveConfirmationDialog
+  ${_hasRemoveConfirmationDialog
       ? `
     redirectTo = (uri: string) => {
       this._router
@@ -131,25 +133,49 @@ const setTableControllerMethods = (object: MainInterface): string => {
     };
     `
       : ``
-  }
+    }
 
   sendErrorMessage = (errorMessage: string) => {
     this._snackbar.open(errorMessage, undefined, { duration: 4 * 1000 });
   };
+  ${hasInfiniteScroll ? `
+  ngOnInit() {
+    this._initSorting();
+    this.dataSource.attach(this.viewPort);
+
+    this.viewPort.scrolledIndexChange
+      .pipe(
+        map(() => (this.viewPort?.getOffsetToRenderedContentStart() || 0) * -1),
+        distinctUntilChanged(),
+      )
+      .subscribe(offset => (this.offset = offset));
+
+    this.viewPort.renderedRangeStream.subscribe(range => {
+      // console.log(range);
+      this.offset = range.start * -this.ITEM_SIZE;
+    });
+  }
+
+  private _initSorting() {
+    this.dataSource.matTableDataSource.sort = this.matSort;
+
+    const originalSortingDataAccessor = this.dataSource.matTableDataSource
+      .sortingDataAccessor;
+
+    this.dataSource.matTableDataSource.sortingDataAccessor = (
+      data: any,
+      sortHeaderId: string
+    ) => {
+
+      return originalSortingDataAccessor(data, sortHeaderId);
+    };
+  }`: ''}
   `;
 
   return code;
 };
 
-const verifyTableElement = (
-  object: MainInterface,
-  element: TableElementInterface
-) => {
-  if (!object.table) {
-    console.info("Only tables set here");
-    return ``;
-  }
-
+const verifyTableElement = (element: TableElementInterface) => {
   let code = ``;
 
   if (element.row.menu) {
