@@ -133,7 +133,8 @@ const setTableControllerMethods = (object: MainInterface): string => {
       : ``
   }
 
-  createXls = (objects: any) => {
+  createXls = () => {
+    const objects = this.${object.table.id}DataSource;
     let data = objects.map((object: any) => {
       return this.setNewObject(object);
     });
@@ -148,9 +149,11 @@ const setTableControllerMethods = (object: MainInterface): string => {
     for (const key in object) {
       if (Object.prototype.hasOwnProperty.call(object, key)) {
         const value = object[key];
-        this.${object.table.id}DisplayedColumns.map(property => {
-          if (property === key) {
-            newObject[property] = value;
+        this.fieldToLabel.map(property => {
+          let propertyLabel = "";
+          if (property.field === key) {            
+            propertyLabel = property.label;
+            newObject[propertyLabel] = value;
           }
         })
       }

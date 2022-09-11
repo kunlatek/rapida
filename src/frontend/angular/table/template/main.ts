@@ -57,7 +57,7 @@ const setTableTemplate = (object: MainInterface, mainArray: Array<MainInterface>
             <mat-icon>search</mat-icon> Filtrar
           </button>        
         </form>
-        <button mat-raised-button color="primary" (click)="createXls(${object.table.id}DataSource)">
+        <button mat-raised-button color="primary" (click)="createXls()">
           <mat-icon>format_list_bulleted</mat-icon>
           Baixar XLS
         </button>
