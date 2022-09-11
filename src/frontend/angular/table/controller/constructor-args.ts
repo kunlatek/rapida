@@ -1,5 +1,4 @@
 import { MainInterface } from "../../../../interfaces/main";
-import { TextTransformation } from "../../../../utils/text.transformation";
 
 const setTableControllerConstructorArguments = (
   { table }: MainInterface
@@ -21,7 +20,7 @@ const setTableControllerConstructorArguments = (
     const message = this._errorHandler.apiErrorMessage(error.message);
     this.sendErrorMessage(message);
   }
-  ${hasInfiniteScroll ? '' : `this.set${TextTransformation.pascalfy(table.id)}Service();`}
+  ${hasInfiniteScroll ? '' : `this._setFiltersParams();`}
   
   ${hasInfiniteScroll ? `
   this.dataSource = new InfiniteScrollTableDataSource();
@@ -33,9 +32,8 @@ const setTableControllerConstructorArguments = (
         return;
       }
       this._pageCache.add(+page);
-      this.set${TextTransformation.pascalfy(
-    table.id
-  )}Service(page);
+      this._page = +page - 1;
+      this._setFiltersParams();
     });
   ` : ''}
   `;

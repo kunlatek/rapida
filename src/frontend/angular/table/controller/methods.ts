@@ -19,47 +19,55 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
 
   let code = `
   ${_methods}
+
+  _setFiltersParams(isPagination = false) {
+    let httpParams = new HttpParams();
+    const valueToSearch = this.${table.id}SearchForm.value.searchInput;
+    if (this._page) {
+      httpParams = httpParams.append('page', this._page);
+    }
+    if (valueToSearch) {
+      const filtersToAppend = this._setSearchFilters(valueToSearch);
+      httpParams = httpParams.append('filter', filtersToAppend);
+    }
+    this.set${TextTransformation.pascalfy(table.id)}Service(httpParams, isPagination);
+  }
   
-  ${table.id}Search(${table.id}Directive: FormGroupDirective) {
-    this.isLoading = true;
-    const filter = \`?filter={"or":[\${
-      this.${table.id}DisplayedColumns.map(
-        (element: string) => {
-          if (element !== "undefined") {
-            return \`{"\${element}":{"like": "\${
-              this.${table.id}SearchForm.value.searchInput
-            }", "options": "i"}}\`;
-          }
-          return "";
+  private _setSearchFilters(valueToSearch: string) {
+    const filters = this.${table.id}DisplayedColumns.filter((col) => col !== 'actions').reduce((previous: any, current) => {
+      const param = {
+        [current]: {
+          like: valueToSearch,
         }
-      )
-    }]}\`;
+      };
+      previous.or.push(param);
+      return previous;
+    }, {
+      or: []
+    });
 
-    this.set${TextTransformation.pascalfy(
-    table.id
-  )}Service(filter.replace("},]", "}]"));
-
-    this.${table.id}SearchForm.reset();
-    ${table.id}Directive.resetForm();
-  };
+    return JSON.stringify(filters);
+  }
 
   set${TextTransformation.pascalfy(
     table.id
-  )}Service = (filter: string = "") => {
+  )}Service = (params: HttpParams, isPagination: boolean) => {
     this._${table.id}Service
-      .getAll(filter)
+      .getAll(params)
       .then((result: any) => {
-        ${hasInfiniteScroll ? `
-        this.dataSource.matTableDataSource.data = [...this.dataSource.matTableDataSource.data,...result.data.result];
-        this.dataSource.pages = (result.data.total/50) + 1;
-        `
-      : `this.${table.id}DataSource = result.data.result;`}
+        const currentData = ${hasInfiniteScroll ? 'this.dataSource.matTableDataSource.data' : 'this.dataSource'}
+        let newData = [...result.data.result];
+        if (isPagination) {
+          newData = [...newData, ...currentData];
+          ${hasInfiniteScroll ? 'this.dataSource.pages = (result.data.total / 50) + 1' : ''};
+        }
+        ${hasInfiniteScroll ? 'this.dataSource.matTableDataSource.data' : 'this.dataSource'} = newData;
         this.isLoading = false;
       })
       .catch(async (err: any) => {
         if (err.error.logMessage === "jwt expired") {
           await this.refreshToken();
-          this.set${TextTransformation.pascalfy(table.id)}Service();
+          this._setFiltersParams();
         } else {
           const message = this._errorHandler.apiErrorMessage(err.error.message);
           this.isLoading = false;

@@ -23,7 +23,8 @@ const setTableService = ({ table, projectPath }: MainInterface): string => {
   let code = `
   import { HttpClient } from "@angular/common/http";
   import { Injectable } from "@angular/core";
-
+  import { HttpParams } from "@angular/common/http";
+  
   @Injectable({
   providedIn: "root",
   })
@@ -89,9 +90,10 @@ const setTableServiceServicesOverTableElement = (
     switch (method) {
       case ServiceFunctionsEnum.Get:
         code += `
-        getAll(filter: string = "") {
+        getAll(params: HttpParams) {
           return this._httpClient.get(
-            \`\${this.BASE_URL}/${service.endpoint}\${filter}\`, {
+            \`\${this.BASE_URL}/${service.endpoint}\`, {
+              params,
               headers: {
                 ${hasAuthorization}
               }

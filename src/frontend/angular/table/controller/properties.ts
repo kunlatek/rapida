@@ -20,13 +20,12 @@ const setTableControllerProperties = ({ table }: MainInterface): string => {
   ${table.id}DisplayedColumns: string[] = [
     ${_displayedTableFields}
   ];
-  ${table.id}DataSource: any = [];
+  dataSource: ${hasInfiniteScroll ? 'InfiniteScrollTableDataSource' : ' any = []'};
   ${table.id}SearchForm: FormGroup;
   isLoading = true;
+  private _page!: number;
   ${hasInfiniteScroll ? `
-  dataSource: InfiniteScrollTableDataSource;
   ITEM_SIZE = 50;
-
   @ViewChild(CdkVirtualScrollViewport, { static: true })
   viewPort!: CdkVirtualScrollViewport;
   @ViewChild(MatSort, { static: true }) matSort!: MatSort;
@@ -34,7 +33,7 @@ const setTableControllerProperties = ({ table }: MainInterface): string => {
   offset!: number;
 
   private _pageCache = new Set<number>();
-
+  
   `: ''}
   `;
 

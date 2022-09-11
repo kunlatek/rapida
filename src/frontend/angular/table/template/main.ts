@@ -47,7 +47,7 @@ const setTableTemplate = ({ table, projectPath }: MainInterface): string => {
     <mat-card-actions>
       <form id="${table.id}" #${table.id}Directive="ngForm" 
       [formGroup]="${table.id}SearchForm" 
-      (ngSubmit)="${table.id}Search(${table.id}Directive)">
+      (ngSubmit)="_setFiltersParams()">
         <mat-form-field appearance="standard">
           <mat-label>Filtro</mat-label>
           <input matInput formControlName="searchInput" 
@@ -63,7 +63,7 @@ const setTableTemplate = ({ table, projectPath }: MainInterface): string => {
     ${hasInfiniteScroll ? `<cdk-virtual-scroll-viewport #viewPort
                              [itemSize]="ITEM_SIZE"
                              matSort>`: ''}
-    <table mat-table [dataSource]="${hasInfiniteScroll ? `dataSource` : `${table.id}DataSource`}" class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
       ${_specificStructure}    
       <tr mat-header-row *matHeaderRowDef="${table.id}DisplayedColumns${hasInfiniteScroll ? ';sticky: true' : ''}" ${hasInfiniteScroll ? '[style.top.px]="offset"' : ''}></tr>
       <tr mat-row *matRowDef="let row; columns: ${table.id}DisplayedColumns;"></tr>                                        
@@ -71,7 +71,7 @@ const setTableTemplate = ({ table, projectPath }: MainInterface): string => {
     ${hasInfiniteScroll ? `</cdk-virtual-scroll-viewport>` : ''}
     <div 
       style="width: 100%; height: 100px; display: flex; align-items: center; justify-content: center; color: #c9c9c9"
-      *ngIf="${hasInfiniteScroll ? '!this.dataSource.matTableDataSource.data.length' : table.id + 'DataSource.length  === 0'} && !isLoading">
+      *ngIf="${hasInfiniteScroll ? '!this.dataSource.matTableDataSource.data.length' : '!this.dataSource.length'} && !isLoading">
       <div style="display: flex; flex-direction: column;">
         <img 
           width="50"
