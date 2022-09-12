@@ -13,14 +13,14 @@ import { setTableControllerMethods } from "./methods";
  * @param object
  * @returns
  */
-const setTableController = (object: MainInterface): string => {
+const setTableController = (object: MainInterface, mainArray: Array<MainInterface> | undefined = undefined,): string => {
   if (!object.table) {
     console.info("Only tables set here");
     return ``;
   }
 
   let _imports: string = setTableControllerImports(object);
-  let _properties: string = setTableControllerProperties(object);
+  let _properties: string = setTableControllerProperties(object, mainArray);
   let _constructorParams: string = setTableControllerConstructorParams(object);
   let _constructorArguments: string = setTableControllerConstructorArguments(
     object

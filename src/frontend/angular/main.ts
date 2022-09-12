@@ -22,7 +22,8 @@ require("dotenv").config();
 
 const createAngularProject = (
   object: MainInterface,
-  index: number
+  index: number,
+  array: Array<MainInterface>,
 ): BuildedFrontendCode => {
   process.env.ARRAY_LAYER = "[]";
   process.env.ARRAYS_IN_A_FLOW = "[]";
@@ -39,9 +40,9 @@ const createAngularProject = (
   }
 
   if (object.form) {
-    const controllerCode = setFormController(object);
-    const serviceCode = setFormService(object);
-    const templateCode = setFormTemplate(object);
+    const controllerCode = setFormController(object, array);
+    const serviceCode = setFormService(object, array);
+    const templateCode = setFormTemplate(object, array);
 
     response = {
       component: controllerCode,
@@ -51,9 +52,9 @@ const createAngularProject = (
   }
 
   if (object.table) {
-    const controllerCode = setTableController(object);
-    const serviceCode = setTableService(object);
-    const templateCode = setTableTemplate(object);
+    const controllerCode = setTableController(object, array);
+    const serviceCode = setTableService(object, array);
+    const templateCode = setTableTemplate(object, array);
 
     response = {
       component: controllerCode,
@@ -63,9 +64,9 @@ const createAngularProject = (
   }
 
   if (object.chart) {
-    const controllerCode = setChartController(object);
-    const serviceCode = setChartService(object);
-    const templateCode = setChartTemplate(object);
+    const controllerCode = setChartController(object, array);
+    const serviceCode = setChartService(object, array);
+    const templateCode = setChartTemplate(object, array);
 
     response = {
       component: controllerCode,
@@ -75,8 +76,8 @@ const createAngularProject = (
   }
 
   if (object.module) {
-    const controllerCode = setModuleController(object);
-    const templateCode = setModuleTemplate(object);
+    const controllerCode = setModuleController(object, array);
+    const templateCode = setModuleTemplate(object, array);
     response = {
       component: controllerCode,
       template: templateCode,

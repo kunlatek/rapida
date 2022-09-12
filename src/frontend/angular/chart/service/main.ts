@@ -12,7 +12,7 @@ let _hasAuthorization: boolean = false;
  * @param object
  * @returns
  */
-const setChartService = (object: MainInterface): string => {
+const setChartService = (object: MainInterface, mainArray: Array<MainInterface> | undefined = undefined,): string => {
   if (!object.chart) {
     console.info("Only charts set here");
     return ``;

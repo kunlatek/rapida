@@ -68,6 +68,7 @@ export const ANIMATION_TABLE: MainInterface = {
         },
       },
     ],
+    formIdToFieldsToLabels: "animationForm",
     actions: {
         id: "animationTable",
         title: "Exemplo",
