@@ -2,11 +2,11 @@ import { FormButtonTypeEnum, FormInputTypeEnum, ServiceFunctionsEnum } from "../
 import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/main";
 import { MainInterface } from "../../../src/interfaces/main";
 
-export const CLIENT_PRODUCT_FORM: MainInterface = {
+export const PRODUCT_FORM: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
   backendFramework: BackendFrameworkEnum.Loopback,
   form: {
-    id: "clientProductForm",
+    id: "productForm",
     title: "Produto",
     elements: [
       {
@@ -41,7 +41,7 @@ export const CLIENT_PRODUCT_FORM: MainInterface = {
                   name: "manufacturerId",
                   type: FormInputTypeEnum.Text,
                   optionsApi: {
-                    endpoint: "client-manufacturers",
+                    endpoint: "manufacturers",
                     labelField: "name",
                     valueField: "_id",
                     paramsToFilter: ["name"]
@@ -134,7 +134,7 @@ export const CLIENT_PRODUCT_FORM: MainInterface = {
                         placeholder: "Ex.: Parafuso SX Inox 6x50mm Ciser",
                         tooltip: "Produto utilizado paraa construção deste produto",
                         optionsApi: {
-                          endpoint: "client-products",
+                          endpoint: "products",
                           labelField: "name",
                           valueField: "_id",
                           paramsToFilter: ["name", "model", "ean13", "ean14"]
@@ -206,7 +206,7 @@ export const CLIENT_PRODUCT_FORM: MainInterface = {
     ],
     service: {
       baseUrl: "http://localhost:3000",
-      endpoint: "client-products",
+      endpoint: "products",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

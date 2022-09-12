@@ -5,11 +5,11 @@ import {
 } from "../../../src/enums/main";
 import { MainInterface } from "../../../src/interfaces/main";
 
-export const CLIENT_MANUFACTURER_FORM: MainInterface = {
+export const MANUFACTURER_FORM: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
   backendFramework: BackendFrameworkEnum.Loopback,
   form: {
-    id: "clientManufacturerForm",
+    id: "manufacturerForm",
     title: "Fabricante de produtos",
     elements: [
       {
@@ -1257,7 +1257,7 @@ export const CLIENT_MANUFACTURER_FORM: MainInterface = {
     ],
     service: {
       baseUrl: "http://localhost:3000",
-      endpoint: "client-manufacturers",
+      endpoint: "manufacturers",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,
