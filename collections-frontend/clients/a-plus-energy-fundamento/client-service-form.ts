@@ -1,53 +1,40 @@
-import {
-  FormButtonTypeEnum,
-  FormInputTypeEnum,
-  ServiceFunctionsEnum,
-} from "../../../src/enums/form";
-import {
-  BackendFrameworkEnum,
-  FrontendFrameworkEnum,
-} from "../../../src/enums/main";
+import { FormInputTypeEnum, ServiceFunctionsEnum } from "../../../src/enums/form";
+import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/main";
 import { MainInterface } from "../../../src/interfaces/main";
 
 export const CLIENT_SERVICE_FORM: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
   backendFramework: BackendFrameworkEnum.Loopback,
   form: {
+    title: "Serviço prestado",
     id: "clientServiceForm",
-    title: "Serviço",
     elements: [
       {
-        input: {
-          label: "Nome",
-          name: "name",
+        autocomplete: {
+          label: "Local de instalação",
+          name: "clientSettlementId",
           type: FormInputTypeEnum.Text,
-          placeholder: "Nome do serviço prestado",
-          isRequired: true,
-        },
+          placeholder: "Instalação para serviço",
+          optionsApi: {
+            endpoint: "client-settlements",
+            labelField: "settlementZipCode",
+            valueField: "_id",
+            paramsToFilter: ["settlementZipCode", "settlementAddress"],
+          },
+        }
       },
       {
-        input: {
-          label: "Descrição",
-          name: "description",
+        select: {
+          label: "Serviços prestados",
+          name: "clientId",
           type: FormInputTypeEnum.Text,
-          placeholder: "Descrição do serviço prestado",
-          isMultipleLines: true,
-        },
-      },
-      {
-        input: {
-          label: "Preço",
-          name: "price",
-          placeholder: "Em R$",
-          type: FormInputTypeEnum.Number,
-          isRequired: true,
-        },
-      },
-      {
-        button: {
-          label: "Criar",
-          type: FormButtonTypeEnum.Submit,
-        },
+          optionsApi: {
+            endpoint: "clients",
+            labelField: "name",
+            valueField: "_id",
+          },
+          isMultiple: true,
+        }
       },
     ],
     service: {
@@ -62,5 +49,5 @@ export const CLIENT_SERVICE_FORM: MainInterface = {
         ServiceFunctionsEnum.Find,
       ],
     },
-  },
-};
+  }
+}

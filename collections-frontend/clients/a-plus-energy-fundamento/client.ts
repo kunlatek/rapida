@@ -1,11 +1,11 @@
 import { FrontendFrameworkEnum } from "../../../src/enums/main";
 import { MainInterface } from "../../../src/interfaces/main";
 
-export const CLIENT_MANUFACTURER: MainInterface = {
+export const CLIENT: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
   module: {
-    title: "Fábricas",
-    id: "clientManufacturer",
-    components: ["clientManufacturerForm", "clientManufacturerTable"],
+    title: "Clientes",
+    id: "client",
+    components: ["clientForm", "clientTable"],
   }
 }

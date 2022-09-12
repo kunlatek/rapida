@@ -3,13 +3,13 @@ import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/
 import { RequestTypeEnum } from "../../../src/enums/request";
 import { MainInterface } from "../../../src/interfaces/main";
 
-export const CLIENT_PRODUCT_TABLE: MainInterface = {
+export const PRODUCT_TABLE: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
   backendFramework: BackendFrameworkEnum.Loopback,
   table: {
     title: "Produtos",
     subtitle: "Listagem de produtos",
-    id: "clientProductTable",
+    id: "productTable",
     data: {
       type: RequestTypeEnum.Object,
     },
@@ -49,7 +49,7 @@ export const CLIENT_PRODUCT_TABLE: MainInterface = {
             {
               action: {
                 type: RequestTypeEnum.Link,
-                url: "/main/client-product",
+                url: "/main/product",
                 param: "_id",
               },
               label: "Editar",
@@ -71,7 +71,7 @@ export const CLIENT_PRODUCT_TABLE: MainInterface = {
     ],
     service: {
       baseUrl: "http://localhost:3000",
-      endpoint: "client-products",
+      endpoint: "products",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,

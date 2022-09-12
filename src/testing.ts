@@ -32,58 +32,66 @@ const projectPath = "/home/ryzzan/Projects/a-plus-energy-fundamento";
 /**
  * A+ ENERGY
  */
-import { CLIENT_PERSON_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-person-form";
-import { CLIENT_PERSON_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-person-table";
-import { CLIENT_PERSON } from "../collections-frontend/clients/a-plus-energy-fundamento/client-person";
+import { CLIENT_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-form";
+import { CLIENT_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-table";
+import { CLIENT } from "../collections-frontend/clients/a-plus-energy-fundamento/client";
 
-import { CLIENT_COMPANY_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-company-form";
-import { CLIENT_COMPANY_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-company-table";
-import { CLIENT_COMPANY } from "../collections-frontend/clients/a-plus-energy-fundamento/client-company";
-
-import { CLIENT_MANUFACTURER_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-manufacturer-form";
-import { CLIENT_MANUFACTURER_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-manufacturer-table";
-import { CLIENT_MANUFACTURER } from "../collections-frontend/clients/a-plus-energy-fundamento/client-manufacturer";
-
-import { CLIENT_PRODUCT_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-product-form";
-import { CLIENT_PRODUCT_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-product-table";
-import { CLIENT_PRODUCT } from "../collections-frontend/clients/a-plus-energy-fundamento/client-product";
+import { CLIENT_SETTLEMENT_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-settlement-form";
+import { CLIENT_SETTLEMENT_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-settlement-table";
+import { CLIENT_SETTLEMENT } from "../collections-frontend/clients/a-plus-energy-fundamento/client-settlement";
 
 import { CLIENT_SERVICE_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-service-form";
 import { CLIENT_SERVICE_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-service-table";
 import { CLIENT_SERVICE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-service";
 
-import { CLIENT_ACTION_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-action-form";
-import { CLIENT_ACTION_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-action-table";
-import { CLIENT_ACTION } from "../collections-frontend/clients/a-plus-energy-fundamento/client-action";
+import { MANUFACTURER_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/manufacturer-form";
+import { MANUFACTURER_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/manufacturer-table";
+import { MANUFACTURER } from "../collections-frontend/clients/a-plus-energy-fundamento/manufacturer";
+
+import { PRODUCT_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/product-form";
+import { PRODUCT_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/product-table";
+import { PRODUCT } from "../collections-frontend/clients/a-plus-energy-fundamento/product";
+
+import { SERVICE_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/service-form";
+import { SERVICE_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/service-table";
+import { SERVICE } from "../collections-frontend/clients/a-plus-energy-fundamento/service";
+
+import { ACTION_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/action-form";
+import { ACTION_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/action-table";
+import { ACTION } from "../collections-frontend/clients/a-plus-energy-fundamento/action";
 //////////////////////////////////////////////////////////
 
 const array = [
   /**
    * A+ ENERGY 
    */
-  CLIENT_PERSON_FORM,
-  CLIENT_PERSON_TABLE,
-  CLIENT_PERSON,
-  
-  CLIENT_COMPANY_FORM,
-  CLIENT_COMPANY_TABLE,
-  CLIENT_COMPANY,
-  
-  CLIENT_MANUFACTURER_FORM,
-  CLIENT_MANUFACTURER_TABLE,
-  CLIENT_MANUFACTURER,
+  CLIENT_FORM,
+  CLIENT_TABLE,
+  CLIENT,
 
-  CLIENT_PRODUCT_FORM,
-  CLIENT_PRODUCT_TABLE,
-  CLIENT_PRODUCT,
+  CLIENT_SETTLEMENT_FORM,
+  CLIENT_SETTLEMENT_TABLE,
+  CLIENT_SETTLEMENT,
 
   CLIENT_SERVICE_FORM,
   CLIENT_SERVICE_TABLE,
   CLIENT_SERVICE,
+  
+  MANUFACTURER_FORM,
+  MANUFACTURER_TABLE,
+  MANUFACTURER,
 
-  CLIENT_ACTION_FORM,
-  CLIENT_ACTION_TABLE,
-  CLIENT_ACTION,
+  PRODUCT_FORM,
+  PRODUCT_TABLE,
+  PRODUCT,
+
+  SERVICE_FORM,
+  SERVICE_TABLE,
+  SERVICE,
+
+  ACTION_FORM,
+  ACTION_TABLE,
+  ACTION,
 ];
 
 array.forEach((object) => {

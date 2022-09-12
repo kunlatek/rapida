@@ -5,11 +5,11 @@ import {
 } from "../../../src/enums/main";
 import { MainInterface } from "../../../src/interfaces/main";
 
-export const CLIENT_ACTION_FORM: MainInterface = {
+export const ACTION_FORM: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
   backendFramework: BackendFrameworkEnum.Loopback,
   form: {
-    id: "clientActionForm",
+    id: "actionForm",
     title: "Ação",
     elements: [
       {
@@ -24,12 +24,13 @@ export const CLIENT_ACTION_FORM: MainInterface = {
                   name: "servicesId",
                   type: FormInputTypeEnum.Text,
                   optionsApi: {
-                    endpoint: "client-services",
+                    endpoint: "services",
                     labelField: "name",
                     valueField: "_id",
                     paramsToFilter: ["name"],
                   },
                   isRequired: true,
+                  isMultiple: true,
                 },
               },
               {
@@ -85,7 +86,7 @@ export const CLIENT_ACTION_FORM: MainInterface = {
     ],
     service: {
       baseUrl: "http://localhost:3000",
-      endpoint: "client-actions",
+      endpoint: "actions",
       hasAuthorization: true,
       methods: [
         ServiceFunctionsEnum.Get,
