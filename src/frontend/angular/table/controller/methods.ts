@@ -138,7 +138,7 @@ const setTableControllerMethods = (object: MainInterface): string => {
     let data = objects.map((object: any) => {
       return this.setNewObject(object);
     });
-    const fileName = "${object.table.title ? object.table.title+"-"+Date.now() : "download-"+Date.now() }";
+    const fileName = \`${object.table.title ? object.table.title+"-${Date.now()}" : "download-${Date.now()}" }\`;
     const exportType =  exportFromJSON.types.xls;
 
     exportFromJSON({ data, fileName, exportType });
