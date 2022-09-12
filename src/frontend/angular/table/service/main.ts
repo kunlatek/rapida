@@ -1,42 +1,42 @@
-import * as fs from "fs";
-import * as chp from "child_process";
-import { MainInterface } from "../../../../interfaces/main";
-import { TextTransformation } from "../../../../utils/text.transformation";
-import { ServiceInterface } from "../../../../interfaces/form";
 import { ServiceFunctionsEnum } from "../../../../enums/form";
+import { ServiceInterface } from "../../../../interfaces/form";
+import { MainInterface } from "../../../../interfaces/main";
+import { TableInterface } from "../../../../interfaces/table";
+import { TextTransformation } from "../../../../utils/text.transformation";
+import { FileType } from "../../core/file-type";
+import { writeToFile } from "../../core/write-to-file";
 
 let _hasAuthorization: boolean = false;
-
 /**
  * SET CODE
  * @param object
  * @returns
  */
-const setTableService = (object: MainInterface, mainArray: Array<MainInterface> | undefined = undefined,): string => {
-  if (!object.table) {
+const setTableService = ({ table, projectPath }: MainInterface): string => {
+  if (!table) {
     console.info("Only tables set here");
     return ``;
   }
 
-  let _services: string = setTableServiceServices(object);
+  let _services: string = setTableServiceServices(table);
 
   let code = `
   import { HttpClient } from "@angular/common/http";
   import { Injectable } from "@angular/core";
-
+  import { HttpParams } from "@angular/common/http";
+  
   @Injectable({
   providedIn: "root",
   })
-  export class ${TextTransformation.pascalfy(object.table.id)}Service {
-      BASE_URL = "${object.table.service?.baseUrl}";
+  export class ${TextTransformation.pascalfy(table.id)}Service {
+      BASE_URL = "${table.service?.baseUrl}";
 
       constructor(private _httpClient: HttpClient) {}
 
       ${_services}
 
-      ${
-        _hasAuthorization
-          ? `
+      ${_hasAuthorization
+      ? `
         refreshToken () {
           return this._httpClient.get(
             \`\${this.BASE_URL}/auth/refresh-token\`, {
@@ -47,22 +47,28 @@ const setTableService = (object: MainInterface, mainArray: Array<MainInterface> 
           ).toPromise();
         }
         `
-          : ``
-      }
+      : ``
+    }
   }
   `;
 
-  setTableServiceArchitectureAndWriteToFile(object, code);
+  writeToFile({
+    id: table.id,
+    projectPath: projectPath,
+    code,
+    type: FileType.SERVICE,
+  });
+
   return code;
 };
 
 // SET SERVICES
-const setTableServiceServices = (object: MainInterface) => {
+const setTableServiceServices = (table: TableInterface) => {
   let code = ``;
 
-  if (object.table?.service) {
+  if (table?.service) {
     code += setTableServiceServicesOverTableElement(
-      object.table?.service
+      table?.service
     );
   }
 
@@ -84,9 +90,10 @@ const setTableServiceServicesOverTableElement = (
     switch (method) {
       case ServiceFunctionsEnum.Get:
         code += `
-        getAll(filter: string = "") {
+        getAll(params: HttpParams) {
           return this._httpClient.get(
-            \`\${this.BASE_URL}/${service.endpoint}\${filter}\`, {
+            \`\${this.BASE_URL}/${service.endpoint}\`, {
+              params,
               headers: {
                 ${hasAuthorization}
               }
@@ -179,53 +186,6 @@ const setTableServiceServicesOverTableElement = (
   });
 
   return code;
-};
-
-/**
- * JOIN CODE AND ARCHITECTURE
- * @param object
- * @param code
- */
-const setTableServiceArchitectureAndWriteToFile = (
-  object: MainInterface,
-  code: string
-) => {
-  if (!object.table) {
-    return "";
-  }
-
-  const filePath = `${
-    object.projectPath
-  }/src/app/components/${TextTransformation.kebabfy(
-    object.table.id
-  )}/${TextTransformation.kebabfy(object.table.id)}.service.ts`;
-
-  try {
-    fs.writeFileSync(filePath, code);
-    console.info(
-      `File ${TextTransformation.kebabfy(object.table.id)} already exists.`
-    );
-    console.info(`File successfully written in ${filePath}.`);
-  } catch (error) {
-    console.info(
-      `File ${TextTransformation.kebabfy(object.table.id)} doesn't exist.`
-    );
-
-    try {
-      chp.execSync(
-        `ng g c components/${TextTransformation.kebabfy(
-          object.table.id
-        )} --skip-import`,
-        { cwd: object.projectPath }
-      );
-    } catch (error) {
-      console.warn(error);
-    }
-
-    fs.writeFileSync(filePath, code);
-
-    console.info(`File successfully created in ${filePath}.`);
-  }
 };
 
 export { setTableService };

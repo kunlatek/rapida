@@ -1,6 +1,6 @@
 import { ServiceFunctionsEnum } from "../../../src/enums/form";
 import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/main";
-import { FilterTypeEnum, RequestTypeEnum } from "../../../src/enums/request";
+import { RequestTypeEnum } from "../../../src/enums/request";
 import { MainInterface } from "../../../src/interfaces/main";
 
 export const MANUFACTURER_TABLE: MainInterface = {
@@ -10,6 +10,7 @@ export const MANUFACTURER_TABLE: MainInterface = {
     title: "Fabricantes",
     subtitle: "Listagem de fabricantes",
     id: "manufacturerTable",
+    formIdToFieldsToLabels: "manufacturerForm",
     data: {
       type: RequestTypeEnum.Object,
     },
@@ -75,4 +76,4 @@ export const MANUFACTURER_TABLE: MainInterface = {
       ],
     },
   }
-}
+};

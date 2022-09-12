@@ -1,5 +1,5 @@
-import * as fs from "fs";
 import * as chp from "child_process";
+import * as fs from "fs";
 
 import { BuildedFrontendCode, MainInterface } from "../../interfaces/main";
 
@@ -17,6 +17,7 @@ import { setTableTemplate } from "./table/template/main";
 
 import { setModuleController } from "./module/controller/main";
 import { setModuleTemplate } from "./module/template/main";
+import { setTableInfiniteScrollService } from "./table/service/infinite-scroll-table-data-source";
 
 require("dotenv").config();
 
@@ -27,7 +28,7 @@ const createAngularProject = (
 ): BuildedFrontendCode => {
   process.env.ARRAY_LAYER = "[]";
   process.env.ARRAYS_IN_A_FLOW = "[]";
-  
+
   let response: BuildedFrontendCode = {
     component: "",
     module: "",
@@ -53,8 +54,9 @@ const createAngularProject = (
 
   if (object.table) {
     const controllerCode = setTableController(object, array);
-    const serviceCode = setTableService(object, array);
-    const templateCode = setTableTemplate(object, array);
+    const serviceCode = setTableService(object);
+    const templateCode = setTableTemplate(object);
+    const tableInfiniteScrollTemplateCode = setTableInfiniteScrollService(object);
 
     response = {
       component: controllerCode,

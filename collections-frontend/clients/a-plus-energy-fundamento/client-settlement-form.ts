@@ -472,4 +472,4 @@ export const CLIENT_SETTLEMENT_FORM: MainInterface = {
       ],
     },
   }
-}
+};

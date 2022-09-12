@@ -10,6 +10,7 @@ export const PRODUCT_TABLE: MainInterface = {
     title: "Produtos",
     subtitle: "Listagem de produtos",
     id: "productTable",
+    formIdToFieldsToLabels: "productForm",
     data: {
       type: RequestTypeEnum.Object,
     },
@@ -82,4 +83,4 @@ export const PRODUCT_TABLE: MainInterface = {
       ],
     },
   }
-}
+};

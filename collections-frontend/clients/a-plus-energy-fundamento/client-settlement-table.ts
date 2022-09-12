@@ -10,6 +10,7 @@ export const CLIENT_SETTLEMENT_TABLE: MainInterface = {
     title: "Instalações",
     subtitle: "Listagem de instalações",
     id: "clientSettlementTable",
+    formIdToFieldsToLabels: "clientSettlementForm",
     data: {
       type: RequestTypeEnum.Object,
     },
@@ -74,4 +75,4 @@ export const CLIENT_SETTLEMENT_TABLE: MainInterface = {
       ],
     },
   }
-}
+};

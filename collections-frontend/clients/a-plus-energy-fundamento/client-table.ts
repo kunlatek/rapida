@@ -10,6 +10,7 @@ export const CLIENT_TABLE: MainInterface = {
     title: "Ações",
     subtitle: "Listagem de ações",
     id: "clientTable",
+    formIdToFieldsToLabels: "clientForm",
     data: {
       type: RequestTypeEnum.Object,
     },
@@ -66,4 +67,4 @@ export const CLIENT_TABLE: MainInterface = {
       ],
     },
   }
-}
+};

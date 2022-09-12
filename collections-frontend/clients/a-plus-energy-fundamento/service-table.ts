@@ -10,6 +10,7 @@ export const SERVICE_TABLE: MainInterface = {
     title: "Serviços",
     subtitle: "Listagem de serviços",
     id: "serviceTable",
+    formIdToFieldsToLabels: "serviceForm",
     data: {
       type: RequestTypeEnum.Object,
     },
@@ -66,4 +67,4 @@ export const SERVICE_TABLE: MainInterface = {
       ],
     },
   }
-}
+};

@@ -4,57 +4,82 @@ import { TextTransformation } from "../../../../utils/text.transformation";
 
 let _hasRemoveConfirmationDialog: boolean = false;
 
-const setTableControllerMethods = (object: MainInterface): string => {
-  if (!object.table) {
+const setTableControllerMethods = ({ table }: MainInterface): string => {
+  if (!table) {
     console.info("Only tables set here");
     return ``;
   }
 
+  const hasInfiniteScroll = table.infiniteScroll;
   let _methods = ``;
 
-  object.table.elements.forEach((element) => {
-    verifyTableElement(object, element);
+  table.elements.forEach((element) => {
+    verifyTableElement(element);
   });
 
   let code = `
   ${_methods}
-  
-  ${object.table.id}Search(${object.table.id}Directive: FormGroupDirective) {
-    this.isLoading = true;
-    const filter = \`?filter={"or":[\${
-      this.${object.table.id}DisplayedColumns.map(
-        (element: string) => {
-          if (element !== "undefined") {
-            return \`{"\${element}":{"like": "\${
-              this.${object.table.id}SearchForm.value.searchInput
-            }", "options": "i"}}\`;
-          }
-          return "";
-        }
-      )
-    }]}\`;
 
+  _setFiltersParams(isPagination = false) {
+    let httpParams = new HttpParams();
+    const valueToSearch = this.${table.id}SearchForm.value.searchInput;
+    if (this._page) {
+      httpParams = httpParams.append('page', this._page);
+    }
+    if (valueToSearch) {
+      const filtersToAppend = this._setSearchFilters(valueToSearch);
+      httpParams = httpParams.append('filter', filtersToAppend);
+    }
     this.set${TextTransformation.pascalfy(
-      object.table.id
-    )}Service(filter.replace("},]", "}]"));
+    table.id
+  )}Service(httpParams, isPagination);
+  }
+  
+  private _setSearchFilters(valueToSearch: string) {
+    const filters = this.${table.id
+    }DisplayedColumns.filter((col) => col !== 'actions').reduce((previous: any, current) => {
+      const param = {
+        [current]: {
+          like: valueToSearch,
+        }
+      };
+      previous.or.push(param);
+      return previous;
+    }, {
+      or: []
+    });
 
-    this.${object.table.id}SearchForm.reset();
-    ${object.table.id}Directive.resetForm();
-  };
+    return JSON.stringify(filters);
+  }
 
   set${TextTransformation.pascalfy(
-    object.table.id
-  )}Service = (filter: string = "") => {
-    this._${object.table.id}Service
-      .getAll(filter)
+      table.id
+    )}Service = (params: HttpParams, isPagination: boolean) => {
+    this._${table.id}Service
+      .getAll(params)
       .then((result: any) => {
-        this.${object.table.id}DataSource = result.data.result;
+        const currentData = ${hasInfiniteScroll
+      ? "this.dataSource.matTableDataSource.data"
+      : "this.dataSource"
+    }
+        let newData = [...result.data.result];
+        if (isPagination) {
+          newData = [...newData, ...currentData];
+          ${hasInfiniteScroll
+      ? "this.dataSource.pages = (result.data.total / 50) + 1"
+      : ""
+    };
+        }
+        ${hasInfiniteScroll
+      ? "this.dataSource.matTableDataSource.data"
+      : "this.dataSource"
+    } = newData;
         this.isLoading = false;
       })
       .catch(async (err: any) => {
         if (err.error.logMessage === "jwt expired") {
           await this.refreshToken();
-          this.set${TextTransformation.pascalfy(object.table.id)}Service();
+          this._setFiltersParams();
         } else {
           const message = this._errorHandler.apiErrorMessage(err.error.message);
           this.isLoading = false;
@@ -63,8 +88,7 @@ const setTableControllerMethods = (object: MainInterface): string => {
       });
   };
 
-  ${
-    _hasRemoveConfirmationDialog
+  ${_hasRemoveConfirmationDialog
       ? `
     removeConfirmationDialogOpenDialog = (id: string) => {
       const removeConfirmationDialogDialogRef = this._dialog.open(
@@ -77,11 +101,11 @@ const setTableControllerMethods = (object: MainInterface): string => {
           if (res) {
             try {
               const routeToGo =
-                this.${object.table.id}Id !== ""
-                  ? this._router.url.split(\`/\${this.${object.table.id}Id}\`)[0]
+                this.${table.id}Id !== ""
+                  ? this._router.url.split(\`/\${this.${table.id}Id}\`)[0]
                   : this._router.url;
               this.isLoading = true;
-              await this._${object.table.id}Service.delete(res.id);
+              await this._${table.id}Service.delete(res.id);
               this.redirectTo(routeToGo);
               this.isLoading = false;
             } catch (error: any) {
@@ -95,14 +119,13 @@ const setTableControllerMethods = (object: MainInterface): string => {
     };
     `
       : ``
-  }
+    }
 
-  ${
-    object.table.service?.hasAuthorization
+  ${table.service?.hasAuthorization
       ? `
     refreshToken = async () => {
       try {
-        const res: any = await this._${object.table.id}Service.refreshToken();
+        const res: any = await this._${table.id}Service.refreshToken();
         if (res) {
           sessionStorage.setItem("token", res?.data.authToken);
           sessionStorage.setItem("refreshToken", res?.data.authRefreshToken);
@@ -117,10 +140,9 @@ const setTableControllerMethods = (object: MainInterface): string => {
     };
     `
       : ""
-  }
+    }
 
-  ${
-    _hasRemoveConfirmationDialog
+  ${_hasRemoveConfirmationDialog
       ? `
       redirectTo = (uri: string) => {
         this._router
@@ -131,54 +153,88 @@ const setTableControllerMethods = (object: MainInterface): string => {
       };
       `
       : ``
-  }
-
-  createXls = () => {
-    const objects = this.${object.table.id}DataSource;
-    let data = objects.map((object: any) => {
-      return this.setNewObject(object);
-    });
-    const fileName = \`${object.table.title ? object.table.title+"-${Date.now()}" : "download-${Date.now()}" }\`;
-    const exportType =  exportFromJSON.types.xls;
-
-    exportFromJSON({ data, fileName, exportType });
-  };
-
-  setNewObject = (object: any) => {
-    const newObject: any = {};
-    for (const key in object) {
-      if (Object.prototype.hasOwnProperty.call(object, key)) {
-        const value = object[key];
-        this.fieldToLabel.map(property => {
-          let propertyLabel = "";
-          if (property.field === key) {            
-            propertyLabel = property.label;
-            newObject[propertyLabel] = value;
-          }
-        })
-      }
     }
-    
-    return newObject;
-  };
 
+  ${table.fieldsToLabels || table.formIdToFieldsToLabels
+      ? `
+      createXls = () => {
+        const objects = this.dataSource;
+        let data = objects.map((object: any) => {
+          return this.setNewObject(object);
+        });
+        const fileName = \`${table.title
+        ? table.title + "-${Date.now()}"
+        : "download-${Date.now()}"
+      }\`;
+        const exportType =  exportFromJSON.types.xls;
+
+        exportFromJSON({ data, fileName, exportType });
+      };
+
+      setNewObject = (object: any) => {
+        const newObject: any = {};
+        for (const key in object) {
+          if (Object.prototype.hasOwnProperty.call(object, key)) {
+            const value = object[key];
+            this.fieldToLabel.map(property => {
+              let propertyLabel = "";
+              if (property.field === key) {            
+                propertyLabel = property.label;
+                newObject[propertyLabel] = value;
+              }
+            })
+          }
+        }
+        
+        return newObject;
+      };
+      `
+      : ``
+    }
+  
   sendErrorMessage = (errorMessage: string) => {
     this._snackbar.open(errorMessage, undefined, { duration: 4 * 1000 });
   };
+  ${hasInfiniteScroll
+      ? `
+  ngOnInit() {
+    this._initSorting();
+    this.dataSource.attach(this.viewPort);
+
+    this.viewPort.scrolledIndexChange
+      .pipe(
+        map(() => (this.viewPort?.getOffsetToRenderedContentStart() || 0) * -1),
+        distinctUntilChanged(),
+      )
+      .subscribe(offset => (this.offset = offset));
+
+    this.viewPort.renderedRangeStream.subscribe(range => {
+      this.offset = range.start * -this.ITEM_SIZE;
+    });
+  }
+
+  private _initSorting() {
+    this.dataSource.matTableDataSource.sort = this.matSort;
+
+    const originalSortingDataAccessor = this.dataSource.matTableDataSource
+      .sortingDataAccessor;
+
+    this.dataSource.matTableDataSource.sortingDataAccessor = (
+      data: any,
+      sortHeaderId: string
+    ) => {
+
+      return originalSortingDataAccessor(data, sortHeaderId);
+    };
+  }`
+      : ""
+    }
   `;
 
   return code;
 };
 
-const verifyTableElement = (
-  object: MainInterface,
-  element: TableElementInterface
-) => {
-  if (!object.table) {
-    console.info("Only tables set here");
-    return ``;
-  }
-
+const verifyTableElement = (element: TableElementInterface) => {
   let code = ``;
 
   if (element.row.menu) {

@@ -10,6 +10,7 @@ export const ACTION_TABLE: MainInterface = {
     title: "Ações",
     subtitle: "Listagem de ações",
     id: "actionTable",
+    formIdToFieldsToLabels: "actionForm",
     data: {
       type: RequestTypeEnum.Object,
     },
@@ -66,4 +67,4 @@ export const ACTION_TABLE: MainInterface = {
       ],
     },
   }
-}
+};

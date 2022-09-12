@@ -1,41 +1,45 @@
-import * as fs from "fs";
-import * as chp from "child_process";
+import { RequestTypeEnum } from "../../../../enums/request";
 import { MainInterface } from "../../../../interfaces/main";
-import { TextTransformation } from "../../../../utils/text.transformation";
 import {
   RowMenuElementInterface,
   TableElementInterface,
+  TableInterface
 } from "../../../../interfaces/table";
-import { FormElementInterface } from "../../../../interfaces/form";
-import { RequestTypeEnum } from "../../../../enums/request";
+import { TextTransformation } from "../../../../utils/text.transformation";
+import { FileType } from "../../core/file-type";
+import { writeToFile } from "../../core/write-to-file";
 
 /**
  * SET CODE
  * @param object
  * @returns
  */
-const setTableTemplate = (object: MainInterface, mainArray: Array<MainInterface> | undefined = undefined,): string => {
-  if (!object.table) {
+const setTableTemplate = ({ table, projectPath }: MainInterface): string => {
+  if (!table) {
     console.info("Only tables set here");
     return ``;
   }
 
+  const hasInfiniteScroll = table.infiniteScroll;
   let _specificStructure: string = "";
   let _specificStructureOverMenu: string = "";
 
-  const hasTableTitle = object.table.title
-    ? `<mat-card-title>${object.table.title}</mat-card-title>`
+  const hasTableTitle = table.title
+    ? `<mat-card-title>${table.title}</mat-card-title>`
     : "";
 
-  const hasTableSubtitle = object.table.subtitle
-    ? `<mat-card-subtitle>${object.table.subtitle}</mat-card-subtitle>`
+  const hasTableSubtitle = table.subtitle
+    ? `<mat-card-subtitle>${table.subtitle}</mat-card-subtitle>`
     : "";
 
-  object.table?.elements.forEach((element) => {
-    _specificStructure += setSpecificStructureOverTableElement(object, element);
-    _specificStructureOverMenu += setSpecificStructureOverRowMenu(object, element);
+  table?.elements.forEach((element) => {
+    _specificStructure += setSpecificStructureOverTableElement(table, element);
+    _specificStructureOverMenu += setSpecificStructureOverRowMenu(
+      table,
+      element
+    );
   });
-  
+
   let code = `
   <mat-card>
     <mat-card-header>
@@ -44,10 +48,10 @@ const setTableTemplate = (object: MainInterface, mainArray: Array<MainInterface>
     </mat-card-header>
 
     <mat-card-actions>
-    <div class="flex-row">
-        <form id="${object.table.id}" #${object.table.id}Directive="ngForm" 
-        [formGroup]="${object.table.id}SearchForm" 
-        (ngSubmit)="${object.table.id}Search(${object.table.id}Directive)">
+      <div class="flex-row">
+        <form id="${table.id}" #${table.id}Directive="ngForm" 
+        [formGroup]="${table.id}SearchForm" 
+        (ngSubmit)="_setFiltersParams()">
           <mat-form-field appearance="standard">
             <mat-label>Filtro</mat-label>
             <input matInput formControlName="searchInput" 
@@ -55,24 +59,41 @@ const setTableTemplate = (object: MainInterface, mainArray: Array<MainInterface>
           </mat-form-field>
           <button mat-raised-button color="primary">
             <mat-icon>search</mat-icon> Filtrar
-          </button>        
+          </button>
         </form>
-        <button mat-raised-button color="primary" (click)="createXls()">
-          <mat-icon>format_list_bulleted</mat-icon>
-          Baixar XLS
-        </button>
+        ${table.fieldsToLabels || table.formIdToFieldsToLabels
+      ? `
+      <button mat-raised-button color="primary" (click)="createXls()">
+        <mat-icon>format_list_bulleted</mat-icon>
+        Baixar XLS
+      </button>
+      `
+      : ``
+    }
       </div>
     </mat-card-actions>
 
     <mat-card-content class="table-container">
-    <table mat-table [dataSource]="${object.table.id}DataSource" class="mat-elevation-z8">
+    ${hasInfiniteScroll
+      ? `<cdk-virtual-scroll-viewport #viewPort
+                             [itemSize]="ITEM_SIZE"
+                             matSort>`
+      : ""
+    }
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
       ${_specificStructure}    
-      <tr mat-header-row *matHeaderRowDef="${object.table.id}DisplayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: ${object.table.id}DisplayedColumns;"></tr>                                        
+      <tr mat-header-row *matHeaderRowDef="${table.id}DisplayedColumns${hasInfiniteScroll ? ";sticky: true" : ""
+    }" ${hasInfiniteScroll ? '[style.top.px]="offset"' : ""}></tr>
+      <tr mat-row *matRowDef="let row; columns: ${table.id
+    }DisplayedColumns;"></tr>                                        
     </table>
+    ${hasInfiniteScroll ? `</cdk-virtual-scroll-viewport>` : ""}
     <div 
       style="width: 100%; height: 100px; display: flex; align-items: center; justify-content: center; color: #c9c9c9"
-      *ngIf="${object.table.id}DataSource.length === 0 && !isLoading">
+      *ngIf="${hasInfiniteScroll
+      ? "!this.dataSource.matTableDataSource.data.length"
+      : "!this.dataSource.length"
+    } && !isLoading">
       <div style="display: flex; flex-direction: column;">
         <img 
           width="50"
@@ -91,30 +112,34 @@ const setTableTemplate = (object: MainInterface, mainArray: Array<MainInterface>
   ${_specificStructureOverMenu}
   `;
 
-  setTableTemplateArchitectureAndWriteToFile(object, code);
+  writeToFile({
+    id: table.id,
+    projectPath: projectPath,
+    code,
+    type: FileType.TEMPLATE,
+  });
+
   return code;
 };
 
 const setSpecificStructureOverTableElement = (
-  object: MainInterface,
+  table: TableInterface,
   element: TableElementInterface
 ): string => {
-  if (!object.table) {
+  if (!table) {
     console.info("Only tables set here");
     return ``;
   }
 
-  
   let columnContent = "";
   let code = ``;
 
   if (element.row.menu) {
     columnContent = `
     <button mat-icon-button class="icon" aria-label="${TextTransformation.pascalfy(
-      object.table.id
-    )}" [matMenuTriggerFor]="${
-      object.table?.id
-    }Menu"  [matMenuTriggerData]="{element: element}">
+      table.id
+    )}" [matMenuTriggerFor]="${table?.id
+      }Menu"  [matMenuTriggerData]="{element: element}">
       <mat-icon>${element.row.icon}</mat-icon>
     </button>
     `;
@@ -124,7 +149,7 @@ const setSpecificStructureOverTableElement = (
     if (element.row.fieldProperties) {
       element.row.fieldProperties.forEach((property: string, index: number) => {
         columnContent += `
-        ${index > 0 ? " | " :  ""}{{element.${element.row.field}.${property}}}
+        ${index > 0 ? " | " : ""}{{element.${element.row.field}.${property}}}
         `;
       });
     }
@@ -138,7 +163,8 @@ const setSpecificStructureOverTableElement = (
 
   code += `
   <ng-container matColumnDef="${element.row.field}">
-    <th mat-header-cell *matHeaderCellDef> ${element.column.label} </th>
+    <th mat-header-cell *matHeaderCellDef ${table.infiniteScroll ? '[style.top.px]="offset"' : ""
+    }> ${element.column.label} </th>
     <td mat-cell *matCellDef="let element"> ${columnContent} </td>
   </ng-container>
   `;
@@ -147,7 +173,7 @@ const setSpecificStructureOverTableElement = (
 };
 
 const setSpecificStructureOverRowMenu = (
-  object: MainInterface,
+  table: TableInterface,
   element: TableElementInterface
 ): string => {
   const menuArray: Array<RowMenuElementInterface> = [];
@@ -159,14 +185,14 @@ const setSpecificStructureOverRowMenu = (
     });
 
     code += `
-    <mat-menu #${object?.table?.id}Menu="matMenu">
+    <mat-menu #${table?.id}Menu="matMenu">
       ${setSpecificStructureOverRowMenuItems(menuArray)}
     </mat-menu>
     `;
   }
-  
+
   return code;
-}
+};
 
 const setSpecificStructureOverRowMenuItems = (
   rowMenuElements: Array<RowMenuElementInterface>
@@ -181,9 +207,8 @@ const setSpecificStructureOverRowMenuItems = (
       menuParam = "";
 
     if (element.action.type && element.action.type == RequestTypeEnum.Link) {
-      menuButtonAction = `[routerLink]="['${element.action.url}'${
-        element.action.param ? ", " + element.action.param : ""
-      }]"`;
+      menuButtonAction = `[routerLink]="['${element.action.url}'${element.action.param ? ", " + element.action.param : ""
+        }]"`;
 
       if (element.action.param) {
         hasMenuParam = true;
@@ -215,53 +240,6 @@ const setSpecificStructureOverRowMenuItems = (
   }
 
   return code;
-};
-
-/**
- * JOIN CODE AND ARCHITECTURE
- * @param object
- * @param code
- */
-const setTableTemplateArchitectureAndWriteToFile = (
-  object: MainInterface,
-  code: string
-) => {
-  if (!object.table) {
-    return "";
-  }
-
-  const filePath = `${
-    object.projectPath
-  }/src/app/components/${TextTransformation.kebabfy(
-    object.table.id
-  )}/${TextTransformation.kebabfy(object.table.id)}.component.html`;
-
-  try {
-    fs.writeFileSync(filePath, code);
-    console.info(
-      `File ${TextTransformation.kebabfy(object.table.id)} already exists.`
-    );
-    console.info(`File successfully written in ${filePath}.`);
-  } catch (error) {
-    console.info(
-      `File ${TextTransformation.kebabfy(object.table.id)} doesn't exist.`
-    );
-
-    try {
-      chp.execSync(
-        `ng g c components/${TextTransformation.kebabfy(
-          object.table.id
-        )} --skip-import`,
-        { cwd: object.projectPath }
-      );
-    } catch (error) {
-      console.warn(error);
-    }
-
-    fs.writeFileSync(filePath, code);
-
-    console.info(`File successfully created in ${filePath}.`);
-  }
 };
 
 export { setTableTemplate };

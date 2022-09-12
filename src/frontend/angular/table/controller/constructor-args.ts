@@ -1,27 +1,41 @@
 import { MainInterface } from "../../../../interfaces/main";
-import { TextTransformation } from "../../../../utils/text.transformation";
 
 const setTableControllerConstructorArguments = (
-  object: MainInterface
+  { table }: MainInterface
 ): string => {
-  if (!object.table) {
+  if (!table) {
     console.info("Only tables set here");
     return ``;
   }
-
+  const hasInfiniteScroll = table.infiniteScroll;
   const code = `
-  this.${object.table.id}SearchForm = this._formBuilder.group({
+  this.${table.id}SearchForm = this._formBuilder.group({
     searchInput: [null, []],
   });
   try {
     this._activatedRoute.params.subscribe(async (routeParams) => {
-      this.${object.table.id}Id = routeParams["id"];
+      this.${table.id}Id = routeParams["id"];
     });
   } catch (error: any) {
     const message = this._errorHandler.apiErrorMessage(error.message);
     this.sendErrorMessage(message);
   }
-  this.set${TextTransformation.pascalfy(object.table.id)}Service();
+  ${hasInfiniteScroll ? '' : `this._setFiltersParams();`}
+  
+  ${hasInfiniteScroll ? `
+  this.dataSource = new InfiniteScrollTableDataSource();
+  this.dataSource.page$.subscribe((page: string) => {
+      if (!page) {
+        return;
+      }
+      if (this._pageCache.has(+page)) {
+        return;
+      }
+      this._pageCache.add(+page);
+      this._page = +page - 1;
+      this._setFiltersParams();
+    });
+  ` : ''}
   `;
 
   return code;
