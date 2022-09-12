@@ -6,7 +6,6 @@ import { controllerMain } from "./controller/main";
 import { modelMain } from "./model/main";
 import { repositoryMain } from "./repository/main";
 import { FormElementInterface } from "../../interfaces/form";
-import { FormInputTypeEnum } from "../../enums/form";
 
 const createLoopbackProject = (
   object: MainInterface,
@@ -26,7 +25,7 @@ const createLoopbackProject = (
   if (object.form) {
     const controllerCode = controllerMain(object);
     const modelCode = modelMain(object);
-    const repositoryCode = repositoryMain(object);
+    const repositoryCode = repositoryMain(object, index);
 
     response = {
       controller: controllerCode,
