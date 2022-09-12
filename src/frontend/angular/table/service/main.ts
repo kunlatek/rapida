@@ -12,7 +12,7 @@ let _hasAuthorization: boolean = false;
  * @param object
  * @returns
  */
-const setTableService = (object: MainInterface): string => {
+const setTableService = (object: MainInterface, mainArray: Array<MainInterface> | undefined = undefined,): string => {
   if (!object.table) {
     console.info("Only tables set here");
     return ``;

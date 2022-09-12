@@ -60,6 +60,7 @@ export const CHARACTER_TABLE: MainInterface = {
         },
       },
     ],
+    formIdToFieldsToLabels: "characterForm",
     actions: {
         id: "characterTable",
         title: "Exemplo",

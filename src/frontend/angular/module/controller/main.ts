@@ -13,7 +13,7 @@ import {
  * @param object
  * @returns
  */
-const setModuleController = (object: MainInterface): string => {
+const setModuleController = (object: MainInterface, mainArray: Array<MainInterface> | undefined = undefined,): string => {
   if (!object.module) {
     console.info("Only modules set here");
     return ``;

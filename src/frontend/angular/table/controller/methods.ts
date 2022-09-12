@@ -122,16 +122,45 @@ const setTableControllerMethods = (object: MainInterface): string => {
   ${
     _hasRemoveConfirmationDialog
       ? `
-    redirectTo = (uri: string) => {
-      this._router
-        .navigateByUrl("/main", { skipLocationChange: true })
-        .then(() => {
-          this._router.navigate([uri]);
-        });
-    };
-    `
+      redirectTo = (uri: string) => {
+        this._router
+          .navigateByUrl("/main", { skipLocationChange: true })
+          .then(() => {
+            this._router.navigate([uri]);
+          });
+      };
+      `
       : ``
   }
+
+  createXls = () => {
+    const objects = this.${object.table.id}DataSource;
+    let data = objects.map((object: any) => {
+      return this.setNewObject(object);
+    });
+    const fileName = \`${object.table.title ? object.table.title+"-${Date.now()}" : "download-${Date.now()}" }\`;
+    const exportType =  exportFromJSON.types.xls;
+
+    exportFromJSON({ data, fileName, exportType });
+  };
+
+  setNewObject = (object: any) => {
+    const newObject: any = {};
+    for (const key in object) {
+      if (Object.prototype.hasOwnProperty.call(object, key)) {
+        const value = object[key];
+        this.fieldToLabel.map(property => {
+          let propertyLabel = "";
+          if (property.field === key) {            
+            propertyLabel = property.label;
+            newObject[propertyLabel] = value;
+          }
+        })
+      }
+    }
+    
+    return newObject;
+  };
 
   sendErrorMessage = (errorMessage: string) => {
     this._snackbar.open(errorMessage, undefined, { duration: 4 * 1000 });
