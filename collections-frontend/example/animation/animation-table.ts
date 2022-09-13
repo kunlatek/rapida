@@ -1,4 +1,4 @@
-import { FormInputTypeEnum, ServiceFunctionsEnum } from "../../../src/enums/form";
+import { ServiceFunctionsEnum } from "../../../src/enums/form";
 import { FrontendFrameworkEnum } from "../../../src/enums/main";
 import { RequestTypeEnum } from "../../../src/enums/request";
 import { MainInterface } from "../../../src/interfaces/main";
@@ -9,7 +9,7 @@ export const ANIMATION_TABLE: MainInterface = {
   table: {
     id: "animationTable",
     title: "Animações",
-    infiniteScroll: false,
+    infiniteScroll: true,
     data: {
       type: RequestTypeEnum.Object,
     },
@@ -45,6 +45,7 @@ export const ANIMATION_TABLE: MainInterface = {
         row: {
           type: "menu",
           icon: "more_vert",
+          field: "actions",
           menu: [
             {
               action: {
@@ -70,18 +71,6 @@ export const ANIMATION_TABLE: MainInterface = {
       },
     ],
     formIdToFieldsToLabels: "animationForm",
-    actions: {
-      id: "animationTable",
-      title: "Exemplo",
-      elements: [{
-        input: {
-          label: "Search input",
-          name: "searchInput",
-          placeholder: "Placeholder to search input",
-          type: FormInputTypeEnum.Text
-        }
-      }]
-    },
     service: {
       baseUrl: "http://localhost:3000",
       endpoint: "animations",
