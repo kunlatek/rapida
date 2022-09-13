@@ -8,7 +8,7 @@ export const ANIMATION_TABLE: MainInterface = {
   frontendFramework: FrontendFrameworkEnum.Angular,
   table: {
     id: "animationTable",
-    title: "Animações",
+    title: "Exemplos",
     infiniteScroll: true,
     data: {
       type: RequestTypeEnum.Object,
@@ -43,6 +43,7 @@ export const ANIMATION_TABLE: MainInterface = {
           label: "Ações",
         },
         row: {
+          field: "actions",
           type: "menu",
           icon: "more_vert",
           field: "actions",

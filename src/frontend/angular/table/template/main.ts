@@ -73,7 +73,7 @@ const setTableTemplate = ({ table, projectPath }: MainInterface): string => {
       </div>
     </mat-card-actions>
 
-    <mat-card-content class="table-container">
+    <mat-card-content class="${hasInfiniteScroll ? '' : 'table-container'}">
     ${hasInfiniteScroll
       ? `<cdk-virtual-scroll-viewport #viewPort
                              [itemSize]="ITEM_SIZE"
