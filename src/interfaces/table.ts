@@ -6,6 +6,8 @@ export interface TableInterface {
   id: string;
   data: RequestInterface;
   elements: Array<TableElementInterface>;
+  fieldsToLabels?: Array<{label: string; field: string;}>;
+  formIdToFieldsToLabels?: string;
   actions?: FormInterface;
   object?: Array<unknown>;
   subtitle?: string;

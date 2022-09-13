@@ -30,11 +30,14 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
       const filtersToAppend = this._setSearchFilters(valueToSearch);
       httpParams = httpParams.append('filter', filtersToAppend);
     }
-    this.set${TextTransformation.pascalfy(table.id)}Service(httpParams, isPagination);
+    this.set${TextTransformation.pascalfy(
+    table.id
+  )}Service(httpParams, isPagination);
   }
   
   private _setSearchFilters(valueToSearch: string) {
-    const filters = this.${table.id}DisplayedColumns.filter((col) => col !== 'actions').reduce((previous: any, current) => {
+    const filters = this.${table.id
+    }DisplayedColumns.filter((col) => col !== 'actions').reduce((previous: any, current) => {
       const param = {
         [current]: {
           like: valueToSearch,
@@ -50,18 +53,27 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
   }
 
   set${TextTransformation.pascalfy(
-    table.id
-  )}Service = (params: HttpParams, isPagination: boolean) => {
+      table.id
+    )}Service = (params: HttpParams, isPagination: boolean) => {
     this._${table.id}Service
       .getAll(params)
       .then((result: any) => {
-        const currentData = ${hasInfiniteScroll ? 'this.dataSource.matTableDataSource.data' : 'this.dataSource'}
+        const currentData = ${hasInfiniteScroll
+      ? "this.dataSource.matTableDataSource.data"
+      : "this.dataSource"
+    }
         let newData = [...result.data.result];
         if (isPagination) {
           newData = [...newData, ...currentData];
-          ${hasInfiniteScroll ? 'this.dataSource.pages = (result.data.total / 50) + 1' : ''};
+          ${hasInfiniteScroll
+      ? "this.dataSource.pages = (result.data.total / 50) + 1"
+      : ""
+    };
         }
-        ${hasInfiniteScroll ? 'this.dataSource.matTableDataSource.data' : 'this.dataSource'} = newData;
+        ${hasInfiniteScroll
+      ? "this.dataSource.matTableDataSource.data"
+      : "this.dataSource"
+    } = newData;
         this.isLoading = false;
       })
       .catch(async (err: any) => {
@@ -132,21 +144,59 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
 
   ${_hasRemoveConfirmationDialog
       ? `
-    redirectTo = (uri: string) => {
-      this._router
-        .navigateByUrl("/main", { skipLocationChange: true })
-        .then(() => {
-          this._router.navigate([uri]);
-        });
-    };
-    `
+      redirectTo = (uri: string) => {
+        this._router
+          .navigateByUrl("/main", { skipLocationChange: true })
+          .then(() => {
+            this._router.navigate([uri]);
+          });
+      };
+      `
       : ``
     }
 
+  ${table.fieldsToLabels || table.formIdToFieldsToLabels
+      ? `
+      createXls = () => {
+        const objects: any = ${hasInfiniteScroll ? `this.dataSource.matTableDataSource.filteredData;` : `this.dataSource`}
+        let data = objects.map((object: any) => {
+          return this.setNewObject(object);
+        });
+        const fileName = \`${table.title
+        ? table.title + "-${Date.now()}"
+        : "download-${Date.now()}"
+      }\`;
+        const exportType =  exportFromJSON.types.xls;
+
+        exportFromJSON({ data, fileName, exportType });
+      };
+
+      setNewObject = (object: any) => {
+        const newObject: any = {};
+        for (const key in object) {
+          if (Object.prototype.hasOwnProperty.call(object, key)) {
+            const value = object[key];
+            this.fieldToLabel.map(property => {
+              let propertyLabel = "";
+              if (property.field === key) {            
+                propertyLabel = property.label;
+                newObject[propertyLabel] = value;
+              }
+            })
+          }
+        }
+        
+        return newObject;
+      };
+      `
+      : ``
+    }
+  
   sendErrorMessage = (errorMessage: string) => {
     this._snackbar.open(errorMessage, undefined, { duration: 4 * 1000 });
   };
-  ${hasInfiniteScroll ? `
+  ${hasInfiniteScroll
+      ? `
   ngOnInit() {
     this._initSorting();
     this.dataSource.attach(this.viewPort);
@@ -159,7 +209,6 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
       .subscribe(offset => (this.offset = offset));
 
     this.viewPort.renderedRangeStream.subscribe(range => {
-      // console.log(range);
       this.offset = range.start * -this.ITEM_SIZE;
     });
   }
@@ -177,7 +226,9 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
 
       return originalSortingDataAccessor(data, sortHeaderId);
     };
-  }`: ''}
+  }`
+      : ""
+    }
   `;
 
   return code;

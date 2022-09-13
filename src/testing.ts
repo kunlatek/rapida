@@ -29,24 +29,15 @@ const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitat
 const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api";
 const projectPath = "/home/ryzzan/Projects/animation";
 
-/**
- * ANIMATION
- */
+import { ANIMATION } from "../collections-frontend/example/animation/animation";
 import { ANIMATION_FORM } from "../collections-frontend/example/animation/animation-form";
 import { ANIMATION_TABLE } from "../collections-frontend/example/animation/animation-table";
-import { ANIMATION } from "../collections-frontend/example/animation/animation";
 
+import { CHARACTER } from "../collections-frontend/example/animation/character";
 import { CHARACTER_FORM } from "../collections-frontend/example/animation/character-form";
 import { CHARACTER_TABLE } from "../collections-frontend/example/animation/character-table";
-import { CHARACTER } from "../collections-frontend/example/animation/character";
-
-
-//////////////////////////////////////////////////////////
 
 const array = [
-  /**
-   * ANIMATION
-   */
   ANIMATION_FORM,
   ANIMATION_TABLE,
   ANIMATION,

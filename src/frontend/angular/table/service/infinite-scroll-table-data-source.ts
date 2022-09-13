@@ -94,7 +94,7 @@ export class InfiniteScrollTableDataSource extends DataSource<any> {
     const startPage = this._getPageForIndex(start);
     const endPage = this._getPageForIndex(end + this._pageOffset);
     const pages: number[] = [];
-    console.log('_getPagesToDownload', startPage, endPage);
+    
     for (let i = startPage; i <= endPage && i < this.pages; i++) {
       if (!this._pageCache.has(i)) {
         pages.push(i);

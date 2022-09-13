@@ -14,7 +14,7 @@ import { setChartControllerMethods } from "./methods";
  * @param object
  * @returns
  */
-const setChartController = (object: MainInterface): string => {
+const setChartController = (object: MainInterface, mainArray: Array<MainInterface> | undefined = undefined,): string => {
   if (!object.chart) {
     console.info("Only charts set here");
     return ``;

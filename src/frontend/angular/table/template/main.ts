@@ -34,7 +34,10 @@ const setTableTemplate = ({ table, projectPath }: MainInterface): string => {
 
   table?.elements.forEach((element) => {
     _specificStructure += setSpecificStructureOverTableElement(table, element);
-    _specificStructureOverMenu += setSpecificStructureOverRowMenu(table, element);
+    _specificStructureOverMenu += setSpecificStructureOverRowMenu(
+      table,
+      element
+    );
   });
 
   let code = `
@@ -45,33 +48,52 @@ const setTableTemplate = ({ table, projectPath }: MainInterface): string => {
     </mat-card-header>
 
     <mat-card-actions>
-      <form id="${table.id}" #${table.id}Directive="ngForm" 
-      [formGroup]="${table.id}SearchForm" 
-      (ngSubmit)="_setFiltersParams()">
-        <mat-form-field appearance="standard">
-          <mat-label>Filtro</mat-label>
-          <input matInput formControlName="searchInput" 
-          placeholder="Procure qualquer coisa">
-        </mat-form-field>
-        <button mat-raised-button color="primary">
-          <mat-icon>search</mat-icon> Filtrar
-        </button>
-      </form>
+      <div class="flex-row">
+        <form id="${table.id}" #${table.id}Directive="ngForm" 
+        [formGroup]="${table.id}SearchForm" 
+        (ngSubmit)="_setFiltersParams()">
+          <mat-form-field appearance="standard">
+            <mat-label>Filtro</mat-label>
+            <input matInput formControlName="searchInput" 
+            placeholder="Procure qualquer coisa">
+          </mat-form-field>
+          <button mat-raised-button color="primary">
+            <mat-icon>search</mat-icon> Filtrar
+          </button>
+        </form>
+        ${table.fieldsToLabels || table.formIdToFieldsToLabels
+      ? `
+      <button mat-raised-button color="primary" (click)="createXls()">
+        <mat-icon>format_list_bulleted</mat-icon>
+        Baixar XLS
+      </button>
+      `
+      : ``
+    }
+      </div>
     </mat-card-actions>
 
     <mat-card-content class="table-container">
-    ${hasInfiniteScroll ? `<cdk-virtual-scroll-viewport #viewPort
+    ${hasInfiniteScroll
+      ? `<cdk-virtual-scroll-viewport #viewPort
                              [itemSize]="ITEM_SIZE"
-                             matSort>`: ''}
+                             matSort>`
+      : ""
+    }
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
       ${_specificStructure}    
-      <tr mat-header-row *matHeaderRowDef="${table.id}DisplayedColumns${hasInfiniteScroll ? ';sticky: true' : ''}" ${hasInfiniteScroll ? '[style.top.px]="offset"' : ''}></tr>
-      <tr mat-row *matRowDef="let row; columns: ${table.id}DisplayedColumns;"></tr>                                        
+      <tr mat-header-row *matHeaderRowDef="${table.id}DisplayedColumns${hasInfiniteScroll ? ";sticky: true" : ""
+    }" ${hasInfiniteScroll ? '[style.top.px]="offset"' : ""}></tr>
+      <tr mat-row *matRowDef="let row; columns: ${table.id
+    }DisplayedColumns;"></tr>                                        
     </table>
-    ${hasInfiniteScroll ? `</cdk-virtual-scroll-viewport>` : ''}
+    ${hasInfiniteScroll ? `</cdk-virtual-scroll-viewport>` : ""}
     <div 
       style="width: 100%; height: 100px; display: flex; align-items: center; justify-content: center; color: #c9c9c9"
-      *ngIf="${hasInfiniteScroll ? '!this.dataSource.matTableDataSource.data.length' : '!this.dataSource.length'} && !isLoading">
+      *ngIf="${hasInfiniteScroll
+      ? "!this.dataSource.matTableDataSource.data.length"
+      : "!this.dataSource.length"
+    } && !isLoading">
       <div style="display: flex; flex-direction: column;">
         <img 
           width="50"
@@ -141,7 +163,8 @@ const setSpecificStructureOverTableElement = (
 
   code += `
   <ng-container matColumnDef="${element.row.field}">
-    <th mat-header-cell *matHeaderCellDef ${table.infiniteScroll ? '[style.top.px]="offset"' : ''}> ${element.column.label} </th>
+    <th mat-header-cell *matHeaderCellDef ${table.infiniteScroll ? '[style.top.px]="offset"' : ""
+    }> ${element.column.label} </th>
     <td mat-cell *matCellDef="let element"> ${columnContent} </td>
   </ng-container>
   `;
