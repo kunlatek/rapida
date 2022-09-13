@@ -1,4 +1,4 @@
-import { FormInputTypeEnum, ServiceFunctionsEnum } from "../../../src/enums/form";
+import { FormButtonTypeEnum, FormInputTypeEnum, ServiceFunctionsEnum } from "../../../src/enums/form";
 import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/main";
 import { MainInterface } from "../../../src/interfaces/main";
 
@@ -21,21 +21,29 @@ export const CLIENT_SERVICE_FORM: MainInterface = {
             valueField: "_id",
             paramsToFilter: ["settlementZipCode", "settlementAddress"],
           },
+          isRequired: true,
         }
       },
       {
         select: {
           label: "Serviços prestados",
-          name: "clientId",
+          name: "serviceId",
           type: FormInputTypeEnum.Text,
           optionsApi: {
-            endpoint: "clients",
+            endpoint: "services",
             labelField: "name",
             valueField: "_id",
           },
+          isRequired: true,
           isMultiple: true,
         }
       },
+      {
+        button: {
+          label: "Criar",
+          type: FormButtonTypeEnum.Submit,
+        }
+      }
     ],
     service: {
       baseUrl: "http://localhost:3000",
@@ -50,4 +58,4 @@ export const CLIENT_SERVICE_FORM: MainInterface = {
       ],
     },
   }
-}
+};

@@ -25,20 +25,12 @@ export const MANUFACTURER_TABLE: MainInterface = {
       },
       {
         column: {
-          label: "Contatos",
-        },
-        row: {
-          field: "contacts",
-          fieldProperties: ["contactValue"],
-        },
-      },
-      {
-        column: {
           label: "Ações",
         },
         row: {
           type: "menu",
           icon: "more_vert",
+          field: "actions",
           menu: [
             {
               action: {
