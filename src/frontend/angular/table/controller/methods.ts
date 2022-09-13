@@ -158,7 +158,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
   ${table.fieldsToLabels || table.formIdToFieldsToLabels
       ? `
       createXls = () => {
-        const objects = this.dataSource;
+        const objects: any = this.dataSource;
         let data = objects.map((object: any) => {
           return this.setNewObject(object);
         });
