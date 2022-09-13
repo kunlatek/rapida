@@ -9,7 +9,7 @@ export const ANIMATION_TABLE: MainInterface = {
   table: {
     id: "animationTable",
     title: "Exemplos",
-    infiniteScroll: false,
+    infiniteScroll: true,
     data: {
       type: RequestTypeEnum.Object,
     },
@@ -43,6 +43,7 @@ export const ANIMATION_TABLE: MainInterface = {
           label: "Ações",
         },
         row: {
+          field: "actions",
           type: "menu",
           icon: "more_vert",
           menu: [
