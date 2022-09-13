@@ -11,6 +11,7 @@ export const ACTION_TABLE: MainInterface = {
     subtitle: "Listagem de ações",
     id: "actionTable",
     formIdToFieldsToLabels: "actionForm",
+    infiniteScroll: true,
     data: {
       type: RequestTypeEnum.Object,
     },

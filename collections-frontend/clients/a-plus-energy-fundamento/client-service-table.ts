@@ -11,6 +11,7 @@ export const CLIENT_SERVICE_TABLE: MainInterface = {
     subtitle: "Listagem de serviços prestados",
     id: "clientServiceTable",
     formIdToFieldsToLabels: "clientServiceForm",
+    infiniteScroll: true,
     data: {
       type: RequestTypeEnum.Object,
     },

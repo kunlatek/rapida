@@ -11,6 +11,7 @@ export const MANUFACTURER_TABLE: MainInterface = {
     subtitle: "Listagem de fabricantes",
     id: "manufacturerTable",
     formIdToFieldsToLabels: "manufacturerForm",
+    infiniteScroll: true,
     data: {
       type: RequestTypeEnum.Object,
     },

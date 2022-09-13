@@ -11,6 +11,7 @@ export const CLIENT_TABLE: MainInterface = {
     subtitle: "Listagem de ações",
     id: "clientTable",
     formIdToFieldsToLabels: "clientForm",
+    infiniteScroll: true,
     data: {
       type: RequestTypeEnum.Object,
     },

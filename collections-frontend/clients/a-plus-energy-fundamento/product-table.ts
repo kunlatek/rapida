@@ -11,6 +11,7 @@ export const PRODUCT_TABLE: MainInterface = {
     subtitle: "Listagem de produtos",
     id: "productTable",
     formIdToFieldsToLabels: "productForm",
+    infiniteScroll: true,
     data: {
       type: RequestTypeEnum.Object,
     },

@@ -11,6 +11,7 @@ export const CLIENT_SETTLEMENT_TABLE: MainInterface = {
     subtitle: "Listagem de instalações",
     id: "clientSettlementTable",
     formIdToFieldsToLabels: "clientSettlementForm",
+    infiniteScroll: true,
     data: {
       type: RequestTypeEnum.Object,
     },
