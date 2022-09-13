@@ -158,7 +158,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
   ${table.fieldsToLabels || table.formIdToFieldsToLabels
       ? `
       createXls = () => {
-        const objects: any = this.dataSource;
+        const objects: any = ${hasInfiniteScroll ? `this.dataSource.matTableDataSource.filteredData;` : `this.dataSource`}
         let data = objects.map((object: any) => {
           return this.setNewObject(object);
         });
