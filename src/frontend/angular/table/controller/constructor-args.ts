@@ -33,7 +33,7 @@ const setTableControllerConstructorArguments = (
       }
       this._pageCache.add(+page);
       this._page = +page - 1;
-      this._setFiltersParams();
+      this._setFiltersParams(true);
     });
   ` : ''}
   `;
