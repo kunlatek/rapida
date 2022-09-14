@@ -165,11 +165,15 @@ const setAutocompleteMethod = (
     element.autocomplete.name
   )} = async (${iterations ? iterations : ""}) => {
     try {
-      const paramsToFilter = [${element.autocomplete.optionsApi.paramsToFilter.map(
-    (element) => {
-      return `"${element}"`;
+      ${array
+      ? `this.loading${TextTransformation.pascalfy(element.autocomplete.name)}[${iterations?.split(": any")[0]}] = true;`
+      : `this.loading${TextTransformation.pascalfy(element.autocomplete.name)} = true;`
     }
-  )}];
+      const paramsToFilter = [${element.autocomplete.optionsApi.paramsToFilter.map(
+      (element) => {
+        return `"${element}"`;
+      }
+    )}];
       if(this.${object.form?.id}Form.
       ${array
       ? `get([${controls}, ${iterations
@@ -203,7 +207,10 @@ const setAutocompleteMethod = (
           this.filtered${TextTransformation.pascalfy(
       element.autocomplete.name
     )} = result.data.result;
-          this.isLoading = false;
+          ${array
+      ? `this.loading${TextTransformation.pascalfy(element.autocomplete.name)}[${iterations?.split(": any")[0]}] = false;`
+      : `this.loading${TextTransformation.pascalfy(element.autocomplete.name)} = false;`
+    }
         })
         .catch(async err => {
             if (err.error.logMessage === 'jwt expired') {
