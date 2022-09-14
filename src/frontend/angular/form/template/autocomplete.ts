@@ -24,18 +24,16 @@ const setAutocomplete = (
     code += `
       <mat-form-field class="full-width" ${conditions}>
         <mat-label>${element.autocomplete.label}</mat-label>
-        <mat-chip-list #${
-          element.autocomplete.name
-        }ChipList aria-label="Seleção de ${element.autocomplete.label.toLowerCase()}">
+        <mat-chip-list #${element.autocomplete.name
+      }ChipList aria-label="Seleção de ${element.autocomplete.label.toLowerCase()}">
           <mat-chip 
-            *ngFor="let ${
-              element.autocomplete.name
-            }Item of chosen${TextTransformation.pascalfy(
-      element.autocomplete.name
-    )}View" 
+            *ngFor="let ${element.autocomplete.name
+      }Item of chosen${TextTransformation.pascalfy(
+        element.autocomplete.name
+      )}View" 
             (removed)="remove${TextTransformation.pascalfy(
-              element.autocomplete.name
-            )}(${element.autocomplete.name}Item)">
+        element.autocomplete.name
+      )}(${element.autocomplete.name}Item)">
             {{${element.autocomplete.name}Item}}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
@@ -47,41 +45,54 @@ const setAutocomplete = (
             formControlName="${element.autocomplete.name}" 
             matInput 
             [matAutocomplete]="auto${TextTransformation.pascalfy(
-              element.autocomplete.name
-            )}" 
+        element.autocomplete.name
+      )}" 
             [matChipInputFor]="${element.autocomplete.name}ChipList" 
-            [matChipInputSeparatorKeyCodes]="${
-              element.autocomplete.name
-            }SeparatorKeysCodes" 
+            [matChipInputSeparatorKeyCodes]="${element.autocomplete.name
+      }SeparatorKeysCodes" 
             (matChipInputTokenEnd)="add${TextTransformation.pascalfy(
-              element.autocomplete.name
-            )}($event)" 
+        element.autocomplete.name
+      )}($event)" 
             (keyup)="callSetFiltered${TextTransformation.pascalfy(
-              element.autocomplete.name
-            )}(${arrayCurrentIndexAsParam})" 
+        element.autocomplete.name
+      )}(${arrayCurrentIndexAsParam})" 
             #${element.autocomplete.name}Input 
             ${required}
           >
         </mat-chip-list>
         <mat-autocomplete 
           #auto${TextTransformation.pascalfy(
-            element.autocomplete.name
-          )}="matAutocomplete" 
+        element.autocomplete.name
+      )}="matAutocomplete" 
           (optionSelected)="selected${TextTransformation.pascalfy(
-            element.autocomplete.name
-          )}($event)"
+        element.autocomplete.name
+      )}($event${arrayCurrentIndexAsParam ? ", " + arrayCurrentIndexAsParam : ""})"
         >
-          <mat-option *ngFor="let ${
-            element.autocomplete.name
-          }Item of filtered${TextTransformation.pascalfy(
-      element.autocomplete.name
-    )}" [value]="${element.autocomplete.name}Item.${
-      element.autocomplete.optionsApi.valueField
-    }">
-                {{${element.autocomplete.name}Item.${
-      element.autocomplete.optionsApi.labelField
-    }}}
-          </mat-option>
+          <mat-option *ngFor="let ${element.autocomplete.name
+      }Item of filtered${TextTransformation.pascalfy(
+        element.autocomplete.name
+      )}" [value]="${element.autocomplete.name}Item.${element.autocomplete.optionsApi.valueField
+      }">`;
+
+    if (!Array.isArray(element.autocomplete.optionsApi.labelField)) {
+      code += `{{${element.autocomplete.name}Item.${element.autocomplete.optionsApi.labelField}}}`;
+    }
+
+    if (Array.isArray(element.autocomplete.optionsApi.labelField)) {
+      const name = element.autocomplete.name;
+      const labelFieldLength =
+        element.autocomplete.optionsApi.labelField.length;
+      element.autocomplete.optionsApi.labelField.forEach(
+        (e: string, index: number) => {
+          code += `{{${name}Item.${e}}}`;
+          if (labelFieldLength < index) {
+            code += ` - `;
+          }
+        }
+      );
+    }
+
+    code += `</mat-option>
         </mat-autocomplete>
       </mat-form-field>
       `;
@@ -96,32 +107,46 @@ const setAutocomplete = (
               formControlName="${element.autocomplete.name}" 
               matInput 
               [matAutocomplete]="auto${TextTransformation.pascalfy(
-                element.autocomplete.name
-              )}" 
+      element.autocomplete.name
+    )}" 
               (keyup)="callSetFiltered${TextTransformation.pascalfy(
-                element.autocomplete.name
-              )}(${arrayCurrentIndexAsParam})" 
+      element.autocomplete.name
+    )}(${arrayCurrentIndexAsParam})" 
               ${required}
         >
         <mat-autocomplete 
           #auto${TextTransformation.pascalfy(
-            element.autocomplete.name
-          )}="matAutocomplete" 
-          [displayWith]="displayFnTo${TextTransformation.pascalfy(
-            element.autocomplete.name
-          )}.bind(this)"
-        >
-          <mat-option *ngFor="let ${
-            element.autocomplete.name
-          }Item of filtered${TextTransformation.pascalfy(
       element.autocomplete.name
-    )}" [value]="${element.autocomplete.name}Item.${
-      element.autocomplete.optionsApi.valueField
-    }">
-            {{${element.autocomplete.name}Item.${
-      element.autocomplete.optionsApi.labelField
-    }}}
-          </mat-option>
+    )}="matAutocomplete" 
+          [displayWith]="displayFnTo${TextTransformation.pascalfy(
+      element.autocomplete.name
+    )}.bind(this)"
+        >
+          <mat-option *ngFor="let ${element.autocomplete.name
+      }Item of filtered${TextTransformation.pascalfy(
+        element.autocomplete.name
+      )}" [value]="${element.autocomplete.name}Item.${element.autocomplete.optionsApi.valueField
+      }">`;
+
+    if (!Array.isArray(element.autocomplete.optionsApi.labelField)) {
+      code += `{{${element.autocomplete.name}Item.${element.autocomplete.optionsApi.labelField}}}`;
+    }
+
+    if (Array.isArray(element.autocomplete.optionsApi.labelField)) {
+      const name = element.autocomplete.name;
+      const labelFieldLength =
+        element.autocomplete.optionsApi.labelField.length;
+      element.autocomplete.optionsApi.labelField.forEach(
+        (e: string, index: number) => {
+          code += `{{${name}Item.${e}}}`;
+          if (labelFieldLength < index) {
+            code += ` - `;
+          }
+        }
+      );
+    }
+
+    code += `</mat-option>
         </mat-autocomplete>
       </mat-form-field>
       `;
