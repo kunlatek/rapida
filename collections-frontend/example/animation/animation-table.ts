@@ -43,7 +43,6 @@ export const ANIMATION_TABLE: MainInterface = {
           label: "Ações",
         },
         row: {
-          field: "actions",
           type: "menu",
           icon: "more_vert",
           field: "actions",

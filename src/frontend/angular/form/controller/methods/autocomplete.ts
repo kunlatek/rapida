@@ -24,7 +24,7 @@ const setAutocompleteMethod = (
     code += `
     add${TextTransformation.pascalfy(
       element.autocomplete.name
-    )}(event: MatChipInputEvent): void {
+    )}(event: MatChipInputEvent${iterations ? ", " + iterations : ""}): void {
       const value = (event.value || '').trim();
       
       if (value) {
@@ -33,12 +33,18 @@ const setAutocompleteMethod = (
     )}View.push(value);
       }
       event.chipInput!.clear();
-      this.${object.form?.id}Form.get('${element.autocomplete.name
-      }')?.setValue(null);
+      this.${object.form?.id}Form.
+      ${array
+        ? `get([${controls}, ${iterations
+          ?.split(",")
+        [iterations.split(",").length - 1].replace(/: any/g, "")}, "${element.autocomplete.name
+        }"])?.setValue(null);`
+        : `get('${element.autocomplete.name}}')?.setValue(null);`
+      }
     };
     remove${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}(element: string): void {
+      )}(element: string${iterations ? ", " + iterations : ""}): void {
       const index = this.chosen${TextTransformation.pascalfy(
         element.autocomplete.name
       )}View.indexOf(element);
@@ -50,10 +56,20 @@ const setAutocompleteMethod = (
         this.chosen${TextTransformation.pascalfy(
         element.autocomplete.name
       )}Value.splice(index, 1);
-        this.${object.form?.id}Form.get("${element.autocomplete.name
-      }")?.setValue(this.chosen${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}Value);
+      
+        this.${object.form?.id}Form.
+        ${array
+        ? `get([${controls}, ${iterations
+          ?.split(",")
+        [iterations.split(",").length - 1].replace(/: any/g, "")}, "${element.autocomplete.name
+        }"])?.setValue(this.chosen${TextTransformation.pascalfy(
+          element.autocomplete.name
+        )}Value);`
+        : `get("${element.autocomplete.name
+        }")?.setValue(this.chosen${TextTransformation.pascalfy(
+          element.autocomplete.name
+        )}Value);`
+      }
       }
     };
     

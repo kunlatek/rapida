@@ -33,7 +33,8 @@ const setAutocomplete = (
       )}View" 
             (removed)="remove${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}(${element.autocomplete.name}Item)">
+      )}(${element.autocomplete.name}Item${arrayCurrentIndexAsParam ? ", " + arrayCurrentIndexAsParam : ""
+      })">
             {{${element.autocomplete.name}Item}}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
@@ -52,7 +53,8 @@ const setAutocomplete = (
       }SeparatorKeysCodes" 
             (matChipInputTokenEnd)="add${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}($event)" 
+      )}($event${arrayCurrentIndexAsParam ? ", " + arrayCurrentIndexAsParam : ""
+      })" 
             (keyup)="callSetFiltered${TextTransformation.pascalfy(
         element.autocomplete.name
       )}(${arrayCurrentIndexAsParam})" 
@@ -66,7 +68,8 @@ const setAutocomplete = (
       )}="matAutocomplete" 
           (optionSelected)="selected${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}($event${arrayCurrentIndexAsParam ? ", " + arrayCurrentIndexAsParam : ""})"
+      )}($event${arrayCurrentIndexAsParam ? ", " + arrayCurrentIndexAsParam : ""
+      })"
         >
           <mat-option *ngFor="let ${element.autocomplete.name
       }Item of filtered${TextTransformation.pascalfy(
@@ -85,7 +88,7 @@ const setAutocomplete = (
       element.autocomplete.optionsApi.labelField.forEach(
         (e: string, index: number) => {
           code += `{{${name}Item.${e}}}`;
-          if (labelFieldLength < index) {
+          if (labelFieldLength > (index + 1)) {
             code += ` - `;
           }
         }
@@ -139,7 +142,7 @@ const setAutocomplete = (
       element.autocomplete.optionsApi.labelField.forEach(
         (e: string, index: number) => {
           code += `{{${name}Item.${e}}}`;
-          if (labelFieldLength < index) {
+          if (labelFieldLength > (index + 1)) {
             code += ` - `;
           }
         }
