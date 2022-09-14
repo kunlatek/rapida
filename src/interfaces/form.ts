@@ -6,11 +6,11 @@ import {
   FormInputTypeEnum,
   FormMethodEnum,
   FormTargetEnum,
-  ServiceFunctionsEnum,
+  ServiceFunctionsEnum
 } from "../enums/form";
 import {
   FilterComparisonOperatorEnum,
-  FilterLogicalOperatorEnum,
+  FilterLogicalOperatorEnum
 } from "../enums/request";
 import { DialogInterface } from "./dialog";
 
@@ -137,10 +137,10 @@ export interface SlideInterface {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface LabelInterface {}
+export interface LabelInterface { }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface LegendInterface {}
+export interface LegendInterface { }
 
 export interface OptgroupInterface {
   label: string;
@@ -180,7 +180,7 @@ export interface OptionApiInterface {
 export interface AutocompleteApiInterface {
   endpoint?: string;
   externalEndpoint?: string;
-  labelField: string;
+  labelField: string | Array<string>;
   valueField: string;
   paramsToFilter: Array<string>;
   isDisabled?: boolean;
@@ -189,7 +189,7 @@ export interface AutocompleteApiInterface {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface OutputInterface {}
+export interface OutputInterface { }
 
 export interface SelectInterface {
   type: FormInputTypeEnum;
@@ -261,7 +261,7 @@ export interface RadioInterface {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface TextareaInterface {}
+export interface TextareaInterface { }
 
 export interface ConditionInterface {
   type: ConditionEnum;
