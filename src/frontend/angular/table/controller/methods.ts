@@ -41,6 +41,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
       const param = {
         [current]: {
           like: valueToSearch,
+          options: "i"
         }
       };
       previous.or.push(param);
