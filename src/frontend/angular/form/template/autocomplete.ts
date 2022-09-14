@@ -1,16 +1,20 @@
-import { FormElementInterface } from "../../../../interfaces/form";
+import { ArrayInterface, FormElementInterface } from "../../../../interfaces/form";
 import { TextTransformation } from "../../../../utils/text.transformation";
+import { setArrayControls, setArrayIndexes } from "../controller/methods/array";
 
 const setAutocomplete = (
   element: FormElementInterface,
   conditions: string,
-  arrayCurrentIndexAsParam: string | undefined = undefined
+  array: ArrayInterface | undefined = undefined
 ) => {
   let code = ``;
 
   if (!element.autocomplete) {
     return code;
   }
+
+  const iterations = array ? setArrayIndexes(array.id) : undefined;
+  const controls = array ? setArrayControls(array.id) : undefined;
 
   const placeholder = element.autocomplete.placeholder
     ? `placeholder="${element.autocomplete.placeholder}"`
@@ -33,8 +37,7 @@ const setAutocomplete = (
       )}View" 
             (removed)="remove${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}(${element.autocomplete.name}Item${arrayCurrentIndexAsParam ? ", " + arrayCurrentIndexAsParam : ""
-      })">
+      )}(${element.autocomplete.name}Item${iterations ? ", " + iterations.replace(": any", "") : ""})">
             {{${element.autocomplete.name}Item}}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
@@ -53,11 +56,10 @@ const setAutocomplete = (
       }SeparatorKeysCodes" 
             (matChipInputTokenEnd)="add${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}($event${arrayCurrentIndexAsParam ? ", " + arrayCurrentIndexAsParam : ""
-      })" 
+      )}($event${iterations ? ", " + iterations.replace(": any", "") : ""})" 
             (keyup)="callSetFiltered${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}(${arrayCurrentIndexAsParam})" 
+      )}(${iterations ? iterations.replace(": any", "") : ""})" 
             #${element.autocomplete.name}Input 
             ${required}
           >
@@ -68,8 +70,7 @@ const setAutocomplete = (
       )}="matAutocomplete" 
           (optionSelected)="selected${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}($event${arrayCurrentIndexAsParam ? ", " + arrayCurrentIndexAsParam : ""
-      })"
+      )}($event${iterations ? ", " + iterations.replace(": any", "") : ""})"
         >
           <mat-option *ngFor="let ${element.autocomplete.name
       }Item of filtered${TextTransformation.pascalfy(
@@ -114,7 +115,7 @@ const setAutocomplete = (
     )}" 
               (keyup)="callSetFiltered${TextTransformation.pascalfy(
       element.autocomplete.name
-    )}(${arrayCurrentIndexAsParam})" 
+    )}(${iterations ? iterations.replace(": any", "") : ""})" 
               ${required}
         >
         <mat-autocomplete 

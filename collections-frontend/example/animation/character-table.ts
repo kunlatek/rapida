@@ -27,7 +27,8 @@ export const CHARACTER_TABLE: MainInterface = {
           label: "Animação relacionada",
         },
         row: {
-          field: "animationId",
+          field: "animation",
+          fieldProperties: ["name"],
         },
       },
       {

@@ -1,11 +1,11 @@
 import { FormInputTypeEnum } from "../../../../../enums/form";
 import {
   ArrayInterface,
-  FormElementInterface,
+  FormElementInterface
 } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
-import { setArrayIndexes, setArrayMethod } from "./array";
+import { setArrayMethod } from "./array";
 import { setAutocompleteMethod } from "./autocomplete";
 import { setInputMethod } from "./input";
 
@@ -26,8 +26,6 @@ const setFormMethodsByElements = (
   elements: Array<FormElementInterface>,
   array: ArrayInterface | undefined = undefined
 ): string => {
-  const iterations = array ? setArrayIndexes(array.id) : undefined;
-
   let code = ``;
   elements.forEach((element) => {
     if (element.input) {
@@ -40,9 +38,8 @@ const setFormMethodsByElements = (
         element.select?.name
       )}SelectObject = async () => {
         try {
-          const array: any = await this._${object.form?.id}Service.${
-        element.select.name
-      }SelectObjectGetAll();
+          const array: any = await this._${object.form?.id}Service.${element.select.name
+        }SelectObjectGetAll();
           if (array.data?.result) {
             array.data?.result.map((object: any) => {
               this.${element.select?.name}SelectObject.push({
@@ -62,6 +59,7 @@ const setFormMethodsByElements = (
     }
 
     if (element.autocomplete) {
+      console.log(array, 65);
       code += setAutocompleteMethod(object, element, array);
     }
 
