@@ -21,15 +21,8 @@ export const CLIENT_SETTLEMENT_TABLE: MainInterface = {
           label: "Cliente",
         },
         row: {
-          field: "clientId",
-        },
-      },
-      {
-        column: {
-          label: "Nome",
-        },
-        row: {
-          field: "name",
+          field: "client",
+          fieldProperties: ["name"],
         },
       },
       {
