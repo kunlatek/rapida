@@ -9,6 +9,7 @@ export const CHARACTER_TABLE: MainInterface = {
   table: {
     id: "characterTable",
     title: "Personagens",
+    infiniteScroll: true,
     data: {
       type: RequestTypeEnum.Object,
     },
@@ -26,7 +27,8 @@ export const CHARACTER_TABLE: MainInterface = {
           label: "Animação relacionada",
         },
         row: {
-          field: "animationId",
+          field: "animation",
+          fieldProperties: ["name"],
         },
       },
       {

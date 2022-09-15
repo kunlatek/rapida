@@ -1,5 +1,5 @@
 import { FormInputTypeEnum } from "../../../../../enums/form";
-import { FormElementInterface } from "../../../../../interfaces/form";
+import { ArrayInterface, FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 import { setFormBuilderProperty } from "./form-builder";
@@ -8,11 +8,11 @@ const setProperty = (
   object: MainInterface
 ): string => {
   let code = ``;
-  
+
   if (!object.form) {
     return code;
   }
-  
+
   code += setFormPropertiesByElements(object, object.form.elements);
   code += setFormBuilderProperty(object);
 
@@ -21,38 +21,43 @@ const setProperty = (
 
 const setFormPropertiesByElements = (
   object: MainInterface,
-  elements: Array<FormElementInterface>
+  elements: Array<FormElementInterface>,
+  array: ArrayInterface | undefined = undefined
 ) => {
   let code = ``;
 
   elements.forEach(element => {
     if (element.input?.type === FormInputTypeEnum.File) {
-      code += `fileName: string = '';`
+      code += `fileName: string = '';`;
     }
-  
+
     if (element.tabs) {
-        element.tabs.forEach(tab => {
-          code += setFormPropertiesByElements(object, tab.elements);
-        })
+      element.tabs.forEach(tab => {
+        code += setFormPropertiesByElements(object, tab.elements);
+      });
     }
-  
+
     if (element.array) {
-      code += setFormPropertiesByElements(object, element.array.elements);
+      code += setFormPropertiesByElements(object, element.array.elements, element.array);
     }
-  
+
     if (element.select) {
-        if (element.select.optionsObject) {                        
-            code += `${element.select.name}SelectObject = ${JSON.stringify(element.select.optionsObject)};`;
-        }
-  
-        if (element.select.optionsApi) {
-            code += `${element.select.name}SelectObject: Array<any> = [];`;
-        }
+      if (element.select.optionsObject) {
+        code += `${element.select.name}SelectObject = ${JSON.stringify(element.select.optionsObject)};`;
+      }
+
+      if (element.select.optionsApi) {
+        code += `${element.select.name}SelectObject: Array<any> = [];`;
+      }
     }
-  
+
     if (element.autocomplete) {
       code += `
       filtered${TextTransformation.pascalfy(element.autocomplete.name)}: Array<any> = [];
+      ${array
+          ? `loading${TextTransformation.pascalfy(element.autocomplete.name)}: Array<boolean> = [false];`
+          : `loading${TextTransformation.pascalfy(element.autocomplete.name)}: boolean = false;`
+        }
       `;
 
       if (element.autocomplete.isMultiple) {
@@ -65,15 +70,15 @@ const setFormPropertiesByElements = (
         `;
       }
     }
-  
+
     if (element.checkbox) {
-        if (element.checkbox.optionsObject) {                        
-            code += `${element.checkbox.name}CheckboxObject = ${JSON.stringify(element.checkbox.optionsObject)};`;
-        }
-  
-        if (element.checkbox.optionsApi) {
-            code += `${element.checkbox.name}CheckboxObject: Array<CheckboxObjectInterface> = [];`;
-        }
+      if (element.checkbox.optionsObject) {
+        code += `${element.checkbox.name}CheckboxObject = ${JSON.stringify(element.checkbox.optionsObject)};`;
+      }
+
+      if (element.checkbox.optionsApi) {
+        code += `${element.checkbox.name}CheckboxObject: Array<CheckboxObjectInterface> = [];`;
+      }
     }
   });
 
@@ -82,4 +87,4 @@ const setFormPropertiesByElements = (
 
 export {
   setProperty
-}
+};
