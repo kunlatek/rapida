@@ -1,7 +1,7 @@
 import { FormInputTypeEnum } from "../../../../../enums/form";
 import {
   ArrayInterface,
-  FormElementInterface,
+  FormElementInterface
 } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
@@ -16,30 +16,33 @@ const setInputMethod = (
   if (!element.input) {
     return code;
   }
-  
+
   const iterations = array ? setArrayIndexes(array.id) : undefined;
   const controls = array ? setArrayControlsToAdd(array.id) : undefined;
 
   if (element.input.type === FormInputTypeEnum.File) {
     code += `
-    on${TextTransformation.capitalization(
+    async on${TextTransformation.capitalization(
       element.input.name
     )}FileSelected(event: any) {
       if (event.target.files.length > 0) {
-        let files = this.${object.form?.id}Form.value.${
-      element.input.name
-    } || [];
         const file = event.target.files[0];
-        files.push(file);
-        this.${object.form?.id}Form.get("${
-      element.input.name
-    }")?.setValue(files);
+        const bufferFiles = await fileListToBase64([file]);
+
+        let files = this.${object.form?.id}Form.value.${element.input.name} || [];
+    
+        files.push({
+          name: file.name,
+          fileName: file.name,
+          base64: bufferFiles[0]
+        });
+        this.${object.form?.id}Form.get("${element.input.name}")?.setValue(files);
       }
     }
     delete${TextTransformation.capitalization(
       element.input.name
     )}File(index: number) {
-      let files = this.${object.form?.id}Form.value.image;
+      let files = this.${object.form?.id}Form.value.${element.input.name};
       files.splice(index, 1);
       this.${object.form?.id}Form.get("${element.input.name}")?.setValue(files);
     }
@@ -52,14 +55,12 @@ const setInputMethod = (
       element.input.name
     )}InputRequestToFind = async (${iterations ? iterations : ""}) => {
       try {
-        const array: any = await this._${object.form?.id}Service.${
-      element.input.name
-    }InputRequestToFind(this.${object.form?.id}Form.
-          ${
-            array
-              ? `get([${controls}, ${iterations?.replace(/: any/g, "")}, "${element.input.name}"])?.value);`
-              : `value.${element.input.name});`
-          }
+        const array: any = await this._${object.form?.id}Service.${element.input.name
+      }InputRequestToFind(this.${object.form?.id}Form.
+          ${array
+        ? `get([${controls}, ${iterations?.replace(/: any/g, "")}, "${element.input.name}"])?.value);`
+        : `value.${element.input.name});`
+      }
         if (array.data) {
           ${fillFieldsOverApiRequest(object, element, array)}
         }
@@ -72,14 +73,12 @@ const setInputMethod = (
     };
 
     callSet${TextTransformation.pascalfy(
-      element.input.name
-    )}InputRequestToFind = MyPerformance.debounce((${
-      iterations ? iterations : ""
-    }) => this.set${TextTransformation.pascalfy(
-      element.input.name
-    )}InputRequestToFind(${
-      iterations ? iterations?.replace(/: any/g, "") : ""
-    }));
+        element.input.name
+      )}InputRequestToFind = MyPerformance.debounce((${iterations ? iterations : ""
+      }) => this.set${TextTransformation.pascalfy(
+        element.input.name
+      )}InputRequestToFind(${iterations ? iterations?.replace(/: any/g, "") : ""
+      }));
     `;
   }
 
@@ -98,11 +97,10 @@ const fillFieldsOverApiRequest = (
   if (element.input) {
     element.input.apiRequest?.formFieldsFilledByApiResponse.forEach((e) => {
       code += `this.${object.form?.id}Form.
-      ${
-        array
+      ${array
           ? `get([${controls}, ${iterations?.replace(/: any/g, "")}, "${e.formFieldName}"])?.`
           : `get("${e.formFieldName}")?.`
-      }
+        }
       setValue(array.data.${e.propertyFromApiToFillFormField});`;
     });
   }

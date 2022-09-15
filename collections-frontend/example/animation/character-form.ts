@@ -43,6 +43,14 @@ export const CHARACTER_FORM: MainInterface = {
                   isRequired: true,
                 }
               },
+              {
+                input: {
+                  label: "Imagem",
+                  placeholder: "Imagem do personagem",
+                  name: "img",
+                  type: FormInputTypeEnum.File,
+                }
+              },
             ],
           },
           {

@@ -27,6 +27,7 @@ const setControllerConstructorParams = (object: MainInterface): string => {
   )}Repository,
 
   @service(ChartService) private chartService: ChartService,
+  @service(StorageService) private storageService: StorageService,
                                         
   @inject(RestBindings.Http.REQUEST) private httpRequest: Request,
   @inject(RestBindings.Http.RESPONSE) private httpResponse: Response,

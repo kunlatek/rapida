@@ -35,7 +35,7 @@ const setControllerImports = (object: MainInterface): string => {
   )}Repository} from '../repositories/${TextTransformation.kebabfy(
     modelName
   )}.repository';
-  import {ChartService} from '../services';
+  import {ChartService, StorageService} from '../services';
   import {serverMessages} from '../utils/server-messages';
   import {getRelatedElements} from '../utils/general-functions';
   ${_relatedRepositoriesImports ? `import {${_relatedRepositoriesImports}} from '../repositories';` : ''}

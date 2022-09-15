@@ -27,30 +27,27 @@ const setFormControllerImports = (object: MainInterface): string => {
   });
 
   let code = `
-  import { Component, ${_hasAutocompleteMultiple ? `ElementRef, ViewChild,` : ``} ${
-    _hasCondition ? `OnChanges,` : ``
-  }} from "@angular/core";
-  import { FormBuilder, FormGroupDirective, FormGroup, ${
-    _hasArray ? "FormArray," : ""
-  } ${_hasValidator ? "Validators," : ""} } from "@angular/forms";
+  import { Component, ${_hasAutocompleteMultiple ? `ElementRef, ViewChild,` : ``} ${_hasCondition ? `OnChanges,` : ``
+    }} from "@angular/core";
+  import { FormBuilder, FormGroupDirective, FormGroup, ${_hasArray ? "FormArray," : ""
+    } ${_hasValidator ? "Validators," : ""} } from "@angular/forms";
   import { ActivatedRoute, Router } from "@angular/router";
   import { MatSnackBar } from "@angular/material/snack-bar";
-  ${
-    (_hasAutocomplete || _hasInputApiRequest)
+  ${(_hasAutocomplete || _hasInputApiRequest)
       ? `import { MyPerformance } from "src/app/utils/performance";`
       : ``
-  }
-  ${
-    _hasAutocompleteMultiple
+    }
+  ${_hasAutocompleteMultiple
       ? `import { COMMA, ENTER } from "@angular/cdk/keycodes";
       import {MatChipInputEvent} from '@angular/material/chips';
       import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';`
       : ``
-  }
+    }
   import { MyErrorHandler } from "../../utils/error-handler";
   import { ${TextTransformation.pascalfy(
-    object.form.id
-  )}Service } from "./${TextTransformation.kebabfy(object.form.id)}.service";
+      object.form.id
+    )}Service } from "./${TextTransformation.kebabfy(object.form.id)}.service";
+  import { fileListToBase64 } from "src/app/utils/file";
   `;
 
   return code;
@@ -68,7 +65,7 @@ const verifyFormElement = (element: FormElementInterface): void => {
   ];
   const type = Object.keys(element)[0];
   const value = Object.values(element)[0];
-  
+
   if (element.tabs) {
     element.tabs.forEach((tab) => {
       tab.elements.forEach((tabElement) => {
@@ -86,7 +83,7 @@ const verifyFormElement = (element: FormElementInterface): void => {
 
   if (element.autocomplete) {
     _hasAutocomplete = true;
-    
+
     if (value.isMultiple) {
       _hasAutocompleteMultiple = true;
     }

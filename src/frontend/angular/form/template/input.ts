@@ -17,8 +17,8 @@ const setInput = (
 
   const callMethod = element.input.apiRequest
     ? `(focusout)="callSet${TextTransformation.pascalfy(
-        element.input.name
-      )}InputRequestToFind(${arrayCurrentIndexAsParam})"`
+      element.input.name
+    )}InputRequestToFind(${arrayCurrentIndexAsParam})"`
     : "";
   const placeholder = element.input.placeholder
     ? `placeholder="${element.input.placeholder}"`
@@ -33,8 +33,8 @@ const setInput = (
   if (element.input.type === FormInputTypeEnum.File) {
     code += `
         <input type="file" class="file-input" (change)="on${TextTransformation.capitalization(
-          element.input.name
-        )}FileSelected($event)" ${tooltip} #fileUpload multiple>
+      element.input.name
+    )}FileSelected($event)" ${tooltip} #fileUpload multiple>
         <div class="file-upload">
             <button type="button" mat-raised-button color="primary" (click)="fileUpload.click()">
                 <mat-icon>attach_file</mat-icon>
@@ -42,13 +42,12 @@ const setInput = (
             </button>
         </div>
         <mat-list>
-          <mat-list-item *ngFor="let file of ${object.form?.id}Form.value.${
-      element.input.name
-    }; index as i;">
-            {{file.name}}
+          <mat-list-item *ngFor="let file of ${object.form?.id}Form.value.${element.input.name
+      }; index as i;">
+            <a href="{{file.url}}" target="_blank">{{file.name}}</a>
             <button mat-icon-button type="button" (click)="delete${TextTransformation.capitalization(
-              element.input.name
-            )}File(i)">
+        element.input.name
+      )}File(i)">
               <mat-icon>delete</mat-icon>
             </button>
           </mat-list-item>
@@ -65,17 +64,13 @@ const setInput = (
   } else if (element.input.type === FormInputTypeEnum.Date) {
     code += `
       <mat-form-field ${conditions}>
-        <input matInput formControlName="${element.input.name}" ${
-      placeholder ? placeholder : `placeholder="${element.input.label}"`
-    } ${tooltip} ${required} ${mask} ${callMethod} [matDatepicker]="${
-      element.input.name
-    }Picker" [disabled]="true">
-        <mat-datepicker-toggle matSuffix [for]="${
-          element.input.name
-        }Picker"></mat-datepicker-toggle>
-        <mat-datepicker #${
-          element.input.name
-        }Picker [disabled]="false"></mat-datepicker>
+        <input matInput formControlName="${element.input.name}" ${placeholder ? placeholder : `placeholder="${element.input.label}"`
+      } ${tooltip} ${required} ${mask} ${callMethod} [matDatepicker]="${element.input.name
+      }Picker" [disabled]="true">
+        <mat-datepicker-toggle matSuffix [for]="${element.input.name
+      }Picker"></mat-datepicker-toggle>
+        <mat-datepicker #${element.input.name
+      }Picker [disabled]="false"></mat-datepicker>
       </mat-form-field>
       `;
   } else {
