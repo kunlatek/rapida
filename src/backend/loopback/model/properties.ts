@@ -60,7 +60,7 @@ const setArrayTypeModels = (formElements: Array<FormElementInterface>): string =
             })
             __relatedAttributes?: object[];
             `
-              : ``
+              : ``;
 
             arrayTypeModels += `
             @model()
@@ -69,7 +69,7 @@ const setArrayTypeModels = (formElements: Array<FormElementInterface>): string =
       
               ${_arrayOfRelatedPropertiesInMultidimensionalArray}
             }
-          `
+          `;
           } else if (elementProperty.autocomplete) {
             const collection = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(elementProperty.autocomplete?.optionsApi?.endpoint?.split('-').join(' ') || '')));
             _relatedPropertiesToReturn += `{ Collection: '${collection}', attr: '${elementProperty.autocomplete.name}' },`;
@@ -79,8 +79,8 @@ const setArrayTypeModels = (formElements: Array<FormElementInterface>): string =
         return {
           _properties: _propertiesToReturn,
           _relatedProperties: _relatedPropertiesToReturn,
-        }
-      }
+        };
+      };
 
       const _propertiesCreated = createProperties(value.elements);
       _properties += _propertiesCreated._properties;
@@ -96,7 +96,7 @@ const setArrayTypeModels = (formElements: Array<FormElementInterface>): string =
       })
       __relatedAttributes?: object[];
       `
-        : ``
+        : ``;
 
       code += `
       ${arrayTypeModels}
@@ -106,7 +106,7 @@ const setArrayTypeModels = (formElements: Array<FormElementInterface>): string =
 
         ${_arrayOfRelatedProperties}
       }
-      `
+      `;
     }
   });
 
@@ -129,7 +129,7 @@ const setByElementInArrayType = (
           numberTypes.includes(value.type || type) ? 'number' :
             (booleanTypes.includes(value.type || type) ? 'boolean' : 'any')
         )
-    )
+    );
 
   if (type === 'array') {
     const relatedType = TextTransformation.setIdToClassName(value.id);
@@ -162,7 +162,7 @@ const setByElementInArrayType = (
   }
 
   return code;
-}
+};
 
 const setModelProperties = (object: MainInterface): string => {
   if (!object.form) {
@@ -198,7 +198,7 @@ const setByElement = (
 
   let code = ``;
 
-  const propertyType = value.isMultiple || type === 'array' ?
+  const propertyType = value.isMultiple || type === 'array' || value.type === 'file' ?
     'array' :
     (
       stringTypes.includes(value.type || type) ? 'String' :
@@ -206,7 +206,7 @@ const setByElement = (
           numberTypes.includes(value.type || type) ? 'number' :
             (booleanTypes.includes(value.type || type) ? 'boolean' : 'any')
         )
-    )
+    );
 
   if (value.optionsApi && value.optionsApi.endpoint) {
     const className = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
@@ -245,14 +245,14 @@ const setByElement = (
     code += `
       @property({
           type: '${propertyType}',
-          ${value.isMultiple ? "itemType: 'any'," : 'jsonSchema: {nullable: true},'}
+          ${value.isMultiple || value.type === 'file' ? "itemType: 'any'," : 'jsonSchema: {nullable: true},'}
       })
-      ${value.name}?: ${value.isMultiple ? 'any[]' : propertyType};
+      ${value.name}?: ${value.isMultiple || value.type === 'file' ? 'any[]' : propertyType};
       `;
   }
 
   return code;
-}
+};
 
 
 export {

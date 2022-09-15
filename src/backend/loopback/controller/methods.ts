@@ -1,3 +1,4 @@
+import { FormInputTypeEnum } from "../../../enums/form";
 import { FormElementInterface } from "../../../interfaces/form";
 import { MainInterface } from "../../../interfaces/main";
 import { TextTransformation } from "../../../utils/text.transformation";
@@ -56,7 +57,7 @@ const setGetRelatedElementsInArrayType = (object: MainInterface): string => {
         });
 
         return _findRelatedElementsToReturn;
-      }
+      };
 
       _findRelatedElements +=
         `
@@ -65,7 +66,7 @@ const setGetRelatedElementsInArrayType = (object: MainInterface): string => {
           
           ${createMultidimensionalArrayFindRelatedCode(value.elements, value.id, true)}
         }
-      `
+      `;
     }
   });
 
@@ -83,6 +84,7 @@ const setControllerMethods = (object: MainInterface): string => {
   let _propertiesRelatedFind: string = ``;
   let _createRelated: string = ``;
   let _deleteRelated: string = ``;
+  let _storageFile: string = ``;
 
   const elements: Array<FormElementInterface> = getAllElements(object.form?.elements);
 
@@ -90,6 +92,7 @@ const setControllerMethods = (object: MainInterface): string => {
     _propertiesRelatedFind += setPropertiesToFindByElement(element);
     _createRelated += setCreateAllMethodsByElement(object, element);
     _deleteRelated += setDeleteAllMethodsByElement(object, element);
+    _storageFile += setStorageFileByElement(object, element);
   });
 
   let code = `
@@ -118,6 +121,7 @@ const setControllerMethods = (object: MainInterface): string => {
           const createdBy = this.currentUser?.[securityId] as string;
           const ownerId = this.currentUser?.ownerId as string;
           const dataWithoutNullProperties = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null));
+          ${_storageFile}
       
           const dataCreated = await this.repository.create({...dataWithoutNullProperties, _createdBy: createdBy, _ownerId: ownerId});
           
@@ -266,6 +270,7 @@ const setControllerMethods = (object: MainInterface): string => {
           let dataToWorkInRelation = await this.repository.findById(id);
           ${_deleteRelated}
           const dataWithoutNullProperties = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null));
+          ${_storageFile}
   
           await this.repository.updateById(id, dataWithoutNullProperties);
           const idToWorkInRelation = dataToWorkInRelation._id;
@@ -314,6 +319,7 @@ const setControllerMethods = (object: MainInterface): string => {
           let dataToWorkInRelation = await this.repository.findById(id);
           ${_deleteRelated}
           const dataWithoutNullProperties = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null));
+          ${_storageFile}
   
           await this.repository.updateById(id, dataWithoutNullProperties);
 
@@ -602,6 +608,35 @@ const createDeleteAllMethods = (
         await this.${mainPropertyCamelCase}Has${secondProperty}Repository.deleteAll({ ${mainPropertyCamelCase}Id: id }) 
       }
   `;
+};
+
+const setStorageFileByElement = (
+  object: MainInterface,
+  element: FormElementInterface
+): string => {
+  let code = ``;
+
+  const modelName: string = object.form!.id.replace("Form", "");
+  const value = Object.values(element)[0];
+
+  if (value.type === FormInputTypeEnum.File) {
+    code += `
+      if(data.${value.name}){
+        for (let fileIndex = 0; fileIndex < data.${value.name}!.length; fileIndex++) {
+          const file = data.${value.name}![fileIndex];
+          if(!file.url){
+            const url = await this.storageService.uploadFiles('${TextTransformation.kebabfy(modelName)}', file)
+            data.${value.name}![fileIndex] = {
+              name: file.fileName,
+              url
+            }
+          }
+        }
+      }
+    `;
+  }
+
+  return code;
 };
 
 export { setControllerMethods };
