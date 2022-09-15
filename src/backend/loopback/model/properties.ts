@@ -121,7 +121,7 @@ const setByElementInArrayType = (
 
   let code = ``;
 
-  const propertyType = value.isMultiple || type === 'array' ?
+  const propertyType = value.isMultiple || type === 'array' || value.type === 'file' ?
     'array' :
     (
       stringTypes.includes(value.type || type) ? 'String' :
@@ -145,9 +145,9 @@ const setByElementInArrayType = (
     code += `
       @property({
           type: '${propertyType}',
-          ${value.isMultiple ? "itemType: 'any'," : 'jsonSchema: {nullable: true},'}
+          ${value.isMultiple || value.type === 'file' ? "itemType: 'any'," : 'jsonSchema: {nullable: true},'}
       })
-      ${value.name}?: ${value.isMultiple ? 'any[]' : propertyType};
+      ${value.name}?: ${value.isMultiple || value.type === 'file' ? 'any[]' : propertyType};
       `;
   }
 
