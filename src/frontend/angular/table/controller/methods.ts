@@ -30,6 +30,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
       const filtersToAppend = this._setSearchFilters(valueToSearch);
       httpParams = httpParams.append('filter', filtersToAppend);
     }
+    httpParams = httpParams.append('order_by', '_createdAt');
     this.set${TextTransformation.pascalfy(
     table.id
   )}Service(httpParams, isPagination);
