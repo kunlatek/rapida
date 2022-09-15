@@ -30,7 +30,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
       const filtersToAppend = this._setSearchFilters(valueToSearch);
       httpParams = httpParams.append('filter', filtersToAppend);
     }
-    httpParams = httpParams.append('order_by', '_createdAt');
+    httpParams = httpParams.append('order_by', '_createdAt DESC');
     this.set${TextTransformation.pascalfy(
     table.id
   )}Service(httpParams, isPagination);
@@ -66,7 +66,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
     }
         let newData = [...result.data.result];
         if (isPagination) {
-          newData = [...newData, ...currentData];
+          newData = [...currentData,...newData];
           ${hasInfiniteScroll
       ? "this.dataSource.pages = (result.data.total / 50) + 1"
       : ""
