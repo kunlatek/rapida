@@ -678,12 +678,12 @@ const setStorageFileInArrayType = (object: MainInterface): string => {
 
             if (elementValue.type === FormInputTypeEnum.File) {
               _storageFileToReturn += `
-                if(${TextTransformation.singularize(value.id)}.${elementValue.name}){
-                  for (let fileIndex = 0; fileIndex < ${TextTransformation.singularize(value.id)}.${elementValue.name}!.length; fileIndex++) {
-                    const file = ${TextTransformation.singularize(value.id)}.${elementValue.name}![fileIndex];
+                if(${TextTransformation.singularize(relatedId)}.${elementValue.name}){
+                  for (let fileIndex = 0; fileIndex < ${TextTransformation.singularize(relatedId)}.${elementValue.name}!.length; fileIndex++) {
+                    const file = ${TextTransformation.singularize(relatedId)}.${elementValue.name}![fileIndex];
                     if(!file.url){
                       const url = await this.storageService.uploadFiles('${TextTransformation.kebabfy(modelName)}', file)
-                      ${TextTransformation.singularize(value.id)}.${elementValue.name}![fileIndex] = {
+                      ${TextTransformation.singularize(relatedId)}.${elementValue.name}![fileIndex] = {
                         name: file.fileName,
                         url
                       }
