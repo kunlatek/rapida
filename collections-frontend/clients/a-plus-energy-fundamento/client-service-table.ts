@@ -10,18 +10,12 @@ export const CLIENT_SERVICE_TABLE: MainInterface = {
     title: "Serviços prestados",
     subtitle: "Listagem de serviços prestados",
     id: "clientServiceTable",
+    formIdToFieldsToLabels: "clientServiceForm",
+    infiniteScroll: true,
     data: {
       type: RequestTypeEnum.Object,
     },
     elements: [
-      {
-        column: {
-          label: "Instalação",
-        },
-        row: {
-          field: "clientSettlementId",
-        },
-      },
       {
         column: {
           label: "Instalação",
@@ -37,6 +31,7 @@ export const CLIENT_SERVICE_TABLE: MainInterface = {
         row: {
           type: "menu",
           icon: "more_vert",
+          field: "actions",
           menu: [
             {
               action: {
@@ -74,4 +69,4 @@ export const CLIENT_SERVICE_TABLE: MainInterface = {
       ],
     },
   }
-}
+};

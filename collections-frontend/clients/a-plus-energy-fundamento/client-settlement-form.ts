@@ -20,7 +20,8 @@ export const CLIENT_SETTLEMENT_FORM: MainInterface = {
             labelField: "name",
             valueField: "_id",
             paramsToFilter: ["name", "uniqueId"]
-          }
+          },
+          isRequired: true,
         }
       },
       {
@@ -37,7 +38,8 @@ export const CLIENT_SETTLEMENT_FORM: MainInterface = {
               label: "Teto",
               value: "roof",
             }
-          ]
+          ],
+          isRequired: true,
         }
       },
       {
@@ -54,7 +56,8 @@ export const CLIENT_SETTLEMENT_FORM: MainInterface = {
               label: "Autoconsumo remoto",
               value: "remoteSelfConsumption",
             }
-          ]
+          ],
+          isRequired: true,
         }
       },
       {
@@ -69,7 +72,7 @@ export const CLIENT_SETTLEMENT_FORM: MainInterface = {
                 type: FormInputTypeEnum.Text,
                 placeholder: "Ex.: SMA",
                 optionsApi: {
-                  endpoint: "client-products",
+                  endpoint: "products",
                   labelField: "name",
                   valueField: "_id",
                   paramsToFilter: ["name", "ean13", "ean14"]
@@ -100,7 +103,7 @@ export const CLIENT_SETTLEMENT_FORM: MainInterface = {
                 type: FormInputTypeEnum.Text,
                 placeholder: "Ex.: Trina",
                 optionsApi: {
-                  endpoint: "client-products",
+                  endpoint: "products",
                   labelField: "name",
                   valueField: "_id",
                   paramsToFilter: ["name", "ean13", "ean14"]
@@ -136,23 +139,23 @@ export const CLIENT_SETTLEMENT_FORM: MainInterface = {
                   endpoint: "__external-api/address",
                   formFieldsFilledByApiResponse: [
                     {
-                      formFieldName: "address",
+                      formFieldName: "benefitedAddress",
                       propertyFromApiToFillFormField: "address"
                     },
                     {
-                      formFieldName: "district",
+                      formFieldName: "benefitedDistrict",
                       propertyFromApiToFillFormField: "neighborhood"
                     },
                     {
-                      formFieldName: "city",
+                      formFieldName: "benefitedCity",
                       propertyFromApiToFillFormField: "city"
                     },
                     {
-                      formFieldName: "state",
+                      formFieldName: "benefitedState",
                       propertyFromApiToFillFormField: "state"
                     },
                     {
-                      formFieldName: "country",
+                      formFieldName: "benefitedCountry",
                       propertyFromApiToFillFormField: "country"
                     },
                   ]
@@ -305,23 +308,23 @@ export const CLIENT_SETTLEMENT_FORM: MainInterface = {
             endpoint: "__external-api/address",
             formFieldsFilledByApiResponse: [
               {
-                formFieldName: "address",
+                formFieldName: "settlementAddress",
                 propertyFromApiToFillFormField: "address"
               },
               {
-                formFieldName: "district",
+                formFieldName: "settlementDistrict",
                 propertyFromApiToFillFormField: "neighborhood"
               },
               {
-                formFieldName: "city",
+                formFieldName: "settlementCity",
                 propertyFromApiToFillFormField: "city"
               },
               {
-                formFieldName: "state",
+                formFieldName: "settlementState",
                 propertyFromApiToFillFormField: "state"
               },
               {
-                formFieldName: "country",
+                formFieldName: "settlementCountry",
                 propertyFromApiToFillFormField: "country"
               },
             ]
@@ -472,4 +475,4 @@ export const CLIENT_SETTLEMENT_FORM: MainInterface = {
       ],
     },
   }
-}
+};

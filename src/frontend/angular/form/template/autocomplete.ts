@@ -1,16 +1,23 @@
-import { FormElementInterface } from "../../../../interfaces/form";
+import {
+  ArrayInterface,
+  FormElementInterface
+} from "../../../../interfaces/form";
 import { TextTransformation } from "../../../../utils/text.transformation";
+import { setArrayControls, setArrayIndexes } from "../controller/methods/array";
 
 const setAutocomplete = (
   element: FormElementInterface,
   conditions: string,
-  arrayCurrentIndexAsParam: string | undefined = undefined
+  array: ArrayInterface | undefined = undefined
 ) => {
   let code = ``;
 
   if (!element.autocomplete) {
     return code;
   }
+
+  const iterations = array ? setArrayIndexes(array.id) : undefined;
+  const controls = array ? setArrayControls(array.id) : undefined;
 
   const placeholder = element.autocomplete.placeholder
     ? `placeholder="${element.autocomplete.placeholder}"`
@@ -24,18 +31,17 @@ const setAutocomplete = (
     code += `
       <mat-form-field class="full-width" ${conditions}>
         <mat-label>${element.autocomplete.label}</mat-label>
-        <mat-chip-list #${
-          element.autocomplete.name
-        }ChipList aria-label="Seleção de ${element.autocomplete.label.toLowerCase()}">
+        <mat-chip-list #${element.autocomplete.name
+      }ChipList aria-label="Seleção de ${element.autocomplete.label.toLowerCase()}">
           <mat-chip 
-            *ngFor="let ${
-              element.autocomplete.name
-            }Item of chosen${TextTransformation.pascalfy(
-      element.autocomplete.name
-    )}View" 
+            *ngFor="let ${element.autocomplete.name
+      }Item of chosen${TextTransformation.pascalfy(
+        element.autocomplete.name
+      )}View" 
             (removed)="remove${TextTransformation.pascalfy(
-              element.autocomplete.name
-            )}(${element.autocomplete.name}Item)">
+        element.autocomplete.name
+      )}(${element.autocomplete.name}Item${iterations ? ", " + iterations.replace(": any", "") : ""
+      })">
             {{${element.autocomplete.name}Item}}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
@@ -47,41 +53,78 @@ const setAutocomplete = (
             formControlName="${element.autocomplete.name}" 
             matInput 
             [matAutocomplete]="auto${TextTransformation.pascalfy(
-              element.autocomplete.name
-            )}" 
+        element.autocomplete.name
+      )}" 
             [matChipInputFor]="${element.autocomplete.name}ChipList" 
-            [matChipInputSeparatorKeyCodes]="${
-              element.autocomplete.name
-            }SeparatorKeysCodes" 
+            [matChipInputSeparatorKeyCodes]="${element.autocomplete.name
+      }SeparatorKeysCodes" 
             (matChipInputTokenEnd)="add${TextTransformation.pascalfy(
-              element.autocomplete.name
-            )}($event)" 
+        element.autocomplete.name
+      )}($event${iterations ? ", " + iterations.replace(": any", "") : ""
+      })" 
             (keyup)="callSetFiltered${TextTransformation.pascalfy(
-              element.autocomplete.name
-            )}(${arrayCurrentIndexAsParam})" 
+        element.autocomplete.name
+      )}(${iterations ? iterations.replace(": any", "") : ""})" 
             #${element.autocomplete.name}Input 
             ${required}
           >
         </mat-chip-list>
         <mat-autocomplete 
           #auto${TextTransformation.pascalfy(
-            element.autocomplete.name
-          )}="matAutocomplete" 
+        element.autocomplete.name
+      )}="matAutocomplete" 
           (optionSelected)="selected${TextTransformation.pascalfy(
-            element.autocomplete.name
-          )}($event)"
+        element.autocomplete.name
+      )}($event${iterations ? ", " + iterations.replace(": any", "") : ""})"
         >
-          <mat-option *ngFor="let ${
-            element.autocomplete.name
-          }Item of filtered${TextTransformation.pascalfy(
-      element.autocomplete.name
-    )}" [value]="${element.autocomplete.name}Item.${
-      element.autocomplete.optionsApi.valueField
-    }">
-                {{${element.autocomplete.name}Item.${
-      element.autocomplete.optionsApi.labelField
-    }}}
+        <mat-option disabled *ngIf="
+          ${array
+        ? `loading${TextTransformation.pascalfy(
+          element.autocomplete.name
+        )}[${iterations?.split(": any")[0]}]`
+        : `loading${TextTransformation.pascalfy(
+          element.autocomplete.name
+        )}`
+      }
+          ">
+            <mat-spinner diameter="35"></mat-spinner>
           </mat-option>
+        <ng-container *ngIf="
+          ${array
+        ? `!loading${TextTransformation.pascalfy(
+          element.autocomplete.name
+        )}[${iterations?.split(": any")[0]}];`
+        : `!loading${TextTransformation.pascalfy(
+          element.autocomplete.name
+        )};`
+      }
+          ">
+          <mat-option *ngFor="let ${element.autocomplete.name
+      }Item of filtered${TextTransformation.pascalfy(
+        element.autocomplete.name
+      )}" [value]="${element.autocomplete.name}Item.${element.autocomplete.optionsApi.valueField
+      }">`;
+
+    if (!Array.isArray(element.autocomplete.optionsApi.labelField)) {
+      code += `{{${element.autocomplete.name}Item.${element.autocomplete.optionsApi.labelField}}}`;
+    }
+
+    if (Array.isArray(element.autocomplete.optionsApi.labelField)) {
+      const name = element.autocomplete.name;
+      const labelFieldLength =
+        element.autocomplete.optionsApi.labelField.length;
+      element.autocomplete.optionsApi.labelField.forEach(
+        (e: string, index: number) => {
+          code += `{{${name}Item.${e}}}`;
+          if (labelFieldLength > index + 1) {
+            code += ` - `;
+          }
+        }
+      );
+    }
+
+    code += `</mat-option>
+          </ng-container>
         </mat-autocomplete>
       </mat-form-field>
       `;
@@ -96,32 +139,69 @@ const setAutocomplete = (
               formControlName="${element.autocomplete.name}" 
               matInput 
               [matAutocomplete]="auto${TextTransformation.pascalfy(
-                element.autocomplete.name
-              )}" 
+      element.autocomplete.name
+    )}" 
               (keyup)="callSetFiltered${TextTransformation.pascalfy(
-                element.autocomplete.name
-              )}(${arrayCurrentIndexAsParam})" 
+      element.autocomplete.name
+    )}(${iterations ? iterations.replace(": any", "") : ""})" 
               ${required}
         >
         <mat-autocomplete 
           #auto${TextTransformation.pascalfy(
-            element.autocomplete.name
-          )}="matAutocomplete" 
-          [displayWith]="displayFnTo${TextTransformation.pascalfy(
-            element.autocomplete.name
-          )}.bind(this)"
-        >
-          <mat-option *ngFor="let ${
-            element.autocomplete.name
-          }Item of filtered${TextTransformation.pascalfy(
       element.autocomplete.name
-    )}" [value]="${element.autocomplete.name}Item.${
-      element.autocomplete.optionsApi.valueField
-    }">
-            {{${element.autocomplete.name}Item.${
-      element.autocomplete.optionsApi.labelField
-    }}}
+    )}="matAutocomplete" 
+          [displayWith]="displayFnTo${TextTransformation.pascalfy(
+      element.autocomplete.name
+    )}.bind(this)"
+        >
+          <mat-option disabled *ngIf="
+          ${array
+        ? `loading${TextTransformation.pascalfy(
+          element.autocomplete.name
+        )}[${iterations?.split(": any")[0]}]`
+        : `loading${TextTransformation.pascalfy(
+          element.autocomplete.name
+        )}`
+      }
+          ">
+            <mat-spinner diameter="35"></mat-spinner>
           </mat-option>
+          <ng-container *ngIf="
+          ${array
+        ? `!loading${TextTransformation.pascalfy(
+          element.autocomplete.name
+        )}[${iterations?.split(": any")[0]}];`
+        : `!loading${TextTransformation.pascalfy(
+          element.autocomplete.name
+        )};`
+      }
+          ">
+          <mat-option *ngFor="let ${element.autocomplete.name
+      }Item of filtered${TextTransformation.pascalfy(
+        element.autocomplete.name
+      )}" [value]="${element.autocomplete.name}Item.${element.autocomplete.optionsApi.valueField
+      }">`;
+
+    if (!Array.isArray(element.autocomplete.optionsApi.labelField)) {
+      code += `{{${element.autocomplete.name}Item.${element.autocomplete.optionsApi.labelField}}}`;
+    }
+
+    if (Array.isArray(element.autocomplete.optionsApi.labelField)) {
+      const name = element.autocomplete.name;
+      const labelFieldLength =
+        element.autocomplete.optionsApi.labelField.length;
+      element.autocomplete.optionsApi.labelField.forEach(
+        (e: string, index: number) => {
+          code += `{{${name}Item.${e}}}`;
+          if (labelFieldLength > index + 1) {
+            code += ` - `;
+          }
+        }
+      );
+    }
+
+    code += `</mat-option>
+          </ng-container>
         </mat-autocomplete>
       </mat-form-field>
       `;

@@ -143,7 +143,7 @@ const setConditionOverEdition = (
                       : ` && `
                       }`;
                   }
-                  code += `_${array}.${condition.key}`
+                  code += `_${array}.${condition.key}`;
                   code += `${condition.comparisonOperator
                     ? ` ${condition.comparisonOperator} `
                     : ` === `
@@ -173,7 +173,7 @@ const setConditionOverEdition = (
                       : ` && `
                       }`;
                   }
-                  code += `this.${object.form?.id}Form.get("${condition.key}")?.value`
+                  code += `this.${object.form?.id}Form.get("${condition.key}")?.value`;
                   code += `${condition.comparisonOperator
                     ? ` ${condition.comparisonOperator} `
                     : ` === `
@@ -223,7 +223,6 @@ const setConditionsInArray = (
   ];
 
   let code = ``;
-  let substring = ``;
 
   elements.forEach((element) => {
     const type = Object.keys(element)[0];
@@ -240,7 +239,7 @@ const setConditionsInArray = (
               const stringToSplit = `setConditionIn${TextTransformation.pascalfy(value.conditions.elements[0].key)} = (${iterations}) => { if (typeof i === "number") {`;
               const stringToSplitExists = code.includes(stringToSplit);
               const conditionMethodExists = code.includes(conditionMethod);
-              
+
               let conditionMethodCode = `this.${value.name ? value.name : value.id}FormCondition[${iterations.split(": any")[iterations.split(": any").length - 2].replace(", ", "")}] = (`;
 
               value.conditions.elements.forEach(
@@ -266,7 +265,7 @@ const setConditionsInArray = (
                 code = codeSplited.join('');
               } else {
                 if (!conditionMethodExists) {
-                  code += `${stringToSplit} ${conditionMethodCode}); } };`
+                  code += `${stringToSplit} ${conditionMethodCode}); } };`;
                 }
               }
 

@@ -10,6 +10,8 @@ export const PRODUCT_TABLE: MainInterface = {
     title: "Produtos",
     subtitle: "Listagem de produtos",
     id: "productTable",
+    formIdToFieldsToLabels: "productForm",
+    infiniteScroll: true,
     data: {
       type: RequestTypeEnum.Object,
     },
@@ -45,6 +47,7 @@ export const PRODUCT_TABLE: MainInterface = {
         row: {
           type: "menu",
           icon: "more_vert",
+          field: "actions",
           menu: [
             {
               action: {
@@ -82,4 +85,4 @@ export const PRODUCT_TABLE: MainInterface = {
       ],
     },
   }
-}
+};

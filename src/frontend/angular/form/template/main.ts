@@ -1,17 +1,17 @@
-import * as fs from "fs";
 import * as chp from "child_process";
-import { MainInterface } from "../../../../interfaces/main";
+import * as fs from "fs";
 import {
-  FormElementInterface,
-} from "../../../../interfaces/form";
-import {
-  FormButtonTypeEnum,
-  FormInputTypeEnum,
+  FormButtonTypeEnum
 } from "../../../../enums/form";
+import {
+  ArrayInterface,
+  FormElementInterface
+} from "../../../../interfaces/form";
+import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
 import { setArrayFlowIdentifier, setArrayIndexes, setArrayIndexesToAdd, setArrayLayer } from "./array";
-import { setConditions } from "./condition";
 import { setAutocomplete } from "./autocomplete";
+import { setConditions } from "./condition";
 import { setInput } from "./input";
 require('dotenv').config();
 
@@ -32,7 +32,7 @@ let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
  * @param object
  * @returns
  */
-const setFormTemplate = (object: MainInterface): string => {
+const setFormTemplate = (object: MainInterface, mainArray: Array<MainInterface> | undefined = undefined,): string => {
   if (!object.form) {
     console.info("Only forms set here");
     return ``;
@@ -90,18 +90,18 @@ const setFormTemplate = (object: MainInterface): string => {
 const setSpecificStructureOverFormElement = (
   object: MainInterface,
   element: FormElementInterface,
-  array: string | undefined = undefined,
+  array: ArrayInterface | undefined = undefined,
   arrayCurrentIndexAsParam: string | undefined = undefined
 ): string => {
   let code = ``;
   let conditions = setConditions(element, array, arrayCurrentIndexAsParam);
-  
+
   if (element.input) {
     code += setInput(object, element, conditions, arrayCurrentIndexAsParam);
   }
 
   if (element.autocomplete) {
-    code += setAutocomplete(element, conditions, arrayCurrentIndexAsParam);
+    code += setAutocomplete(element, conditions, array);
   }
 
   if (element.button) {
@@ -189,11 +189,11 @@ const setSpecificStructureOverFormElement = (
       setCondition += `(selectionChange)="`;
 
       if (array) {
-        setCondition += `setConditionIn${TextTransformation.pascalfy(element.select.name)}(${setArrayIndexes(array)})`;
+        setCondition += `setConditionIn${TextTransformation.pascalfy(element.select.name)}(${setArrayIndexes(array.id)})`;
       }
 
       if (!array) {
-        setCondition += `setCondition()`
+        setCondition += `setCondition()`;
       }
       setCondition += `"`;
     }
@@ -252,7 +252,7 @@ const setSpecificStructureOverFormElement = (
       arrayStructure += setSpecificStructureOverFormElement(
         object,
         arrayElement,
-        element.array?.id,
+        element.array,
         arrayCurrentIndex
       );
     });

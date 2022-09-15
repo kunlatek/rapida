@@ -1,3 +1,4 @@
+import { FormInputTypeEnum } from "../../../enums/form";
 import { FormElementInterface } from "../../../interfaces/form";
 import { MainInterface } from "../../../interfaces/main";
 import { TextTransformation } from "../../../utils/text.transformation";
@@ -56,7 +57,7 @@ const setGetRelatedElementsInArrayType = (object: MainInterface): string => {
         });
 
         return _findRelatedElementsToReturn;
-      }
+      };
 
       _findRelatedElements +=
         `
@@ -65,7 +66,7 @@ const setGetRelatedElementsInArrayType = (object: MainInterface): string => {
           
           ${createMultidimensionalArrayFindRelatedCode(value.elements, value.id, true)}
         }
-      `
+      `;
     }
   });
 
@@ -83,6 +84,7 @@ const setControllerMethods = (object: MainInterface): string => {
   let _propertiesRelatedFind: string = ``;
   let _createRelated: string = ``;
   let _deleteRelated: string = ``;
+  let _storageFile: string = ``;
 
   const elements: Array<FormElementInterface> = getAllElements(object.form?.elements);
 
@@ -90,6 +92,7 @@ const setControllerMethods = (object: MainInterface): string => {
     _propertiesRelatedFind += setPropertiesToFindByElement(element);
     _createRelated += setCreateAllMethodsByElement(object, element);
     _deleteRelated += setDeleteAllMethodsByElement(object, element);
+    _storageFile += setStorageFileByElement(object, element);
   });
 
   let code = `
@@ -118,6 +121,9 @@ const setControllerMethods = (object: MainInterface): string => {
           const createdBy = this.currentUser?.[securityId] as string;
           const ownerId = this.currentUser?.ownerId as string;
           const dataWithoutNullProperties = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null));
+          
+          ${_storageFile}
+          ${setStorageFileInArrayType(object)}
       
           const dataCreated = await this.repository.create({...dataWithoutNullProperties, _createdBy: createdBy, _ownerId: ownerId});
           
@@ -266,6 +272,9 @@ const setControllerMethods = (object: MainInterface): string => {
           let dataToWorkInRelation = await this.repository.findById(id);
           ${_deleteRelated}
           const dataWithoutNullProperties = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null));
+          
+          ${_storageFile}
+          ${setStorageFileInArrayType(object)}
   
           await this.repository.updateById(id, dataWithoutNullProperties);
           const idToWorkInRelation = dataToWorkInRelation._id;
@@ -314,6 +323,9 @@ const setControllerMethods = (object: MainInterface): string => {
           let dataToWorkInRelation = await this.repository.findById(id);
           ${_deleteRelated}
           const dataWithoutNullProperties = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null));
+          
+          ${_storageFile}
+          ${setStorageFileInArrayType(object)}
   
           await this.repository.updateById(id, dataWithoutNullProperties);
 
@@ -602,6 +614,117 @@ const createDeleteAllMethods = (
         await this.${mainPropertyCamelCase}Has${secondProperty}Repository.deleteAll({ ${mainPropertyCamelCase}Id: id }) 
       }
   `;
+};
+
+const setStorageFileByElement = (
+  object: MainInterface,
+  element: FormElementInterface
+): string => {
+  let code = ``;
+
+  const modelName: string = object.form!.id.replace("Form", "");
+  const value = Object.values(element)[0];
+
+  if (value.type === FormInputTypeEnum.File) {
+    code += `
+      if(data.${value.name}){
+        for (let fileIndex = 0; fileIndex < data.${value.name}!.length; fileIndex++) {
+          const file = data.${value.name}![fileIndex];
+          if(!file.url){
+            const url = await this.storageService.uploadFiles('${TextTransformation.kebabfy(modelName)}', file)
+            data.${value.name}![fileIndex] = {
+              name: file.fileName,
+              url
+            }
+          }
+        }
+      }
+    `;
+  }
+
+  return code;
+};
+
+const setStorageFileInArrayType = (object: MainInterface): string => {
+  if (!object.form) {
+    console.info("Only forms set here");
+    return ``;
+  }
+
+  const modelName: string = object.form!.id.replace("Form", "");
+
+  let _findRelatedElements = ``;
+
+  const elements: Array<FormElementInterface> = getAllElements(object.form.elements);
+
+  elements.forEach((element) => {
+    const type = Object.keys(element)[0];
+    if (type === 'array') {
+      const value = Object.values(element)[0];
+      const relatedType = TextTransformation.setIdToClassName(value.id);
+
+      const createMultidimensionalArrayStorageFileCode = (
+        elements: Array<FormElementInterface>,
+        relatedId: string,
+        isFirstArray: boolean,
+      ) => {
+
+        let _storageFileToReturn = ``;
+        elements?.forEach((elementProperty: FormElementInterface) => {
+
+          const elementValue = Object.values(elementProperty)[0];
+
+          if (elementValue.type === FormInputTypeEnum.File || elementProperty.array) {
+
+            if (elementValue.type === FormInputTypeEnum.File) {
+              _storageFileToReturn += `
+                if(${TextTransformation.singularize(value.id)}.${elementValue.name}){
+                  for (let fileIndex = 0; fileIndex < ${TextTransformation.singularize(value.id)}.${elementValue.name}!.length; fileIndex++) {
+                    const file = ${TextTransformation.singularize(value.id)}.${elementValue.name}![fileIndex];
+                    if(!file.url){
+                      const url = await this.storageService.uploadFiles('${TextTransformation.kebabfy(modelName)}', file)
+                      ${TextTransformation.singularize(value.id)}.${elementValue.name}![fileIndex] = {
+                        name: file.fileName,
+                        url
+                      }
+                    }
+                  }
+                }
+              `;
+
+            } else if (elementProperty.array) {
+              _storageFileToReturn +=
+                `
+                for(
+                  let ${elementProperty.array?.id}Index = 0; 
+                  ${elementProperty.array?.id}Index < ${TextTransformation.singularize(relatedId)}?.${elementProperty.array?.id}?.length!; 
+                  ${elementProperty.array?.id}Index++
+                ){
+                  
+                  const ${TextTransformation.singularize(elementProperty.array?.id)} = ${TextTransformation.singularize(relatedId)}?.${elementProperty.array?.id}![${elementProperty.array?.id}Index];
+                  
+                  ${createMultidimensionalArrayStorageFileCode(elementProperty.array?.elements!, elementProperty.array?.id!, false)}
+                };
+              `;
+            }
+          }
+        });
+
+        return _storageFileToReturn;
+      };
+
+      _findRelatedElements +=
+        `
+        for(let ${value.id}Index = 0; ${value.id}Index < data.${value.id}?.length!; ${value.id}Index++){
+          const ${TextTransformation.singularize(value.id)} = data.${value.id}![${value.id}Index];
+          
+          ${createMultidimensionalArrayStorageFileCode(value.elements, value.id, true)}
+        }
+      `;
+    }
+  });
+
+  return _findRelatedElements;
 };
 
 export { setControllerMethods };

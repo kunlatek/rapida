@@ -20,7 +20,7 @@ const setFrontend = (
   try {
     switch (array[index].frontendFramework) {
       case FrontendFrameworkEnum.Angular:
-        response = createAngularProject(array[index], index);
+        response = createAngularProject(array[index], index, array);
         break;
 
       default:

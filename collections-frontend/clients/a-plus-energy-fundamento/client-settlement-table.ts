@@ -10,6 +10,8 @@ export const CLIENT_SETTLEMENT_TABLE: MainInterface = {
     title: "Instalações",
     subtitle: "Listagem de instalações",
     id: "clientSettlementTable",
+    formIdToFieldsToLabels: "clientSettlementForm",
+    infiniteScroll: true,
     data: {
       type: RequestTypeEnum.Object,
     },
@@ -19,15 +21,8 @@ export const CLIENT_SETTLEMENT_TABLE: MainInterface = {
           label: "Cliente",
         },
         row: {
-          field: "clientId",
-        },
-      },
-      {
-        column: {
-          label: "Nome",
-        },
-        row: {
-          field: "name",
+          field: "client",
+          fieldProperties: ["name"],
         },
       },
       {
@@ -37,6 +32,7 @@ export const CLIENT_SETTLEMENT_TABLE: MainInterface = {
         row: {
           type: "menu",
           icon: "more_vert",
+          field: "actions",
           menu: [
             {
               action: {
@@ -74,4 +70,4 @@ export const CLIENT_SETTLEMENT_TABLE: MainInterface = {
       ],
     },
   }
-}
+};

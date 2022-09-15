@@ -1,9 +1,9 @@
 import { ConditionEnum } from "../../../../enums/form";
-import { FormElementInterface } from "../../../../interfaces/form";
+import { ArrayInterface, FormElementInterface } from "../../../../interfaces/form";
 
 const setConditions = (
   element: FormElementInterface,
-  array: string | undefined = undefined,
+  array: ArrayInterface | undefined = undefined,
   arrayCurrentIndexAsParam: string | undefined = undefined
 ): string => {
   const formElements = [
@@ -27,7 +27,7 @@ const setConditions = (
           code += `*ngIf="${value.name ? value.name : value.id}FormCondition[${arrayCurrentIndexAsParam}]"`;
         }
 
-        if (!array) {          
+        if (!array) {
           code += `*ngIf="${value.name ? value.name : value.id}FormCondition"`;
         }
       }
@@ -43,4 +43,4 @@ const setConditions = (
 
 export {
   setConditions
-}
+};

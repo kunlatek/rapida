@@ -10,6 +10,8 @@ export const CLIENT_TABLE: MainInterface = {
     title: "Ações",
     subtitle: "Listagem de ações",
     id: "clientTable",
+    formIdToFieldsToLabels: "clientForm",
+    infiniteScroll: true,
     data: {
       type: RequestTypeEnum.Object,
     },
@@ -29,6 +31,7 @@ export const CLIENT_TABLE: MainInterface = {
         row: {
           type: "menu",
           icon: "more_vert",
+          field: "actions",
           menu: [
             {
               action: {
@@ -66,4 +69,4 @@ export const CLIENT_TABLE: MainInterface = {
       ],
     },
   }
-}
+};

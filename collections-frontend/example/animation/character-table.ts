@@ -1,4 +1,4 @@
-import { FormInputTypeEnum, ServiceFunctionsEnum } from "../../../src/enums/form";
+import { ServiceFunctionsEnum } from "../../../src/enums/form";
 import { FrontendFrameworkEnum } from "../../../src/enums/main";
 import { RequestTypeEnum } from "../../../src/enums/request";
 import { MainInterface } from "../../../src/interfaces/main";
@@ -9,6 +9,7 @@ export const CHARACTER_TABLE: MainInterface = {
   table: {
     id: "characterTable",
     title: "Personagens",
+    infiniteScroll: true,
     data: {
       type: RequestTypeEnum.Object,
     },
@@ -26,7 +27,8 @@ export const CHARACTER_TABLE: MainInterface = {
           label: "Animação relacionada",
         },
         row: {
-          field: "animationId",
+          field: "animation",
+          fieldProperties: ["name"],
         },
       },
       {
@@ -36,6 +38,7 @@ export const CHARACTER_TABLE: MainInterface = {
         row: {
           type: "menu",
           icon: "more_vert",
+          field: "actions",
           menu: [
             {
               action: {
@@ -60,27 +63,16 @@ export const CHARACTER_TABLE: MainInterface = {
         },
       },
     ],
-    actions: {
-        id: "characterTable",
-        title: "Exemplo",
-        elements: [{
-            input: {
-                label: "Search input",
-                name: "searchInput",
-                placeholder: "Placeholder to search input",
-                type: FormInputTypeEnum.Text
-            }
-        }]
-    },
+    formIdToFieldsToLabels: "characterForm",
     service: {
-        baseUrl: "http://localhost:3000",
-        endpoint: "characters",
-        hasAuthorization: true,
-        methods: [
-            ServiceFunctionsEnum.Get,
-            ServiceFunctionsEnum.Delete,
-            ServiceFunctionsEnum.Find,
-        ],
+      baseUrl: "http://localhost:3000",
+      endpoint: "characters",
+      hasAuthorization: true,
+      methods: [
+        ServiceFunctionsEnum.Get,
+        ServiceFunctionsEnum.Delete,
+        ServiceFunctionsEnum.Find,
+      ],
     },
   },
 };

@@ -9,7 +9,7 @@ import { TextTransformation } from "../../../../utils/text.transformation";
  * @param object
  * @returns
  */
- const setModuleTemplate = (object: MainInterface): string => {
+ const setModuleTemplate = (object: MainInterface, mainArray: Array<MainInterface> | undefined = undefined,): string => {
   if (!object.module) {
     console.info("Only modules set here");
     return ``;

@@ -1,7 +1,7 @@
 import {
   FormButtonTypeEnum,
   FormInputTypeEnum,
-  ServiceFunctionsEnum,
+  ServiceFunctionsEnum
 } from "../../../src/enums/form";
 import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/main";
 import { MainInterface } from "../../../src/interfaces/main";
@@ -20,14 +20,14 @@ export const CHARACTER_FORM: MainInterface = {
             id: "mainTab",
             elements: [
               {
-                autocomplete: {                  
+                autocomplete: {
                   label: "Animação",
                   placeholder: "Animação do personagem",
                   name: "animationId",
                   type: FormInputTypeEnum.Text,
                   optionsApi: {
                     endpoint: "animations",
-                    labelField: "name",
+                    labelField: ["name", "_id"],
                     valueField: "_id",
                     paramsToFilter: ["name", "startDate"],
                   },
@@ -41,6 +41,14 @@ export const CHARACTER_FORM: MainInterface = {
                   name: "name",
                   type: FormInputTypeEnum.Text,
                   isRequired: true,
+                }
+              },
+              {
+                input: {
+                  label: "Imagem",
+                  placeholder: "Imagem do personagem",
+                  name: "img",
+                  type: FormInputTypeEnum.File,
                 }
               },
             ],
@@ -71,7 +79,7 @@ export const CHARACTER_FORM: MainInterface = {
                         placeholder: "Ex.: Masculino",
                         tooltip: "Um valor qualquer acerca do atributo pré definido"
                       }
-                    },                    
+                    },
                   ],
                 },
               },
@@ -97,9 +105,23 @@ export const CHARACTER_FORM: MainInterface = {
                   elements: [
                     {
                       input: {
-                        label: "Label de array de tab",
+                        label: "Input no rolê",
                         name: "inputArrayTab",
                         type: FormInputTypeEnum.Text,
+                      }
+                    },
+                    {
+                      autocomplete: {
+                        label: "Autocomplete múltiplo no rolê",
+                        name: "autocompleteArrayTab",
+                        type: FormInputTypeEnum.Text,
+                        optionsApi: {
+                          labelField: ["name", "animationId"],
+                          valueField: "_id",
+                          paramsToFilter: ["name"],
+                          endpoint: "characters",
+                        },
+                        isMultiple: true,
                       }
                     },
                     {
@@ -142,7 +164,7 @@ export const CHARACTER_FORM: MainInterface = {
       {
         button: {
           label: "Criar",
-          type: FormButtonTypeEnum.Submit,          
+          type: FormButtonTypeEnum.Submit,
         }
       },
     ],
