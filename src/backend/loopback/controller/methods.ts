@@ -35,8 +35,8 @@ const setGetRelatedElementsInArrayType = (object: MainInterface): string => {
               const collection = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(elementProperty.autocomplete?.optionsApi?.endpoint?.split('-').join(' ') || '')));
               _findRelatedElementsToReturn +=
                 `
-                const relatedData_${relatedType}_${value.id}_${element.autocomplete!.name} = await getRelatedElements('${collection}', ${isFirstArray ? 'data' : TextTransformation.singularize(value.id)}?.${relatedId}?.map(el => el.${elementProperty.autocomplete.name}) || []);
-                ${TextTransformation.singularize(relatedId)}.${elementProperty.autocomplete.name.slice(0, -2)} = relatedData_${relatedType}_${value.id}_${element.autocomplete!.name}.find(childEl => childEl._id.toString() === ${TextTransformation.singularize(relatedId)}.${elementProperty.autocomplete.name})
+                const relatedData_${relatedType}_${value.id}_${elementProperty.autocomplete.name} = await getRelatedElements('${collection}', ${isFirstArray ? 'data' : TextTransformation.singularize(value.id)}?.${relatedId}?.map(el => el.${elementProperty.autocomplete.name}) || []);
+                ${TextTransformation.singularize(relatedId)}.${elementProperty.autocomplete.name.slice(0, -2)} = relatedData_${relatedType}_${value.id}_${elementProperty.autocomplete.name}.find(childEl => childEl._id.toString() === ${TextTransformation.singularize(relatedId)}.${elementProperty.autocomplete.name})
               `;
             } else if (elementProperty.array) {
               _findRelatedElementsToReturn +=
