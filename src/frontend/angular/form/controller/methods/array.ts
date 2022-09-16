@@ -1,6 +1,6 @@
 import {
   ArrayInterface,
-  FormElementInterface,
+  FormElementInterface
 } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
@@ -98,6 +98,22 @@ const setArrayLayer = (
   process.env.ARRAY_LAYER = JSON.stringify(_arrayLayer);
 };
 
+const setArrayNames = (arrayId: string): string => {
+  let code = ``;
+
+  _arraysInAFlow = [];
+  setArraysInAFlow(arrayId);
+  const arrayReversed = _arraysInAFlow.reverse();
+
+  arrayReversed.forEach((array, index) => {
+    code +=
+      `"${array.name}"` +
+      (arrayReversed.length > index + 1 ? `, ` : "");
+  });
+
+  return code;
+};
+
 const setArrayControls = (arrayId: string): string => {
   let code = ``;
 
@@ -142,7 +158,7 @@ const setArrayIndexes = (arrayId: string): string => {
   });
 
   return code;
-}
+};
 
 const setArrayIndexesToAdd = (arrayId: string): string => {
   let code = ``;
@@ -235,10 +251,12 @@ const setArrayMethod = (
 
 export {
   setArray,
+  setArrayNames,
   setArrayControls,
   setArrayControlsToAdd,
   setArrayIndexes,
   setArrayIndexesToAdd,
   setArrayMethod,
   setArrayLayer,
+  setArraysInAFlow,
 };

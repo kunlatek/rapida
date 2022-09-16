@@ -4,7 +4,7 @@ import {
 } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
-import { setArrayControls, setArrayIndexes } from "./array";
+import { setArrayControls, setArrayIndexes, setArrayNames } from "./array";
 
 const setAutocompleteMethod = (
   object: MainInterface,
@@ -19,6 +19,7 @@ const setAutocompleteMethod = (
 
   const iterations = array ? setArrayIndexes(array.id) : undefined;
   const controls = array ? setArrayControls(array.id) : undefined;
+  const arrayNames = array ? setArrayNames(array.id) : undefined;
 
   if (element.autocomplete.isMultiple) {
     code += `
@@ -102,6 +103,72 @@ const setAutocompleteMethod = (
     `;
   }
 
+  /**
+   * Set properties in autocomplete to edit
+   */
+
+  const splitArray = arrayNames?.split(", ");
+  const name = element.autocomplete.name;
+
+  if (!element.autocomplete.isMultiple && !array) {
+    code += `
+    set${TextTransformation.pascalfy(element.autocomplete.name)}ToEdit = () => {
+      this.${object.form?.id
+      }ToEdit?.data?.${element.autocomplete.name.substring(
+        0,
+        element.autocomplete.name.length - 2
+      )} ? this.filtered${TextTransformation.pascalfy(name)}.push(this.${object.form?.id}ToEdit.data.${element.autocomplete.name.substring(
+        0,
+        element.autocomplete.name.length - 2
+      )}) : this.filtered${TextTransformation.pascalfy(name)}.push(null);
+    }
+    `;
+  }
+
+  if (!element.autocomplete.isMultiple && array) {
+    code += `
+    set${TextTransformation.pascalfy(element.autocomplete.name)}ToEdit = () => {
+      this.${object.form?.id
+      }ToEdit.data
+    `;
+    splitArray?.forEach((arrayName: string, index: number) => {
+      if (splitArray.length < 2) {
+        code += `
+        [${arrayName}].forEach((array${index}: any) => {
+          this.filtered${TextTransformation.pascalfy(name)}.push(array${index}["${name.substring(0, name.length - 2)}"]);
+        })
+        `;
+      }
+      if (splitArray.length > 1) {
+
+      }
+    });
+    code += `
+    }
+    `;
+  }
+
+  if (element.autocomplete.isMultiple && array) {
+    code += `
+    set${TextTransformation.pascalfy(element.autocomplete.name)}ToEdit = () => {
+      this.${object.form?.id
+      }ToEdit.data
+    `;
+    splitArray?.forEach((arrayName: string, index: number) => {
+      code += `
+      [${arrayName}].forEach((array${index}: any) => {
+        console.log(array${index});
+      })
+      `;
+    });
+    code += `
+    }
+    `;
+  }
+
+  /**
+   * Display selected option to autocomplete
+   */
   code += `
   displayFnTo${TextTransformation.pascalfy(
     element.autocomplete.name
@@ -130,44 +197,27 @@ const setAutocompleteMethod = (
       } === value)?.${element.autocomplete.optionsApi.labelField}`;
   }
 
-  code += ` : "";
-    const otherValue = this.${object.form?.id
-    }ToEdit?.data?.${element.autocomplete.name.substring(
-      0,
-      element.autocomplete.name.length - 2
-    )} ? this.${object.form?.id}ToEdit.data.${element.autocomplete.name.substring(
-      0,
-      element.autocomplete.name.length - 2
-    )} : null;
-    if (value === otherValue?.${element.autocomplete.optionsApi.valueField}) {
-      return `;
-  if (Array.isArray(element.autocomplete.optionsApi.labelField)) {
-    const labelFieldLength = element.autocomplete.optionsApi.labelField.length;
-    element.autocomplete.optionsApi.labelField.forEach(
-      (e: string, index: number) => {
-        code += `otherValue.${e}`;
-        if (labelFieldLength > index + 1) {
-          code += ` + " - " + `;
-        }
-      }
-    );
-  }
+  code += ` : "";`;
 
-  if (!Array.isArray(element.autocomplete.optionsApi.labelField)) {
-    code += `otherValue.${element.autocomplete.optionsApi.labelField};`;
-  }
-
-  code += `}
+  code += `
     return treatedValue;
-  };
+  };`;
 
+  /**
+   * Show options according to what is writen in input
+   */
+  code += `
   setFiltered${TextTransformation.pascalfy(
     element.autocomplete.name
   )} = async (${iterations ? iterations : ""}) => {
     try {
       ${array
-      ? `this.loading${TextTransformation.pascalfy(element.autocomplete.name)}[${iterations?.split(": any")[0]}] = true;`
-      : `this.loading${TextTransformation.pascalfy(element.autocomplete.name)} = true;`
+      ? `this.loading${TextTransformation.pascalfy(
+        element.autocomplete.name
+      )}[${iterations?.split(": any")[0]}] = true;`
+      : `this.loading${TextTransformation.pascalfy(
+        element.autocomplete.name
+      )} = true;`
     }
       const paramsToFilter = [${element.autocomplete.optionsApi.paramsToFilter.map(
       (element) => {
@@ -208,8 +258,12 @@ const setAutocompleteMethod = (
       element.autocomplete.name
     )} = result.data.result;
           ${array
-      ? `this.loading${TextTransformation.pascalfy(element.autocomplete.name)}[${iterations?.split(": any")[0]}] = false;`
-      : `this.loading${TextTransformation.pascalfy(element.autocomplete.name)} = false;`
+      ? `this.loading${TextTransformation.pascalfy(
+        element.autocomplete.name
+      )}[${iterations?.split(": any")[0]}] = false;`
+      : `this.loading${TextTransformation.pascalfy(
+        element.autocomplete.name
+      )} = false;`
     }
         })
         .catch(async err => {
@@ -230,10 +284,15 @@ const setAutocompleteMethod = (
       );
       this.sendErrorMessage(message);
     };
-  };
+  };`;
+
+  /**
+   * Call with debounce to setFiltered function
+   */
+  code += `
   callSetFiltered${TextTransformation.pascalfy(
-      element.autocomplete.name
-    )} = MyPerformance.debounce((${iterations ? iterations : ""
+    element.autocomplete.name
+  )} = MyPerformance.debounce((${iterations ? iterations : ""
     }) => this.setFiltered${TextTransformation.pascalfy(
       element.autocomplete.name
     )}(${iterations ? iterations?.replace(/: any/g, "") : ""}));

@@ -59,7 +59,6 @@ const setFormMethodsByElements = (
     }
 
     if (element.autocomplete) {
-      console.log(array, 65);
       code += setAutocompleteMethod(object, element, array);
     }
 

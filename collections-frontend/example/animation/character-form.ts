@@ -112,8 +112,21 @@ export const CHARACTER_FORM: MainInterface = {
                     },
                     {
                       autocomplete: {
-                        label: "Autocomplete múltiplo no rolê",
+                        label: "Autocomplete único no rolê",
                         name: "autocompleteArrayTab",
+                        type: FormInputTypeEnum.Text,
+                        optionsApi: {
+                          labelField: ["name", "animationId"],
+                          valueField: "_id",
+                          paramsToFilter: ["name"],
+                          endpoint: "characters",
+                        },
+                      }
+                    },
+                    {
+                      autocomplete: {
+                        label: "Autocomplete múltiplo no rolê",
+                        name: "autocompleteMultipleArrayTab",
                         type: FormInputTypeEnum.Text,
                         optionsApi: {
                           labelField: ["name", "animationId"],

@@ -1,13 +1,13 @@
-import * as fs from "fs";
 import * as chp from "child_process";
+import * as fs from "fs";
+import { FormElementInterface } from "../../../../interfaces/form";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
-import { setFormControllerImports } from "./imports/main";
-import { setFormControllerProperties } from "./properties/main";
-import { setFormControllerConstructorParams } from "./constructor-params/main";
 import { setFormControllerConstructorArguments } from "./constructor-args/main";
+import { setFormControllerConstructorParams } from "./constructor-params/main";
+import { setFormControllerImports } from "./imports/main";
 import { setFormControllerMethods } from "./methods/main";
-import { FormElementInterface } from "../../../../interfaces/form";
+import { setFormControllerProperties } from "./properties/main";
 
 /**
  * SET CODE
@@ -30,7 +30,7 @@ const setFormController = (object: MainInterface, mainArray: Array<MainInterface
   let _constructorArguments = setFormControllerConstructorArguments(object);
   let code = ``;
 
-  object.form.elements.forEach(element => {    
+  object.form.elements.forEach(element => {
     verifyFormElement(element);
   });
 
@@ -40,11 +40,11 @@ const setFormController = (object: MainInterface, mainArray: Array<MainInterface
   @Component({
     selector: "app-${TextTransformation.kebabfy(object.form.id)}",
     templateUrl: "./${TextTransformation.kebabfy(
-      object.form.id
-    )}.component.html",
+    object.form.id
+  )}.component.html",
     styleUrls: ["./${TextTransformation.kebabfy(
-      object.form.id
-    )}.component.scss"],
+    object.form.id
+  )}.component.scss"],
   })
   export class ${TextTransformation.pascalfy(object.form.id)}Component ${_hasCondition ? `implements OnChanges` : ``}{
     ${_properties}
@@ -80,7 +80,7 @@ const verifyFormElement = (element: FormElementInterface): void => {
       _hasCondition = true;
     }
   }
-}
+};
 
 /**
  * JOIN CODE AND ARCHITECTURE
@@ -95,11 +95,10 @@ const setFormArchitectureAndWriteToFile = (
     return "";
   }
 
-  const filePath = `${
-    object.projectPath
-  }/src/app/components/${TextTransformation.kebabfy(
-    object.form.id
-  )}/${TextTransformation.kebabfy(object.form.id)}.component.ts`;
+  const filePath = `${object.projectPath
+    }/src/app/components/${TextTransformation.kebabfy(
+      object.form.id
+    )}/${TextTransformation.kebabfy(object.form.id)}.component.ts`;
 
   try {
     fs.writeFileSync(filePath, code);

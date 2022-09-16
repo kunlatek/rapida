@@ -37,7 +37,7 @@ const setFormBuilderProperty = (
   code += setFormArrayBuilderByElementsProperty(object.form.elements);
 
   return code;
-}
+};
 
 const setFormArrayBuilderByElementsProperty = (
   formElements: Array<FormElementInterface>
@@ -62,7 +62,7 @@ const setFormArrayBuilderByElementsProperty = (
   }
 
   return code;
-}
+};
 
 const setFormBuilderByElements = (
   formElements: Array<FormElementInterface>,
@@ -71,14 +71,17 @@ const setFormBuilderByElements = (
   let code = ``;
 
   formElements.forEach(element => {
-    if (!inArray) {      
+    if (!inArray) {
       if (element.input) {
         code += `
         ${element.input.name}:[
-          {
-            ${element.input.value ? `value: '${element.input.value}'` : `value: null`}
-            ${element.input.isDisabled ? `, disabled: true` : `, disabled: false`}
-          },
+          ${element.input.type === FormInputTypeEnum.File
+            ? `[],`
+            : `{
+              ${element.input.value ? `value: '${element.input.value}'` : `value: null`}
+              ${element.input.isDisabled ? `, disabled: true` : `, disabled: false`}
+            },`
+          }
           [
         `;
         // VALIDATORS
@@ -96,9 +99,9 @@ const setFormBuilderByElements = (
         code += `
           ]
         ],
-        `;        
+        `;
       }
-  
+
       if (element.select) {
         code += `
         ${element.select.name}:[
@@ -120,9 +123,9 @@ const setFormBuilderByElements = (
         code += `
           ]
         ],
-        `;      
+        `;
       }
-  
+
       if (element.autocomplete) {
         code += `
         ${element.autocomplete.name}:[
@@ -144,9 +147,9 @@ const setFormBuilderByElements = (
         code += `
           ]
         ],
-        `;        
+        `;
       }
-  
+
       if (element.checkbox) {
         code += `
         ${element.checkbox.name}:[
@@ -171,7 +174,7 @@ const setFormBuilderByElements = (
         ],
         `;
       }
-  
+
       if (element.radio) {
         code += `
         ${element.radio.name}:[
@@ -196,27 +199,27 @@ const setFormBuilderByElements = (
         ],
         `;
       }
-  
+
       if (element.slide) {
         code += `
         ${element.slide.name}:[
           false,
           []
         ],
-        `;        
+        `;
       }
     }
-    
+
     if (element.array) {
       let inArrayLayer: any;
       for (let i = 0; i < _arrayLayer.length; i++) {
         const e = _arrayLayer[i];
-        
+
         if ((e.name === inArray)) {
           inArrayLayer = e;
         }
       }
-      
+
       if (!inArray && !inArrayLayer) {
         code += `
         ${element.array.id}: this._formBuilder.array([]),
