@@ -37,7 +37,7 @@ const setControllerImports = (object: MainInterface): string => {
   )}.repository';
   import {ChartService, StorageService} from '../services';
   import {serverMessages} from '../utils/server-messages';
-  import {getRelatedElements} from '../utils/general-functions';
+  import {getRelatedElement, getRelatedElements} from '../utils/general-functions';
   ${_relatedRepositoriesImports ? `import {${_relatedRepositoriesImports}} from '../repositories';` : ''}
   `;
 
@@ -52,19 +52,19 @@ const setRepositoriesImportsByElement = (
   const modelName = object.form!.id.replace("Form", "");
   const value = Object.values(element)[0];
 
-  if (value.optionsApi && value.optionsApi.endpoint) {
-    const className = TextTransformation.setIdToClassName(
-      TextTransformation.pascalfy(
-        TextTransformation.singularize(
-          value.optionsApi.endpoint.split("-").join(" ")
-        )
-      )
-    );
+  // if (value.optionsApi && value.optionsApi.endpoint) {
+  //   const className = TextTransformation.setIdToClassName(
+  //     TextTransformation.pascalfy(
+  //       TextTransformation.singularize(
+  //         value.optionsApi.endpoint.split("-").join(" ")
+  //       )
+  //     )
+  //   );
 
-    if (value.isMultiple) {
-      code += createRepositoriesImports(modelName, className);
-    }
-  }
+  //   if (value.isMultiple) {
+  //     code += createRepositoriesImports(modelName, className);
+  //   }
+  // }
 
   return code;
 };

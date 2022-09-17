@@ -80,6 +80,33 @@ export const CHARACTER_FORM: MainInterface = {
                         tooltip: "Um valor qualquer acerca do atributo pré definido"
                       }
                     },
+                    {
+                      autocomplete: {
+                        label: "Outras animações",
+                        name: "otherAnimations",
+                        type: FormInputTypeEnum.Text,
+                        optionsApi: {
+                          endpoint: "animations",
+                          labelField: ["name", "_id"],
+                          valueField: "_id",
+                          paramsToFilter: ["name", "startDate"],
+                        },
+                        isMultiple: true,
+                      }
+                    },
+                    {
+                      autocomplete: {
+                        label: "Outro personagem",
+                        name: "otherCharacter",
+                        type: FormInputTypeEnum.Text,
+                        optionsApi: {
+                          endpoint: "characters",
+                          labelField: ["name"],
+                          valueField: "_id",
+                          paramsToFilter: ["name"],
+                        },
+                      }
+                    },
                   ],
                 },
               },

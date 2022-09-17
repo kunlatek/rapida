@@ -49,19 +49,19 @@ const setRelatedPropertiesByElement = (
 
   let code = ``;
 
-  if (value.optionsApi && value.optionsApi.endpoint) {
-    const className = TextTransformation.setIdToClassName(
-      TextTransformation.pascalfy(
-        TextTransformation.singularize(
-          value.optionsApi.endpoint.split("-").join(" ")
-        )
-      )
-    );
+  // if (value.optionsApi && value.optionsApi.endpoint) {
+  //   const className = TextTransformation.setIdToClassName(
+  //     TextTransformation.pascalfy(
+  //       TextTransformation.singularize(
+  //         value.optionsApi.endpoint.split("-").join(" ")
+  //       )
+  //     )
+  //   );
 
-    if (value.isMultiple) {
-      code += createProperties(modelName, className);
-    }
-  }
+  //   if (value.isMultiple) {
+  //     code += createProperties(modelName, className);
+  //   }
+  // }
 
   return code;
 };
