@@ -45,6 +45,14 @@ export const CHARACTER_FORM: MainInterface = {
               },
               {
                 input: {
+                  label: "Apelido",
+                  placeholder: "Apelido do personagem",
+                  name: "nickname",
+                  type: FormInputTypeEnum.Text,
+                }
+              },
+              {
+                input: {
                   label: "Imagem",
                   placeholder: "Imagem do personagem",
                   name: "img",
@@ -93,84 +101,6 @@ export const CHARACTER_FORM: MainInterface = {
                 }
               },
             ],
-          },
-          {
-            title: "Área de teste",
-            id: "testTab",
-            elements: [
-              {
-                array: {
-                  title: "Array dentro de tab",
-                  id: "arrayTabArray",
-                  elements: [
-                    {
-                      input: {
-                        label: "Input no rolê",
-                        name: "inputArrayTab",
-                        type: FormInputTypeEnum.Text,
-                      }
-                    },
-                    {
-                      autocomplete: {
-                        label: "Autocomplete único no rolê",
-                        name: "autocompleteArrayTab",
-                        type: FormInputTypeEnum.Text,
-                        optionsApi: {
-                          labelField: ["name", "animationId"],
-                          valueField: "_id",
-                          paramsToFilter: ["name"],
-                          endpoint: "characters",
-                        },
-                      }
-                    },
-                    {
-                      autocomplete: {
-                        label: "Autocomplete múltiplo no rolê",
-                        name: "autocompleteMultipleArrayTab",
-                        type: FormInputTypeEnum.Text,
-                        optionsApi: {
-                          labelField: ["name", "animationId"],
-                          valueField: "_id",
-                          paramsToFilter: ["name"],
-                          endpoint: "characters",
-                        },
-                        isMultiple: true,
-                      }
-                    },
-                    {
-                      array: {
-                        title: "Array dentro de array dentro de tab",
-                        id: "arrayArrayTabArray",
-                        elements: [
-                          {
-                            input: {
-                              label: "Input no rolê",
-                              name: "inputArrayArrayTab",
-                              type: FormInputTypeEnum.Text
-                            }
-                          },
-                          {
-                            array: {
-                              title: "Array dentro de array dentro de array dentro de tab",
-                              id: "arrayArrayArrayTabArray",
-                              elements: [
-                                {
-                                  input: {
-                                    label: "Input no rolê",
-                                    name: "inputArrayArrayArrayTab",
-                                    type: FormInputTypeEnum.Text
-                                  }
-                                },
-                              ]
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
           },
         ],
       },
