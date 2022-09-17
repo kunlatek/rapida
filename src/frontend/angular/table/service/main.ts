@@ -6,7 +6,7 @@ import { TextTransformation } from "../../../../utils/text.transformation";
 import { FileType } from "../../core/file-type";
 import { writeToFile } from "../../core/write-to-file";
 
-let _hasAuthorization: boolean = false;
+let _hasAuthorization = false;
 /**
  * SET CODE
  * @param object
@@ -18,9 +18,9 @@ const setTableService = ({ table, projectPath }: MainInterface): string => {
     return ``;
   }
 
-  let _services: string = setTableServiceServices(table);
+  const _services: string = setTableServiceServices(table);
 
-  let code = `
+  const code = `
   import { HttpClient } from "@angular/common/http";
   import { Injectable } from "@angular/core";
   import { HttpParams } from "@angular/common/http";

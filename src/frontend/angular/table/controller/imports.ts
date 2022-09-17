@@ -2,9 +2,9 @@ import { MainInterface } from "../../../../interfaces/main";
 import { TableElementInterface } from "../../../../interfaces/table";
 import { TextTransformation } from "../../../../utils/text.transformation";
 
-let _hasArray: boolean = false;
-let _hasDialog: boolean = false;
-let _hasRemoveConfirmationDialog: boolean = false;
+const _hasArray = false;
+let _hasDialog = false;
+let _hasRemoveConfirmationDialog = false;
 
 const setTableControllerImports = ({ table }: MainInterface): string => {
   if (!table) {
@@ -46,7 +46,7 @@ const setTableControllerImports = ({ table }: MainInterface): string => {
 };
 
 const verifyTableElement = (element: TableElementInterface) => {
-  let code = ``;
+  const code = ``;
 
   if (element.row.menu) {
     element.row.menu.forEach((menuElement) => {

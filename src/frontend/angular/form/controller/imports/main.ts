@@ -2,12 +2,12 @@ import { FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 
-let _hasArray: boolean = false;
-let _hasValidator: boolean = false;
-let _hasAutocompleteMultiple: boolean = false;
-let _hasAutocomplete: boolean = false;
-let _hasCondition: boolean = false;
-let _hasInputApiRequest: boolean = false;
+let _hasArray = false;
+let _hasValidator = false;
+let _hasAutocompleteMultiple = false;
+let _hasAutocomplete = false;
+let _hasCondition = false;
+let _hasInputApiRequest = false;
 
 const setFormControllerImports = (object: MainInterface): string => {
   if (!object.form) {
@@ -26,7 +26,7 @@ const setFormControllerImports = (object: MainInterface): string => {
     verifyFormElement(element);
   });
 
-  let code = `
+  const code = `
   import { Component, ${_hasAutocompleteMultiple ? `ElementRef, ViewChild,` : ``} ${_hasCondition ? `OnChanges,` : ``
     }} from "@angular/core";
   import { FormBuilder, FormGroupDirective, FormGroup, ${_hasArray ? "FormArray," : ""

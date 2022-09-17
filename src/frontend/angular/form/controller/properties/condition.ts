@@ -2,7 +2,7 @@ import { ConditionEnum } from "../../../../../enums/form";
 import { FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 
-let _conditionProperties: Array<string> = [];
+const _conditionProperties: Array<string> = [];
 
 const setCondition = (
   object: MainInterface
@@ -21,7 +21,7 @@ const setCondition = (
 const setConditionByElements = (
   object: MainInterface,
   elements: Array<FormElementInterface>,
-  isArray: boolean = false
+  isArray = false
 ): string => {
   const formElements = [
     "input",

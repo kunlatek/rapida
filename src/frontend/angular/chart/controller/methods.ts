@@ -22,8 +22,8 @@ const setChartControllerMethods = (object: MainInterface): string => {
         : this.chartInput.companies.join()
       }\`;
       this.set${TextTransformation.kebabfy(
-        object.chart.id
-      )}Service(this.mainFilter);
+    object.chart.id
+  )}Service(this.mainFilter);
     }
 
     if (this.chartInput?.time === "3") {
@@ -41,8 +41,8 @@ const setChartControllerMethods = (object: MainInterface): string => {
         : this.chartInput.companies.join()
       }\`;
       this.set${TextTransformation.kebabfy(
-        object.chart.id
-      )}Service(this.mainFilter)
+    object.chart.id
+  )}Service(this.mainFilter)
     }
   }
   
@@ -62,8 +62,7 @@ const setChartControllerMethods = (object: MainInterface): string => {
       event?: ChartEvent;
       active?: any;
     }): void => {
-      this.chartFilterObject = this.${
-        object.chart.id
+      this.chartFilterObject = this.${object.chart.id
       }DataSource.identifiers[active[0].index];
       this.chartFilter = "";
       for (const key in this.chartFilterObject) {
@@ -77,8 +76,8 @@ const setChartControllerMethods = (object: MainInterface): string => {
     };
 
     set${TextTransformation.kebabfy(
-      object.chart.id
-    )}Service = (filter: string = '') => {
+        object.chart.id
+      )}Service = (filter: string = '') => {
       this.isLoading = true;
       this._${object.chart.id}Service.getAll(filter)
       .then((result: any) => {
@@ -88,12 +87,10 @@ const setChartControllerMethods = (object: MainInterface): string => {
               if (Object.prototype.hasOwnProperty.call(object, key)) {
                 const element = object[key];
                 
-                object.backgroundColor = this.${
-                  object.chart.id
-                }Background[index];
-                object.hoverBackgroundColor = this.${
-                  object.chart.id
-                }Background[index];
+                object.backgroundColor = this.${object.chart.id
+      }Background[index];
+                object.hoverBackgroundColor = this.${object.chart.id
+      }Background[index];
               }
             }
 
@@ -105,12 +102,10 @@ const setChartControllerMethods = (object: MainInterface): string => {
           this.${object.chart.id}DataSource = [];
         }
         this.isLoading = false;
-        this.${object.chart.id}BarChartData.datasets = this.${
-      object.chart.id
-    }DataSource.datasets;
-        this.${object.chart.id}BarChartData.labels = this.${
-      object.chart.id
-    }DataSource.labels;
+        this.${object.chart.id}BarChartData.datasets = this.${object.chart.id
+      }DataSource.datasets;
+        this.${object.chart.id}BarChartData.labels = this.${object.chart.id
+      }DataSource.labels;
       })
       .catch(async err => {
         if (err.error.logMessage === 'jwt expired') {
@@ -162,12 +157,10 @@ const setChartControllerMethods = (object: MainInterface): string => {
                 if (Object.prototype.hasOwnProperty.call(object, key)) {
                   const element = object[key];
                   
-                  object.backgroundColor = this.${
-                    object.chart.id
-                  }Background[index];
-                  object.hoverBackgroundColor = this.${
-                    object.chart.id
-                  }Background[index];
+                  object.backgroundColor = this.${object.chart.id
+        }Background[index];
+                  object.hoverBackgroundColor = this.${object.chart.id
+        }Background[index];
                 }
               }
   
@@ -179,12 +172,10 @@ const setChartControllerMethods = (object: MainInterface): string => {
             this.${object.chart.id}DataSource = [];
           }
           this.isLoading = false;
-          this.${object.chart.id}BarChartData.datasets = this.${
-        object.chart.id
-      }DataSource.datasets;
-          this.${object.chart.id}BarChartData.labels = this.${
-        object.chart.id
-      }DataSource.labels;
+          this.${object.chart.id}BarChartData.datasets = this.${object.chart.id
+        }DataSource.datasets;
+          this.${object.chart.id}BarChartData.labels = this.${object.chart.id
+        }DataSource.labels;
         })
         .catch(async err => {
           if (err.error.logMessage === 'jwt expired') {
@@ -237,15 +228,12 @@ const setChartControllerMethods = (object: MainInterface): string => {
                 if (Object.prototype.hasOwnProperty.call(object, key)) {
                   const element = object[key];
                   
-                  object.backgroundColor = this.${
-                    object.chart.id
-                  }Background[index];
-                  object.hoverBackgroundColor = this.${
-                    object.chart.id
-                  }Background[index];
-                  object.hoverBorderColor = this.${
-                    object.chart.id
-                  }Background[index];
+                  object.backgroundColor = this.${object.chart.id
+        }Background[index];
+                  object.hoverBackgroundColor = this.${object.chart.id
+        }Background[index];
+                  object.hoverBorderColor = this.${object.chart.id
+        }Background[index];
                 }
               }
   
@@ -258,12 +246,10 @@ const setChartControllerMethods = (object: MainInterface): string => {
           }
           
           this.isLoading = false;
-          this.${object.chart.id}PieChartData.datasets = this.${
-        object.chart.id
-      }DataSource.datasets;
-          this.${object.chart.id}PieChartData.labels = this.${
-        object.chart.id
-      }DataSource.labels;
+          this.${object.chart.id}PieChartData.datasets = this.${object.chart.id
+        }DataSource.datasets;
+          this.${object.chart.id}PieChartData.labels = this.${object.chart.id
+        }DataSource.labels;
         })
         .catch(async err => {
           if (err.error.logMessage === 'jwt expired') {

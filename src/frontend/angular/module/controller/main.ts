@@ -19,11 +19,11 @@ const setModuleController = (object: MainInterface, mainArray: Array<MainInterfa
     return ``;
   }
   
-  let _imports = setModuleControllerImports(object);
-  let _ngModuleDeclarations = setNgModuleDeclarations(object);
-  let _ngModuleImports = setNgModuleImports(object);
+  const _imports = setModuleControllerImports(object);
+  const _ngModuleDeclarations = setNgModuleDeclarations(object);
+  const _ngModuleImports = setNgModuleImports(object);
 
-  let code = `
+  const code = `
   ${_imports}
 
   const maskConfig: Partial < IConfig > = {

@@ -9,7 +9,7 @@ const setChartControllerConstructorArguments = (
     return ``;
   }
 
-  let code = `
+  const code = `
   this.set${TextTransformation.pascalfy(object.chart.id)}Service(
       this.mainFilter
   );

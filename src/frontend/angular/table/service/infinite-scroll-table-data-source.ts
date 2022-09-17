@@ -13,7 +13,7 @@ const setTableInfiniteScrollService = ({ table, projectPath }: MainInterface): s
     return ` `;
   }
 
-  let code = `
+  const code = `
   import { ListRange } from '@angular/cdk/collections';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { DataSource } from '@angular/cdk/table';

@@ -15,9 +15,9 @@ import { TextTransformation } from "../../../../utils/text.transformation";
     return ``;
   }
 
-  let components = setModuleComponents(object.module);
+  const components = setModuleComponents(object.module);
   
-  let code = `
+  const code = `
   ${components}
   `;
   

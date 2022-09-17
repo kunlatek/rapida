@@ -5,7 +5,7 @@ import { TextTransformation } from "../../../../utils/text.transformation";
 import { ServiceInterface } from "../../../../interfaces/form";
 import { ServiceFunctionsEnum } from "../../../../enums/form";
 
-let _hasAuthorization: boolean = false;
+let _hasAuthorization = false;
 
 /**
  * SET CODE
@@ -18,9 +18,9 @@ const setChartService = (object: MainInterface, mainArray: Array<MainInterface> 
     return ``;
   }
 
-  let _services: string = setChartServiceServices(object);
+  const _services: string = setChartServiceServices(object);
 
-  let code = `
+  const code = `
   import { HttpClient } from "@angular/common/http";
   import { Injectable } from "@angular/core";
 
