@@ -40,7 +40,7 @@ const setAutocomplete = (
       )}View" 
             (removed)="remove${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}(${element.autocomplete.name}Item${iterations ? ", " + iterations.replace(": any", "") : ""
+      )}(${element.autocomplete.name}Item${iterations ? ", " + iterations.replace(/: any/g, "") : ""
       })">
             {{${element.autocomplete.name}Item}}
             <button matChipRemove>
@@ -60,11 +60,11 @@ const setAutocomplete = (
       }SeparatorKeysCodes" 
             (matChipInputTokenEnd)="add${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}($event${iterations ? ", " + iterations.replace(": any", "") : ""
+      )}($event${iterations ? ", " + iterations.replace(/: any/g, "") : ""
       })" 
             (keyup)="callSetFiltered${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}(${iterations ? iterations.replace(": any", "") : ""})" 
+      )}(${iterations ? iterations.replace(/: any/g, "") : ""})" 
             #${element.autocomplete.name}Input 
             ${required}
           >
@@ -75,7 +75,7 @@ const setAutocomplete = (
       )}="matAutocomplete" 
           (optionSelected)="selected${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}($event${iterations ? ", " + iterations.replace(": any", "") : ""})"
+      )}($event${iterations ? ", " + iterations.replace(/: any/g, "") : ""})"
         >
         <mat-option disabled *ngIf="
           ${array
@@ -143,7 +143,7 @@ const setAutocomplete = (
     )}" 
               (keyup)="callSetFiltered${TextTransformation.pascalfy(
       element.autocomplete.name
-    )}(${iterations ? iterations.replace(": any", "") : ""})" 
+    )}(${iterations ? iterations.replace(/: any/g, "") : ""})" 
               ${required}
         >
         <mat-autocomplete 

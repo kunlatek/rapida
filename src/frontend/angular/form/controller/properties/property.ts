@@ -1,4 +1,3 @@
-import { FormInputTypeEnum } from "../../../../../enums/form";
 import { ArrayInterface, FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
@@ -27,9 +26,6 @@ const setFormPropertiesByElements = (
   let code = ``;
 
   elements.forEach(element => {
-    if (element.input?.type === FormInputTypeEnum.File) {
-      code += `fileName: string = '';`;
-    }
 
     if (element.tabs) {
       element.tabs.forEach(tab => {
