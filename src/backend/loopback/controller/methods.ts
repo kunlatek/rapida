@@ -16,9 +16,21 @@ const setGetRelatedElementsInArrayType = (object: MainInterface): string => {
 
   elements.forEach((element) => {
     const type = Object.keys(element)[0];
-    if (type === 'array') {
-      const value = Object.values(element)[0];
-      const relatedType = TextTransformation.setIdToClassName(value.id);
+    const value = Object.values(element)[0];
+
+    if (value.optionsApi) {
+      const parentCollection = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint?.split('-').join(' ') || '')));
+
+      _findRelatedElements +=
+        `
+        data.${value.name} = 
+        ${value.isMultiple ?
+          `await getRelatedElements('${parentCollection}', data?.${value.name} || [])`
+          :
+          `await getRelatedElement('${parentCollection}', data?.${value.name})`
+        }
+      `;
+    } else if (type === 'array') {
 
       const createMultidimensionalArrayFindRelatedCode = (
         elements: Array<FormElementInterface>,
@@ -29,14 +41,21 @@ const setGetRelatedElementsInArrayType = (object: MainInterface): string => {
         let _findRelatedElementsToReturn = ``;
         elements?.forEach((elementProperty: FormElementInterface) => {
 
-          if (elementProperty.autocomplete || elementProperty.array) {
+          const relatedValue = Object.values(elementProperty)[0];
 
-            if (elementProperty.autocomplete) {
-              const collection = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(elementProperty.autocomplete?.optionsApi?.endpoint?.split('-').join(' ') || '')));
+          if (relatedValue.optionsApi || elementProperty.array) {
+
+            if (relatedValue.optionsApi) {
+              const collection = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(relatedValue.optionsApi.endpoint?.split('-').join(' ') || '')));
+
               _findRelatedElementsToReturn +=
                 `
-                const relatedData_${relatedType}_${value.id}_${elementProperty.autocomplete.name} = await getRelatedElements('${collection}', ${isFirstArray ? 'data' : TextTransformation.singularize(value.id)}?.${relatedId}?.map(el => el.${elementProperty.autocomplete.name}) || []);
-                ${TextTransformation.singularize(relatedId)}.${elementProperty.autocomplete.name.slice(0, -2)} = relatedData_${relatedType}_${value.id}_${elementProperty.autocomplete.name}.find(childEl => childEl._id.toString() === ${TextTransformation.singularize(relatedId)}.${elementProperty.autocomplete.name})
+                ${TextTransformation.singularize(relatedId)}.${relatedValue.name} = 
+                ${relatedValue.isMultiple ?
+                  `await getRelatedElements('${collection}', ${isFirstArray ? 'data' : TextTransformation.singularize(relatedId)}?.${relatedValue.name} || [])`
+                  :
+                  `await getRelatedElement('${collection}', ${isFirstArray ? 'data' : TextTransformation.singularize(relatedId)}?.${relatedValue.name})`
+                }
               `;
             } else if (elementProperty.array) {
               _findRelatedElementsToReturn +=
@@ -64,7 +83,7 @@ const setGetRelatedElementsInArrayType = (object: MainInterface): string => {
         for(let ${value.id}Index = 0; ${value.id}Index < data.${value.id}?.length!; ${value.id}Index++){
           const ${TextTransformation.singularize(value.id)} = data.${value.id}![${value.id}Index];
           
-          ${createMultidimensionalArrayFindRelatedCode(value.elements, value.id, true)}
+          ${createMultidimensionalArrayFindRelatedCode(value.elements, value.id, false)}
         }
       `;
     }
@@ -127,8 +146,8 @@ const setControllerMethods = (object: MainInterface): string => {
       
           const dataCreated = await this.repository.create({...dataWithoutNullProperties, _createdBy: createdBy, _ownerId: ownerId});
           
-          const dataToWorkInRelation = data;
-          const idToWorkInRelation = dataCreated._id;
+          // const dataToWorkInRelation = data;
+          // const idToWorkInRelation = dataCreated._id;
           ${_createRelated}
           const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
 
@@ -269,17 +288,20 @@ const setControllerMethods = (object: MainInterface): string => {
       @param.query.string('locale') locale?: LocaleEnum,
   ): Promise<IHttpResponse> {
       try {
-          let dataToWorkInRelation = await this.repository.findById(id);
+          // let dataToWorkInRelation = await this.repository.findById(id);
           ${_deleteRelated}
+          
           const dataWithoutNullProperties = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null));
           
           ${_storageFile}
           ${setStorageFileInArrayType(object)}
   
           await this.repository.updateById(id, dataWithoutNullProperties);
-          const idToWorkInRelation = dataToWorkInRelation._id;
-          dataToWorkInRelation = JSON.parse(JSON.stringify(data));
+          
+          // const idToWorkInRelation = dataToWorkInRelation._id;
+          //dataToWorkInRelation = JSON.parse(JSON.stringify(data));
           ${_createRelated}
+          
           const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
       
           return HttpResponseToClient.noContentHttpResponse({
@@ -320,8 +342,9 @@ const setControllerMethods = (object: MainInterface): string => {
       @param.query.string('locale') locale?: LocaleEnum,
   ): Promise<IHttpResponse> {
       try {
-          let dataToWorkInRelation = await this.repository.findById(id);
+          // let dataToWorkInRelation = await this.repository.findById(id);
           ${_deleteRelated}
+          
           const dataWithoutNullProperties = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null));
           
           ${_storageFile}
@@ -329,8 +352,8 @@ const setControllerMethods = (object: MainInterface): string => {
   
           await this.repository.updateById(id, dataWithoutNullProperties);
 
-          const idToWorkInRelation = dataToWorkInRelation._id;
-          dataToWorkInRelation = JSON.parse(JSON.stringify(data));
+          // const idToWorkInRelation = dataToWorkInRelation._id;
+          // dataToWorkInRelation = JSON.parse(JSON.stringify(data));
           ${_createRelated}
 
           const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
@@ -508,19 +531,19 @@ const setPropertiesToFindByElement = (
 
   const value = Object.values(element)[0];
 
-  if (value.optionsApi && value.optionsApi.endpoint) {
-    const propertyName = TextTransformation.setIdToPropertyName(
-      TextTransformation.pascalfy(
-        TextTransformation.singularize(
-          value.optionsApi.endpoint.split("-").join(" ")
-        )
-      )
-    );
-    if (value.isMultiple)
-      code += `'${propertyName}',`;
-    else
-      code += `'${value.name.slice(0, -2)}',`;
-  }
+  // if (value.optionsApi && value.optionsApi.endpoint) {
+  //   const propertyName = TextTransformation.setIdToPropertyName(
+  //     TextTransformation.pascalfy(
+  //       TextTransformation.singularize(
+  //         value.optionsApi.endpoint.split("-").join(" ")
+  //       )
+  //     )
+  //   );
+  //   if (value.isMultiple)
+  //     code += `'${propertyName}',`;
+  //   else
+  //     code += `'${value.name.slice(0, -2)}',`;
+  // }
 
   return code;
 };
@@ -534,18 +557,18 @@ const setCreateAllMethodsByElement = (
   const modelName: string = object.form!.id.replace("Form", "");
   const value = Object.values(element)[0];
 
-  if (value.optionsApi && value.optionsApi.endpoint) {
-    const className = TextTransformation.setIdToClassName(
-      TextTransformation.pascalfy(
-        TextTransformation.singularize(
-          value.optionsApi.endpoint.split("-").join(" ")
-        )
-      )
-    );
-    if (value.isMultiple) {
-      code += createCreateAllMethods(modelName, className, value.name);
-    }
-  }
+  // if (value.optionsApi && value.optionsApi.endpoint) {
+  //   const className = TextTransformation.setIdToClassName(
+  //     TextTransformation.pascalfy(
+  //       TextTransformation.singularize(
+  //         value.optionsApi.endpoint.split("-").join(" ")
+  //       )
+  //     )
+  //   );
+  //   if (value.isMultiple) {
+  //     code += createCreateAllMethods(modelName, className, value.name);
+  //   }
+  // }
 
   return code;
 };
@@ -559,18 +582,18 @@ const setDeleteAllMethodsByElement = (
   const modelName: string = object.form!.id.replace("Form", "");
   const value = Object.values(element)[0];
 
-  if (value.optionsApi && value.optionsApi.endpoint) {
-    const className = TextTransformation.setIdToClassName(
-      TextTransformation.pascalfy(
-        TextTransformation.singularize(
-          value.optionsApi.endpoint.split("-").join(" ")
-        )
-      )
-    );
-    if (value.isMultiple) {
-      code += createDeleteAllMethods(modelName, className, value.name);
-    }
-  }
+  // if (value.optionsApi && value.optionsApi.endpoint) {
+  //   const className = TextTransformation.setIdToClassName(
+  //     TextTransformation.pascalfy(
+  //       TextTransformation.singularize(
+  //         value.optionsApi.endpoint.split("-").join(" ")
+  //       )
+  //     )
+  //   );
+  //   if (value.isMultiple) {
+  //     code += createDeleteAllMethods(modelName, className, value.name);
+  //   }
+  // }
 
   return code;
 };

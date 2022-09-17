@@ -50,24 +50,22 @@ const setArrayTypeModels = (formElements: Array<FormElementInterface>): string =
             const _relatedTypeInMultidimensionalArray = TextTransformation.setIdToClassName(elementProperty.array.id);
             const _propertiesCreatedInMultidimensionalArray = createProperties(elementProperty.array.elements);
 
-            const _arrayOfRelatedPropertiesInMultidimensionalArray = _propertiesCreatedInMultidimensionalArray._relatedProperties.length ?
-              `
-            @property({
-              type: 'array',
-              itemType: 'object',
-              jsonSchema: {nullable: true},
-              default: [${_propertiesCreatedInMultidimensionalArray._relatedProperties}]
-            })
-            __relatedAttributes?: object[];
-            `
-              : ``;
+            // const _arrayOfRelatedPropertiesInMultidimensionalArray = _propertiesCreatedInMultidimensionalArray._relatedProperties.length ?
+            //   `
+            // @property({
+            //   type: 'array',
+            //   itemType: 'object',
+            //   jsonSchema: {nullable: true},
+            //   default: [${_propertiesCreatedInMultidimensionalArray._relatedProperties}]
+            // })
+            // __relatedAttributes?: object[];
+            // `
+            //   : ``;
 
             arrayTypeModels += `
             @model()
             class ${_relatedTypeInMultidimensionalArray} extends Entity {
               ${_propertiesCreatedInMultidimensionalArray._properties}
-      
-              ${_arrayOfRelatedPropertiesInMultidimensionalArray}
             }
           `;
           } else if (elementProperty.autocomplete) {
@@ -86,25 +84,23 @@ const setArrayTypeModels = (formElements: Array<FormElementInterface>): string =
       _properties += _propertiesCreated._properties;
       _relatedProperties += _propertiesCreated._relatedProperties;
 
-      const _arrayOfRelatedProperties = _relatedProperties.length ?
-        `
-      @property({
-        type: 'array',
-        itemType: 'object',
-        jsonSchema: {nullable: true},
-        default: [${_relatedProperties}]
-      })
-      __relatedAttributes?: object[];
-      `
-        : ``;
+      // const _arrayOfRelatedProperties = _relatedProperties.length ?
+      //   `
+      // @property({
+      //   type: 'array',
+      //   itemType: 'object',
+      //   jsonSchema: {nullable: true},
+      //   default: [${_relatedProperties}]
+      // })
+      // __relatedAttributes?: object[];
+      // `
+      //   : ``;
 
       code += `
       ${arrayTypeModels}
       @model()
       class ${relatedType} extends Entity {
         ${_properties}
-
-        ${_arrayOfRelatedProperties}
       }
       `;
     }
@@ -208,30 +204,31 @@ const setByElement = (
         )
     );
 
-  if (value.optionsApi && value.optionsApi.endpoint) {
-    const className = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
-    const propertyName = TextTransformation.setIdToPropertyName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
-    const modelNameClass = TextTransformation.setIdToClassName(modelName);
+  // if (value.optionsApi && value.optionsApi.endpoint) {
+  //   const className = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
+  //   const propertyName = TextTransformation.setIdToPropertyName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
+  //   const modelNameClass = TextTransformation.setIdToClassName(modelName);
 
-    if (value.isMultiple) {
-      code += `
-        @property({ type: 'array', itemType: 'any'})
-        ${value.name}?: any[];
-        @hasMany(() => ${className}, {
-          through: {
-            model: () => ${modelNameClass}Has${className},
-            ${modelNameClass === className ? `keyFrom: '${propertyName}Id', keyTo: '${propertyName}RelatedId',` : ''}
-          }
-        })
-        ${propertyName}: ${className}[];
-        `;
-    } else {
-      code += `
-        @belongsTo(() => ${className})
-        ${value.name}?: String;
-        `;
-    }
-  } else if (type === 'array') {
+  //   if (value.isMultiple) {
+  //     code += `
+  //       @property({ type: 'array', itemType: 'any'})
+  //       ${value.name}?: any[];
+  //       @hasMany(() => ${className}, {
+  //         through: {
+  //           model: () => ${modelNameClass}Has${className},
+  //           ${modelNameClass === className ? `keyFrom: '${propertyName}Id', keyTo: '${propertyName}RelatedId',` : ''}
+  //         }
+  //       })
+  //       ${propertyName}: ${className}[];
+  //       `;
+  //   } else {
+  //     code += `
+  //       @belongsTo(() => ${className})
+  //       ${value.name}?: String;
+  //       `;
+  //   }
+  // } else
+  if (type === 'array') {
     const relatedType = TextTransformation.setIdToClassName(value.id);
 
     code += `

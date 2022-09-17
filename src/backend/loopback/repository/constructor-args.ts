@@ -34,22 +34,22 @@ const setRepositoryConstructorArgumentsByElement = (
 
   let code = ``;
 
-  if (value.optionsApi && value.optionsApi.endpoint) {
-    const className = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
-    const propertyName = TextTransformation.setIdToPropertyName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
+  // if (value.optionsApi && value.optionsApi.endpoint) {
+  //   const className = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
+  //   const propertyName = TextTransformation.setIdToPropertyName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
 
-    if (value.isMultiple) {
-      code += `
-        this.${propertyName} = this.createHasManyThroughRepositoryFactoryFor('${propertyName}', ${modelName.toLowerCase() === className.toLowerCase() ? 'Getter.fromValue(this)' : `${propertyName}RepositoryGetter`}, ${modelName}Has${className}RepositoryGetter,);
-        this.registerInclusionResolver('${propertyName}', this.${propertyName}.inclusionResolver);
-        `;
-    } else {
-      code += `
-        this.${value.name.slice(0, -2)} = this.createBelongsToAccessorFor('${value.name.slice(0, -2)}', ${modelName.toLowerCase() === className.toLowerCase() ? 'Getter.fromValue(this)' : `${propertyName}RepositoryGetter`},);
-        this.registerInclusionResolver('${value.name.slice(0, -2)}', this.${value.name.slice(0, -2)}.inclusionResolver);
-        `;
-    }
-  }
+  //   if (value.isMultiple) {
+  //     code += `
+  //       this.${propertyName} = this.createHasManyThroughRepositoryFactoryFor('${propertyName}', ${modelName.toLowerCase() === className.toLowerCase() ? 'Getter.fromValue(this)' : `${propertyName}RepositoryGetter`}, ${modelName}Has${className}RepositoryGetter,);
+  //       this.registerInclusionResolver('${propertyName}', this.${propertyName}.inclusionResolver);
+  //       `;
+  //   } else {
+  //     code += `
+  //       this.${value.name.slice(0, -2)} = this.createBelongsToAccessorFor('${value.name.slice(0, -2)}', ${modelName.toLowerCase() === className.toLowerCase() ? 'Getter.fromValue(this)' : `${propertyName}RepositoryGetter`},);
+  //       this.registerInclusionResolver('${value.name.slice(0, -2)}', this.${value.name.slice(0, -2)}.inclusionResolver);
+  //       `;
+  //   }
+  // }
 
   return code;
 };
