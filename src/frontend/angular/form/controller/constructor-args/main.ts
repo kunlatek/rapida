@@ -12,9 +12,9 @@ const setFormControllerConstructorArguments = (
     console.info("Only forms set here");
     return ``;
   }
-  let _optionsCreation: string = ``;
-  let _patchArrayValues: string = ``;
-  let _autocompleteToEdit: string = ``;
+  let _optionsCreation = ``;
+  let _patchArrayValues = ``;
+  let _autocompleteToEdit = ``;
 
   _optionsCreation += setFormSelectOptions(object);
   _patchArrayValues = setJsonToPatchValue(object, object.form.elements);

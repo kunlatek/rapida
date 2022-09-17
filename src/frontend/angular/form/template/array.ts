@@ -11,7 +11,7 @@ let _arraysInAFlow: Array<ArrayFeaturesInterface> = JSON.parse(
 
 const setArrayLayer = (
   elements: Array<FormElementInterface>,
-  index: number = 0,
+  index = 0,
   parentArray: string | undefined = undefined
 ) => {
   const iterationsIds = ["i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t"];
@@ -26,7 +26,7 @@ const setArrayLayer = (
   );
 
   let hasArray = false;
-  let arraysInThisLayer: Array<{
+  const arraysInThisLayer: Array<{
     id: string;
     elements: Array<FormElementInterface>;
   }> = [];

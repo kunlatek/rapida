@@ -7,7 +7,7 @@ const setChartControllerConstructorParams = (object: MainInterface): string => {
     return ``;
   }
 
-  let code = `
+  const code = `
   private _router: Router,
   private _formBuilder: FormBuilder,
   private _activatedRoute: ActivatedRoute,

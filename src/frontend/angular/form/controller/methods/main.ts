@@ -9,8 +9,8 @@ import {
 } from "./condition";
 import { setFileSubmit, setMethod, setValueBeforeSubmit } from "./method";
 
-let _hasCondition: boolean = false;
-let _hasConditionInArray: boolean = false;
+let _hasCondition = false;
+let _hasConditionInArray = false;
 
 const setFormControllerMethods = (object: MainInterface): string => {
   if (!object.form) {
@@ -20,14 +20,14 @@ const setFormControllerMethods = (object: MainInterface): string => {
 
   setArray(object);
 
-  let _conditionsMethods = setCondition(object, object.form.elements);
-  let _conditionsMethodsOverEdition = setConditionOverEdition(
+  const _conditionsMethods = setCondition(object, object.form.elements);
+  const _conditionsMethodsOverEdition = setConditionOverEdition(
     object,
     object.form.elements
   );
-  let _methods = setMethod(object);
-  let _fileSubmit = setFileSubmit(object);
-  let _valueTreatmentBeforeSubmit = setValueBeforeSubmit(
+  const _methods = setMethod(object);
+  const _fileSubmit = setFileSubmit(object);
+  const _valueTreatmentBeforeSubmit = setValueBeforeSubmit(
     object,
     object.form.elements
   );
@@ -137,7 +137,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
 
 const verifyFormElement = (
   element: FormElementInterface,
-  isArray: boolean = false
+  isArray = false
 ): void => {
   const formElements = [
     "input",

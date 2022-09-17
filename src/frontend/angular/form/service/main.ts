@@ -5,7 +5,7 @@ import { TextTransformation } from "../../../../utils/text.transformation";
 import { FormElementInterface, ServiceInterface } from "../../../../interfaces/form";
 import { ServiceFunctionsEnum } from "../../../../enums/form";
 
-let _hasAuthorization: boolean = false;
+let _hasAuthorization = false;
 
 /**
  * SET CODE
@@ -18,7 +18,7 @@ const setFormService = (object: MainInterface, mainArray: Array<MainInterface> |
     return ``;
   }
 
-  let _services: string = ``;
+  let _services = ``;
 
   if (object.form.service) {
     _services += setFormServiceServices(object.form.service);
@@ -29,7 +29,7 @@ const setFormService = (object: MainInterface, mainArray: Array<MainInterface> |
   }
 
 
-  let code = `
+  const code = `
   import { HttpClient } from "@angular/common/http";
   import { Injectable } from "@angular/core";
 

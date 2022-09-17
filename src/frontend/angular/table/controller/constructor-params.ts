@@ -2,8 +2,8 @@ import { MainInterface } from "../../../../interfaces/main";
 import { TableElementInterface } from "../../../../interfaces/table";
 import { TextTransformation } from "../../../../utils/text.transformation";
 
-let _hasDialog: boolean = false;
-let _hasRemoveConfirmationDialog: boolean = false;
+let _hasDialog = false;
+let _hasRemoveConfirmationDialog = false;
 
 const setTableControllerConstructorParams = (object: MainInterface): string => {
   if (!object.table) {
@@ -15,7 +15,7 @@ const setTableControllerConstructorParams = (object: MainInterface): string => {
     verifyTableElement(object, element);
   });
 
-  let code = `
+  const code = `
   private _formBuilder: FormBuilder,
   private _activatedRoute: ActivatedRoute,
   private _router: Router,
@@ -39,7 +39,7 @@ const verifyTableElement = (
     return ``;
   }
 
-  let code = ``;
+  const code = ``;
 
   if (element.row.menu) {
     element.row.menu.forEach((menuElement) => {

@@ -3,7 +3,7 @@ import * as chp from "child_process";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
 
-let _specificStructure: string = "";
+let _specificStructure = "";
 
 /**
  * SET CODE
@@ -26,7 +26,7 @@ const setChartTemplate = (object: MainInterface, mainArray: Array<MainInterface>
 
   _specificStructure += setSpecificStructure(object);
 
-  let code = `
+  const code = `
   <mat-card *ngIf="${object.chart.id}DataSource.datasets && ${object.chart.id}DataSource?.datasets?.length > 0">
     <mat-card-header>
       ${hasChartTitle}

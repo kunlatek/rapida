@@ -21,8 +21,8 @@ const setTableTemplate = ({ table, projectPath }: MainInterface): string => {
   }
 
   const hasInfiniteScroll = table.infiniteScroll;
-  let _specificStructure: string = "";
-  let _specificStructureOverMenu: string = "";
+  let _specificStructure = "";
+  let _specificStructureOverMenu = "";
 
   const hasTableTitle = table.title
     ? `<mat-card-title>${table.title}</mat-card-title>`
@@ -40,7 +40,7 @@ const setTableTemplate = ({ table, projectPath }: MainInterface): string => {
     );
   });
 
-  let code = `
+  const code = `
   <mat-card>
     <mat-card-header>
       ${hasTableTitle}

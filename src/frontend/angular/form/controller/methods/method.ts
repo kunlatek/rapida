@@ -95,7 +95,7 @@ const setValueBeforeSubmit = (
   object: MainInterface,
   elements: Array<FormElementInterface>
 ): string => {
-  let code = ``;
+  const code = ``;
 
   elements.forEach((element) => {
     if (element.input) {

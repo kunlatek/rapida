@@ -38,7 +38,7 @@ const setFormTemplate = (object: MainInterface, mainArray: Array<MainInterface> 
     return ``;
   }
 
-  let _specificStructure: string = ``;
+  let _specificStructure = ``;
   _arrayLayer = [];
 
   setArrayLayer(object.form.elements);
@@ -60,7 +60,7 @@ const setFormTemplate = (object: MainInterface, mainArray: Array<MainInterface> 
     ? `<mat-card-subtitle>${object.form.subtitle}</mat-card-subtitle>`
     : "";
 
-  let code = `
+  const code = `
   <mat-card *ngIf="(isAddModule && updateOnePermission) || (!isAddModule && createOnePermission)">
     <mat-card-header>
       ${hasFormTitle}
@@ -94,7 +94,7 @@ const setSpecificStructureOverFormElement = (
   arrayCurrentIndexAsParam: string | undefined = undefined
 ): string => {
   let code = ``;
-  let conditions = setConditions(element, array, arrayCurrentIndexAsParam);
+  const conditions = setConditions(element, array, arrayCurrentIndexAsParam);
 
   if (element.input) {
     code += setInput(object, element, conditions, arrayCurrentIndexAsParam);
@@ -237,10 +237,10 @@ const setSpecificStructureOverFormElement = (
     const remove = `remove${arrayClassName}`;
 
     let arrayStructure = ``;
-    let arrayIndexes = setArrayIndexes(element.array.id);
-    let arrayIndexesToAdd = setArrayIndexesToAdd(element.array.id);
+    const arrayIndexes = setArrayIndexes(element.array.id);
+    const arrayIndexesToAdd = setArrayIndexesToAdd(element.array.id);
     let arrayCurrentIndex: any;
-    let arrayFlowIdentifier = setArrayFlowIdentifier(element.array.id) ? setArrayFlowIdentifier(element.array.id) : `this.${object.form?.id}Form`;
+    const arrayFlowIdentifier = setArrayFlowIdentifier(element.array.id) ? setArrayFlowIdentifier(element.array.id) : `this.${object.form?.id}Form`;
 
     _arrayLayer?.forEach(array => {
       if (array.name === element.array?.id) {
@@ -338,7 +338,7 @@ const setFormTemplateArchitectureAndWriteToFile = (
 
 const verifyFormElement = (
   element: FormElementInterface,
-  isArray: boolean = false
+  isArray = false
 ): void => {
   const formElements = [
     "input",

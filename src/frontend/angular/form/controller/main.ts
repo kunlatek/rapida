@@ -23,11 +23,11 @@ const setFormController = (object: MainInterface, mainArray: Array<MainInterface
     return ``;
   }
 
-  let _methods = setFormControllerMethods(object);
-  let _imports = setFormControllerImports(object);
-  let _properties = setFormControllerProperties(object);
-  let _constructorParams = setFormControllerConstructorParams(object);
-  let _constructorArguments = setFormControllerConstructorArguments(object);
+  const _methods = setFormControllerMethods(object);
+  const _imports = setFormControllerImports(object);
+  const _properties = setFormControllerProperties(object);
+  const _constructorParams = setFormControllerConstructorParams(object);
+  const _constructorArguments = setFormControllerConstructorArguments(object);
   let code = ``;
 
   object.form.elements.forEach(element => {

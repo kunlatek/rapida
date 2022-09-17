@@ -41,7 +41,7 @@ const setTableControllerProperties = ({ table }: MainInterface, mainArray: Array
     });
   }
 
-  let code = `
+  const code = `
   ${table.id}Id: string = "";
   ${table.id}DisplayedColumns: string[] = [
     ${_displayedTableFields}

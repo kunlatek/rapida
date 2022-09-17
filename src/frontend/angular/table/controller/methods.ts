@@ -2,7 +2,7 @@ import { MainInterface } from "../../../../interfaces/main";
 import { TableElementInterface } from "../../../../interfaces/table";
 import { TextTransformation } from "../../../../utils/text.transformation";
 
-let _hasRemoveConfirmationDialog: boolean = false;
+let _hasRemoveConfirmationDialog = false;
 
 const setTableControllerMethods = ({ table }: MainInterface): string => {
   if (!table) {
@@ -11,13 +11,13 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
   }
 
   const hasInfiniteScroll = table.infiniteScroll;
-  let _methods = ``;
+  const _methods = ``;
 
   table.elements.forEach((element) => {
     verifyTableElement(element);
   });
 
-  let code = `
+  const code = `
   ${_methods}
 
   _setFiltersParams(isPagination = false) {
@@ -237,7 +237,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
 };
 
 const verifyTableElement = (element: TableElementInterface) => {
-  let code = ``;
+  const code = ``;
 
   if (element.row.menu) {
     element.row.menu.forEach((menuElement) => {

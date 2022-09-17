@@ -19,15 +19,15 @@ const setTableController = (object: MainInterface, mainArray: Array<MainInterfac
     return ``;
   }
   const hasInfiniteScroll = object.table.infiniteScroll;
-  let _imports: string = setTableControllerImports(object);
-  let _properties: string = setTableControllerProperties(object, mainArray);
-  let _constructorParams: string = setTableControllerConstructorParams(object);
-  let _constructorArguments: string = setTableControllerConstructorArguments(
+  const _imports: string = setTableControllerImports(object);
+  const _properties: string = setTableControllerProperties(object, mainArray);
+  const _constructorParams: string = setTableControllerConstructorParams(object);
+  const _constructorArguments: string = setTableControllerConstructorArguments(
     object
   );
-  let _methods: string = setTableControllerMethods(object);
+  const _methods: string = setTableControllerMethods(object);
 
-  let code = `
+  const code = `
   ${_imports}
 
   @Component({

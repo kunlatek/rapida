@@ -45,9 +45,8 @@ const setChartControllerProperties = (object: MainInterface): string => {
       },
       elements: {
         line: {
-          tension: ${
-            object.chart.line.tension ? object.chart.line.tension : 0.5
-          },
+          tension: ${object.chart.line.tension ? object.chart.line.tension : 0.5
+      },
         },
       },
       scales: {
@@ -78,11 +77,10 @@ const setChartControllerProperties = (object: MainInterface): string => {
       labels: ${JSON.stringify(object.chart.bar.labels)},
     };
 
-    ${object.chart.id}Background: Array<string> = ${
-      object.chart.bar.backgroundColor
+    ${object.chart.id}Background: Array<string> = ${object.chart.bar.backgroundColor
         ? object.chart.bar.backgroundColor
         : `["#1F7AFF", "#85B7FF", "#B8D5FF"]`
-    };
+      };
 
     ${object.chart.id}BarChartOptions: ChartConfiguration["options"] = {
       responsive: true,
@@ -109,18 +107,16 @@ const setChartControllerProperties = (object: MainInterface): string => {
 
   if (object.chart.pie) {
     code += `
-    ${
-      object.chart.id
-    }PieChartData: ChartData<"pie", number[], string | string[]> = {
+    ${object.chart.id
+      }PieChartData: ChartData<"pie", number[], string | string[]> = {
       datasets: ${JSON.stringify(object.chart.pie.datasets)},
       labels: ${JSON.stringify(object.chart.pie.labels)},
     };
 
-    ${object.chart.id}Background: Array<string> = ${
-      object.chart.pie.backgroundColor
+    ${object.chart.id}Background: Array<string> = ${object.chart.pie.backgroundColor
         ? object.chart.pie.backgroundColor
         : `["#1F7AFF", "#85B7FF", "#B8D5FF"]`
-    };
+      };
 
     ${object.chart.id}PieChartOptions: ChartConfiguration["options"] = {
       responsive: true,

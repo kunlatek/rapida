@@ -4,8 +4,8 @@ import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 import { setArrayControlsToAdd, setArrayIndexes } from "./array";
 
-let _conditionMethods: Array<string> = [];
-let _conditionMethodsOverEdition: Array<string> = [];
+const _conditionMethods: Array<string> = [];
+const _conditionMethodsOverEdition: Array<string> = [];
 
 const setCondition = (
   object: MainInterface,

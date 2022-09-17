@@ -1,7 +1,7 @@
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
 
-let _hasChart: boolean = false;
+let _hasChart = false;
 
 const setModuleControllerImports = (object: MainInterface): string => {
   if (!object.module) {
@@ -46,7 +46,7 @@ const setModuleControllerImportsOverElement = (
     _hasChart = true;
   }
 
-  let code = `
+  const code = `
   import { ${TextTransformation.pascalfy(
     element
   )}Component } from "src/app/components/${TextTransformation.kebabfy(
@@ -82,7 +82,7 @@ const setNgModuleDeclarationsOverElement = (
     _hasChart = true;
   }
 
-  let code = `
+  const code = `
   ${TextTransformation.pascalfy(element)}Component,
   `;
 
@@ -118,7 +118,7 @@ const setNgModuleImportsOverElement = (
     _hasChart = true;
   }
 
-  let code = `
+  const code = `
   `;
 
   return code;

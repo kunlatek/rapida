@@ -1,13 +1,13 @@
-import * as fs from "fs";
 import * as chp from "child_process";
+import * as fs from "fs";
 
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
-import { setChartControllerImports } from "./imports";
-import { setChartControllerProperties } from "./properties";
-import { setChartControllerConstructorParams } from "./constructor-params";
 import { setChartControllerConstructorArguments } from "./constructor-args";
+import { setChartControllerConstructorParams } from "./constructor-params";
+import { setChartControllerImports } from "./imports";
 import { setChartControllerMethods } from "./methods";
+import { setChartControllerProperties } from "./properties";
 
 /**
  * SET CODE
@@ -20,25 +20,25 @@ const setChartController = (object: MainInterface, mainArray: Array<MainInterfac
     return ``;
   }
 
-  let _imports: string = setChartControllerImports(object);
-  let _properties: string = setChartControllerProperties(object);
-  let _constructorParams: string = setChartControllerConstructorParams(object);
-  let _constructorArguments: string = setChartControllerConstructorArguments(
+  const _imports: string = setChartControllerImports(object);
+  const _properties: string = setChartControllerProperties(object);
+  const _constructorParams: string = setChartControllerConstructorParams(object);
+  const _constructorArguments: string = setChartControllerConstructorArguments(
     object
   );
-  let _methods: string = setChartControllerMethods(object);
+  const _methods: string = setChartControllerMethods(object);
 
-  let code = `
+  const code = `
   ${_imports}
   
   @Component({
     selector: "app-${TextTransformation.kebabfy(object.chart.id)}",
     templateUrl: "./${TextTransformation.kebabfy(
-      object.chart.id
-    )}.component.html",
+    object.chart.id
+  )}.component.html",
     styleUrls: ["./${TextTransformation.kebabfy(
-      object.chart.id
-    )}.component.scss"],
+    object.chart.id
+  )}.component.scss"],
   })
   export class ${TextTransformation.pascalfy(
     object.chart.id
@@ -72,11 +72,10 @@ const setChartControllerArchitectureAndWriteToFile = (
     return "";
   }
 
-  const filePath = `${
-    object.projectPath
-  }/src/app/components/${TextTransformation.kebabfy(
-    object.chart.id
-  )}/${TextTransformation.kebabfy(object.chart.id)}.component.ts`;
+  const filePath = `${object.projectPath
+    }/src/app/components/${TextTransformation.kebabfy(
+      object.chart.id
+    )}/${TextTransformation.kebabfy(object.chart.id)}.component.ts`;
 
   try {
     fs.writeFileSync(filePath, code);

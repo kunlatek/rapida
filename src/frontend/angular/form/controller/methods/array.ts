@@ -17,7 +17,7 @@ let _arraysInAFlow: Array<ArrayFeaturesInterface> = JSON.parse(
 );
 
 const setArray = (object: MainInterface) => {
-  let code = ``;
+  const code = ``;
 
   if (!object.form) {
     return code;
@@ -38,7 +38,7 @@ const setArray = (object: MainInterface) => {
 
 const setArrayLayer = (
   elements: Array<FormElementInterface>,
-  index: number = 0,
+  index = 0,
   parentArray: string | undefined = undefined
 ) => {
   const iterationsIds = [
@@ -57,7 +57,7 @@ const setArrayLayer = (
   ];
 
   let hasArray = false;
-  let arraysInThisLayer: Array<{
+  const arraysInThisLayer: Array<{
     id: string;
     elements: Array<FormElementInterface>;
   }> = [];
