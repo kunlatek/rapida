@@ -15,6 +15,7 @@ export const environment = {
 `;
 
 const envBackend = `
+AUTH_DB=uzanto
 PORT=3000
 SERVER_ROOT_URI=http://localhost:3000
 CLIENT_REDIRECT_URI=http://localhost:4200
@@ -22,7 +23,7 @@ MONGO_URL=mongodb+srv://kunlatek:Kunlatek751@cluster0.b0pfr.mongodb.net/?authSou
 DB=animation
 NODEMAILER_USER=administrativo@kunlatek.com
 NODEMAILER_PASS=yetyxhgzjzktuwef
-ADMIN_USERS=rabbadesalman@gmail.com
+ADMIN_USERS=contato@kunlatek.com
 `;
 
 const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitation-and-permission";
@@ -37,6 +38,14 @@ import { CHARACTER } from "../collections-frontend/example/animation/character";
 import { CHARACTER_FORM } from "../collections-frontend/example/animation/character-form";
 import { CHARACTER_TABLE } from "../collections-frontend/example/animation/character-table";
 
+// import { CLIENT_PERSON } from "../collections-frontend/kunlatek/kliento/client-person";
+// import { CLIENT_PERSON_FORM } from "../collections-frontend/kunlatek/kliento/client-person-form";
+// import { CLIENT_PERSON_TABLE } from "../collections-frontend/kunlatek/kliento/client-person-table";
+
+// import { CLIENT_COMPANY } from "../collections-frontend/kunlatek/kliento/client-company";
+// import { CLIENT_COMPANY_FORM } from "../collections-frontend/kunlatek/kliento/client-company-form";
+// import { CLIENT_COMPANY_TABLE } from "../collections-frontend/kunlatek/kliento/client-company-table";
+
 const array = [
   ANIMATION_FORM,
   ANIMATION_TABLE,
@@ -45,6 +54,13 @@ const array = [
   CHARACTER_FORM,
   CHARACTER_TABLE,
   CHARACTER,
+  // CLIENT_COMPANY_FORM,
+  // CLIENT_COMPANY_TABLE,
+  // CLIENT_COMPANY,
+
+  // CLIENT_PERSON_FORM,
+  // CLIENT_PERSON_TABLE,
+  // CLIENT_PERSON,
 ];
 
 array.forEach((object) => {
