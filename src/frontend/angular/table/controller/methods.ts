@@ -85,7 +85,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
         } else {
           const message = this._errorHandler.apiErrorMessage(err.error.message);
           this.isLoading = false;
-          this.sendErrorMessage(message);
+          this._snackBarService.open(message);
         }
       });
   };
@@ -114,7 +114,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
               const message = this._errorHandler.apiErrorMessage(
                 error.message
               );
-              this.sendErrorMessage(message);
+              this._snackBarService.open(message);
             }
           }
         });
@@ -135,7 +135,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
       } catch (error: any) {
         const message = this._errorHandler.apiErrorMessage(error.message);
         this.isLoading = false;
-        this.sendErrorMessage(message);
+        this._snackBarService.open(message);
         sessionStorage.clear();
         this._router.navigate(["/"]);
       }
@@ -193,10 +193,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
       `
       : ``
     }
-  
-  sendErrorMessage = (errorMessage: string) => {
-    this._snackbar.open(errorMessage, undefined, { duration: 4 * 1000 });
-  };
+ 
   ${hasInfiniteScroll
       ? `
   ngOnInit() {

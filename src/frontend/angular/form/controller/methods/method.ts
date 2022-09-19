@@ -52,7 +52,7 @@ const setFormMethodsByElements = (
           const message = this._errorHandler.apiErrorMessage(
             error.message
           );
-          this.sendErrorMessage(message);
+          this._snackBarService.open(message);
         };
       };
       `;
@@ -124,3 +124,4 @@ export {
   setFileSubmit,
   setValueBeforeSubmit,
 };
+

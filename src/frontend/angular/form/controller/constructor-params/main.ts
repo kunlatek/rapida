@@ -11,7 +11,7 @@ const setFormControllerConstructorParams = (object: MainInterface): string => {
   private _formBuilder: FormBuilder,
   private _activatedRoute: ActivatedRoute,
   private _router: Router,
-  private _snackbar: MatSnackBar,
+  private _snackBarService: SnackBarService,
   private _${object.form.id}Service: ${TextTransformation.pascalfy(
     object.form.id
   )}Service,

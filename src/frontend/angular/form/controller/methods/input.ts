@@ -68,7 +68,7 @@ const setInputMethod = (
         const message = this._errorHandler.apiErrorMessage(
           error.message
         );
-        this.sendErrorMessage(message);
+        this._snackBarService.open(message);
       };
     };
 

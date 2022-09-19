@@ -274,7 +274,7 @@ const setAutocompleteMethod = (
     )}(${iterations ? iterations?.replace(/: any/g, "") : ""});
             } else {
                 const message = this._errorHandler.apiErrorMessage(err.error.message);
-                this.sendErrorMessage(message);
+                this._snackBarService.open(message);
             };
         });
       }
@@ -282,7 +282,7 @@ const setAutocompleteMethod = (
       const message = this._errorHandler.apiErrorMessage(
         error.message
       );
-      this.sendErrorMessage(message);
+      this._snackBarService.open(message);
     };
   };`;
 

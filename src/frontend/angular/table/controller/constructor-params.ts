@@ -20,7 +20,7 @@ const setTableControllerConstructorParams = (object: MainInterface): string => {
   private _activatedRoute: ActivatedRoute,
   private _router: Router,
   ${_hasDialog ? `private _dialog: MatDialog,` : ``}
-  private _snackbar: MatSnackBar,
+  private _snackBarService: SnackBarService,
   private _errorHandler: MyErrorHandler,
   private _${object.table.id}Service: ${TextTransformation.pascalfy(
     object.table.id

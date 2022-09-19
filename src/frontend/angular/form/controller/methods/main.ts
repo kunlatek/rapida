@@ -5,7 +5,7 @@ import { setArray } from "./array";
 import {
   setCondition,
   setConditionOverEdition,
-  setConditionsInArray,
+  setConditionsInArray
 } from "./condition";
 import { setFileSubmit, setMethod, setValueBeforeSubmit } from "./method";
 
@@ -35,10 +35,9 @@ const setFormControllerMethods = (object: MainInterface): string => {
   object.form.elements.forEach((element) => {
     verifyFormElement(element);
   });
-  
+
   const code = `
-  ${
-    _hasCondition
+  ${_hasCondition
       ? `setCondition = () => {
         ${_conditionsMethods}        
       };
@@ -47,13 +46,12 @@ const setFormControllerMethods = (object: MainInterface): string => {
         ${_conditionsMethodsOverEdition}
       };`
       : ``
-  }
+    }
 
-  ${
-    _hasConditionInArray
+  ${_hasConditionInArray
       ? setConditionsInArray(object, object.form.elements)
       : ""
-  }
+    }
 
   ${_methods}
   ${object.form.id}Submit = async (
@@ -76,8 +74,8 @@ const setFormControllerMethods = (object: MainInterface): string => {
             );
         }
         this.redirectTo("main/${TextTransformation.kebabfy(
-          object.form.id.split("Form")[0]
-        )}");
+      object.form.id.split("Form")[0]
+    )}");
         
         this.isLoading = false;
       } catch (error: any) {
@@ -87,7 +85,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
         } else {
           const message = this._errorHandler.apiErrorMessage(error.message);
           this.isLoading = false;
-          this.sendErrorMessage(message);
+          this._snackBarService.open(message);
         }
       };
       
@@ -104,7 +102,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
       } catch (error: any) {
         const message = this._errorHandler.apiErrorMessage(error.message);
         this.isLoading = false;
-        this.sendErrorMessage(message);
+        this._snackBarService.open(message);
         sessionStorage.clear();
         this._router.navigate(['/']);
       };
@@ -124,11 +122,6 @@ const setFormControllerMethods = (object: MainInterface): string => {
     } else {
       this.isLoading = false;
     }
-  };
-  sendErrorMessage = (errorMessage: string) => {
-    this._snackbar.open(errorMessage, undefined, {
-      duration: 4 * 1000,
-    });
   };
   `;
 
