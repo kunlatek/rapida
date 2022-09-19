@@ -32,7 +32,7 @@ const setFormControllerImports = (object: MainInterface): string => {
   import { FormBuilder, FormGroupDirective, FormGroup, ${_hasArray ? "FormArray," : ""
     } ${_hasValidator ? "Validators," : ""} } from "@angular/forms";
   import { ActivatedRoute, Router } from "@angular/router";
-  import { MatSnackBar } from "@angular/material/snack-bar";
+  import { SnackBarService } from "src/app/modules/shared/services/snackbar.service";
   ${(_hasAutocomplete || _hasInputApiRequest)
       ? `import { MyPerformance } from "src/app/utils/performance";`
       : ``

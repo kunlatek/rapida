@@ -21,7 +21,7 @@ const setTableControllerImports = ({ table }: MainInterface): string => {
   const code = `
   import { Component, ViewChild, OnInit } from "@angular/core";
   import { ActivatedRoute, Router } from "@angular/router";
-  import { MatSnackBar } from "@angular/material/snack-bar";
+  import { SnackBarService } from "src/app/modules/shared/services/snackbar.service";
   import { MyErrorHandler } from "../../utils/error-handler";
   import { HttpParams } from "@angular/common/http";
   ${_hasDialog ? `import { MatDialog } from "@angular/material/dialog";` : ``}
