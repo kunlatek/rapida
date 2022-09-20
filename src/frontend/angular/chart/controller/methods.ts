@@ -103,13 +103,9 @@ const setChartControllerMethods = (object: MainInterface): string => {
       })
       .catch(async err => {
         if (err.error.logMessage === 'jwt expired') {
-          await this.refreshToken();
           this.set${TextTransformation.kebabfy(object.chart.id)}Service();
-        } else {
-          const message = this._errorHandler.apiErrorMessage(err.error.message);
-          this.isLoading = false;
-          this._snackBarService.open(message);
-        };
+        }
+        this.isLoading = false;
       });
     };
     `;
@@ -173,13 +169,9 @@ const setChartControllerMethods = (object: MainInterface): string => {
         })
         .catch(async err => {
           if (err.error.logMessage === 'jwt expired') {
-            await this.refreshToken();
             this.set${TextTransformation.kebabfy(object.chart.id)}Service();
-          } else {
-            const message = this._errorHandler.apiErrorMessage(err.error.message);
-            this.isLoading = false;
-            this._snackBarService.open(message);
-          };
+          }
+          this.isLoading = false;
         });
       };
       `;
@@ -247,13 +239,9 @@ const setChartControllerMethods = (object: MainInterface): string => {
         })
         .catch(async err => {
           if (err.error.logMessage === 'jwt expired') {
-            await this.refreshToken();
             this.set${TextTransformation.pascalfy(object.chart.id)}Service();
-          } else {
-            const message = this._errorHandler.apiErrorMessage(err.error.message);
+          }
             this.isLoading = false;
-            this._snackBarService.open(message);
-          };
         });
       };
       `;

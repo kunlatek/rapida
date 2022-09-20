@@ -268,14 +268,11 @@ const setAutocompleteMethod = (
         })
         .catch(async err => {
             if (err.error.logMessage === 'jwt expired') {
-              await this.refreshToken();
               this.setFiltered${TextTransformation.pascalfy(
       element.autocomplete.name
     )}(${iterations ? iterations?.replace(/: any/g, "") : ""});
-            } else {
-                const message = this._errorHandler.apiErrorMessage(err.error.message);
-                this._snackBarService.open(message);
-            };
+            }
+            this.isLoading = false;
         });
       }
     } catch (error: any) {

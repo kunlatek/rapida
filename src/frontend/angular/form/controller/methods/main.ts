@@ -80,39 +80,22 @@ const setFormControllerMethods = (object: MainInterface): string => {
         this.isLoading = false;
       } catch (error: any) {
         if (error.logMessage === 'jwt expired') {
-          await this.refreshToken();
           this.${object.form.id}Submit(${object.form?.id}Directive);
-        } else {
-          const message = this._errorHandler.apiErrorMessage(error.message);
-          this.isLoading = false;
-          this._snackBarService.open(message);
         }
+          this.isLoading = false;
       };
       
       this.${object.form?.id}Form.reset();
       ${object.form?.id}Directive.resetForm();
   };
-  refreshToken = async () => {
-      try {
-        const res: any = await this._${object.form.id}Service.refreshToken();
-        if (res) {
-          sessionStorage.setItem('token', res?.data.authToken);
-          sessionStorage.setItem('refreshToken', res?.data.authRefreshToken);
-        }
-      } catch (error: any) {
-        const message = this._errorHandler.apiErrorMessage(error.message);
-        this.isLoading = false;
-        this._snackBarService.open(message);
-        sessionStorage.clear();
-        this._router.navigate(['/']);
-      };
-  };
+
   redirectTo = (uri:string) => {
       this._router.navigateByUrl('/main', {skipLocationChange: true})
       .then(() => {
         this._router.navigate([uri]);
       });
   };
+  
   checkOptionsCreation = async(functions: Array<Function>, index: number) => {
     const newIndex = index + 1;
 
