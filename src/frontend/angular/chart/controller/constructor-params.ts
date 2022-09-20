@@ -15,7 +15,7 @@ const setChartControllerConstructorParams = (object: MainInterface): string => {
     object.chart.id
   )}Service,
   private _errorHandler: MyErrorHandler,
-  private _snackbar: MatSnackBar,
+  private _snackBarService: SnackBarService,
   private _dialog: MatDialog,
   `;
 

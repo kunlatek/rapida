@@ -34,21 +34,6 @@ const setTableService = ({ table, projectPath }: MainInterface): string => {
       constructor(private _httpClient: HttpClient) {}
 
       ${_services}
-
-      ${_hasAuthorization
-      ? `
-        refreshToken () {
-          return this._httpClient.get(
-            \`\${this.BASE_URL}/auth/refresh-token\`, {
-            headers: {
-              'Authorization': \`Bearer \${sessionStorage.getItem('refreshToken')}\`
-            }
-          }
-          ).toPromise();
-        }
-        `
-      : ``
-    }
   }
   `;
 

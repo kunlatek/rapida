@@ -1,9 +1,9 @@
-import * as fs from "fs";
 import * as chp from "child_process";
+import * as fs from "fs";
+import { ServiceFunctionsEnum } from "../../../../enums/form";
+import { FormElementInterface, ServiceInterface } from "../../../../interfaces/form";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
-import { FormElementInterface, ServiceInterface } from "../../../../interfaces/form";
-import { ServiceFunctionsEnum } from "../../../../enums/form";
 
 let _hasAuthorization: boolean = false;
 
@@ -22,7 +22,7 @@ const setFormService = (object: MainInterface, mainArray: Array<MainInterface> |
 
   if (object.form.service) {
     _services += setFormServiceServices(object.form.service);
-    
+
     object.form.elements.forEach(element => {
       _services += setFormServiceServicesOverFormElement(element);
     });
@@ -42,25 +42,9 @@ const setFormService = (object: MainInterface, mainArray: Array<MainInterface> |
       constructor(private _httpClient: HttpClient) {}
 
       ${_services}
-
-      ${
-        _hasAuthorization
-          ? `
-        refreshToken () {
-          return this._httpClient.get(
-            \`\${this.BASE_URL}/auth/refresh-token\`, {
-            headers: {
-              'Authorization': \`Bearer \${sessionStorage.getItem('refreshToken')}\`
-            }
-          }
-          ).toPromise();
-        }
-        `
-          : ``
-      }
   }
   `;
-  
+
   setFormServiceArchitectureAndWriteToFile(object, code);
   return code;
 };
@@ -297,7 +281,7 @@ const setFormServiceServicesOverFormElement = (
   }
 
   return code;
-}
+};
 
 /**
  * JOIN CODE AND ARCHITECTURE
@@ -312,11 +296,10 @@ const setFormServiceArchitectureAndWriteToFile = (
     return "";
   }
 
-  const filePath = `${
-    object.projectPath
-  }/src/app/components/${TextTransformation.kebabfy(
-    object.form.id
-  )}/${TextTransformation.kebabfy(object.form.id)}.service.ts`;
+  const filePath = `${object.projectPath
+    }/src/app/components/${TextTransformation.kebabfy(
+      object.form.id
+    )}/${TextTransformation.kebabfy(object.form.id)}.service.ts`;
 
   try {
     fs.writeFileSync(filePath, code);

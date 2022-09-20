@@ -5,7 +5,7 @@ import { setArray } from "./array";
 import {
   setCondition,
   setConditionOverEdition,
-  setConditionsInArray,
+  setConditionsInArray
 } from "./condition";
 import { setFileSubmit, setMethod, setValueBeforeSubmit } from "./method";
 
@@ -35,10 +35,9 @@ const setFormControllerMethods = (object: MainInterface): string => {
   object.form.elements.forEach((element) => {
     verifyFormElement(element);
   });
-  
+
   const code = `
-  ${
-    _hasCondition
+  ${_hasCondition
       ? `setCondition = () => {
         ${_conditionsMethods}        
       };
@@ -47,13 +46,12 @@ const setFormControllerMethods = (object: MainInterface): string => {
         ${_conditionsMethodsOverEdition}
       };`
       : ``
-  }
+    }
 
-  ${
-    _hasConditionInArray
+  ${_hasConditionInArray
       ? setConditionsInArray(object, object.form.elements)
       : ""
-  }
+    }
 
   ${_methods}
   ${object.form.id}Submit = async (
@@ -76,45 +74,28 @@ const setFormControllerMethods = (object: MainInterface): string => {
             );
         }
         this.redirectTo("main/${TextTransformation.kebabfy(
-          object.form.id.split("Form")[0]
-        )}");
+      object.form.id.split("Form")[0]
+    )}");
         
         this.isLoading = false;
       } catch (error: any) {
         if (error.logMessage === 'jwt expired') {
-          await this.refreshToken();
           this.${object.form.id}Submit(${object.form?.id}Directive);
-        } else {
-          const message = this._errorHandler.apiErrorMessage(error.message);
-          this.isLoading = false;
-          this.sendErrorMessage(message);
         }
+          this.isLoading = false;
       };
       
       this.${object.form?.id}Form.reset();
       ${object.form?.id}Directive.resetForm();
   };
-  refreshToken = async () => {
-      try {
-        const res: any = await this._${object.form.id}Service.refreshToken();
-        if (res) {
-          sessionStorage.setItem('token', res?.data.authToken);
-          sessionStorage.setItem('refreshToken', res?.data.authRefreshToken);
-        }
-      } catch (error: any) {
-        const message = this._errorHandler.apiErrorMessage(error.message);
-        this.isLoading = false;
-        this.sendErrorMessage(message);
-        sessionStorage.clear();
-        this._router.navigate(['/']);
-      };
-  };
+
   redirectTo = (uri:string) => {
       this._router.navigateByUrl('/main', {skipLocationChange: true})
       .then(() => {
         this._router.navigate([uri]);
       });
   };
+  
   checkOptionsCreation = async(functions: Array<Function>, index: number) => {
     const newIndex = index + 1;
 
@@ -124,11 +105,6 @@ const setFormControllerMethods = (object: MainInterface): string => {
     } else {
       this.isLoading = false;
     }
-  };
-  sendErrorMessage = (errorMessage: string) => {
-    this._snackbar.open(errorMessage, undefined, {
-      duration: 4 * 1000,
-    });
   };
   `;
 

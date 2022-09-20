@@ -80,13 +80,9 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
       })
       .catch(async (err: any) => {
         if (err.error.logMessage === "jwt expired") {
-          await this.refreshToken();
           this._setFiltersParams();
-        } else {
-          const message = this._errorHandler.apiErrorMessage(err.error.message);
-          this.isLoading = false;
-          this.sendErrorMessage(message);
         }
+        this.isLoading = false;
       });
   };
 
@@ -114,34 +110,13 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
               const message = this._errorHandler.apiErrorMessage(
                 error.message
               );
-              this.sendErrorMessage(message);
+              this._snackBarService.open(message);
             }
           }
         });
     };
     `
       : ``
-    }
-
-  ${table.service?.hasAuthorization
-      ? `
-    refreshToken = async () => {
-      try {
-        const res: any = await this._${table.id}Service.refreshToken();
-        if (res) {
-          sessionStorage.setItem("token", res?.data.authToken);
-          sessionStorage.setItem("refreshToken", res?.data.authRefreshToken);
-        }
-      } catch (error: any) {
-        const message = this._errorHandler.apiErrorMessage(error.message);
-        this.isLoading = false;
-        this.sendErrorMessage(message);
-        sessionStorage.clear();
-        this._router.navigate(["/"]);
-      }
-    };
-    `
-      : ""
     }
 
   ${_hasRemoveConfirmationDialog
@@ -193,10 +168,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
       `
       : ``
     }
-  
-  sendErrorMessage = (errorMessage: string) => {
-    this._snackbar.open(errorMessage, undefined, { duration: 4 * 1000 });
-  };
+ 
   ${hasInfiniteScroll
       ? `
   ngOnInit() {

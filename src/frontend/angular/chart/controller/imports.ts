@@ -9,7 +9,7 @@ const setChartControllerImports = (object: MainInterface): string => {
 
   let code = `
   import { Component, Input, OnChanges, } from "@angular/core";
-  import { MatSnackBar } from "@angular/material/snack-bar";
+  import { SnackBarService } from "src/app/modules/shared/services/snackbar.service";
   import { MatDialog } from "@angular/material/dialog";
   import { ${TextTransformation.pascalfy(
     object.chart.id
