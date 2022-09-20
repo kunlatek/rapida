@@ -50,7 +50,6 @@ const setAutocompleteMethod = (
         getParentsIndexes += `${TextTransformation.singularize(parent)}Index: number${(index < (_allParents.length - 1)) ? ", " : ""}`;
         getParentsControl += `"${parent}", ${TextTransformation.singularize(parent)}Index${(index < (_allParents.length - 1)) ? ", " : ""}`;
       });
-      console.log(element, getParentsIndexes, array.id, 55);
     }
   }
 
@@ -178,7 +177,7 @@ const setAutocompleteMethod = (
   code += `
     return treatedValue;
   };`;
-  console.log(parentArray, 181);
+
   /**
    * Show options according to what is writen in input
    */
