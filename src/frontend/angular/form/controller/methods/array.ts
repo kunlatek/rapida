@@ -1,9 +1,9 @@
 import {
-  ArrayInterface,
-  FormElementInterface
+  ArrayInterface
 } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
+import { setArrayLayer, setArraysInAFlow } from "../../../core/array";
 import { setFormBuilderByElements } from "../properties/form-builder";
 import { ArrayFeaturesInterface } from "./interfaces";
 import { setFormMethodsByElements } from "./method";
@@ -15,88 +15,7 @@ let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
 let _arraysInAFlow: Array<ArrayFeaturesInterface> = JSON.parse(
   process.env.ARRAYS_IN_A_FLOW!
 );
-
-const setArray = (object: MainInterface) => {
-  let code = ``;
-
-  if (!object.form) {
-    return code;
-  }
-
-  _arrayLayer = JSON.parse(
-    process.env.ARRAY_LAYER!
-  );
-
-  _arraysInAFlow = JSON.parse(
-    process.env.ARRAYS_IN_A_FLOW!
-  );
-
-  setArrayLayer(object.form.elements);
-
-  return code;
-};
-
-const setArrayLayer = (
-  elements: Array<FormElementInterface>,
-  index: number = 0,
-  parentArray: string | undefined = undefined
-) => {
-  const iterationsIds = [
-    "i",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "p",
-    "q",
-    "r",
-    "s",
-    "t",
-  ];
-
-  let hasArray = false;
-  let arraysInThisLayer: Array<{
-    id: string;
-    elements: Array<FormElementInterface>;
-  }> = [];
-
-  elements.forEach((element) => {
-    if (element.array) {
-      _arrayLayer.push({
-        layer: index,
-        arrayNumber: _arrayLayer.length,
-        indexIdentifier: iterationsIds[index],
-        name: element.array.id,
-        parentArray: parentArray,
-      });
-
-      arraysInThisLayer.push({
-        id: element.array.id,
-        elements: element.array.elements,
-      });
-
-      hasArray = true;
-    }
-
-    if (element.tabs) {
-      element.tabs.forEach((tab) => {
-        setArrayLayer(tab.elements);
-      });
-    }
-  });
-
-  if (hasArray) {
-    const newIndex = index + 1;
-
-    arraysInThisLayer.forEach((element) => {
-      setArrayLayer(element.elements, newIndex, element.id);
-    });
-  }
-
-  process.env.ARRAY_LAYER = JSON.stringify(_arrayLayer);
-};
+let _allParents: Array<string> = [];
 
 const setArrayNames = (arrayId: string): string => {
   let code = ``;
@@ -106,9 +25,7 @@ const setArrayNames = (arrayId: string): string => {
   const arrayReversed = _arraysInAFlow.reverse();
 
   arrayReversed.forEach((array, index) => {
-    code +=
-      `"${array.name}"` +
-      (arrayReversed.length > index + 1 ? `, ` : "");
+    code += `"${array.name}"` + (arrayReversed.length > index + 1 ? `, ` : "");
   });
 
   return code;
@@ -119,6 +36,11 @@ const setArrayControls = (arrayId: string): string => {
 
   _arraysInAFlow = [];
   setArraysInAFlow(arrayId);
+
+  _arraysInAFlow = JSON.parse(
+    process.env.ARRAYS_IN_A_FLOW!
+  );
+
   const arrayReversed = _arraysInAFlow.reverse();
 
   arrayReversed.forEach((array, index) => {
@@ -154,7 +76,10 @@ const setArrayIndexes = (arrayId: string): string => {
   const arrayReversed = _arraysInAFlow.reverse();
 
   arrayReversed.forEach((array, index) => {
-    code += array.indexIdentifier + ": any" + ((arrayReversed.length > (index + 1)) ? ", " : "");
+    code +=
+      array.indexIdentifier +
+      ": any" +
+      (arrayReversed.length > index + 1 ? ", " : "");
   });
 
   return code;
@@ -168,33 +93,13 @@ const setArrayIndexesToAdd = (arrayId: string): string => {
   const arrayReversed = _arraysInAFlow.reverse();
   arrayReversed.forEach((element: any, index: number) => {
     if (_arraysInAFlow.length > 1) {
-      if (index < (_arraysInAFlow.length - 1)) {
+      if (index < _arraysInAFlow.length - 1) {
         code += element.indexIdentifier + ": any,";
       }
     }
   });
 
   return code;
-};
-
-const setArraysInAFlow = (arrayId: string) => {
-  _arrayLayer?.forEach((array) => {
-    if (array.name === arrayId) {
-      if (_arraysInAFlow.indexOf(array) === -1) {
-        _arraysInAFlow.push({
-          indexIdentifier: array.indexIdentifier,
-          arrayNumber: array.arrayNumber,
-          layer: array.layer,
-          name: array.name,
-          parentArray: array.parentArray ? array.parentArray : undefined,
-        });
-      }
-
-      if (array.parentArray) {
-        setArraysInAFlow(array.parentArray);
-      }
-    }
-  });
 };
 
 const setArrayMethod = (
@@ -207,40 +112,67 @@ const setArrayMethod = (
     return code;
   }
 
-  const add = `add${TextTransformation.pascalfy(array.id)}`;
-  const remove = `remove${TextTransformation.pascalfy(array.id)}`;
-  const initArray = `init${TextTransformation.pascalfy(array.id)}`;
-  const iterations = setArrayIndexes(array.id);
-  const iterationsToAdd = setArrayIndexesToAdd(array.id);
-  const controls = setArrayControls(array.id);
-  const controlsToAdd = setArrayControlsToAdd(array.id);
-  let arrayCurrentIndex;
+  setArrayLayer(object.form!.elements);
 
-  _arrayLayer?.forEach((arrayLayer: any) => {
+  _arrayLayer = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
+
+  const add = `add${TextTransformation.pascalfy(
+    TextTransformation.singularize(array.id)
+  )}`;
+  const remove = `remove${TextTransformation.pascalfy(
+    TextTransformation.singularize(array.id)
+  )}`;
+
+  let parentArray: string | undefined;
+  let getParents: string = ``;
+  let getParentsIndexes: string = ``;
+
+  _arrayLayer?.forEach((arrayLayer: ArrayFeaturesInterface) => {
     if (arrayLayer.name === array.id) {
-      arrayCurrentIndex = arrayLayer.indexIdentifier;
+      parentArray = arrayLayer.parentArray;
     }
   });
 
+  if (parentArray) {
+    setAllParents(parentArray);
+
+    _allParents.forEach((parent: string, index: number) => {
+      getParents += `this.${parent}.at(${TextTransformation.singularize(parent)}Index).`;
+      getParentsIndexes += `${TextTransformation.singularize(parent)}Index: number${(index < (_allParents.length - 1)) ? ", " : ""}`;
+    });
+  }
+
   code += `
-  ${initArray}() {
-    return this._formBuilder.group({${setFormBuilderByElements(array.elements)}})
-  };
+  ${parentArray ?
+      `
+    ${array.id}(${getParentsIndexes}) {
+      return ${getParents}get("${array.id}") as FormArray;
+    }
+    `
+      :
+      `
+    get ${array.id}() {
+      return this.${object.form?.id}Form.get("${array.id}") as FormArray;
+    };
+    `
+    }
   
-  ${add}(${iterationsToAdd}) {
-    const control = <FormArray>this.${object.form?.id
-    }Form.get([${controlsToAdd}]) as FormArray;
-    control.push(this.${initArray}());
+  
+  ${add}${((_allParents?.length > 0) && (getParentsIndexes !== "")) ? `(${getParentsIndexes})` : `()`} {
+    const new${TextTransformation.pascalfy(
+      TextTransformation.singularize(array.id)
+    )} = 
+    new FormGroup({${setFormBuilderByElements(array.elements)}});
+    
+    this.${array.id}${((_allParents?.length > 0) && (getParentsIndexes !== "")) ? `(${getParentsIndexes.replace(/: number/g, "")})` : ``}.push(new${TextTransformation.pascalfy(
+      TextTransformation.singularize(array.id)
+    )});
   };
 
-  get${TextTransformation.pascalfy(array.id)}(form: any) {
-    return form.controls.${array.id}.controls;
-  };
-
-  ${remove}(${iterations}) {
-    const control = <FormArray>this.${object.form?.id
-    }Form.get([${controls}]) as FormArray;
-    control.removeAt(${arrayCurrentIndex});
+  ${remove}(${getParentsIndexes && (getParentsIndexes !== "") ? `${getParentsIndexes}, ` : ``}${TextTransformation.singularize(array.id)}Index: number) {
+    this.${array.id}${((_allParents?.length > 0) && (getParentsIndexes !== "")) ? `(${getParentsIndexes.replace(/: number/g, "")})` : ``}.removeAt(${TextTransformation.singularize(array.id)}Index);
   };
   `;
 
@@ -249,14 +181,43 @@ const setArrayMethod = (
   return code;
 };
 
+const setAllParents = (lastParent: string) => {
+  _allParents.push(lastParent);
+
+  _arrayLayer.forEach((element: ArrayFeaturesInterface) => {
+    if ((element.name === lastParent) && element.parentArray) {
+      _allParents.push(element.parentArray);
+      setAllParents(element.parentArray);
+    }
+  });
+};
+
+const setArraysToEdit = (array: Array<ArrayInterface>) => {
+  let code = ``;
+  for (let index = 0; index < array.length; index++) {
+    const element = array[index];
+
+    code += `
+    case "${element.id}":
+      this.add${TextTransformation.pascalfy(TextTransformation.singularize(element.id))}(`;
+    if (_arrayLayer.find((item: ArrayFeaturesInterface) => (item.name === element.id && item.layer > 0))) {
+      code += `indexArr`;
+    }
+    code += `
+      );
+      break;
+    `;
+  }
+
+  return code;
+};
+
 export {
-  setArray,
   setArrayNames,
   setArrayControls,
   setArrayControlsToAdd,
   setArrayIndexes,
   setArrayIndexesToAdd,
   setArrayMethod,
-  setArrayLayer,
-  setArraysInAFlow,
+  setArraysToEdit,
 };

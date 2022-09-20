@@ -1,7 +1,14 @@
 import { ArrayInterface, FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
-import { setFormBuilderProperty } from "./form-builder";
+import { setArrayLayer } from "../../../core/array";
+import { ArrayFeaturesInterface, setFormBuilderProperty } from "./form-builder";
+require("dotenv").config();
+
+let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+  process.env.ARRAY_LAYER!
+);
+let _allParents: Array<string> = [];
 
 const setProperty = (
   object: MainInterface
@@ -25,8 +32,36 @@ const setFormPropertiesByElements = (
 ) => {
   let code = ``;
 
-  elements.forEach(element => {
+  setArrayLayer(object.form!.elements);
 
+  _arrayLayer = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
+
+  let parentArray: string | undefined;
+  let getParents: string = ``;
+  let getParentsIndexes: string = ``;
+  let getParentsControl: string = ``;
+
+  if (array) {
+    _arrayLayer?.forEach((arrayLayer: ArrayFeaturesInterface) => {
+      if (arrayLayer.name === array.id) {
+        parentArray = arrayLayer.parentArray;
+      }
+    });
+
+    if (parentArray) {
+      setAllParents(parentArray);
+
+      _allParents.forEach((parent: string, index: number) => {
+        getParents += `this.${parent}.at(${TextTransformation.singularize(parent)}Index).`;
+        getParentsIndexes += `${TextTransformation.singularize(parent)}Index: number${(index < (_allParents.length - 1)) ? ", " : ""}`;
+        getParentsControl += `"${parent}", ${TextTransformation.singularize(parent)}Index${(index < (_allParents.length - 1)) ? ", " : ""}`;
+      });
+    }
+  }
+
+  elements.forEach(element => {
     if (element.tabs) {
       element.tabs.forEach(tab => {
         code += setFormPropertiesByElements(object, tab.elements);
@@ -50,7 +85,7 @@ const setFormPropertiesByElements = (
     if (element.autocomplete) {
       code += `
       filtered${TextTransformation.pascalfy(element.autocomplete.name)}: Array<any> = [];
-      ${array
+      ${(array && (getParentsIndexes && (getParentsIndexes !== "")))
           ? `loading${TextTransformation.pascalfy(element.autocomplete.name)}: Array<boolean> = [false];`
           : `loading${TextTransformation.pascalfy(element.autocomplete.name)}: boolean = false;`
         }
@@ -79,6 +114,17 @@ const setFormPropertiesByElements = (
   });
 
   return code;
+};
+
+const setAllParents = (lastParent: string) => {
+  _allParents.push(lastParent);
+
+  _arrayLayer.forEach((element: ArrayFeaturesInterface) => {
+    if ((element.name === lastParent) && element.parentArray) {
+      _allParents.push(element.parentArray);
+      setAllParents(element.parentArray);
+    }
+  });
 };
 
 export {

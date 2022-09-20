@@ -17,8 +17,7 @@ const setFormControllerConstructorArguments = (
   let _autocompleteToEdit: string = ``;
 
   _optionsCreation += setFormSelectOptions(object);
-  _patchArrayValues = setJsonToPatchValue(object, object.form.elements);
-  _autocompleteToEdit += setAutocompleteToEdit(object, object.form.elements);
+  // _autocompleteToEdit += setAutocompleteToEdit(object, object.form.elements);
 
   object.form.elements.forEach((element: any) => {
     verifyFormElement(element);
@@ -36,11 +35,9 @@ const setFormControllerConstructorArguments = (
     
         if (this.${object.form.id}Id) {
           this.${object.form.id}ToEdit = await this._${object.form.id}Service.find(this.${object.form.id}Id);
+          this._createAllArray(this.${object.form.id}ToEdit.data);
           this.${object.form.id}Form.patchValue(this.${object.form.id}ToEdit.data);
 
-          ${_autocompleteToEdit}
-
-          ${_patchArrayValues}
         
           ${_hasCondition ? "this.setConditionOverEdition();" : ""}
         }
@@ -95,34 +92,6 @@ const verifyFormElement = (element: FormElementInterface): void => {
       verifyFormElement(arrayElement);
     });
   }
-};
-
-const setJsonToPatchValue = (object: MainInterface, formElements: Array<FormElementInterface>, array: string | undefined = undefined): string => {
-  let code = ``;
-
-  formElements.forEach((element: any) => {
-    if (element.tabs) {
-      element.tabs.forEach((tabElement: any) => {
-        code += setJsonToPatchValue(object, tabElement.elements);
-      });
-    }
-
-    if (element.array) {
-      code += `
-      (${array ? `${array}Form` : `this.${object.form?.id}Form`}.get("${element.array.id}") as FormArray).clear();
-      ${array ? `_${array}` : `this.${object.form?.id}ToEdit.data`}.${element.array.id}?.forEach((_${element.array.id}: any) => {
-        const ${element.array.id}Form = this.init${TextTransformation.pascalfy(element.array.id)}();
-        ${element.array.id}Form.patchValue(_${element.array.id});
-        (${array ? `${array}Form` : `this.${object.form?.id}Form`}.get("${element.array.id}") as FormArray).push(${element.array.id}Form);
-      `;
-      code += setJsonToPatchValue(object, element.array.elements, element.array.id);
-      code += `
-      });
-      `;
-    }
-  });
-
-  return code;
 };
 
 const setAutocompleteToEdit = (object: MainInterface, formElements: any, array: string | undefined = undefined): string => {

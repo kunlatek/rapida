@@ -29,7 +29,7 @@ const setFormControllerImports = (object: MainInterface): string => {
   let code = `
   import { Component, ${_hasAutocompleteMultiple ? `ElementRef, ViewChild,` : ``} ${_hasCondition ? `OnChanges,` : ``
     }} from "@angular/core";
-  import { FormBuilder, FormGroupDirective, FormGroup, ${_hasArray ? "FormArray," : ""
+  import { FormBuilder, FormGroupDirective, FormGroup, FormControl, ${_hasArray ? "FormArray," : ""
     } ${_hasValidator ? "Validators," : ""} } from "@angular/forms";
   import { ActivatedRoute, Router } from "@angular/router";
   import { MatSnackBar } from "@angular/material/snack-bar";

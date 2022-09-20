@@ -1,16 +1,26 @@
-import { FormElementInterface } from "../../../../../interfaces/form";
+import { ArrayInterface, FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
-import { setArray } from "./array";
+import { setArray } from "../../../core/array";
+import { setArraysToEdit } from "./array";
 import {
   setCondition,
   setConditionOverEdition,
-  setConditionsInArray,
+  setConditionsInArray
 } from "./condition";
+import { ArrayFeaturesInterface } from "./interfaces";
 import { setFileSubmit, setMethod, setValueBeforeSubmit } from "./method";
 
 let _hasCondition: boolean = false;
 let _hasConditionInArray: boolean = false;
+let _arrays: Array<ArrayInterface> = [];
+let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+  process.env.ARRAY_LAYER!
+);
+let _arraysInAFlow: Array<ArrayFeaturesInterface> = JSON.parse(
+  process.env.ARRAYS_IN_A_FLOW!
+);
+let _arraysToEdit: string = ``;
 
 const setFormControllerMethods = (object: MainInterface): string => {
   if (!object.form) {
@@ -18,7 +28,17 @@ const setFormControllerMethods = (object: MainInterface): string => {
     return ``;
   }
 
+  _arrays = [];
+
   setArray(object);
+
+  _arrayLayer = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
+
+  _arraysInAFlow = JSON.parse(
+    process.env.ARRAYS_IN_A_FLOW!
+  );
 
   let _conditionsMethods = setCondition(object, object.form.elements);
   let _conditionsMethodsOverEdition = setConditionOverEdition(
@@ -35,10 +55,43 @@ const setFormControllerMethods = (object: MainInterface): string => {
   object.form.elements.forEach((element) => {
     verifyFormElement(element);
   });
-  
+
+  _arraysToEdit = setArraysToEdit(_arrays);
+
   const code = `
-  ${
-    _hasCondition
+  ${(_arrays.length > 0)
+      ? `private _createAllArray(data: any, indexArray: any = null) {
+          const arr: any = [];
+          Object.keys(data).forEach((item) => {
+            if (Array.isArray(data[item]) && data[item].length) {
+              arr.push(...data[item]);
+              if (data[item].length > 1) {
+                this.addNewFormArrayItem(item, data[item].length - 1, indexArray);
+              }
+            }
+          });
+          this._createAllFormGroupInArray(arr);
+        }
+
+        private _createAllFormGroupInArray(arr: any) {
+          arr.forEach((element: any, index: number) => {
+            this._createAllArray(element, index);
+          });
+        }
+        
+        private addNewFormArrayItem(functionName: string, howManyTimes: number, indexArr: number) {
+          for (let index = 0; index < howManyTimes; index++) {
+            switch (functionName) {
+              ${_arraysToEdit}
+              default:
+                break;
+            }
+          }
+        }`
+      : ``
+    }
+
+  ${_hasCondition
       ? `setCondition = () => {
         ${_conditionsMethods}        
       };
@@ -47,13 +100,12 @@ const setFormControllerMethods = (object: MainInterface): string => {
         ${_conditionsMethodsOverEdition}
       };`
       : ``
-  }
+    }
 
-  ${
-    _hasConditionInArray
+  ${_hasConditionInArray
       ? setConditionsInArray(object, object.form.elements)
       : ""
-  }
+    }
 
   ${_methods}
   ${object.form.id}Submit = async (
@@ -76,8 +128,8 @@ const setFormControllerMethods = (object: MainInterface): string => {
             );
         }
         this.redirectTo("main/${TextTransformation.kebabfy(
-          object.form.id.split("Form")[0]
-        )}");
+      object.form.id.split("Form")[0]
+    )}");
         
         this.isLoading = false;
       } catch (error: any) {
@@ -94,6 +146,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
       this.${object.form?.id}Form.reset();
       ${object.form?.id}Directive.resetForm();
   };
+  
   refreshToken = async () => {
       try {
         const res: any = await this._${object.form.id}Service.refreshToken();
@@ -109,12 +162,14 @@ const setFormControllerMethods = (object: MainInterface): string => {
         this._router.navigate(['/']);
       };
   };
+  
   redirectTo = (uri:string) => {
       this._router.navigateByUrl('/main', {skipLocationChange: true})
       .then(() => {
         this._router.navigate([uri]);
       });
   };
+  
   checkOptionsCreation = async(functions: Array<Function>, index: number) => {
     const newIndex = index + 1;
 
@@ -125,6 +180,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
       this.isLoading = false;
     }
   };
+
   sendErrorMessage = (errorMessage: string) => {
     this._snackbar.open(errorMessage, undefined, {
       duration: 4 * 1000,
@@ -160,6 +216,7 @@ const verifyFormElement = (
   }
 
   if (element.array) {
+    _arrays.push(element.array);
     element.array.elements.forEach((arrayElement) => {
       verifyFormElement(arrayElement, true);
     });

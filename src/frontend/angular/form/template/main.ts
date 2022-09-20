@@ -1,18 +1,18 @@
 import * as chp from "child_process";
 import * as fs from "fs";
 import {
-  FormButtonTypeEnum
-} from "../../../../enums/form";
-import {
   ArrayInterface,
   FormElementInterface
 } from "../../../../interfaces/form";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
-import { setArrayFlowIdentifier, setArrayIndexes, setArrayIndexesToAdd, setArrayLayer } from "./array";
+import { setArrayLayer } from "../../core/array";
+import { setArrayTemplate } from "./array";
 import { setAutocomplete } from "./autocomplete";
+import { setButton } from "./button";
 import { setConditions } from "./condition";
 import { setInput } from "./input";
+import { setSelect } from "./select";
 require('dotenv').config();
 
 export interface ArrayFeaturesInterface {
@@ -101,50 +101,11 @@ const setSpecificStructureOverFormElement = (
   }
 
   if (element.autocomplete) {
-    code += setAutocomplete(element, conditions, array);
+    code += setAutocomplete(object, element, conditions, array);
   }
 
   if (element.button) {
-    let color = "";
-    const dialogAction = "";
-    const label =
-      element.button.type === FormButtonTypeEnum.Submit
-        ? `{{isAddModule ? "Criar" : "Editar"}}`
-        : element.button.label;
-    const icon =
-      element.button.type === FormButtonTypeEnum.Submit
-        ? `{{isAddModule ? "save" : "edit"}}`
-        : element.button.icon;
-    const disabled = FormButtonTypeEnum.Submit
-      ? `[disabled]="!${object.form?.id}Form.valid || isLoading"`
-      : "";
-
-    if (element.button.type === FormButtonTypeEnum.Button) {
-      color = "";
-    }
-    if (element.button.type === FormButtonTypeEnum.Submit) {
-      color = `color="primary" ${dialogAction}`;
-    }
-    if (element.button.type === FormButtonTypeEnum.Delete) {
-      color = `color="warn" ${dialogAction}`;
-    }
-    if (element.button.type === FormButtonTypeEnum.Reset) {
-      color = `color="accent"`;
-    }
-
-    if (element.button.type === FormButtonTypeEnum.Submit) {
-      code += `<mat-card-actions>`;
-    }
-    code += `
-    <button mat-raised-button 
-    ${color} ${disabled}>
-      <mat-icon>${icon}</mat-icon>
-      ${label}
-    </button>
-    `;
-    if (element.button.type === FormButtonTypeEnum.Submit) {
-      code += `</mat-card-actions>`;
-    }
+    code += setButton(object, element, conditions);
   }
 
   if (element.checkbox) {
@@ -179,35 +140,7 @@ const setSpecificStructureOverFormElement = (
   }
 
   if (element.select) {
-    const tooltip = element.select.tooltip
-      ? `matTooltip="${element.select.tooltip}"`
-      : "";
-    const multiple = element.select.isMultiple ? "multiple" : "";
-    const required = element.select.isRequired ? "required" : "";
-    let setCondition = "";
-    if (element.select.isTriggerToCondition) {
-      setCondition += `(selectionChange)="`;
-
-      if (array) {
-        setCondition += `setConditionIn${TextTransformation.pascalfy(element.select.name)}(${setArrayIndexes(array.id)})`;
-      }
-
-      if (!array) {
-        setCondition += `setCondition()`;
-      }
-      setCondition += `"`;
-    }
-
-    code += `
-    <mat-form-field ${conditions}>
-      <mat-label>${element.select.label}</mat-label>
-      <mat-select formControlName="${element.select.name}" ${tooltip} ${required} ${multiple} ${setCondition}>
-        <mat-option *ngFor="let ${element.select.name}Item of ${element.select.name}SelectObject" [value]="${element.select.name}Item.value">
-          {{${element.select.name}Item.label}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    `;
+    code += setSelect(object, element, conditions);
   }
 
   if (element.slide) {
@@ -232,59 +165,7 @@ const setSpecificStructureOverFormElement = (
   }
 
   if (element.array) {
-    const arrayClassName = TextTransformation.pascalfy(element.array.id);
-    const add = `add${arrayClassName}`;
-    const remove = `remove${arrayClassName}`;
-
-    let arrayStructure = ``;
-    let arrayIndexes = setArrayIndexes(element.array.id);
-    let arrayIndexesToAdd = setArrayIndexesToAdd(element.array.id);
-    let arrayCurrentIndex: any;
-    let arrayFlowIdentifier = setArrayFlowIdentifier(element.array.id) ? setArrayFlowIdentifier(element.array.id) : `this.${object.form?.id}Form`;
-
-    _arrayLayer?.forEach(array => {
-      if (array.name === element.array?.id) {
-        arrayCurrentIndex = array.indexIdentifier;
-      }
-    });
-
-    element.array.elements.forEach((arrayElement) => {
-      arrayStructure += setSpecificStructureOverFormElement(
-        object,
-        arrayElement,
-        element.array,
-        arrayCurrentIndex
-      );
-    });
-    code += `
-    <div ${conditions}>
-      <ng-container formArrayName="${element.array?.id}">
-        <mat-list *ngFor="let _${element.array?.id} of get${TextTransformation.pascalfy(element.array?.id)
-      }(${arrayFlowIdentifier}); index as ${arrayCurrentIndex}">
-          <ng-container [formGroupName]="${arrayCurrentIndex}">
-            <mat-list-item>
-              ${element.array?.title} {{1 + ${arrayCurrentIndex}}}
-            </mat-list-item>
-            <div>
-              ${arrayStructure}
-            </div>
-            <div>
-              <button mat-button type="button" color="warn" (click)="${remove}(${arrayIndexes})">
-                Remover ${element.array?.title.toLowerCase()}
-              </button>
-            </div>
-          </ng-container>
-          <mat-divider></mat-divider>
-        </mat-list>
-      </ng-container>
-    </div>
-    <div style="margin: 10px 0;" ${conditions}>
-      <button mat-raised-button type="button" (click)="${add}(${arrayIndexesToAdd})">
-        Adicionar ${element.array?.title.toLowerCase()}
-      </button>
-      <mat-divider></mat-divider>
-    </div>
-    `;
+    code += setArrayTemplate(object, element, conditions);
   }
 
   return code;
@@ -367,4 +248,4 @@ const verifyFormElement = (
   }
 };
 
-export { setFormTemplate };
+export { setFormTemplate, setSpecificStructureOverFormElement };
