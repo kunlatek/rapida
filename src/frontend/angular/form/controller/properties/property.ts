@@ -94,8 +94,8 @@ const setFormPropertiesByElements = (
       if (element.autocomplete.isMultiple) {
         code += `
         ${element.autocomplete.name}SeparatorKeysCodes: number[] = [ENTER, COMMA];
-        chosen${TextTransformation.pascalfy(element.autocomplete.name)}View: string[] = [];
-        chosen${TextTransformation.pascalfy(element.autocomplete.name)}Value: string[] = [];
+        chosen${TextTransformation.pascalfy(element.autocomplete.name)}View: ${(array) ? `Array<string[]> = [[]]` : `string[] = []`};
+        chosen${TextTransformation.pascalfy(element.autocomplete.name)}Value: ${(array) ? `Array<string[]> = [[]]` : `string[] = []`};
       
         @ViewChild('${element.autocomplete.name}Input') ${element.autocomplete.name}Input!: ElementRef<HTMLInputElement>;
         `;

@@ -27,10 +27,7 @@ const setAutocomplete = (
 
   setArrayLayer(object.form!.elements);
 
-  _arrayLayer = JSON.parse(
-    process.env.ARRAY_LAYER!
-  );
-
+  _arrayLayer = JSON.parse(process.env.ARRAY_LAYER!);
 
   let parentArray: string | undefined;
   let getParents: string = ``;
@@ -48,9 +45,15 @@ const setAutocomplete = (
       setAllParents(parentArray);
 
       _allParents.forEach((parent: string, index: number) => {
-        getParents += `this.${parent}.at(${TextTransformation.singularize(parent)}Index).`;
-        getParentsIndexes += `${TextTransformation.singularize(parent)}Index: number${(index < (_allParents.length - 1)) ? ", " : ""}`;
-        getParentsControl += `"${parent}", ${TextTransformation.singularize(parent)}Index${(index < (_allParents.length - 1)) ? ", " : ""}`;
+        getParents += `this.${parent}.at(${TextTransformation.singularize(
+          parent
+        )}Index).`;
+        getParentsIndexes += `${TextTransformation.singularize(
+          parent
+        )}Index: number${index < _allParents.length - 1 ? ", " : ""}`;
+        getParentsControl += `"${parent}", ${TextTransformation.singularize(
+          parent
+        )}Index${index < _allParents.length - 1 ? ", " : ""}`;
       });
     }
   }
@@ -73,14 +76,16 @@ const setAutocomplete = (
             *ngFor="let ${element.autocomplete.name
       }Item of chosen${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}View" 
+      )}View${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``}" 
             (removed)="remove${TextTransformation.pascalfy(
         element.autocomplete.name
       )}(
-              ${(getParentsIndexes && (getParentsIndexes !== ""))
-        ? `${getParentsIndexes?.replace(/: number/g, "")}${(parentArray && array) ? `, ${TextTransformation.singularize(array.id)}Index` : ``}`
-        : ""
-      }${(array && getParentsIndexes && (getParentsIndexes !== "")) ? ", " : ""}${element.autocomplete.name}Item)">
+              ${getParentsIndexes && getParentsIndexes !== ""
+        ? `${getParentsIndexes?.replace(/: number/g, "")}, `
+        : ``
+      }
+        ${array ? `${TextTransformation.singularize(array.id)}Index, ` : ""}${element.autocomplete.name
+      }Item)">
             {{${element.autocomplete.name}Item}}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
@@ -99,10 +104,18 @@ const setAutocomplete = (
       }SeparatorKeysCodes" 
             (matChipInputTokenEnd)="add${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}(${(getParentsIndexes && (getParentsIndexes !== "")) ? getParentsIndexes?.replace(/: number/g, "") : ""}${(parentArray && array) ? `, ${TextTransformation.singularize(array.id)}Index` : ``}${array && getParentsIndexes && (getParentsIndexes !== "") ? ", " : ""}$event)" 
+      )}(${getParentsIndexes && getParentsIndexes !== ""
+        ? getParentsIndexes?.replace(/: number/g, "")
+        : ""
+      }${getParentsIndexes && getParentsIndexes !== "" && array ? `, ` : ``}${array ? `${TextTransformation.singularize(array.id)}Index, ` : ``
+      }$event)" 
             (keyup)="callSetFiltered${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}(${(getParentsIndexes && (getParentsIndexes !== "")) ? getParentsIndexes?.replace(/: number/g, "") : ""}${(parentArray && array) ? `, ${TextTransformation.singularize(array.id)}Index` : ``})" 
+      )}(${getParentsIndexes && getParentsIndexes !== ""
+        ? getParentsIndexes?.replace(/: number/g, "")
+        : ""
+      }${getParentsIndexes && getParentsIndexes !== "" && array ? `, ` : ``}${array ? `${TextTransformation.singularize(array.id)}Index` : ``
+      })" 
             #${element.autocomplete.name}Input 
             ${required}
           >
@@ -113,10 +126,14 @@ const setAutocomplete = (
       )}="matAutocomplete" 
           (optionSelected)="selected${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}(${(getParentsIndexes && (getParentsIndexes !== "")) ? getParentsIndexes?.replace(/: number/g, "") : ""}${(parentArray && array) ? `, ${TextTransformation.singularize(array.id)}Index` : ``}${array && getParentsIndexes && (getParentsIndexes !== "") ? ", " : ""}$event)"
+      )}(${getParentsIndexes && getParentsIndexes !== ""
+        ? `${getParentsIndexes?.replace(/: number/g, "")}, `
+        : ""
+      }${array ? `${TextTransformation.singularize(array.id)}Index, ` : ``
+      }$event)"
         >
         <mat-option disabled *ngIf="
-          ${array && getParentsIndexes && (getParentsIndexes !== "")
+          ${array && getParentsIndexes && getParentsIndexes !== ""
         ? `loading${TextTransformation.pascalfy(
           element.autocomplete.name
         )}[${getParentsIndexes?.split(": number")[0]}]`
@@ -128,7 +145,7 @@ const setAutocomplete = (
             <mat-spinner diameter="35"></mat-spinner>
           </mat-option>
         <ng-container *ngIf="
-          ${array && getParentsIndexes && (getParentsIndexes !== "")
+          ${array && getParentsIndexes && getParentsIndexes !== ""
         ? `!loading${TextTransformation.pascalfy(
           element.autocomplete.name
         )}[${getParentsIndexes?.split(": number")[0]}];`
@@ -181,19 +198,25 @@ const setAutocomplete = (
     )}" 
               (keyup)="callSetFiltered${TextTransformation.pascalfy(
       element.autocomplete.name
-    )}(${(getParentsIndexes && (getParentsIndexes !== "")) ? getParentsIndexes?.replace(/: number/g, "") : ""}${(parentArray && array) ? `, ${TextTransformation.singularize(array.id)}Index` : ``})" 
+    )}(${getParentsIndexes && getParentsIndexes !== ""
+      ? getParentsIndexes?.replace(/: number/g, "")
+      : ""
+      }${parentArray && array
+        ? `, ${TextTransformation.singularize(array.id)}Index`
+        : ``
+      })" 
               ${required}
         >
         <mat-autocomplete 
           #auto${TextTransformation.pascalfy(
-      element.autocomplete.name
-    )}="matAutocomplete" 
+        element.autocomplete.name
+      )}="matAutocomplete" 
           [displayWith]="displayFnTo${TextTransformation.pascalfy(
-      element.autocomplete.name
-    )}.bind(this)"
+        element.autocomplete.name
+      )}.bind(this)"
         >
           <mat-option disabled *ngIf="
-          ${array && getParentsIndexes && (getParentsIndexes !== "")
+          ${array && getParentsIndexes && getParentsIndexes !== ""
         ? `loading${TextTransformation.pascalfy(
           element.autocomplete.name
         )}[${getParentsIndexes?.split(": number")[0]}]`
@@ -205,7 +228,7 @@ const setAutocomplete = (
             <mat-spinner diameter="35"></mat-spinner>
           </mat-option>
           <ng-container *ngIf="
-          ${array && getParentsIndexes && (getParentsIndexes !== "")
+          ${array && getParentsIndexes && getParentsIndexes !== ""
         ? `!loading${TextTransformation.pascalfy(
           element.autocomplete.name
         )}[${getParentsIndexes?.split(": number")[0]}];`
@@ -252,7 +275,7 @@ const setAllParents = (lastParent: string) => {
   _allParents.push(lastParent);
 
   _arrayLayer.forEach((element: ArrayFeaturesInterface) => {
-    if ((element.name === lastParent) && element.parentArray) {
+    if (element.name === lastParent && element.parentArray) {
       _allParents.push(element.parentArray);
       setAllParents(element.parentArray);
     }

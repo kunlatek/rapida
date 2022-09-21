@@ -115,13 +115,13 @@ const setAutocompleteToEdit = (object: MainInterface, formElements: any, array: 
       if (element.autocomplete.isMultiple) {
         code += `
         if (this.${object.form?.id}ToEdit.data.${TextTransformation.singularize(element.autocomplete.optionsApi.endpoint)}) {
-          this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}View = [];
-          this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}Value = [];
+          this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}View${(array) ? `[${TextTransformation.singularize(array)}Index]` : ``} = [];
+          this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}Value${(array) ? `[${TextTransformation.singularize(array)}Index]` : ``} = [];
           this.${object.form?.id}ToEdit.data
           .${TextTransformation.singularize(element.autocomplete.optionsApi.endpoint)}
           .forEach((element: any) => {
-            this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}View.push(element.${element.autocomplete.optionsApi.labelField[0]});
-            this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}Value.push(element.${element.autocomplete.optionsApi.valueField});
+            this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}View${(array) ? `[${TextTransformation.singularize(array)}Index]` : ``}.push(element.${element.autocomplete.optionsApi.labelField[0]});
+            this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}Value${(array) ? `[${TextTransformation.singularize(array)}Index]` : ``}.push(element.${element.autocomplete.optionsApi.valueField});
           });
         }
         `;

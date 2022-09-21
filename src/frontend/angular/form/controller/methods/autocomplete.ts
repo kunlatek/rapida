@@ -57,42 +57,42 @@ const setAutocompleteMethod = (
     code += `
     add${TextTransformation.pascalfy(
       element.autocomplete.name
-    )}(${(getParentsIndexes && (getParentsIndexes !== "")) ? getParentsIndexes : ""}${(parentArray && array) ? `, ${TextTransformation.singularize(array.id)}Index: number` : ``}${(getParentsIndexes && (getParentsIndexes !== "")) ? ", " : ""}event: MatChipInputEvent): void {
+    )}(${(getParentsIndexes && (getParentsIndexes !== "")) ? `${getParentsIndexes}, ` : ""}${(array) ? `${TextTransformation.singularize(array.id)}Index: number, ` : ``}event: MatChipInputEvent): void {
       const value = (event.value || '').trim();
       
       if (value) {
         this.chosen${TextTransformation.pascalfy(
       element.autocomplete.name
-    )}View.push(value);
+    )}View${(array) ? `[${TextTransformation.singularize(array.id)}Index]` : ``}.push(value);
       }
       event.chipInput!.clear();
       this.${object.form?.id}Form.
       ${array
-        ? `get([${getParentsControl}${(getParentsControl && (getParentsControl !== "")) ? `,` : ``}${(parentArray && array) ? `"${array.id}", ${TextTransformation.singularize(array.id)}Index, ` : ``}"${element.autocomplete.name}"])?.setValue(null);`
+        ? `get([${(getParentsControl && (getParentsControl !== "")) ? `${getParentsControl}, ` : ``}${(array) ? `"${array.id}", ${TextTransformation.singularize(array.id)}Index, ` : ``}"${element.autocomplete.name}"])?.setValue(null);`
         : `get("${element.autocomplete.name}")?.setValue(null);`
       }
     };
 
     remove${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}(${(getParentsIndexes && (getParentsIndexes !== "")) ? getParentsIndexes : ""}${(parentArray && array) ? `, ${TextTransformation.singularize(array.id)}Index: number` : ``}${(getParentsControl && (getParentsControl !== "")) ? ", " : ""}element: string): void {
+      )}(${(getParentsIndexes && (getParentsIndexes !== "")) ? `${getParentsIndexes}, ` : ""}${(array) ? `${TextTransformation.singularize(array.id)}Index: number, ` : ``}element: string): void {
       const index = this.chosen${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}View.indexOf(element);
+      )}View${(array) ? `[${TextTransformation.singularize(array.id)}Index]` : ``}.indexOf(element);
   
       if (index >= 0) {
         this.chosen${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}View.splice(index, 1);
+      )}View${(array) ? `[${TextTransformation.singularize(array.id)}Index]` : ``}.splice(index, 1);
         this.chosen${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}Value.splice(index, 1);
+      )}Value${(array) ? `[${TextTransformation.singularize(array.id)}Index]` : ``}.splice(index, 1);
       
         this.${object.form?.id}Form.
         ${array
         ? `get([${getParentsControl}${(getParentsControl && (getParentsControl !== "")) ? `,` : ``}${(parentArray && array) ? `"${array.id}", ${TextTransformation.singularize(array.id)}Index, ` : ``}"${element.autocomplete.name}"])?.setValue(this.chosen${TextTransformation.pascalfy(
           element.autocomplete.name
-        )}Value);`
+        )}Value[${TextTransformation.singularize(array.id)}Index]);`
         : `get("${element.autocomplete.name}")?.setValue(this.chosen${TextTransformation.pascalfy(
           element.autocomplete.name
         )}Value);`
@@ -102,23 +102,51 @@ const setAutocompleteMethod = (
     
     selected${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}(${(getParentsIndexes && (getParentsIndexes !== "")) ? getParentsIndexes : ""}${(parentArray && array) ? `, ${TextTransformation.singularize(array.id)}Index: number` : ``}${(getParentsControl && (getParentsControl !== "")) ? ", " : ""}event: MatAutocompleteSelectedEvent): void {
+      )}(${(getParentsIndexes && (getParentsIndexes !== "")) ? `${getParentsIndexes}, ` : ""}${(array) ? `${TextTransformation.singularize(array.id)}Index: number, ` : ``}event: MatAutocompleteSelectedEvent): void {
+        ${array
+        ? `
+      if (this.chosen${TextTransformation.pascalfy(
+          element.autocomplete.name
+        )}View[${TextTransformation.singularize(array.id)}Index]) {
+        this.chosen${TextTransformation.pascalfy(
+          element.autocomplete.name
+        )}View[${TextTransformation.singularize(array.id)}Index].push(event.option.viewValue);
       this.chosen${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}View.push(event.option.viewValue);
-      this.chosen${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}Value.push(event.option.value);
-      this.${element.autocomplete.name}Input.nativeElement.value = "";
+          element.autocomplete.name
+        )}Value[${TextTransformation.singularize(array.id)}Index].push(event.option.value);
+        }
+
       
-      this.${object.form?.id}Form.
-      ${array
-        ? `get([${getParentsControl}${(getParentsControl && (getParentsControl !== "")) ? `,` : ``}${(parentArray && array) ? `"${array.id}", ${TextTransformation.singularize(array.id)}Index, ` : ``}"${element.autocomplete.name}"])?.setValue(this.chosen${TextTransformation.pascalfy(
+      if (!this.chosen${TextTransformation.pascalfy(
           element.autocomplete.name
-        )}Value);`
-        : `get("${element.autocomplete.name}")?.setValue(this.chosen${TextTransformation.pascalfy(
+        )}View[${TextTransformation.singularize(array.id)}Index]) {
+        this.chosen${TextTransformation.pascalfy(
           element.autocomplete.name
-        )}Value);`
+        )}View.push([event.option.viewValue]);
+      this.chosen${TextTransformation.pascalfy(
+          element.autocomplete.name
+        )}Value.push([event.option.value]);
+        }
+        this.${element.autocomplete.name}Input.nativeElement.value = "";
+
+        this.${object.form?.id}Form.get([${getParentsControl}${(getParentsControl && (getParentsControl !== "")) ? `,` : ``}${(parentArray && array) ? `"${array.id}", ${TextTransformation.singularize(array.id)}Index, ` : ``}"${element.autocomplete.name}"])?.setValue(this.chosen${TextTransformation.pascalfy(
+          element.autocomplete.name
+        )}Value[${TextTransformation.singularize(array.id)}Index]);
+      `
+        : `
+      this.chosen${TextTransformation.pascalfy(
+          element.autocomplete.name
+        )}View.push(event.option.viewValue);
+      this.chosen${TextTransformation.pascalfy(
+          element.autocomplete.name
+        )}Value.push(event.option.value);
+
+      this.${element.autocomplete.name}Input.nativeElement.value = "";
+
+      this.${object.form?.id}Form.get("${element.autocomplete.name}")?.setValue(this.chosen${TextTransformation.pascalfy(
+          element.autocomplete.name
+        )}Value);
+      `
       }
     };
     `;
@@ -184,7 +212,7 @@ const setAutocompleteMethod = (
   code += `
   setFiltered${TextTransformation.pascalfy(
     element.autocomplete.name
-  )} = async (${(getParentsIndexes && (getParentsIndexes !== "")) ? getParentsIndexes : ""}${(parentArray && array) ? `, ${TextTransformation.singularize(array.id)}Index: number` : ``}) => {
+  )} = async (${(getParentsIndexes && (getParentsIndexes !== "")) ? `${getParentsIndexes}, ` : ""}${(array) ? `${TextTransformation.singularize(array.id)}Index: number` : ``}) => {
     try {
       ${(array && (getParentsIndexes && (getParentsIndexes !== "")))
       ? `this.loading${TextTransformation.pascalfy(
@@ -201,7 +229,7 @@ const setAutocompleteMethod = (
     )}];
       if(this.${object.form?.id}Form.
       ${array
-      ? `get([${getParentsControl}${(getParentsControl && (getParentsControl !== "")) ? `, ` : ``}${(parentArray && array) ? `"${array.id}", ${TextTransformation.singularize(array.id)}Index, ` : ``}"${element.autocomplete.name}"])?.value`
+      ? `get([${(getParentsControl && (getParentsControl !== "")) ? `${getParentsControl}, ` : ``}${(array) ? `"${array.id}", ${TextTransformation.singularize(array.id)}Index, ` : ``}"${element.autocomplete.name}"])?.value`
       : `value.${element.autocomplete.name}`
     }
       .length > 0) {
@@ -210,7 +238,7 @@ const setAutocompleteMethod = (
             return \`{"\${element}":{"like": "\${
               this.${object.form?.id}Form.
               ${array
-      ? `get([${getParentsControl}${(getParentsControl && (getParentsControl !== "")) ? `,` : ``}${(parentArray && array) ? `"${array.id}", ${TextTransformation.singularize(array.id)}Index, ` : ``}"${element.autocomplete.name}"])?.value`
+      ? `get([${(getParentsControl && (getParentsControl !== "")) ? `${getParentsControl}, ` : ``}${(array) ? `"${array.id}", ${TextTransformation.singularize(array.id)}Index, ` : ``}"${element.autocomplete.name}"])?.value`
       : `value.${element.autocomplete.name}`
     }
             }", "options": "i"}}\`
@@ -238,7 +266,7 @@ const setAutocompleteMethod = (
               await this.refreshToken();
               this.setFiltered${TextTransformation.pascalfy(
       element.autocomplete.name
-    )}(${(getParentsIndexes && (getParentsIndexes !== "")) ? getParentsIndexes?.replace(/: number/g, "") : ""}${(parentArray && array) ? `, ${TextTransformation.singularize(array.id)}Index` : ``});
+    )}(${(getParentsIndexes && (getParentsIndexes !== "")) ? `${getParentsIndexes?.replace(/: number/g, "")}, ` : ""}${(array) ? `${TextTransformation.singularize(array.id)}Index` : ``});
             } else {
                 const message = this._errorHandler.apiErrorMessage(err.error.message);
                 this.sendErrorMessage(message);
@@ -259,9 +287,9 @@ const setAutocompleteMethod = (
   code += `
   callSetFiltered${TextTransformation.pascalfy(
     element.autocomplete.name
-  )} = MyPerformance.debounce((${(getParentsIndexes && (getParentsIndexes !== "")) ? getParentsIndexes : ""}${(parentArray && array) ? `, ${TextTransformation.singularize(array.id)}Index: number` : ``}) => this.setFiltered${TextTransformation.pascalfy(
+  )} = MyPerformance.debounce((${(getParentsIndexes && (getParentsIndexes !== "")) ? `${getParentsIndexes}, ` : ""}${(array) ? `${TextTransformation.singularize(array.id)}Index: number` : ``}) => this.setFiltered${TextTransformation.pascalfy(
     element.autocomplete.name
-  )}(${(getParentsIndexes && (getParentsIndexes !== "")) ? getParentsIndexes?.replace(/: number/g, "") : ""}${(parentArray && array) ? `, ${TextTransformation.singularize(array.id)}Index` : ``}));
+  )}(${(getParentsIndexes && (getParentsIndexes !== "")) ? `${getParentsIndexes?.replace(/: number/g, "")}, ` : ""}${(array) ? `${TextTransformation.singularize(array.id)}Index` : ``}));
   `;
 
   return code;
