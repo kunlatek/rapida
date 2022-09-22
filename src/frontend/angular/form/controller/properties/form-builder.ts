@@ -1,17 +1,10 @@
 import { FormInputTypeEnum } from "../../../../../enums/form";
+import { ArrayFeaturesInterface } from "../../../../../interfaces/array";
 import { FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { setArrayLayer } from "../../../core/array";
 
 require('dotenv').config();
-
-export interface ArrayFeaturesInterface {
-  parentArray?: string;
-  layer: number;
-  arrayNumber: number;
-  indexIdentifier: string;
-  name: string;
-}
 
 let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
   process.env.ARRAY_LAYER!

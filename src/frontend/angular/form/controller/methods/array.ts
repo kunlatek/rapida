@@ -1,3 +1,4 @@
+import { ArrayFeaturesInterface } from "../../../../../interfaces/array";
 import {
   ArrayInterface
 } from "../../../../../interfaces/form";
@@ -5,7 +6,6 @@ import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 import { setArrayLayer, setArraysInAFlow } from "../../../core/array";
 import { setFormBuilderByElements } from "../properties/form-builder";
-import { ArrayFeaturesInterface } from "./interfaces";
 import { setFormMethodsByElements } from "./method";
 require("dotenv").config();
 

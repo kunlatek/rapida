@@ -4,6 +4,7 @@ import { TextTransformation } from "../../../../../utils/text.transformation";
 import { setFormSelectOptions } from "./form-select-options";
 
 let _hasCondition = false;
+let _hasArray = false;
 
 const setFormControllerConstructorArguments = (
   object: MainInterface
@@ -12,6 +13,7 @@ const setFormControllerConstructorArguments = (
     console.info("Only forms set here");
     return ``;
   }
+  _hasArray = false;
   let _optionsCreation: string = ``;
   let _patchArrayValues: string = ``;
   let _autocompleteToEdit: string = ``;
@@ -35,7 +37,7 @@ const setFormControllerConstructorArguments = (
     
         if (this.${object.form.id}Id) {
           this.${object.form.id}ToEdit = await this._${object.form.id}Service.find(this.${object.form.id}Id);
-          this._createAllArray(this.${object.form.id}ToEdit.data);
+          ${_hasArray ? `this._createAllArray(this.${object.form.id}ToEdit.data);` : ``}
           this.${object.form.id}Form.patchValue(this.${object.form.id}ToEdit.data);
 
         
@@ -88,6 +90,7 @@ const verifyFormElement = (element: FormElementInterface): void => {
   }
 
   if (element.array) {
+    _hasArray = true;
     element.array.elements.forEach(arrayElement => {
       verifyFormElement(arrayElement);
     });

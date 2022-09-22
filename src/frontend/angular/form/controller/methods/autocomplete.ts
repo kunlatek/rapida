@@ -1,3 +1,4 @@
+import { ArrayFeaturesInterface } from "../../../../../interfaces/array";
 import {
   ArrayInterface,
   FormElementInterface
@@ -5,7 +6,6 @@ import {
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 import { setArrayLayer } from "../../../core/array";
-import { ArrayFeaturesInterface } from "./interfaces";
 require("dotenv").config();
 
 let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
@@ -251,7 +251,7 @@ const setAutocompleteMethod = (
   displayFnTo${TextTransformation.pascalfy(
     element.autocomplete.name
   )} = (value?: any) => {
-      const treatedValue = value._id ? `;
+      const treatedValue = value?._id ? `;
   if (Array.isArray(element.autocomplete.optionsApi.labelField)) {
     const labelFieldLength = element.autocomplete.optionsApi.labelField.length;
     element.autocomplete.optionsApi.labelField.forEach(
@@ -337,9 +337,9 @@ const setAutocompleteMethod = (
       : `value.${element.autocomplete.name}`
     }
       .length > 0) {
-        const filter = \`?filter={"or":[\${paramsToFilter.map((element: string) => {
+        const filter = \`?filter={"$or":[\${paramsToFilter.map((element: string) => {
           if(element !== "undefined") {
-            return \`{"\${element}":{"like": "\${
+            return \`{"\${element}":{"$regex": "\${
               this.${object.form?.id}Form.
               ${array
       ? `get([${getParentsControl && getParentsControl !== ""
@@ -353,7 +353,7 @@ const setAutocompleteMethod = (
       }"${element.autocomplete.name}"])?.value`
       : `value.${element.autocomplete.name}`
     }
-            }", "options": "i"}}\`
+            }", "$options": "i"}}\`
           }
           return;
         })}]}\`;

@@ -1,13 +1,21 @@
 import { FormInputTypeEnum } from "../../../../enums/form";
-import { FormElementInterface } from "../../../../interfaces/form";
+import { ArrayFeaturesInterface } from "../../../../interfaces/array";
+import { ArrayInterface, FormElementInterface } from "../../../../interfaces/form";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
+import { setArrayLayer } from "../../core/array";
+require("dotenv").config();
+
+let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+  process.env.ARRAY_LAYER!
+);
+let _allParents: Array<string> = [];
 
 const setInput = (
   object: MainInterface,
   element: FormElementInterface,
   conditions: string,
-  arrayCurrentIndexAsParam: string | undefined = undefined
+  array: ArrayInterface | undefined = undefined
 ) => {
   let code = ``;
 
@@ -15,10 +23,47 @@ const setInput = (
     return code;
   }
 
+  setArrayLayer(object.form!.elements);
+
+  _arrayLayer = JSON.parse(process.env.ARRAY_LAYER!);
+
+  let parentArray: string | undefined;
+  let getParents: string = ``;
+  let getParentsIndexes: string = ``;
+  let getParentsControl: string = ``;
+
+  if (array) {
+    _arrayLayer?.forEach((arrayLayer: ArrayFeaturesInterface) => {
+      if (arrayLayer.name === array.id) {
+        parentArray = arrayLayer.parentArray;
+      }
+    });
+
+    if (parentArray) {
+      setAllParents(parentArray);
+
+      _allParents.forEach((parent: string, index: number) => {
+        getParents += `this.${parent}.at(${TextTransformation.singularize(
+          parent
+        )}Index).`;
+        getParentsIndexes += `${TextTransformation.singularize(
+          parent
+        )}Index: number${index < _allParents.length - 1 ? ", " : ""}`;
+        getParentsControl += `"${parent}", ${TextTransformation.singularize(
+          parent
+        )}Index${index < _allParents.length - 1 ? ", " : ""}`;
+      });
+    }
+  }
+
   const callMethod = element.input.apiRequest
     ? `(focusout)="callSet${TextTransformation.pascalfy(
       element.input.name
-    )}InputRequestToFind(${arrayCurrentIndexAsParam})"`
+    )}InputRequestToFind(${getParentsIndexes && getParentsIndexes !== ""
+      ? `${getParentsIndexes?.replace(/: number/g, "")}, `
+      : ``
+    }
+        ${array ? `${TextTransformation.singularize(array.id)}Index` : ""})"`
     : "";
   const placeholder = element.input.placeholder
     ? `placeholder="${element.input.placeholder}"`
@@ -83,6 +128,17 @@ const setInput = (
   }
 
   return code;
+};
+
+const setAllParents = (lastParent: string) => {
+  _allParents.push(lastParent);
+
+  _arrayLayer.forEach((element: ArrayFeaturesInterface) => {
+    if (element.name === lastParent && element.parentArray) {
+      _allParents.push(element.parentArray);
+      setAllParents(element.parentArray);
+    }
+  });
 };
 
 export { setInput };

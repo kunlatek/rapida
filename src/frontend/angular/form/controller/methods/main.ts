@@ -1,3 +1,4 @@
+import { ArrayFeaturesInterface } from "../../../../../interfaces/array";
 import { ArrayInterface, FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
@@ -8,7 +9,6 @@ import {
   setConditionOverEdition,
   setConditionsInArray
 } from "./condition";
-import { ArrayFeaturesInterface } from "./interfaces";
 import { setFileSubmit, setMethod, setValueBeforeSubmit } from "./method";
 
 let _hasCondition: boolean = false;

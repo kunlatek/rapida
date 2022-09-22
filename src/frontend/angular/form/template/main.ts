@@ -1,5 +1,6 @@
 import * as chp from "child_process";
 import * as fs from "fs";
+import { ArrayFeaturesInterface } from "../../../../interfaces/array";
 import {
   ArrayInterface,
   FormElementInterface
@@ -14,14 +15,6 @@ import { setConditions } from "./condition";
 import { setInput } from "./input";
 import { setSelect } from "./select";
 require('dotenv').config();
-
-export interface ArrayFeaturesInterface {
-  parentArray?: string;
-  layer: number;
-  arrayNumber: number;
-  indexIdentifier: string;
-  name: string;
-}
 
 let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
   process.env.ARRAY_LAYER!
@@ -97,7 +90,7 @@ const setSpecificStructureOverFormElement = (
   let conditions = setConditions(element, array, arrayCurrentIndexAsParam);
 
   if (element.input) {
-    code += setInput(object, element, conditions, arrayCurrentIndexAsParam);
+    code += setInput(object, element, conditions, array);
   }
 
   if (element.autocomplete) {

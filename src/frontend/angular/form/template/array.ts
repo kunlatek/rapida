@@ -1,8 +1,9 @@
+import { ArrayFeaturesInterface } from "../../../../interfaces/array";
 import { FormElementInterface } from "../../../../interfaces/form";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
 import { setArrayLayer, setArraysInAFlow } from "../../core/array";
-import { ArrayFeaturesInterface, setSpecificStructureOverFormElement } from "./main";
+import { setSpecificStructureOverFormElement } from "./main";
 require("dotenv").config();
 
 let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(

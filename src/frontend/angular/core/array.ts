@@ -1,6 +1,6 @@
+import { ArrayFeaturesInterface } from "../../../interfaces/array";
 import { FormElementInterface, FormInterface } from "../../../interfaces/form";
 import { MainInterface } from "../../../interfaces/main";
-import { ArrayFeaturesInterface } from "../form/template/main";
 require("dotenv").config();
 
 let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(

@@ -43,6 +43,7 @@ const setSelect = (
       </mat-select>
     </mat-form-field>
     `;
+  return code;
 };
 
 export {
