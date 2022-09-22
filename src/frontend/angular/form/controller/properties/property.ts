@@ -92,10 +92,27 @@ const setFormPropertiesByElements = (
       `;
 
       if (element.autocomplete.isMultiple) {
+        const layerCount = _arrayLayer.find((_) => _.name === array?.id);
+        let layerCodeType = ``;
+        let layerCodeValue = ``;
+        if (layerCount) {
+          for (let index = 0; index < (layerCount.layer + 1); index++) {
+            layerCodeType += `[]`;
+            layerCodeValue += `[`;
+          }
+          layerCodeValue += `[]`;
+          for (let index = 0; index < (layerCount.layer + 1); index++) {
+            layerCodeValue += `]`;
+          }
+        }
         code += `
         ${element.autocomplete.name}SeparatorKeysCodes: number[] = [ENTER, COMMA];
-        chosen${TextTransformation.pascalfy(element.autocomplete.name)}View: ${(array) ? `Array<string[]> = [[]]` : `string[] = []`};
-        chosen${TextTransformation.pascalfy(element.autocomplete.name)}Value: ${(array) ? `Array<string[]> = [[]]` : `string[] = []`};
+        chosen${TextTransformation.pascalfy(element.autocomplete.name)}View: ${(array)
+            ? `string[]${layerCodeType} = ${layerCodeValue}`
+            : `string[] = []`};
+        chosen${TextTransformation.pascalfy(element.autocomplete.name)}Value: ${(array)
+            ? `string[]${layerCodeType} = ${layerCodeValue}`
+            : `string[] = []`};
       
         @ViewChild('${element.autocomplete.name}Input') ${element.autocomplete.name}Input!: ElementRef<HTMLInputElement>;
         `;

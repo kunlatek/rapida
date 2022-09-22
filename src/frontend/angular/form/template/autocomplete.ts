@@ -76,7 +76,12 @@ const setAutocomplete = (
             *ngFor="let ${element.autocomplete.name
       }Item of chosen${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}View${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``}" 
+      )}View${getParentsIndexes && getParentsIndexes !== ""
+        ? (`[${getParentsIndexes.replace(/: number/g, "][")}]`).replace("[]", "")
+        : ""
+      }
+      ${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``
+      }"
             (removed)="remove${TextTransformation.pascalfy(
         element.autocomplete.name
       )}(
@@ -101,14 +106,7 @@ const setAutocomplete = (
       )}" 
             [matChipInputFor]="${element.autocomplete.name}ChipList" 
             [matChipInputSeparatorKeyCodes]="${element.autocomplete.name
-      }SeparatorKeysCodes" 
-            (matChipInputTokenEnd)="add${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}(${getParentsIndexes && getParentsIndexes !== ""
-        ? getParentsIndexes?.replace(/: number/g, "")
-        : ""
-      }${getParentsIndexes && getParentsIndexes !== "" && array ? `, ` : ``}${array ? `${TextTransformation.singularize(array.id)}Index, ` : ``
-      }$event)" 
+      }SeparatorKeysCodes"
             (keyup)="callSetFiltered${TextTransformation.pascalfy(
         element.autocomplete.name
       )}(${getParentsIndexes && getParentsIndexes !== ""

@@ -181,7 +181,7 @@ const setFormTemplateArchitectureAndWriteToFile = (
   code: string
 ) => {
   if (!object.form) {
-    return "";
+    return;
   }
 
   const filePath = `${object.projectPath
