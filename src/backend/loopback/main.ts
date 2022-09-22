@@ -1,11 +1,12 @@
-import * as fs from "fs";
 import * as chp from "child_process";
+import * as fs from "fs";
 
+import { FormElementInterface } from "../../interfaces/form";
 import { BuildedBackendCode, MainInterface } from "../../interfaces/main";
 import { controllerMain } from "./controller/main";
 import { modelMain } from "./model/main";
 import { repositoryMain } from "./repository/main";
-import { FormElementInterface } from "../../interfaces/form";
+import { schemaMain } from "./schema/main";
 
 const createLoopbackProject = (
   object: MainInterface,
@@ -16,6 +17,7 @@ const createLoopbackProject = (
     controller: "",
     repository: "",
     service: "",
+    mongooseSchema: "",
   };
 
   if (!doesProjectFolderExists(object)) {
@@ -26,11 +28,13 @@ const createLoopbackProject = (
     const controllerCode = controllerMain(object);
     const modelCode = modelMain(object);
     const repositoryCode = repositoryMain(object, index);
+    const mongooseSchemaCode = schemaMain(object);
 
     response = {
       controller: controllerCode,
       model: modelCode,
       repository: repositoryCode,
+      mongooseSchema: mongooseSchemaCode,
     };
   }
 
@@ -79,7 +83,7 @@ const doesProjectFolderExists = (object: MainInterface) => {
     console.info(`Project folder ${projectPath} doesn't exist.`);
     return false;
   }
-}
+};
 
 const getAllElements = (
   elementList: Array<FormElementInterface>,
@@ -134,10 +138,10 @@ const getAllElements = (
 
     // }
 
-  })
+  });
 
   return elementsToReturn;
-}
+};
 
 export {
   createLoopbackProject,

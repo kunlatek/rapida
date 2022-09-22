@@ -1,5 +1,5 @@
 import { BackendFrameworkEnum } from "../enums/main";
-import { MainInterface, BuildedBackendCode } from "../interfaces/main";
+import { BuildedBackendCode, MainInterface } from "../interfaces/main";
 import { createLoopbackProject } from "./loopback/main";
 
 const setBackend = (
@@ -10,6 +10,7 @@ const setBackend = (
     controller: "",
     model: "",
     repository: "",
+    mongooseSchema: "",
   };
 
   try {
