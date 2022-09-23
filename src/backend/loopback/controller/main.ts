@@ -38,11 +38,7 @@ const setControllerArchitectureAndWriteToFile = (
   object: MainInterface,
   code: string
 ) => {
-  const componentFilePath = `${
-    object.projectPath
-  }-api/src/controllers/${TextTransformation.kebabfy(
-    object.form?.id.replace("Form", "")!
-  )}.controller.ts`;
+  const componentFilePath = `${object.projectPath}-api/src/controllers/${TextTransformation.kebabfy(object.form?.id.replace("Form", "")!)}.controller.ts`;
   const componentIndexFilePath = `${object.projectPath}-api/src/controllers/index.ts`;
 
   try {

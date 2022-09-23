@@ -1,8 +1,8 @@
 import * as fs from "fs";
 
-import { ComponentCodeTypeEnum } from "../../../enums/architecture";
-import { MainInterface } from "../../../interfaces/main";
-import { TextTransformation } from "../../../utils/text.transformation";
+import { ComponentCodeTypeEnum } from "../../../../enums/architecture";
+import { MainInterface } from "../../../../interfaces/main";
+import { TextTransformation } from "../../../../utils/text.transformation";
 import { setModelConstructorParams } from "./constructor-params";
 import { setModelConstructorArguments } from "./contructor-args";
 import { setModelImports } from "./imports";
@@ -43,7 +43,7 @@ const modelMain = (
 
   setModelArchitectureAndWriteToFile(object, code);
   return code;
-}
+};
 
 /**
  * JOIN CODE AND ARCHITECTURE
