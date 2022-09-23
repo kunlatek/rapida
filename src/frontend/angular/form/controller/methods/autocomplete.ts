@@ -29,7 +29,6 @@ const setAutocompleteMethod = (
   _arrayLayer = JSON.parse(process.env.ARRAY_LAYER!);
 
   let parentArray: string | undefined;
-  let getParents: string = ``;
   let getParentsIndexes: string = ``;
   let getParentsControl: string = ``;
 
@@ -44,9 +43,6 @@ const setAutocompleteMethod = (
       setAllParents(parentArray);
 
       _allParents.forEach((parent: string, index: number) => {
-        getParents += `this.${parent}.at(${TextTransformation.singularize(
-          parent
-        )}Index).`;
         getParentsIndexes += `${TextTransformation.singularize(
           parent
         )}Index: number${index < _allParents.length - 1 ? ", " : ""}`;
@@ -168,6 +164,7 @@ const setAutocompleteMethod = (
 
       matrixCreation.push(matrixCode);
     });
+
     code += `
     selected${TextTransformation.pascalfy(element.autocomplete.name)}(${getParentsIndexes && getParentsIndexes !== ""
         ? `${getParentsIndexes}, `

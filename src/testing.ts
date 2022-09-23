@@ -29,9 +29,6 @@ const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitat
 const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api";
 const projectPath = "/home/ryzzan/Projects/a-plus-energy-fundamento";
 
-/**
- * A+ ENERGY
- */
 import { CLIENT } from "../collections-frontend/clients/a-plus-energy-fundamento/client";
 import { CLIENT_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-form";
 import { CLIENT_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-table";
@@ -59,12 +56,8 @@ import { SERVICE_TABLE } from "../collections-frontend/clients/a-plus-energy-fun
 import { ACTION } from "../collections-frontend/clients/a-plus-energy-fundamento/action";
 import { ACTION_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/action-form";
 import { ACTION_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/action-table";
-//////////////////////////////////////////////////////////
 
 const array = [
-  /**
-   * A+ ENERGY 
-   */
   CLIENT_FORM,
   CLIENT_TABLE,
   CLIENT,

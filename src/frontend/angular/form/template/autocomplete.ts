@@ -30,7 +30,6 @@ const setAutocomplete = (
   _arrayLayer = JSON.parse(process.env.ARRAY_LAYER!);
 
   let parentArray: string | undefined;
-  let getParents: string = ``;
   let getParentsIndexes: string = ``;
   let getParentsControl: string = ``;
 
@@ -45,9 +44,6 @@ const setAutocomplete = (
       setAllParents(parentArray);
 
       _allParents.forEach((parent: string, index: number) => {
-        getParents += `this.${parent}.at(${TextTransformation.singularize(
-          parent
-        )}Index).`;
         getParentsIndexes += `${TextTransformation.singularize(
           parent
         )}Index: number${index < _allParents.length - 1 ? ", " : ""}`;
@@ -77,11 +73,10 @@ const setAutocomplete = (
       }Item of chosen${TextTransformation.pascalfy(
         element.autocomplete.name
       )}View${getParentsIndexes && getParentsIndexes !== ""
-        ? (`[${getParentsIndexes.replace(/: number/g, "][")}]`).replace("[]", "")
+        ? `[${getParentsIndexes.replace(/: number/g, "][")}]`.replace("[]", "")
         : ""
       }
-      ${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``
-      }"
+      ${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``}"
             (removed)="remove${TextTransformation.pascalfy(
         element.autocomplete.name
       )}(
@@ -181,7 +176,8 @@ const setAutocomplete = (
         </mat-autocomplete>
       </mat-form-field>
       `;
-  } else {
+  }
+  if (!element.autocomplete.isMultiple) {
     code += `
       <mat-form-field ${conditions}>
         <mat-label>${element.autocomplete.label}</mat-label>
@@ -199,9 +195,7 @@ const setAutocomplete = (
     )}(${getParentsIndexes && getParentsIndexes !== ""
       ? getParentsIndexes?.replace(/: number/g, "")
       : ""
-      }${parentArray && array
-        ? `, ${TextTransformation.singularize(array.id)}Index`
-        : ``
+      }${getParentsIndexes && getParentsIndexes !== "" && array ? `, ` : ``}${array ? `${TextTransformation.singularize(array.id)}Index` : ``
       })" 
               ${required}
         >

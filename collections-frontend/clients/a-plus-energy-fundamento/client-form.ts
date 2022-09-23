@@ -39,7 +39,7 @@ export const CLIENT_FORM: MainInterface = {
                 input: {
                   label: "CPF/CNPJ",
                   name: "uniqueId",
-                  type: FormInputTypeEnum.Number,
+                  type: FormInputTypeEnum.Text,
                   placeholder: "Apenas números",
                   isRequired: true,
                 }
