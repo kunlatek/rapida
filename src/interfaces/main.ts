@@ -1,11 +1,11 @@
-import { ModelInterface } from './model';
 import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../enums/main";
+import { ChartInterface } from './chart';
 import { FormInterface } from "./form";
+import { ListInterface } from './list';
+import { ModelInterface } from './model';
 import { ModuleInterface } from "./module";
 import { TableInterface } from "./table";
 import { TreeInterface } from "./tree";
-import { ChartInterface } from './chart';
-import { ListInterface } from './list';
 
 export interface MainInterface {
   backendFramework?: BackendFrameworkEnum;
@@ -39,4 +39,5 @@ export interface BuildedBackendCode {
   controller: string;
   repository?: string;
   service?: string;
+  mongooseSchema?: string;
 };

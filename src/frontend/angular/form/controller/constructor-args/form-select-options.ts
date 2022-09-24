@@ -1,20 +1,20 @@
 import { FormElementInterface } from "../../../../../interfaces/form";
-import { MainInterface } from "../../../../../interfaces/main"
+import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 
 const setFormSelectOptions = (
   object: MainInterface
 ): string => {
   let code = ``;
-  
+
   if (!object.form) {
     return code;
   }
-  
+
   code += setFormSelectOptionsByElements(object, object.form.elements);
 
   return code;
-}
+};
 
 const setFormSelectOptionsByElements = (
   object: MainInterface,
@@ -22,13 +22,13 @@ const setFormSelectOptionsByElements = (
 ): string => {
   let code = ``;
 
-  formElements.forEach(element => {    
+  formElements.forEach(element => {
     if (element.select) {
       if (element.select.optionsApi) {
         code += `this.set${TextTransformation.pascalfy(element.select.name)}SelectObject,`;
       }
     }
-  
+
     if (element.checkbox) {
       if (element.checkbox.optionsApi) {
         code += ` 
@@ -49,21 +49,21 @@ const setFormSelectOptionsByElements = (
         );`;
       }
     }
-  
+
     if (element.tabs) {
       element.tabs.forEach(tabs => {
         code += setFormSelectOptionsByElements(object, tabs.elements);
       });
     }
-  
+
     if (element.array) {
       code += setFormSelectOptionsByElements(object, element.array.elements);
     }
   });
 
   return code;
-}
+};
 
 export {
   setFormSelectOptions
-}
+};

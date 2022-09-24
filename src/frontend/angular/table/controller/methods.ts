@@ -41,8 +41,8 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
     }DisplayedColumns.filter((col) => col !== 'actions').reduce((previous: any, current) => {
       const param = {
         [current]: {
-          like: valueToSearch,
-          options: "i"
+          $regex: valueToSearch,
+          $options: "i"
         }
       };
       previous.or.push(param);

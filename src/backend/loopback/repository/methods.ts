@@ -1,6 +1,5 @@
 import { FormElementInterface } from "../../../interfaces/form";
 import { MainInterface } from "../../../interfaces/main";
-import { TextTransformation } from "../../../utils/text.transformation";
 import { getAllElements } from "../main";
 
 const setRepositoryMethods = (object: MainInterface): string => {
@@ -29,19 +28,19 @@ const setMethodsByElement = (
 
   let code = ``;
 
-  if (value.optionsApi && value.optionsApi.endpoint) {
-    const className = TextTransformation.setIdToClassName(
-      TextTransformation.pascalfy(
-        TextTransformation.singularize(
-          value.optionsApi.endpoint.split("-").join(" ")
-        )
-      )
-    );
+  // if (value.optionsApi && value.optionsApi.endpoint) {
+  //   const className = TextTransformation.setIdToClassName(
+  //     TextTransformation.pascalfy(
+  //       TextTransformation.singularize(
+  //         value.optionsApi.endpoint.split("-").join(" ")
+  //       )
+  //     )
+  //   );
 
-    if (value.isMultiple) {
-      code += createRepositoryRelatedModels(TextTransformation.pascalfy(modelName), className);
-    }
-  }
+  //   if (value.isMultiple) {
+  //     code += createRepositoryRelatedModels(TextTransformation.pascalfy(modelName), className);
+  //   }
+  // }
 
   return code;
 };

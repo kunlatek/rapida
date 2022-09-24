@@ -1,5 +1,5 @@
-import * as fs from "fs";
 import * as chp from "child_process";
+import * as fs from "fs";
 import { MainInterface } from "../../../../interfaces/main";
 import { ModuleInterface } from "../../../../interfaces/module";
 import { TextTransformation } from "../../../../utils/text.transformation";
@@ -9,18 +9,18 @@ import { TextTransformation } from "../../../../utils/text.transformation";
  * @param object
  * @returns
  */
- const setModuleTemplate = (object: MainInterface, mainArray: Array<MainInterface> | undefined = undefined,): string => {
+const setModuleTemplate = (object: MainInterface, mainArray: Array<MainInterface> | undefined = undefined,): string => {
   if (!object.module) {
     console.info("Only modules set here");
     return ``;
   }
 
   let components = setModuleComponents(object.module);
-  
+
   let code = `
   ${components}
   `;
-  
+
   setModuleTemplateArchitectureAndWriteToFile(object, code);
   return code;
 };
@@ -58,26 +58,25 @@ const setModuleComponents = (module: ModuleInterface): string => {
   }
 
   return code;
-}
+};
 
 /**
  * JOIN CODE AND ARCHITECTURE
  * @param object
  * @param code
  */
- const setModuleTemplateArchitectureAndWriteToFile = (
+const setModuleTemplateArchitectureAndWriteToFile = (
   object: MainInterface,
   code: string
 ) => {
   if (!object.module) {
-    return "";
+    return;
   }
 
-  const filePath = `${
-    object.projectPath
-  }/src/app/modules/${TextTransformation.kebabfy(
-    object.module.id
-  )}/${TextTransformation.kebabfy(object.module.id)}.component.html`;
+  const filePath = `${object.projectPath
+    }/src/app/modules/${TextTransformation.kebabfy(
+      object.module.id
+    )}/${TextTransformation.kebabfy(object.module.id)}.component.html`;
 
   try {
     fs.writeFileSync(filePath, code);

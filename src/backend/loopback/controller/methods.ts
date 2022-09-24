@@ -2,76 +2,26 @@ import { FormInputTypeEnum } from "../../../enums/form";
 import { FormElementInterface } from "../../../interfaces/form";
 import { MainInterface } from "../../../interfaces/main";
 import { TextTransformation } from "../../../utils/text.transformation";
+
+const stringTypes = [
+  "email",
+  "password",
+  "tel",
+  "text",
+  "url",
+  "date",
+  "datetime-local",
+  "month",
+  "range",
+  "time",
+  "url",
+  "week",
+];
+const numberTypes = ["number"];
+
+const booleanTypes = ["slide"];
+
 import { getAllElements } from "../main";
-
-const setGetRelatedElementsInArrayType = (object: MainInterface): string => {
-  if (!object.form) {
-    console.info("Only forms set here");
-    return ``;
-  }
-
-  let _findRelatedElements = ``;
-
-  const elements: Array<FormElementInterface> = getAllElements(object.form.elements);
-
-  elements.forEach((element) => {
-    const type = Object.keys(element)[0];
-    if (type === 'array') {
-      const value = Object.values(element)[0];
-      const relatedType = TextTransformation.setIdToClassName(value.id);
-
-      const createMultidimensionalArrayFindRelatedCode = (
-        elements: Array<FormElementInterface>,
-        relatedId: string,
-        isFirstArray: boolean,
-      ) => {
-
-        let _findRelatedElementsToReturn = ``;
-        elements?.forEach((elementProperty: FormElementInterface) => {
-
-          if (elementProperty.autocomplete || elementProperty.array) {
-
-            if (elementProperty.autocomplete) {
-              const collection = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(elementProperty.autocomplete?.optionsApi?.endpoint?.split('-').join(' ') || '')));
-              _findRelatedElementsToReturn +=
-                `
-                const relatedData_${relatedType}_${value.id}_${elementProperty.autocomplete.name} = await getRelatedElements('${collection}', ${isFirstArray ? 'data' : TextTransformation.singularize(value.id)}?.${relatedId}?.map(el => el.${elementProperty.autocomplete.name}) || []);
-                ${TextTransformation.singularize(relatedId)}.${elementProperty.autocomplete.name.slice(0, -2)} = relatedData_${relatedType}_${value.id}_${elementProperty.autocomplete.name}.find(childEl => childEl._id.toString() === ${TextTransformation.singularize(relatedId)}.${elementProperty.autocomplete.name})
-              `;
-            } else if (elementProperty.array) {
-              _findRelatedElementsToReturn +=
-                `
-                for(
-                  let ${elementProperty.array?.id}Index = 0; 
-                  ${elementProperty.array?.id}Index < ${TextTransformation.singularize(relatedId)}?.${elementProperty.array?.id}?.length!; 
-                  ${elementProperty.array?.id}Index++
-                ){
-                  
-                  const ${TextTransformation.singularize(elementProperty.array?.id)} = ${TextTransformation.singularize(relatedId)}?.${elementProperty.array?.id}![${elementProperty.array?.id}Index];
-                  
-                  ${createMultidimensionalArrayFindRelatedCode(elementProperty.array?.elements!, elementProperty.array?.id!, false)}
-                };
-              `;
-            }
-          }
-        });
-
-        return _findRelatedElementsToReturn;
-      };
-
-      _findRelatedElements +=
-        `
-        for(let ${value.id}Index = 0; ${value.id}Index < data.${value.id}?.length!; ${value.id}Index++){
-          const ${TextTransformation.singularize(value.id)} = data.${value.id}![${value.id}Index];
-          
-          ${createMultidimensionalArrayFindRelatedCode(value.elements, value.id, true)}
-        }
-      `;
-    }
-  });
-
-  return _findRelatedElements;
-};
 
 const setControllerMethods = (object: MainInterface): string => {
   if (!object.form) {
@@ -82,39 +32,47 @@ const setControllerMethods = (object: MainInterface): string => {
   const modelName: string = object.form.id.replace("Form", "");
 
   let _propertiesRelatedFind: string = ``;
-  let _createRelated: string = ``;
-  let _deleteRelated: string = ``;
   let _storageFile: string = ``;
 
   const elements: Array<FormElementInterface> = getAllElements(object.form?.elements);
 
   elements.forEach((element) => {
-    _propertiesRelatedFind += setPropertiesToFindByElement(element);
-    _createRelated += setCreateAllMethodsByElement(object, element);
-    _deleteRelated += setDeleteAllMethodsByElement(object, element);
     _storageFile += setStorageFileByElement(object, element);
   });
 
   let code = `
-  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(
-    modelName
-  )}', action: 'createOne'}})
-  @post('/${TextTransformation.plurarize(
-    TextTransformation.kebabfy(modelName)
-  )}')
-  @response(200, {
-      description: '${TextTransformation.pascalfy(modelName)} model instance',
-      properties: HttpDocumentation.createDocResponseSchemaForFindOneResult(${TextTransformation.pascalfy(
-    modelName
-  )})
+  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'createOne'}})
+  @post('/${TextTransformation.plurarize(TextTransformation.kebabfy(modelName))}')
+  @response(201, {
+    description: '${TextTransformation.pascalfy(modelName)} model instance',
+    properties: {
+      'statusCode': {type: 'number', default: 200},
+      'message': {type: 'string'},
+      'tokens': {
+        type: 'array',
+        items: {
+          properties: {
+            'authToken': {type: 'string'},
+            'refreshAuthToken': {type: 'string'},
+          }
+        }
+      },
+      'data': {
+        properties: ${setRequestBodyContent(object)}
+      }
+    }
   })
   async create(
-      @requestBody({
-          content: HttpDocumentation.createDocRequestSchema(${TextTransformation.pascalfy(
-    modelName
-  )})
-      }) data: ${TextTransformation.pascalfy(modelName)},
-      @param.query.string('locale') locale?: LocaleEnum,
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: {
+            properties: ${setRequestBodyContent(object)}
+          },
+        },
+      },
+    }) data: any,
+    @param.query.string('locale') locale?: LocaleEnum,
   ): Promise<IHttpResponse> {
       try {
   
@@ -125,11 +83,12 @@ const setControllerMethods = (object: MainInterface): string => {
           ${_storageFile}
           ${setStorageFileInArrayType(object)}
       
-          const dataCreated = await this.repository.create({...dataWithoutNullProperties, _createdBy: createdBy, _ownerId: ownerId});
+          const dataCreated = await ${TextTransformation.pascalfy(modelName)}Schema.create({
+            ...dataWithoutNullProperties, 
+            _createdBy: createdBy, 
+            _ownerId: ownerId
+          });
           
-          const dataToWorkInRelation = data;
-          const idToWorkInRelation = dataCreated._id;
-          ${_createRelated}
           const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
 
           return HttpResponseToClient.createHttpResponse({
@@ -152,38 +111,59 @@ const setControllerMethods = (object: MainInterface): string => {
       }
   }
   
-  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(
-    modelName
-  )}', action: 'read'}})
-  @get('/${TextTransformation.plurarize(
-    TextTransformation.kebabfy(modelName)
-  )}')
+  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'read'}})
+  @get('/${TextTransformation.plurarize(TextTransformation.kebabfy(modelName))}')
   @response(200, {
-      description: 'Array of ${TextTransformation.pascalfy(
-    modelName
-  )} model instances',
-      properties: HttpDocumentation.createDocResponseSchemaForFindManyResults(${TextTransformation.pascalfy(
-    modelName
-  )})
+    description: 'Array of ${TextTransformation.pascalfy(modelName)} model instances',
+    properties: {
+      'statusCode': {type: 'number', default: 200},
+      'message': {type: 'string'},
+      'tokens': {
+        type: 'array',
+        items: {
+          properties: {
+            'authToken': {type: 'string'},
+            'refreshAuthToken': {type: 'string'},
+          }
+        }
+      },
+      'data': {
+        properties: {
+          total: {type: 'number'},
+          result: {
+            type: 'array',
+            items: {
+              properties: ${setRequestBodyContent(object)}
+            }
+          }
+        }
+      }
+    }
   })
   async find(
+      @param.query.string('filters') filters?: string,
       @param.query.number('limit') limit?: number,
       @param.query.number('page') page?: number,
       @param.query.string('order_by') orderBy?: string,
       @param.query.string('locale') locale?: LocaleEnum,
   ): Promise<IHttpResponse> {
       try {
-  
-          const filters = HttpDocumentation.createFilterRequestParams(this.httpRequest.url);
-      
-          const result = await this.repository.find({...filters, include: [${_propertiesRelatedFind}]});
-      
-          const total = await this.repository.count(filters['where']);
+          let and = [{ _deletedAt: null }]
+          if (filters) and.push(JSON.parse(filters))
+
+          const result = await ${TextTransformation.pascalfy(modelName)}Schema
+            .find({"$and": and})
+            .limit(limit || 100)
+            .skip((limit || 100) * (page || 0))
+            .sort(orderBy ? { [orderBy]: -1 } : { _createdAt: -1 })
+            ${setDeepPopulate(object)};
+
+          const total = await ${TextTransformation.pascalfy(modelName)}Schema.countDocuments({"$and": and});
 
           const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
 
           return HttpResponseToClient.okHttpResponse({
-              data: {total: total?.count, result},
+              data: {total: total, result},
               tokens,
               locale,
               request: this.httpRequest,
@@ -202,17 +182,26 @@ const setControllerMethods = (object: MainInterface): string => {
       }
   }
   
-  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(
-    modelName
-  )}', action: 'readOne'}})
-  @get('/${TextTransformation.plurarize(
-    TextTransformation.kebabfy(modelName)
-  )}/{id}')
+  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'readOne'}})
+  @get('/${TextTransformation.plurarize(TextTransformation.kebabfy(modelName))}/{id}')
   @response(200, {
-      description: '${TextTransformation.pascalfy(modelName)} model instance',
-      properties: HttpDocumentation.createDocResponseSchemaForFindOneResult(${TextTransformation.pascalfy(
-    modelName
-  )})
+    description: '${TextTransformation.pascalfy(modelName)} model instance',
+    properties: {
+      'statusCode': {type: 'number', default: 200},
+      'message': {type: 'string'},
+      'tokens': {
+        type: 'array',
+        items: {
+          properties: {
+            'authToken': {type: 'string'},
+            'refreshAuthToken': {type: 'string'},
+          }
+        }
+      },
+      'data': {
+        properties: ${setRequestBodyContent(object)}
+      }
+    }
   })
   async findById(
       @param.path.string('id') id: string,
@@ -220,13 +209,10 @@ const setControllerMethods = (object: MainInterface): string => {
   ): Promise<IHttpResponse> {
       try {
   
-          let data = await this.repository.findOne({
-              where: {and: [{_id: id}, {_deletedAt: {eq: null}}]},
-              include: [${_propertiesRelatedFind}],
-          });
+          let data = await ${TextTransformation.pascalfy(modelName)}Schema.findById(id)
+          ${setDeepPopulate(object)}
+          
           if (!data) throw new Error(serverMessages['httpResponse']['notFoundError'][locale ?? LocaleEnum['pt-BR']]);
-
-          ${setGetRelatedElementsInArrayType(object)}
 
           const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
       
@@ -250,36 +236,31 @@ const setControllerMethods = (object: MainInterface): string => {
       }
   }
   
-  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(
-    modelName
-  )}', action: 'updateOne'}})
-  @put('/${TextTransformation.plurarize(
-    TextTransformation.kebabfy(modelName)
-  )}/{id}')
-  @response(200, {description: '${TextTransformation.pascalfy(
-    modelName
-  )} PUT success'})
+  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'updateOne'}})
+  @put('/${TextTransformation.plurarize(TextTransformation.kebabfy(modelName))}/{id}')
+  @response(200, {description: '${TextTransformation.pascalfy(modelName)} PUT success'})
   async updateById(
       @param.path.string('id') id: string,
       @requestBody({
-          content: HttpDocumentation.createDocRequestSchema(${TextTransformation.pascalfy(
-    modelName
-  )})
-      }) data: ${TextTransformation.pascalfy(modelName)},
+        content: {
+          'application/json': {
+            schema: {
+              properties: ${setRequestBodyContent(object)}
+            },
+          },
+        },
+      }) data: any,
       @param.query.string('locale') locale?: LocaleEnum,
   ): Promise<IHttpResponse> {
       try {
-          let dataToWorkInRelation = await this.repository.findById(id);
-          ${_deleteRelated}
+          
           const dataWithoutNullProperties = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null));
           
           ${_storageFile}
           ${setStorageFileInArrayType(object)}
   
-          await this.repository.updateById(id, dataWithoutNullProperties);
-          const idToWorkInRelation = dataToWorkInRelation._id;
-          dataToWorkInRelation = JSON.parse(JSON.stringify(data));
-          ${_createRelated}
+          await ${TextTransformation.pascalfy(modelName)}Schema.findByIdAndUpdate(id, dataWithoutNullProperties);
+          
           const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
       
           return HttpResponseToClient.noContentHttpResponse({
@@ -301,37 +282,30 @@ const setControllerMethods = (object: MainInterface): string => {
       }
   }
   
-  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(
-    modelName
-  )}', action: 'updateOne'}})
-  @patch('/${TextTransformation.plurarize(
-    TextTransformation.kebabfy(modelName)
-  )}/{id}')
-  @response(200, {description: '${TextTransformation.pascalfy(
-    modelName
-  )} PATCH success'})
+  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'updateOne'}})
+  @patch('/${TextTransformation.plurarize(TextTransformation.kebabfy(modelName))}/{id}')
+  @response(200, {description: '${TextTransformation.pascalfy(modelName)} PATCH success'})
   async partialUpdateById(
       @param.path.string('id') id: string,
       @requestBody({
-          content: HttpDocumentation.createDocRequestSchema(${TextTransformation.pascalfy(
-    modelName
-  )})
+        content: {
+          'application/json': {
+            schema: {
+              properties: ${setRequestBodyContent(object)}
+            },
+          },
+        },
       }) data: ${TextTransformation.pascalfy(modelName)},
       @param.query.string('locale') locale?: LocaleEnum,
   ): Promise<IHttpResponse> {
       try {
-          let dataToWorkInRelation = await this.repository.findById(id);
-          ${_deleteRelated}
+          
           const dataWithoutNullProperties = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null));
           
           ${_storageFile}
           ${setStorageFileInArrayType(object)}
-  
-          await this.repository.updateById(id, dataWithoutNullProperties);
 
-          const idToWorkInRelation = dataToWorkInRelation._id;
-          dataToWorkInRelation = JSON.parse(JSON.stringify(data));
-          ${_createRelated}
+          await ${TextTransformation.pascalfy(modelName)}Schema.findByIdAndUpdate(id, dataWithoutNullProperties);
 
           const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
       
@@ -354,12 +328,8 @@ const setControllerMethods = (object: MainInterface): string => {
       }
   }
   
-  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(
-    modelName
-  )}', action: 'deleteOne'}})
-  @del('/${TextTransformation.plurarize(
-    TextTransformation.kebabfy(modelName)
-  )}/{id}')
+  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'deleteOne'}})
+  @del('/${TextTransformation.plurarize(TextTransformation.kebabfy(modelName))}/{id}')
   @response(204, {description: 'Project DELETE success'})
   async deleteById(
       @param.path.string('id') id: string,
@@ -367,9 +337,7 @@ const setControllerMethods = (object: MainInterface): string => {
   ): Promise<IHttpResponse> {
       try {
   
-          const dataToDelete = await this.repository.findById(id);
-      
-          await this.repository.updateById(id, {...dataToDelete, _deletedAt: new Date()});
+          await ${TextTransformation.pascalfy(modelName)}Schema.findByIdAndUpdate(id, {_deletedAt: new Date()});
 
           const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
 
@@ -392,12 +360,9 @@ const setControllerMethods = (object: MainInterface): string => {
       }
   }
 
-  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(
-    modelName
-  )}', action: 'read'}})
-  @get('/${TextTransformation.plurarize(
-    TextTransformation.kebabfy(modelName)
-  )}/chart')
+  /*
+  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'read'}})
+  @get('/${TextTransformation.plurarize(TextTransformation.kebabfy(modelName))}/chart')
   @response(200, {
     description: 'Chart label and data',
     content: {
@@ -447,12 +412,8 @@ const setControllerMethods = (object: MainInterface): string => {
     }
   }
 
-  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(
-    modelName
-  )}', action: 'read'}})
-  @get('/${TextTransformation.plurarize(
-    TextTransformation.kebabfy(modelName)
-  )}/chart/details')
+  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'read'}})
+  @get('/${TextTransformation.plurarize(TextTransformation.kebabfy(modelName))}/chart/details')
   @response(200, {
       description: 'Chart details',
       content: {
@@ -496,124 +457,10 @@ const setControllerMethods = (object: MainInterface): string => {
       });
     }
   }
+  */
   `;
 
   return code;
-};
-
-const setPropertiesToFindByElement = (
-  element: FormElementInterface
-): string => {
-  let code = ``;
-
-  const value = Object.values(element)[0];
-
-  if (value.optionsApi && value.optionsApi.endpoint) {
-    const propertyName = TextTransformation.setIdToPropertyName(
-      TextTransformation.pascalfy(
-        TextTransformation.singularize(
-          value.optionsApi.endpoint.split("-").join(" ")
-        )
-      )
-    );
-    if (value.isMultiple)
-      code += `'${propertyName}',`;
-    else
-      code += `'${value.name.slice(0, -2)}',`;
-  }
-
-  return code;
-};
-
-const setCreateAllMethodsByElement = (
-  object: MainInterface,
-  element: FormElementInterface
-): string => {
-  let code = ``;
-
-  const modelName: string = object.form!.id.replace("Form", "");
-  const value = Object.values(element)[0];
-
-  if (value.optionsApi && value.optionsApi.endpoint) {
-    const className = TextTransformation.setIdToClassName(
-      TextTransformation.pascalfy(
-        TextTransformation.singularize(
-          value.optionsApi.endpoint.split("-").join(" ")
-        )
-      )
-    );
-    if (value.isMultiple) {
-      code += createCreateAllMethods(modelName, className, value.name);
-    }
-  }
-
-  return code;
-};
-
-const setDeleteAllMethodsByElement = (
-  object: MainInterface,
-  element: FormElementInterface
-): string => {
-  let code = ``;
-
-  const modelName: string = object.form!.id.replace("Form", "");
-  const value = Object.values(element)[0];
-
-  if (value.optionsApi && value.optionsApi.endpoint) {
-    const className = TextTransformation.setIdToClassName(
-      TextTransformation.pascalfy(
-        TextTransformation.singularize(
-          value.optionsApi.endpoint.split("-").join(" ")
-        )
-      )
-    );
-    if (value.isMultiple) {
-      code += createDeleteAllMethods(modelName, className, value.name);
-    }
-  }
-
-  return code;
-};
-
-const createCreateAllMethods = (
-  mainProperty: string,
-  secondProperty: string,
-  relatedPropertyName: string
-): string => {
-  const mainPropertyCamelCase =
-    mainProperty.charAt(0).toLowerCase() + mainProperty.slice(1);
-  const secondPropertyCamelCase =
-    secondProperty.charAt(0).toLowerCase() + secondProperty.slice(1);
-
-  return `
-      if(dataToWorkInRelation.${relatedPropertyName} && (dataToWorkInRelation.${relatedPropertyName}.length > 0)){
-        await this.${mainPropertyCamelCase}Has${secondProperty}Repository.createAll(
-            (dataToWorkInRelation.${relatedPropertyName} as any[]).map(${secondPropertyCamelCase} => {
-                return {
-                    ${mainPropertyCamelCase}Id: idToWorkInRelation, 
-                    ${secondPropertyCamelCase}${mainPropertyCamelCase === secondPropertyCamelCase ? "Related" : ""}Id: ${secondPropertyCamelCase},
-                };
-            })
-        ); 
-      }
-  `;
-};
-
-const createDeleteAllMethods = (
-  mainProperty: string,
-  secondProperty: string,
-  relatedPropertyName: string
-): string => {
-  const mainPropertyCamelCase =
-    mainProperty.charAt(0).toLowerCase() + mainProperty.slice(1);
-  const secondPropertyCamelCase =
-    secondProperty.charAt(0).toLowerCase() + secondProperty.slice(1);
-
-  return `
-      if(dataToWorkInRelation.${relatedPropertyName} && (dataToWorkInRelation.${relatedPropertyName}.length > 0)){
-        await this.${mainPropertyCamelCase}Has${secondProperty}Repository.deleteAll({ ${mainPropertyCamelCase}Id: id }) 
-      }
-  `;
 };
 
 const setStorageFileByElement = (
@@ -655,18 +502,18 @@ const setStorageFileInArrayType = (object: MainInterface): string => {
 
   let _findRelatedElements = ``;
 
+  let hasFileInArrayType: boolean = false;
+
   const elements: Array<FormElementInterface> = getAllElements(object.form.elements);
 
   elements.forEach((element) => {
     const type = Object.keys(element)[0];
     if (type === 'array') {
       const value = Object.values(element)[0];
-      const relatedType = TextTransformation.setIdToClassName(value.id);
 
       const createMultidimensionalArrayStorageFileCode = (
         elements: Array<FormElementInterface>,
         relatedId: string,
-        isFirstArray: boolean,
       ) => {
 
         let _storageFileToReturn = ``;
@@ -677,6 +524,8 @@ const setStorageFileInArrayType = (object: MainInterface): string => {
           if (elementValue.type === FormInputTypeEnum.File || elementProperty.array) {
 
             if (elementValue.type === FormInputTypeEnum.File) {
+              hasFileInArrayType = true;
+
               _storageFileToReturn += `
                 if(${TextTransformation.singularize(relatedId)}.${elementValue.name}){
                   for (let fileIndex = 0; fileIndex < ${TextTransformation.singularize(relatedId)}.${elementValue.name}!.length; fileIndex++) {
@@ -703,7 +552,7 @@ const setStorageFileInArrayType = (object: MainInterface): string => {
                   
                   const ${TextTransformation.singularize(elementProperty.array?.id)} = ${TextTransformation.singularize(relatedId)}?.${elementProperty.array?.id}![${elementProperty.array?.id}Index];
                   
-                  ${createMultidimensionalArrayStorageFileCode(elementProperty.array?.elements!, elementProperty.array?.id!, false)}
+                  ${createMultidimensionalArrayStorageFileCode(elementProperty.array?.elements!, elementProperty.array?.id!)}
                 };
               `;
             }
@@ -718,13 +567,129 @@ const setStorageFileInArrayType = (object: MainInterface): string => {
         for(let ${value.id}Index = 0; ${value.id}Index < data.${value.id}?.length!; ${value.id}Index++){
           const ${TextTransformation.singularize(value.id)} = data.${value.id}![${value.id}Index];
           
-          ${createMultidimensionalArrayStorageFileCode(value.elements, value.id, true)}
+          ${createMultidimensionalArrayStorageFileCode(value.elements, value.id)}
         }
       `;
     }
   });
 
-  return _findRelatedElements;
+  return hasFileInArrayType ? _findRelatedElements : '';
+};
+
+const setRequestBodyContent = (object: MainInterface): string => {
+  if (!object.form) {
+    console.info("Only forms set here");
+    return ``;
+  }
+
+  const createProperties = (
+    elements: Array<FormElementInterface>
+  ): string => {
+
+    let code = ``;
+
+    for (let elementIndex = 0; elementIndex < elements.length; elementIndex++) {
+      const element = elements[elementIndex];
+
+      const type = Object.keys(element)[0];
+      const value = Object.values(element)[0];
+
+
+      const propertyType = value.isMultiple || type === 'array' || value.type === 'file' ?
+        'array' :
+        (
+          stringTypes.includes(value.type || type) ? 'string' :
+            (
+              numberTypes.includes(value.type || type) ? 'number' :
+                (booleanTypes.includes(value.type || type) ? 'boolean' : 'any')
+            )
+        );
+
+      if (value.isMultiple || value.type === 'file') {
+
+        code += `
+          ${value.name}: {
+            type: 'array',
+            items: ${value.isRequired ? `{ type: '${value.type === 'file' ? 'object' : 'string'}' }` : '{}'}
+          },
+        `;
+
+      } else if (propertyType === 'array') {
+
+        code += `
+          ${value.id}: {
+            type: 'array',
+            items: {
+              properties: {
+                ${createProperties(value.elements)}
+              }
+            }
+          },
+        `;
+
+      } else {
+
+        code += `
+          ${value.name}: ${value.isRequired ? `{ type: '${propertyType}' }` : `{}`},
+        `;
+
+      }
+    }
+
+    return code;
+  };
+
+  const elements: Array<FormElementInterface> = getAllElements(object.form.elements);
+
+  return `{ ${createProperties(elements)} }`;
+};
+
+const setDeepPopulate = (object: MainInterface): string => {
+  if (!object.form) {
+    console.info("Only forms set here");
+    return ``;
+  }
+
+  let _deepPopulate = ``;
+  let hasPopulatedField: boolean = false;
+
+  const deepPopulate = (elements: Array<FormElementInterface>) => {
+    let _deepPopulateCode = ``;
+
+    elements.forEach((element) => {
+      const type = Object.keys(element)[0];
+      const value = Object.values(element)[0];
+
+      if (value.optionsApi) {
+        hasPopulatedField = true;
+
+        _deepPopulateCode += `
+          {path: '${value.name}'},`;
+      } else if (type === 'array') {
+
+        _deepPopulateCode += `
+          {
+            path: '${value.id}',
+            populate: [
+              ${deepPopulate(value.elements)}
+            ]
+          },`;
+      }
+    });
+
+    return _deepPopulateCode;
+  };
+
+  const elements: Array<FormElementInterface> = getAllElements(object.form.elements);
+
+  _deepPopulate += deepPopulate(elements);
+
+  return hasPopulatedField ?
+    `.populate([
+      ${_deepPopulate}
+    ])
+    `
+    : '';
 };
 
 export { setControllerMethods };

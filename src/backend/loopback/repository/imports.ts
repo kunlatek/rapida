@@ -16,7 +16,7 @@ const setRepositoryImports = (object: MainInterface): string => {
   let additionalLoopbackCoreAndRepositoriesImportMethods = {
     core: [] as string[],
     repositories: [] as string[],
-  }
+  };
 
   const elements: Array<FormElementInterface> = getAllElements(object.form?.elements);
 
@@ -69,17 +69,17 @@ const setModelImportsByElement = (
 
   let code = ``;
 
-  if (value.optionsApi && value.optionsApi.endpoint) {
-    const className = TextTransformation.setIdToClassName(
-      TextTransformation.pascalfy(
-        TextTransformation.singularize(
-          value.optionsApi.endpoint.split("-").join(" ")
-        )
-      )
-    );
+  // if (value.optionsApi && value.optionsApi.endpoint) {
+  //   const className = TextTransformation.setIdToClassName(
+  //     TextTransformation.pascalfy(
+  //       TextTransformation.singularize(
+  //         value.optionsApi.endpoint.split("-").join(" ")
+  //       )
+  //     )
+  //   );
 
-    code += `${className},`;
-  }
+  //   code += `${className},`;
+  // }
 
   return code;
 };
@@ -93,17 +93,17 @@ const setRepositoryImportsByElement = (
 
   let code = ``;
 
-  if (value.optionsApi && value.optionsApi.endpoint) {
-    const className = TextTransformation.setIdToClassName(
-      TextTransformation.pascalfy(
-        TextTransformation.singularize(
-          value.optionsApi.endpoint.split("-").join(" ")
-        )
-      )
-    );
+  // if (value.optionsApi && value.optionsApi.endpoint) {
+  //   const className = TextTransformation.setIdToClassName(
+  //     TextTransformation.pascalfy(
+  //       TextTransformation.singularize(
+  //         value.optionsApi.endpoint.split("-").join(" ")
+  //       )
+  //     )
+  //   );
 
-    code += modelName.toLowerCase() !== className.toLowerCase() ? `${className}Repository,` : "";
-  }
+  //   code += modelName.toLowerCase() !== className.toLowerCase() ? `${className}Repository,` : "";
+  // }
 
   return code;
 };
@@ -119,22 +119,22 @@ const getAdditionalLoopbackCoreAndRepositoriesImportMethods = (
 
   const value = Object.values(element)[0];
 
-  if (value.optionsApi && value.optionsApi.endpoint) {
-    additionalLoopbackCoreAndRepositoriesImportMethods['core'].push('Getter')
-    additionalLoopbackCoreAndRepositoriesImportMethods['repositories'] = additionalLoopbackCoreAndRepositoriesImportMethods['repositories'].concat(['repository'])
-    if (value.isMultiple) {
-      additionalLoopbackCoreAndRepositoriesImportMethods['repositories'] = additionalLoopbackCoreAndRepositoriesImportMethods['repositories'].concat([
-        'HasManyThroughRepositoryFactory',
-        'Entity',
-        'model',
-        'property',
-      ])
-    } else {
-      additionalLoopbackCoreAndRepositoriesImportMethods['repositories'] = additionalLoopbackCoreAndRepositoriesImportMethods['repositories'].concat(['BelongsToAccessor'])
-    }
-  }
+  // if (value.optionsApi && value.optionsApi.endpoint) {
+  //   additionalLoopbackCoreAndRepositoriesImportMethods['core'].push('Getter');
+  //   additionalLoopbackCoreAndRepositoriesImportMethods['repositories'] = additionalLoopbackCoreAndRepositoriesImportMethods['repositories'].concat(['repository']);
+  //   if (value.isMultiple) {
+  //     additionalLoopbackCoreAndRepositoriesImportMethods['repositories'] = additionalLoopbackCoreAndRepositoriesImportMethods['repositories'].concat([
+  //       'HasManyThroughRepositoryFactory',
+  //       'Entity',
+  //       'model',
+  //       'property',
+  //     ]);
+  //   } else {
+  //     additionalLoopbackCoreAndRepositoriesImportMethods['repositories'] = additionalLoopbackCoreAndRepositoriesImportMethods['repositories'].concat(['BelongsToAccessor']);
+  //   }
+  // }
 
   return additionalLoopbackCoreAndRepositoriesImportMethods;
-}
+};
 
 export { setRepositoryImports };

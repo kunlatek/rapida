@@ -92,7 +92,7 @@ const setFormArchitectureAndWriteToFile = (
   code: string
 ) => {
   if (!object.form) {
-    return "";
+    return;
   }
 
   const filePath = `${object.projectPath

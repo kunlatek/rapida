@@ -1,6 +1,5 @@
 import { FormElementInterface } from "../../../interfaces/form";
 import { MainInterface } from "../../../interfaces/main";
-import { TextTransformation } from "../../../utils/text.transformation";
 import { getAllElements } from "../main";
 
 const setRepositoryProperties = (object: MainInterface): string => {
@@ -29,21 +28,21 @@ const setRepositoryPropertiesByElement = (
 
   let code = ``;
 
-  if (value.optionsApi && value.optionsApi.endpoint) {
-    const className = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
-    const propertyName = TextTransformation.setIdToPropertyName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
+  // if (value.optionsApi && value.optionsApi.endpoint) {
+  //   const className = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
+  //   const propertyName = TextTransformation.setIdToPropertyName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
 
-    if (value.isMultiple) {
-      code += `
-        public readonly ${propertyName}: HasManyThroughRepositoryFactory<${className}, typeof ${className}.prototype._id,
-          ${TextTransformation.pascalfy(modelName)}Has${className},
-          typeof ${TextTransformation.pascalfy(modelName)}.prototype._id
-        >;
-        `;
-    } else {
-      code += `public readonly ${value.name.slice(0, -2)}: BelongsToAccessor<${className}, typeof ${TextTransformation.pascalfy(modelName)}.prototype._id>;`;
-    }
-  }
+  //   if (value.isMultiple) {
+  //     code += `
+  //       public readonly ${propertyName}: HasManyThroughRepositoryFactory<${className}, typeof ${className}.prototype._id,
+  //         ${TextTransformation.pascalfy(modelName)}Has${className},
+  //         typeof ${TextTransformation.pascalfy(modelName)}.prototype._id
+  //       >;
+  //       `;
+  //   } else {
+  //     code += `public readonly ${value.name.slice(0, -2)}: BelongsToAccessor<${className}, typeof ${TextTransformation.pascalfy(modelName)}.prototype._id>;`;
+  //   }
+  // }
 
   return code;
 };

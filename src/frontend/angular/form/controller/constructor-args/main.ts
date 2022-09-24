@@ -4,6 +4,7 @@ import { TextTransformation } from "../../../../../utils/text.transformation";
 import { setFormSelectOptions } from "./form-select-options";
 
 let _hasCondition = false;
+let _hasArray = false;
 
 const setFormControllerConstructorArguments = (
   object: MainInterface
@@ -12,13 +13,13 @@ const setFormControllerConstructorArguments = (
     console.info("Only forms set here");
     return ``;
   }
+  _hasArray = false;
   let _optionsCreation: string = ``;
   let _patchArrayValues: string = ``;
   let _autocompleteToEdit: string = ``;
 
   _optionsCreation += setFormSelectOptions(object);
-  _patchArrayValues = setJsonToPatchValue(object, object.form.elements);
-  _autocompleteToEdit += setAutocompleteToEdit(object, object.form.elements);
+  // _autocompleteToEdit += setAutocompleteToEdit(object, object.form.elements);
 
   object.form.elements.forEach((element: any) => {
     verifyFormElement(element);
@@ -36,11 +37,9 @@ const setFormControllerConstructorArguments = (
     
         if (this.${object.form.id}Id) {
           this.${object.form.id}ToEdit = await this._${object.form.id}Service.find(this.${object.form.id}Id);
+          ${_hasArray ? `this._createAllArray(this.${object.form.id}ToEdit.data);` : ``}
           this.${object.form.id}Form.patchValue(this.${object.form.id}ToEdit.data);
 
-          ${_autocompleteToEdit}
-
-          ${_patchArrayValues}
         
           ${_hasCondition ? "this.setConditionOverEdition();" : ""}
         }
@@ -91,38 +90,11 @@ const verifyFormElement = (element: FormElementInterface): void => {
   }
 
   if (element.array) {
+    _hasArray = true;
     element.array.elements.forEach(arrayElement => {
       verifyFormElement(arrayElement);
     });
   }
-};
-
-const setJsonToPatchValue = (object: MainInterface, formElements: Array<FormElementInterface>, array: string | undefined = undefined): string => {
-  let code = ``;
-
-  formElements.forEach((element: any) => {
-    if (element.tabs) {
-      element.tabs.forEach((tabElement: any) => {
-        code += setJsonToPatchValue(object, tabElement.elements);
-      });
-    }
-
-    if (element.array) {
-      code += `
-      (${array ? `${array}Form` : `this.${object.form?.id}Form`}.get("${element.array.id}") as FormArray).clear();
-      ${array ? `_${array}` : `this.${object.form?.id}ToEdit.data`}.${element.array.id}?.forEach((_${element.array.id}: any) => {
-        const ${element.array.id}Form = this.init${TextTransformation.pascalfy(element.array.id)}();
-        ${element.array.id}Form.patchValue(_${element.array.id});
-        (${array ? `${array}Form` : `this.${object.form?.id}Form`}.get("${element.array.id}") as FormArray).push(${element.array.id}Form);
-      `;
-      code += setJsonToPatchValue(object, element.array.elements, element.array.id);
-      code += `
-      });
-      `;
-    }
-  });
-
-  return code;
 };
 
 const setAutocompleteToEdit = (object: MainInterface, formElements: any, array: string | undefined = undefined): string => {
@@ -146,13 +118,13 @@ const setAutocompleteToEdit = (object: MainInterface, formElements: any, array: 
       if (element.autocomplete.isMultiple) {
         code += `
         if (this.${object.form?.id}ToEdit.data.${TextTransformation.singularize(element.autocomplete.optionsApi.endpoint)}) {
-          this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}View = [];
-          this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}Value = [];
+          this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}View${(array) ? `[${TextTransformation.singularize(array)}Index]` : ``} = [];
+          this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}Value${(array) ? `[${TextTransformation.singularize(array)}Index]` : ``} = [];
           this.${object.form?.id}ToEdit.data
           .${TextTransformation.singularize(element.autocomplete.optionsApi.endpoint)}
           .forEach((element: any) => {
-            this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}View.push(element.${element.autocomplete.optionsApi.labelField[0]});
-            this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}Value.push(element.${element.autocomplete.optionsApi.valueField});
+            this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}View${(array) ? `[${TextTransformation.singularize(array)}Index]` : ``}.push(element.${element.autocomplete.optionsApi.labelField[0]});
+            this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}Value${(array) ? `[${TextTransformation.singularize(array)}Index]` : ``}.push(element.${element.autocomplete.optionsApi.valueField});
           });
         }
         `;

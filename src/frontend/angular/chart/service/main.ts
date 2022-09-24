@@ -1,9 +1,9 @@
-import * as fs from "fs";
 import * as chp from "child_process";
+import * as fs from "fs";
+import { ServiceFunctionsEnum } from "../../../../enums/form";
+import { ServiceInterface } from "../../../../interfaces/form";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
-import { ServiceInterface } from "../../../../interfaces/form";
-import { ServiceFunctionsEnum } from "../../../../enums/form";
 
 let _hasAuthorization: boolean = false;
 
@@ -34,9 +34,8 @@ const setChartService = (object: MainInterface, mainArray: Array<MainInterface> 
 
       getDetails(filter: string = "") {
         return this._httpClient
-          .get(\`\${this.BASE_URL}/${
-            object.chart.service?.endpoint
-          }/details?\${filter}\`, {
+          .get(\`\${this.BASE_URL}/${object.chart.service?.endpoint
+    }/details?\${filter}\`, {
             headers: {
               Authorization: \`Bearer \${sessionStorage.getItem("token")}\`,
             },
@@ -46,9 +45,8 @@ const setChartService = (object: MainInterface, mainArray: Array<MainInterface> 
       
       ${_services}
 
-      ${
-        _hasAuthorization
-          ? `
+      ${_hasAuthorization
+      ? `
         refreshToken () {
           return this._httpClient.get(
             \`\${this.BASE_URL}/auth/refresh-token\`, {
@@ -59,8 +57,8 @@ const setChartService = (object: MainInterface, mainArray: Array<MainInterface> 
           ).toPromise();
         }
         `
-          : ``
-      }
+      : ``
+    }
   }
   `;
 
@@ -205,14 +203,13 @@ const setChartServiceArchitectureAndWriteToFile = (
   code: string
 ) => {
   if (!object.chart) {
-    return "";
+    return;
   }
 
-  const filePath = `${
-    object.projectPath
-  }/src/app/components/${TextTransformation.kebabfy(
-    object.chart.id
-  )}/${TextTransformation.kebabfy(object.chart.id)}.service.ts`;
+  const filePath = `${object.projectPath
+    }/src/app/components/${TextTransformation.kebabfy(
+      object.chart.id
+    )}/${TextTransformation.kebabfy(object.chart.id)}.service.ts`;
 
   try {
     fs.writeFileSync(filePath, code);

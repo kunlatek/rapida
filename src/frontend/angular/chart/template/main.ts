@@ -1,5 +1,5 @@
-import * as fs from "fs";
 import * as chp from "child_process";
+import * as fs from "fs";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
 
@@ -167,14 +167,13 @@ const setChartTemplateArchitectureAndWriteToFile = (
   code: string
 ) => {
   if (!object.chart) {
-    return "";
+    return;
   }
 
-  const filePath = `${
-    object.projectPath
-  }/src/app/components/${TextTransformation.kebabfy(
-    object.chart.id
-  )}/${TextTransformation.kebabfy(object.chart.id)}.component.html`;
+  const filePath = `${object.projectPath
+    }/src/app/components/${TextTransformation.kebabfy(
+      object.chart.id
+    )}/${TextTransformation.kebabfy(object.chart.id)}.component.html`;
 
   try {
     fs.writeFileSync(filePath, code);

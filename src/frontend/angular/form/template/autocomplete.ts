@@ -1,11 +1,20 @@
+import { ArrayFeaturesInterface } from "../../../../interfaces/array";
 import {
   ArrayInterface,
   FormElementInterface
 } from "../../../../interfaces/form";
+import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
-import { setArrayControls, setArrayIndexes } from "../controller/methods/array";
+import { setArrayLayer } from "../../core/array";
+require("dotenv").config();
+
+let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+  process.env.ARRAY_LAYER!
+);
+let _allParents: Array<string> = [];
 
 const setAutocomplete = (
+  object: MainInterface,
   element: FormElementInterface,
   conditions: string,
   array: ArrayInterface | undefined = undefined
@@ -16,8 +25,34 @@ const setAutocomplete = (
     return code;
   }
 
-  const iterations = array ? setArrayIndexes(array.id) : undefined;
-  const controls = array ? setArrayControls(array.id) : undefined;
+  setArrayLayer(object.form!.elements);
+
+  _arrayLayer = JSON.parse(process.env.ARRAY_LAYER!);
+
+  let parentArray: string | undefined;
+  let getParentsIndexes: string = ``;
+  let getParentsControl: string = ``;
+
+  if (array) {
+    _arrayLayer?.forEach((arrayLayer: ArrayFeaturesInterface) => {
+      if (arrayLayer.name === array.id) {
+        parentArray = arrayLayer.parentArray;
+      }
+    });
+
+    if (parentArray) {
+      setAllParents(parentArray);
+
+      _allParents.forEach((parent: string, index: number) => {
+        getParentsIndexes += `${TextTransformation.singularize(
+          parent
+        )}Index: number${index < _allParents.length - 1 ? ", " : ""}`;
+        getParentsControl += `"${parent}", ${TextTransformation.singularize(
+          parent
+        )}Index${index < _allParents.length - 1 ? ", " : ""}`;
+      });
+    }
+  }
 
   const placeholder = element.autocomplete.placeholder
     ? `placeholder="${element.autocomplete.placeholder}"`
@@ -37,11 +72,20 @@ const setAutocomplete = (
             *ngFor="let ${element.autocomplete.name
       }Item of chosen${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}View" 
+      )}View${getParentsIndexes && getParentsIndexes !== ""
+        ? `[${getParentsIndexes.replace(/: number/g, "][")}]`.replace("[]", "")
+        : ""
+      }
+      ${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``}"
             (removed)="remove${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}(${element.autocomplete.name}Item${iterations ? ", " + iterations.replace(": any", "") : ""
-      })">
+      )}(
+              ${getParentsIndexes && getParentsIndexes !== ""
+        ? `${getParentsIndexes?.replace(/: number/g, "")}, `
+        : ``
+      }
+        ${array ? `${TextTransformation.singularize(array.id)}Index, ` : ""}${element.autocomplete.name
+      }Item)">
             {{${element.autocomplete.name}Item}}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
@@ -57,14 +101,21 @@ const setAutocomplete = (
       )}" 
             [matChipInputFor]="${element.autocomplete.name}ChipList" 
             [matChipInputSeparatorKeyCodes]="${element.autocomplete.name
-      }SeparatorKeysCodes" 
+      }SeparatorKeysCodes"
             (matChipInputTokenEnd)="add${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}($event${iterations ? ", " + iterations.replace(": any", "") : ""
-      })" 
+      )}(${getParentsIndexes && getParentsIndexes !== ""
+        ? getParentsIndexes?.replace(/: number/g, "")
+        : ""
+      }${getParentsIndexes && getParentsIndexes !== "" && array ? `, ` : ``}${array ? `${TextTransformation.singularize(array.id)}Index, ` : ``
+      }$event)"
             (keyup)="callSetFiltered${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}(${iterations ? iterations.replace(": any", "") : ""})" 
+      )}(${getParentsIndexes && getParentsIndexes !== ""
+        ? getParentsIndexes?.replace(/: number/g, "")
+        : ""
+      }${getParentsIndexes && getParentsIndexes !== "" && array ? `, ` : ``}${array ? `${TextTransformation.singularize(array.id)}Index` : ``
+      })" 
             #${element.autocomplete.name}Input 
             ${required}
           >
@@ -75,13 +126,17 @@ const setAutocomplete = (
       )}="matAutocomplete" 
           (optionSelected)="selected${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}($event${iterations ? ", " + iterations.replace(": any", "") : ""})"
+      )}(${getParentsIndexes && getParentsIndexes !== ""
+        ? `${getParentsIndexes?.replace(/: number/g, "")}, `
+        : ""
+      }${array ? `${TextTransformation.singularize(array.id)}Index, ` : ``
+      }$event)"
         >
         <mat-option disabled *ngIf="
-          ${array
+          ${array && getParentsIndexes && getParentsIndexes !== ""
         ? `loading${TextTransformation.pascalfy(
           element.autocomplete.name
-        )}[${iterations?.split(": any")[0]}]`
+        )}[${getParentsIndexes?.split(": number")[0]}]`
         : `loading${TextTransformation.pascalfy(
           element.autocomplete.name
         )}`
@@ -90,10 +145,10 @@ const setAutocomplete = (
             <mat-spinner diameter="35"></mat-spinner>
           </mat-option>
         <ng-container *ngIf="
-          ${array
+          ${array && getParentsIndexes && getParentsIndexes !== ""
         ? `!loading${TextTransformation.pascalfy(
           element.autocomplete.name
-        )}[${iterations?.split(": any")[0]}];`
+        )}[${getParentsIndexes?.split(": number")[0]}];`
         : `!loading${TextTransformation.pascalfy(
           element.autocomplete.name
         )};`
@@ -128,7 +183,8 @@ const setAutocomplete = (
         </mat-autocomplete>
       </mat-form-field>
       `;
-  } else {
+  }
+  if (!element.autocomplete.isMultiple) {
     code += `
       <mat-form-field ${conditions}>
         <mat-label>${element.autocomplete.label}</mat-label>
@@ -143,22 +199,26 @@ const setAutocomplete = (
     )}" 
               (keyup)="callSetFiltered${TextTransformation.pascalfy(
       element.autocomplete.name
-    )}(${iterations ? iterations.replace(": any", "") : ""})" 
+    )}(${getParentsIndexes && getParentsIndexes !== ""
+      ? getParentsIndexes?.replace(/: number/g, "")
+      : ""
+      }${getParentsIndexes && getParentsIndexes !== "" && array ? `, ` : ``}${array ? `${TextTransformation.singularize(array.id)}Index` : ``
+      })" 
               ${required}
         >
         <mat-autocomplete 
           #auto${TextTransformation.pascalfy(
-      element.autocomplete.name
-    )}="matAutocomplete" 
+        element.autocomplete.name
+      )}="matAutocomplete" 
           [displayWith]="displayFnTo${TextTransformation.pascalfy(
-      element.autocomplete.name
-    )}.bind(this)"
+        element.autocomplete.name
+      )}.bind(this)"
         >
           <mat-option disabled *ngIf="
-          ${array
+          ${array && getParentsIndexes && getParentsIndexes !== ""
         ? `loading${TextTransformation.pascalfy(
           element.autocomplete.name
-        )}[${iterations?.split(": any")[0]}]`
+        )}[${getParentsIndexes?.split(": number")[0]}]`
         : `loading${TextTransformation.pascalfy(
           element.autocomplete.name
         )}`
@@ -167,10 +227,10 @@ const setAutocomplete = (
             <mat-spinner diameter="35"></mat-spinner>
           </mat-option>
           <ng-container *ngIf="
-          ${array
+          ${array && getParentsIndexes && getParentsIndexes !== ""
         ? `!loading${TextTransformation.pascalfy(
           element.autocomplete.name
-        )}[${iterations?.split(": any")[0]}];`
+        )}[${getParentsIndexes?.split(": number")[0]}];`
         : `!loading${TextTransformation.pascalfy(
           element.autocomplete.name
         )};`
@@ -208,6 +268,17 @@ const setAutocomplete = (
   }
 
   return code;
+};
+
+const setAllParents = (lastParent: string) => {
+  _allParents.push(lastParent);
+
+  _arrayLayer.forEach((element: ArrayFeaturesInterface) => {
+    if (element.name === lastParent && element.parentArray) {
+      _allParents.push(element.parentArray);
+      setAllParents(element.parentArray);
+    }
+  });
 };
 
 export { setAutocomplete };

@@ -1,6 +1,5 @@
 import { FormElementInterface } from "../../../interfaces/form";
 import { MainInterface } from "../../../interfaces/main";
-import { TextTransformation } from "../../../utils/text.transformation";
 import { getAllElements } from "../main";
 
 const setModelImports = (object: MainInterface): string => {
@@ -46,18 +45,18 @@ const setImportsDefaultByElement = (
 
   let code = ``;
 
-  if (value.optionsApi && value.optionsApi.endpoint) {
-    const propertyName = TextTransformation.setIdToClassName(
-      TextTransformation.pascalfy(
-        TextTransformation.singularize(
-          value.optionsApi.endpoint.split("-").join(" ")
-        )
-      )
-    );
-    const modelNameClass = TextTransformation.setIdToClassName(modelName);
+  // if (value.optionsApi && value.optionsApi.endpoint) {
+  //   const propertyName = TextTransformation.setIdToClassName(
+  //     TextTransformation.pascalfy(
+  //       TextTransformation.singularize(
+  //         value.optionsApi.endpoint.split("-").join(" ")
+  //       )
+  //     )
+  //   );
+  //   const modelNameClass = TextTransformation.setIdToClassName(modelName);
 
-    code += modelNameClass !== propertyName ? `${propertyName}, ` : "";
-  }
+  //   code += modelNameClass !== propertyName ? `${propertyName}, ` : "";
+  // }
 
   return code;
 };
@@ -71,20 +70,20 @@ const setImportsRelatedRepositoriesByElement = (
 
   let code = ``;
 
-  if (value.optionsApi && value.optionsApi.endpoint) {
-    const className = TextTransformation.setIdToClassName(
-      TextTransformation.pascalfy(
-        TextTransformation.singularize(
-          value.optionsApi.endpoint.split("-").join(" ")
-        )
-      )
-    );
-    const modelNameClass = TextTransformation.setIdToClassName(modelName);
+  // if (value.optionsApi && value.optionsApi.endpoint) {
+  //   const className = TextTransformation.setIdToClassName(
+  //     TextTransformation.pascalfy(
+  //       TextTransformation.singularize(
+  //         value.optionsApi.endpoint.split("-").join(" ")
+  //       )
+  //     )
+  //   );
+  //   const modelNameClass = TextTransformation.setIdToClassName(modelName);
 
-    if (value.isMultiple) {
-      code += `${modelNameClass}Has${className}`;
-    }
-  }
+  //   if (value.isMultiple) {
+  //     code += `${modelNameClass}Has${className}`;
+  //   }
+  // }
 
   return code;
 };
@@ -93,16 +92,17 @@ const getAdditionalLoopbackRepositoriesImportMethods = (
   element: FormElementInterface
 ) => {
 
-  let additionalLoopbackRepositoriesImportMethods = [];
+  // let additionalLoopbackRepositoriesImportMethods = [];
+  let additionalLoopbackRepositoriesImportMethods = [[]];
 
   const value = Object.values(element)[0];
 
-  if (value.optionsApi && value.optionsApi.endpoint) {
-    if (value.isMultiple) additionalLoopbackRepositoriesImportMethods.push('hasMany')
-    else additionalLoopbackRepositoriesImportMethods.push('belongsTo');
-  }
+  // if (value.optionsApi && value.optionsApi.endpoint) {
+  //   if (value.isMultiple) additionalLoopbackRepositoriesImportMethods.push('hasMany')
+  //   else additionalLoopbackRepositoriesImportMethods.push('belongsTo');
+  // }
 
   return additionalLoopbackRepositoriesImportMethods.flat();
-}
+};
 
 export { setModelImports };

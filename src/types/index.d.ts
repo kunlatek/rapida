@@ -1,6 +1,6 @@
 /* eslint-disable no-var */
 
-import { ArrayFeaturesInterface } from "../frontend/angular/form/controller/methods/interfaces";
+import { ArrayFeaturesInterface } from "../interfaces/array";
 
 declare global {
   // var _arrayLayer: Array<ArrayFeaturesInterface>;
@@ -11,4 +11,4 @@ declare global {
   var _conditionProperties: Array<string>;
 }
 
-export {};
+export { };

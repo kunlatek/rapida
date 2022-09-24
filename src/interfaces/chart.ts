@@ -26,7 +26,7 @@ export interface ChartBarInterface {
   datasets: Array<ChartBarDatasetInterface>;
   collection: string;
   collectionGroupedBy: Array<string>; // Max of two props. First prop would create axis label 
-                                      // and if it has a second prop, it would create bar label
+  // and if it has a second prop, it would create bar label
   backgroundColor?: Array<string>; // Default: 'rgba(0, 0, 0, 0.1)'
   borderColor?: Array<String>;
   borderWidth?: number;
@@ -51,15 +51,15 @@ export interface ChartPieInterface {
   labels: Array<string>;
   datasets: Array<ChartPieDatasetInterface>;
   backgroundColor?: Array<string>; // Default: 'rgba(0, 0, 0, 0.1)'
-  borderAlign?: Enumerator<'center'|'inner'>;
+  borderAlign?: Enumerator<'center' | 'inner'>;
   borderColor?: Array<String>;
   borderWidth?: number;
-  borderJoinStyle?: Enumerator<'round'|'bevel'|'miter'>;
+  borderJoinStyle?: Enumerator<'round' | 'bevel' | 'miter'>;
   borderRadius?: number | object;
   circumference?: number;
   hoverBackgroundColor?: string;
   hoverBorderColor?: string;
-  hoverBoderJoinStyle?: Enumerator<'round'|'bevel'|'miter'>;
+  hoverBoderJoinStyle?: Enumerator<'round' | 'bevel' | 'miter'>;
   hoverBorderWidth?: number;
   hoverOffset?: number;
 };
@@ -123,29 +123,29 @@ export interface ChartLineDatasetInterface {
   borderColor?: Array<String>;
   borderDash?: Array<number>;
   borderDashOffset?: number;
-  borderJoinStyle?: Enumerator<'round'|'bevel'|'miter'>;
+  borderJoinStyle?: Enumerator<'round' | 'bevel' | 'miter'>;
   borderWidth?: number;
   fill?: boolean;
   hoverBackgroundColor?: string;
   hoverBorderColor?: string;
-  hoverBoderJoinStyle?: Enumerator<'round'|'bevel'|'miter'>;
+  hoverBoderJoinStyle?: Enumerator<'round' | 'bevel' | 'miter'>;
   hoverBorderWidth?: number;
-  order?:number;
+  order?: number;
 };
 
 export interface ChartDoughnutDatasetInterface {
   data: Array<number>;
   label?: string;
   backgroundColor?: Array<string>; // Default: 'rgba(0, 0, 0, 0.1)'
-  borderAlign?: Enumerator<'center'|'inner'>;
+  borderAlign?: Enumerator<'center' | 'inner'>;
   borderColor?: Array<String>;
   borderWidth?: number;
-  borderJoinStyle?: Enumerator<'round'|'bevel'|'miter'>;
+  borderJoinStyle?: Enumerator<'round' | 'bevel' | 'miter'>;
   borderRadius?: number | object;
   circumference?: number;
   hoverBackgroundColor?: string;
   hoverBorderColor?: string;
-  hoverBoderJoinStyle?: Enumerator<'round'|'bevel'|'miter'>;
+  hoverBoderJoinStyle?: Enumerator<'round' | 'bevel' | 'miter'>;
   hoverBorderWidth?: number;
   hoverOffset?: number;
 };
@@ -161,11 +161,11 @@ export interface ChartPolarAreaDatasetInterface {
   backgroundColor?: Array<string>; // Default: 'rgba(0, 0, 0, 0.1)'
   borderAlign?: Enumerator<'center' | 'inner'>;
   borderColor?: Array<String>;
-  borderJoinStyle?: Enumerator<'round'|'bevel'|'miter'>;
+  borderJoinStyle?: Enumerator<'round' | 'bevel' | 'miter'>;
   borderWidth?: number;
   hoverBackgroundColor?: string;
   hoverBorderColor?: string;
-  hoverBoderJoinStyle?: Enumerator<'round'|'bevel'|'miter'>;
+  hoverBoderJoinStyle?: Enumerator<'round' | 'bevel' | 'miter'>;
   hoverBorderWidth?: number;
 };
 
@@ -173,16 +173,16 @@ export interface ChartRadarDatasetInterface {
   data: Array<number>;
   label?: string;
   backgroundColor?: Array<string>; // Default: 'rgba(0, 0, 0, 0.1)'
-  borderCapStyle?: string; 
+  borderCapStyle?: string;
   borderColor?: Array<string>;
   borderDash?: Array<string>;
   borderDashOffset?: number;
-  borderJoinStyle?: Enumerator<'round'|'bevel'|'miter'>;
+  borderJoinStyle?: Enumerator<'round' | 'bevel' | 'miter'>;
   borderWidth?: number;
   fill?: boolean;
   hoverBackgroundColor?: string;
   hoverBorderColor?: string;
-  hoverBoderJoinStyle?: Enumerator<'round'|'bevel'|'miter'>;
+  hoverBoderJoinStyle?: Enumerator<'round' | 'bevel' | 'miter'>;
   hoverBorderWidth?: number;
   pointBackgroundColor?: string;
   pointBorderColor?: string;
