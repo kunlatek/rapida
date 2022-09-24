@@ -1,7 +1,5 @@
 import { ArrayFeaturesInterface } from "../../../../../interfaces/array";
-import {
-  ArrayInterface
-} from "../../../../../interfaces/form";
+import { ArrayInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 import { setArrayLayer, setArraysInAFlow } from "../../../core/array";
@@ -37,9 +35,7 @@ const setArrayControls = (arrayId: string): string => {
   _arraysInAFlow = [];
   setArraysInAFlow(arrayId);
 
-  _arraysInAFlow = JSON.parse(
-    process.env.ARRAYS_IN_A_FLOW!
-  );
+  _arraysInAFlow = JSON.parse(process.env.ARRAYS_IN_A_FLOW!);
 
   const arrayReversed = _arraysInAFlow.reverse();
 
@@ -114,9 +110,7 @@ const setArrayMethod = (
 
   setArrayLayer(object.form!.elements);
 
-  _arrayLayer = JSON.parse(
-    process.env.ARRAY_LAYER!
-  );
+  _arrayLayer = JSON.parse(process.env.ARRAY_LAYER!);
 
   const add = `add${TextTransformation.pascalfy(
     TextTransformation.singularize(array.id)
@@ -139,20 +133,23 @@ const setArrayMethod = (
     setAllParents(parentArray);
 
     _allParents.forEach((parent: string, index: number) => {
-      getParents += `this.${parent}.at(${TextTransformation.singularize(parent)}Index).`;
-      getParentsIndexes += `${TextTransformation.singularize(parent)}Index: number${(index < (_allParents.length - 1)) ? ", " : ""}`;
+      getParents += `this.${parent}.at(${TextTransformation.singularize(
+        parent
+      )}Index).`;
+      getParentsIndexes += `${TextTransformation.singularize(
+        parent
+      )}Index: number${index < _allParents.length - 1 ? ", " : ""}`;
     });
   }
 
   code += `
-  ${parentArray ?
-      `
+  ${parentArray
+      ? `
     ${array.id}(${getParentsIndexes}) {
       return ${getParents}get("${array.id}") as FormArray;
     }
     `
-      :
-      `
+      : `
     get ${array.id}() {
       return this.${object.form?.id}Form.get("${array.id}") as FormArray;
     };
@@ -160,19 +157,31 @@ const setArrayMethod = (
     }
   
   
-  ${add}${((_allParents?.length > 0) && (getParentsIndexes !== "")) ? `(${getParentsIndexes})` : `()`} {
+  ${add}${_allParents?.length > 0 && getParentsIndexes !== ""
+      ? `(${getParentsIndexes})`
+      : `()`
+    } {
     const new${TextTransformation.pascalfy(
       TextTransformation.singularize(array.id)
     )} = 
     new FormGroup({${setFormBuilderByElements(array.elements)}});
     
-    this.${array.id}${((_allParents?.length > 0) && (getParentsIndexes !== "")) ? `(${getParentsIndexes.replace(/: number/g, "")})` : ``}.push(new${TextTransformation.pascalfy(
+    this.${array.id}${_allParents?.length > 0 && getParentsIndexes !== ""
+      ? `(${getParentsIndexes.replace(/: number/g, "")})`
+      : ``
+    }.push(new${TextTransformation.pascalfy(
       TextTransformation.singularize(array.id)
     )});
   };
 
-  ${remove}(${getParentsIndexes && (getParentsIndexes !== "") ? `${getParentsIndexes}, ` : ``}${TextTransformation.singularize(array.id)}Index: number) {
-    this.${array.id}${((_allParents?.length > 0) && (getParentsIndexes !== "")) ? `(${getParentsIndexes.replace(/: number/g, "")})` : ``}.removeAt(${TextTransformation.singularize(array.id)}Index);
+  ${remove}(${getParentsIndexes && getParentsIndexes !== ""
+      ? `${getParentsIndexes}, `
+      : ``
+    }${TextTransformation.singularize(array.id)}Index: number) {
+    this.${array.id}${_allParents?.length > 0 && getParentsIndexes !== ""
+      ? `(${getParentsIndexes.replace(/: number/g, "")})`
+      : ``
+    }.removeAt(${TextTransformation.singularize(array.id)}Index);
   };
   `;
 
@@ -185,7 +194,7 @@ const setAllParents = (lastParent: string) => {
   _allParents.push(lastParent);
 
   _arrayLayer.forEach((element: ArrayFeaturesInterface) => {
-    if ((element.name === lastParent) && element.parentArray) {
+    if (element.name === lastParent && element.parentArray) {
       _allParents.push(element.parentArray);
       setAllParents(element.parentArray);
     }
@@ -199,8 +208,15 @@ const setArraysToEdit = (array: Array<ArrayInterface>) => {
 
     code += `
     case "${element.id}":
-      this.add${TextTransformation.pascalfy(TextTransformation.singularize(element.id))}(`;
-    if (_arrayLayer.find((item: ArrayFeaturesInterface) => (item.name === element.id && item.layer > 0))) {
+      this.add${TextTransformation.pascalfy(
+      TextTransformation.singularize(element.id)
+    )}(`;
+    if (
+      _arrayLayer.find(
+        (item: ArrayFeaturesInterface) =>
+          item.name === element.id && item.layer > 0
+      )
+    ) {
       code += `indexArr`;
     }
     code += `

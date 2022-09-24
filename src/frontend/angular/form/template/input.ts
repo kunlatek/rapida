@@ -79,20 +79,26 @@ const setInput = (
     code += `
         <input type="file" class="file-input" (change)="on${TextTransformation.capitalization(
       element.input.name
-    )}FileSelected($event)" ${tooltip} #fileUpload multiple>
+    )}FileSelected(${array ? `_${TextTransformation.singularize(array.id)}, ` : ""}$event)" ${tooltip}
+        #${element.input.name}Upload 
+        onclick="this.value = null" 
+        multiple>
         <div class="file-upload">
-            <button type="button" mat-raised-button color="primary" (click)="fileUpload.click()">
+            <button type="button" mat-raised-button color="primary" 
+            (click)="${element.input.name}Upload.click()">
                 <mat-icon>attach_file</mat-icon>
                 Enviar arquivo
             </button>
         </div>
         <mat-list>
-          <mat-list-item *ngFor="let file of ${object.form?.id}Form.value.${element.input.name
-      }; index as i;">
+          <mat-list-item *ngFor="let file of ${array
+        ? `_${TextTransformation.singularize(array.id)}.get('${element.input.name}')?.value; `
+        : `${object.form?.id}Form.value.${element.input.name}; `}index as i;">
             <a href="{{file.url}}" target="_blank">{{file.name}}</a>
-            <button mat-icon-button type="button" (click)="delete${TextTransformation.capitalization(
-        element.input.name
-      )}File(i)">
+            <button mat-icon-button type="button"
+            (click)="delete${TextTransformation.capitalization(
+          element.input.name
+        )}File(${array ? `_${TextTransformation.singularize(array.id)}.get('${element.input.name}'), ` : ``}i)">
               <mat-icon>delete</mat-icon>
             </button>
           </mat-list-item>

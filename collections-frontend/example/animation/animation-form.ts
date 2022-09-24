@@ -99,11 +99,11 @@ export const ANIMATION_FORM: MainInterface = {
                           },
                           {
                             autocomplete: {
-                              label: "Personagens que participam do episódio",
+                              label: "Personagem principal do episódio",
                               name: "episodeCharacters",
                               type: FormInputTypeEnum.Text,
                               optionsApi: {
-                                labelField: ["name", "animationId"],
+                                labelField: "name",
                                 valueField: "_id",
                                 paramsToFilter: ["name"],
                                 endpoint: "characters",

@@ -122,7 +122,7 @@ const setFormBuilderByElements = (
     if (element.autocomplete) {
       code += `
       ${element.autocomplete.name}: new FormControl(
-        ${(element.autocomplete.isMultiple) ? `[]` : `null`},
+        ${(element.autocomplete.isMultiple) ? `[]` : `{value: null}`},
         [
       `;
       // VALIDATORS
@@ -204,13 +204,7 @@ const setFormBuilderByElements = (
 
     if (element.array) {
       code += `
-      ${element.array.id}: new FormArray([
-        new FormGroup({`;
-      code += setFormBuilderByElements(element.array.elements, element.array.id);
-
-      code += `
-        })
-      ]),
+      ${element.array.id}: new FormArray([]),
       `;
     }
 

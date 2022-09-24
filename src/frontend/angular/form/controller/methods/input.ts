@@ -62,27 +62,56 @@ const setInputMethod = (
     code += `
     async on${TextTransformation.capitalization(
       element.input.name
-    )}FileSelected(event: any) {
+    )}FileSelected(${array ? `${TextTransformation.singularize(array.id)}: any, ` : ``}event: any) {
       if (event.target.files.length > 0) {
+        ${array
+        ? `
+          for (let i = 0; i < event.target.files.length; i++) {
+            const file = event.target.files[i];
+            const bufferFiles = await fileListToBase64([file]);
+
+            let files = ${TextTransformation.singularize(array.id)}
+            .get('${element.input.name}')?.value || [];
+
+            files.push({
+              name: file.name,
+              fileName: file.name,
+              base64: bufferFiles[0]
+            });
+            ${TextTransformation.singularize(array.id)}.patchValue({
+              ${element.input.name}: files
+            });
+          }
+        `
+        : `
         const file = event.target.files[0];
         const bufferFiles = await fileListToBase64([file]);
-
         let files = this.${object.form?.id}Form.value.${element.input.name} || [];
-    
         files.push({
           name: file.name,
           fileName: file.name,
           base64: bufferFiles[0]
         });
         this.${object.form?.id}Form.get("${element.input.name}")?.setValue(files);
+        `
+      }
       }
     }
     delete${TextTransformation.capitalization(
-      element.input.name
-    )}File(index: number) {
+        element.input.name
+      )}File(${array ? `value: any, ` : ``}index: number) {
+        ${array
+        ? `
+      const files = value.value;
+      files.splice(index, 1);
+      value.setValue(files);
+      `
+        : `
       let files = this.${object.form?.id}Form.value.${element.input.name};
       files.splice(index, 1);
       this.${object.form?.id}Form.get("${element.input.name}")?.setValue(files);
+      `
+      }
     }
     `;
   }
@@ -141,7 +170,6 @@ const fillFieldsOverApiRequest = (
   array: ArrayInterface | undefined = undefined
 ) => {
   let code = ``;
-  setArrayLayer(object.form!.elements);
 
   _arrayLayer = JSON.parse(process.env.ARRAY_LAYER!);
 

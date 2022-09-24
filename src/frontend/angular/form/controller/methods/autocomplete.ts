@@ -54,6 +54,42 @@ const setAutocompleteMethod = (
   }
 
   if (element.autocomplete.isMultiple) {
+    code += `
+    add${TextTransformation.pascalfy(
+      element.autocomplete.name
+    )}(${getParentsIndexes && getParentsIndexes !== ""
+      ? `${getParentsIndexes}, `
+      : ""
+      }${array ? `${TextTransformation.singularize(array.id)}Index: number, ` : ``
+      }event: MatChipInputEvent): void {
+      const value = (event.value || '').trim();
+      
+      if (value) {
+        this.chosen${TextTransformation.pascalfy(
+        element.autocomplete.name
+      )}View${array
+        ? `[${getParentsIndexes && getParentsIndexes !== ""
+          ? `${getParentsIndexes.replace(/: number/g, "][")}`
+          : ""
+        }${TextTransformation.singularize(
+          array.id
+        )}Index]`
+        : ``}.push(value);
+      }
+      event.chipInput!.clear();
+      this.${object.form?.id}Form.
+      ${array
+        ? `get([${getParentsControl}${getParentsControl && getParentsControl !== "" ? `,` : ``
+        }${parentArray && array
+          ? `"${array.id}", ${TextTransformation.singularize(
+            array.id
+          )}Index, `
+          : ``
+        }"${element.autocomplete.name
+        }"])?.setValue(null);`
+        : `get('${element.autocomplete.name}}')?.setValue(null);`
+      }
+    };`;
     /**
      * Remove chip from multiple autocomplete
      */
@@ -158,7 +194,6 @@ const setAutocompleteMethod = (
         element.autocomplete!.name
       )}Value${layerCodeMinusOne}
           .push(${eventOptionValue});
-          return;
         }
       `;
 
@@ -175,25 +210,11 @@ const setAutocompleteMethod = (
 
     if (array) {
       code += `
-      this.${element.autocomplete.name}Input.nativeElement.value = "";
-
-      this.${object.form?.id}Form.get([${getParentsControl}${getParentsControl && getParentsControl !== "" ? `,` : ``
-        }${parentArray && array
-          ? `"${array.id}", ${TextTransformation.singularize(array.id)}Index, `
-          : ``
-        }"${element.autocomplete.name
-        }"])?.setValue(this.chosen${TextTransformation.pascalfy(
-          element.autocomplete.name
-        )}Value[${getParentsIndexes && getParentsIndexes !== ""
-          ? `${getParentsIndexes.replace(/: number/g, "][")}`
-          : ""
-        }${TextTransformation.singularize(array.id)}Index]);
-
       if (this.chosen${TextTransformation.pascalfy(
-          element.autocomplete.name
-        )}View[${getParentsIndexes && getParentsIndexes !== ""
-          ? `${getParentsIndexes.replace(/: number/g, "][")}`
-          : ""
+        element.autocomplete.name
+      )}View[${getParentsIndexes && getParentsIndexes !== ""
+        ? `${getParentsIndexes.replace(/: number/g, "][")}`
+        : ""
         }${TextTransformation.singularize(array.id)}Index]) {
         this.chosen${TextTransformation.pascalfy(
           element.autocomplete.name
@@ -216,6 +237,21 @@ const setAutocompleteMethod = (
         matrixCreation.forEach((m: any) => {
           code += m;
         });
+        code += `
+
+
+      this.${object.form?.id}Form.get([${getParentsControl}${getParentsControl && getParentsControl !== "" ? `,` : ``
+          }${parentArray && array
+            ? `"${array.id}", ${TextTransformation.singularize(array.id)}Index, `
+            : ``
+          }"${element.autocomplete.name
+          }"])?.setValue(this.chosen${TextTransformation.pascalfy(
+            element.autocomplete.name
+          )}Value[${getParentsIndexes && getParentsIndexes !== ""
+            ? `${getParentsIndexes.replace(/: number/g, "][")}`
+            : ""
+          }${TextTransformation.singularize(array.id)}Index]);
+        `;
       }
     }
 
@@ -228,8 +264,6 @@ const setAutocompleteMethod = (
         element.autocomplete.name
       )}Value.push(event.option.value);
 
-      this.${element.autocomplete.name}Input.nativeElement.value = "";
-
       this.${object.form?.id}Form.get("${element.autocomplete.name
         }")?.setValue(this.chosen${TextTransformation.pascalfy(
           element.autocomplete.name
@@ -241,59 +275,61 @@ const setAutocompleteMethod = (
     `;
   }
 
-  /**
+  if (!element.autocomplete.isMultiple) {
+    /**
    * Display selected option to autocomplete
    */
-  code += `
-  displayFnTo${TextTransformation.pascalfy(
-    element.autocomplete.name
-  )} = (value?: any) => {
-      const treatedValue = value?._id ? `;
-  if (Array.isArray(element.autocomplete.optionsApi.labelField)) {
-    const labelFieldLength = element.autocomplete.optionsApi.labelField.length;
-    element.autocomplete.optionsApi.labelField.forEach(
-      (e: string, index: number) => {
-        code += `value.${e}`;
-        if (labelFieldLength > index + 1) {
-          code += ` + " - " + `;
-        }
-      }
-    );
-  }
-
-  if (!Array.isArray(element.autocomplete.optionsApi.labelField)) {
-    code += `value?.${element.autocomplete.optionsApi.labelField}`;
-  }
-  code += ` : `;
-
-  if (Array.isArray(element.autocomplete.optionsApi.labelField)) {
-    const labelFieldLength = element.autocomplete.optionsApi.labelField.length;
-    const name = element.autocomplete.name;
-    const valueField = element.autocomplete.optionsApi.valueField;
-    element.autocomplete.optionsApi.labelField.forEach(
-      (e: string, index: number) => {
-        code += `this.filtered${TextTransformation.pascalfy(
-          name
-        )}.find((_) => _.${valueField} === value)?.${e}`;
-        if (labelFieldLength > index + 1) {
-          code += ` + " - " + `;
-        }
-      }
-    );
-  }
-
-  if (!Array.isArray(element.autocomplete.optionsApi.labelField)) {
-    code += `this.filtered${TextTransformation.pascalfy(
+    code += `
+    displayFnTo${TextTransformation.pascalfy(
       element.autocomplete.name
-    )}.find((_) => _.${element.autocomplete.optionsApi.valueField
-      } === value)?.${element.autocomplete.optionsApi.labelField}`;
+    )} = (value?: any) => {
+        const treatedValue = value?._id ? `;
+    if (Array.isArray(element.autocomplete.optionsApi.labelField)) {
+      const labelFieldLength = element.autocomplete.optionsApi.labelField.length;
+      element.autocomplete.optionsApi.labelField.forEach(
+        (e: string, index: number) => {
+          code += `value.${e}`;
+          if (labelFieldLength > index + 1) {
+            code += ` + " - " + `;
+          }
+        }
+      );
+    }
+
+    if (!Array.isArray(element.autocomplete.optionsApi.labelField)) {
+      code += `value?.${element.autocomplete.optionsApi.labelField}`;
+    }
+    code += ` : `;
+
+    if (Array.isArray(element.autocomplete.optionsApi.labelField)) {
+      const labelFieldLength = element.autocomplete.optionsApi.labelField.length;
+      const name = element.autocomplete.name;
+      const valueField = element.autocomplete.optionsApi.valueField;
+      element.autocomplete.optionsApi.labelField.forEach(
+        (e: string, index: number) => {
+          code += `this.filtered${TextTransformation.pascalfy(
+            name
+          )}.find((_) => _.${valueField} === value)?.${e}`;
+          if (labelFieldLength > index + 1) {
+            code += ` + " - " + `;
+          }
+        }
+      );
+    }
+
+    if (!Array.isArray(element.autocomplete.optionsApi.labelField)) {
+      code += `this.filtered${TextTransformation.pascalfy(
+        element.autocomplete.name
+      )}.find((_) => _.${element.autocomplete.optionsApi.valueField
+        } === value)?.${element.autocomplete.optionsApi.labelField}`;
+    }
+
+    code += `;`;
+
+    code += `
+      return treatedValue;
+    };`;
   }
-
-  code += `;`;
-
-  code += `
-    return treatedValue;
-  };`;
 
   /**
    * Show options according to what is writen in input
@@ -334,7 +370,7 @@ const setAutocompleteMethod = (
       : `value.${element.autocomplete.name}`
     }
       .length > 0) {
-        const filter = \`?filter={"$or":[\${paramsToFilter.map((element: string) => {
+        const filter = \`?filters={"$or":[\${paramsToFilter.map((element: string) => {
           if(element !== "undefined") {
             return \`{"\${element}":{"$regex": "\${
               this.${object.form?.id}Form.

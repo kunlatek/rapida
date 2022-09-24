@@ -27,7 +27,7 @@ export const CHARACTER_FORM: MainInterface = {
                   type: FormInputTypeEnum.Text,
                   optionsApi: {
                     endpoint: "animations",
-                    labelField: ["name", "_id"],
+                    labelField: "name",
                     valueField: "_id",
                     paramsToFilter: ["name", "startDate"],
                   },

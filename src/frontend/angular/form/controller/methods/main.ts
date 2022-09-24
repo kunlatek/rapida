@@ -17,10 +17,8 @@ let _arrays: Array<ArrayInterface> = [];
 let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
   process.env.ARRAY_LAYER!
 );
-let _arraysInAFlow: Array<ArrayFeaturesInterface> = JSON.parse(
-  process.env.ARRAYS_IN_A_FLOW!
-);
 let _arraysToEdit: string = ``;
+let _treatmentBeforeSubmitting = ``;
 
 const setFormControllerMethods = (object: MainInterface): string => {
   if (!object.form) {
@@ -36,10 +34,6 @@ const setFormControllerMethods = (object: MainInterface): string => {
     process.env.ARRAY_LAYER!
   );
 
-  _arraysInAFlow = JSON.parse(
-    process.env.ARRAYS_IN_A_FLOW!
-  );
-
   let _conditionsMethods = setCondition(object, object.form.elements);
   let _conditionsMethodsOverEdition = setConditionOverEdition(
     object,
@@ -53,7 +47,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
   );
 
   object.form.elements.forEach((element) => {
-    verifyFormElement(element);
+    verifyFormElement(object, element);
   });
 
   _arraysToEdit = setArraysToEdit(_arrays);
@@ -65,8 +59,8 @@ const setFormControllerMethods = (object: MainInterface): string => {
           Object.keys(data).forEach((item) => {
             if (Array.isArray(data[item]) && data[item].length) {
               arr.push(...data[item]);
-              if (data[item].length > 1) {
-                this.addNewFormArrayItem(item, data[item].length - 1, indexArray);
+              if (data[item].length > 0) {
+                this.addNewFormArrayItem(item, data[item].length, indexArray);
               }
             }
           });
@@ -122,6 +116,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
         }
 
         if(!this.isAddModule) {
+          ${_treatmentBeforeSubmitting}
             await this._${object.form.id}Service.update(
               this.${object.form.id}Form.value,
               this.${object.form.id}Id
@@ -192,9 +187,14 @@ const setFormControllerMethods = (object: MainInterface): string => {
 };
 
 const verifyFormElement = (
+  object: MainInterface,
   element: FormElementInterface,
-  isArray: boolean = false
+  array: ArrayInterface | undefined = undefined
 ): void => {
+  if (!object.form) {
+    return;
+  }
+
   const formElements = [
     "input",
     "autocomplete",
@@ -210,7 +210,7 @@ const verifyFormElement = (
   if (element.tabs) {
     element.tabs.forEach((tab) => {
       tab.elements.forEach((tabElement) => {
-        verifyFormElement(tabElement);
+        verifyFormElement(object, tabElement);
       });
     });
   }
@@ -218,15 +218,21 @@ const verifyFormElement = (
   if (element.array) {
     _arrays.push(element.array);
     element.array.elements.forEach((arrayElement) => {
-      verifyFormElement(arrayElement, true);
+      verifyFormElement(object, arrayElement, element.array);
     });
+  }
+
+  if (element.autocomplete) {
+    if (!array) {
+      _treatmentBeforeSubmitting += `this.${object.form.id}Form.get("${element.autocomplete.name}")?.setValue(this.${object.form.id}Form.get("${element.autocomplete.name}")?.value.${element.autocomplete.optionsApi.valueField});`;
+    }
   }
 
   if (formElements.includes(type)) {
     if (value.conditions) {
       _hasCondition = true;
 
-      if (isArray) {
+      if (array) {
         _hasConditionInArray = true;
       }
     }

@@ -102,6 +102,13 @@ const setAutocomplete = (
             [matChipInputFor]="${element.autocomplete.name}ChipList" 
             [matChipInputSeparatorKeyCodes]="${element.autocomplete.name
       }SeparatorKeysCodes"
+            (matChipInputTokenEnd)="add${TextTransformation.pascalfy(
+        element.autocomplete.name
+      )}(${getParentsIndexes && getParentsIndexes !== ""
+        ? getParentsIndexes?.replace(/: number/g, "")
+        : ""
+      }${getParentsIndexes && getParentsIndexes !== "" && array ? `, ` : ``}${array ? `${TextTransformation.singularize(array.id)}Index, ` : ``
+      }$event)"
             (keyup)="callSetFiltered${TextTransformation.pascalfy(
         element.autocomplete.name
       )}(${getParentsIndexes && getParentsIndexes !== ""

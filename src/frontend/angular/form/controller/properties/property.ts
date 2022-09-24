@@ -79,15 +79,15 @@ const setFormPropertiesByElements = (
       }
 
       if (element.select.optionsApi) {
-        code += `${element.select.name}SelectObject: Array<any> = [];`;
+        code += `${element.select.name}SelectObject: any[] = [];`;
       }
     }
 
     if (element.autocomplete) {
       code += `
-      filtered${TextTransformation.pascalfy(element.autocomplete.name)}: Array<any> = [];
+      filtered${TextTransformation.pascalfy(element.autocomplete.name)}: any[] = [];
       ${(array && (getParentsIndexes && (getParentsIndexes !== "")))
-          ? `loading${TextTransformation.pascalfy(element.autocomplete.name)}: Array<boolean> = [false];`
+          ? `loading${TextTransformation.pascalfy(element.autocomplete.name)}: boolean[] = [false];`
           : `loading${TextTransformation.pascalfy(element.autocomplete.name)}: boolean = false;`
         }
       `;
@@ -126,7 +126,7 @@ const setFormPropertiesByElements = (
       }
 
       if (element.checkbox.optionsApi) {
-        code += `${element.checkbox.name}CheckboxObject: Array<CheckboxObjectInterface> = [];`;
+        code += `${element.checkbox.name}CheckboxObject: CheckboxObjectInterface[] = [];`;
       }
     }
   });
