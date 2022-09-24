@@ -30,10 +30,6 @@ const setFormControllerMethods = (object: MainInterface): string => {
 
   setArray(object);
 
-  _arrayLayer = JSON.parse(
-    process.env.ARRAY_LAYER!
-  );
-
   let _conditionsMethods = setCondition(object, object.form.elements);
   let _conditionsMethodsOverEdition = setConditionOverEdition(
     object,

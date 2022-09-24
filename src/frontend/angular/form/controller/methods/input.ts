@@ -6,7 +6,6 @@ import {
 } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
-import { setArrayLayer } from "../../../core/array";
 require("dotenv").config();
 
 let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
@@ -24,10 +23,6 @@ const setInputMethod = (
   if (!element.input) {
     return code;
   }
-
-  setArrayLayer(object.form!.elements);
-
-  _arrayLayer = JSON.parse(process.env.ARRAY_LAYER!);
 
   let parentArray: string | undefined;
   let getParents: string = ``;
@@ -128,7 +123,7 @@ const setInputMethod = (
         const array: any = await this._${object.form?.id}Service.${element.input.name
       }InputRequestToFind(this.${object.form?.id}Form.
           ${array
-        ? `get([${getParentsControl}${getParentsControl && getParentsControl !== "" ? `,` : ``
+        ? `get([${getParentsControl && getParentsControl !== "" ? `${getParentsControl}, ` : ``
         }${array
           ? `"${array.id}", ${TextTransformation.singularize(array.id)}Index, `
           : ``
@@ -171,8 +166,6 @@ const fillFieldsOverApiRequest = (
 ) => {
   let code = ``;
 
-  _arrayLayer = JSON.parse(process.env.ARRAY_LAYER!);
-
   let parentArray: string | undefined;
   let getParents: string = ``;
   let getParentsIndexes: string = ``;
@@ -206,7 +199,7 @@ const fillFieldsOverApiRequest = (
     element.input.apiRequest?.formFieldsFilledByApiResponse.forEach((e) => {
       code += `this.${object.form?.id}Form.
       ${array
-          ? `get([${getParentsControl}${getParentsControl && getParentsControl !== "" ? `,` : ``
+          ? `get([${getParentsControl && getParentsControl !== "" ? `${getParentsControl} ,` : ``
           }${array
             ? `"${array.id}", ${TextTransformation.singularize(array.id)}Index, `
             : ``

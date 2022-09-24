@@ -2,7 +2,7 @@ import { ArrayFeaturesInterface } from "../../../../../interfaces/array";
 import { ArrayInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
-import { setArrayLayer, setArraysInAFlow } from "../../../core/array";
+import { setArraysInAFlow } from "../../../core/array";
 import { setFormBuilderByElements } from "../properties/form-builder";
 import { setFormMethodsByElements } from "./method";
 require("dotenv").config();
@@ -107,10 +107,6 @@ const setArrayMethod = (
   if (!array) {
     return code;
   }
-
-  setArrayLayer(object.form!.elements);
-
-  _arrayLayer = JSON.parse(process.env.ARRAY_LAYER!);
 
   const add = `add${TextTransformation.pascalfy(
     TextTransformation.singularize(array.id)

@@ -5,7 +5,6 @@ import {
 } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
-import { setArrayLayer } from "../../../core/array";
 require("dotenv").config();
 
 let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
@@ -23,10 +22,6 @@ const setAutocompleteMethod = (
   if (!element.autocomplete) {
     return code;
   }
-
-  setArrayLayer(object.form!.elements);
-
-  _arrayLayer = JSON.parse(process.env.ARRAY_LAYER!);
 
   let parentArray: string | undefined;
   let getParentsIndexes: string = ``;
@@ -79,8 +74,8 @@ const setAutocompleteMethod = (
       event.chipInput!.clear();
       this.${object.form?.id}Form.
       ${array
-        ? `get([${getParentsControl}${getParentsControl && getParentsControl !== "" ? `,` : ``
-        }${parentArray && array
+        ? `get([${getParentsControl && getParentsControl !== "" ? `${getParentsControl}, ` : ``
+        }${array
           ? `"${array.id}", ${TextTransformation.singularize(
             array.id
           )}Index, `
@@ -129,7 +124,7 @@ const setAutocompleteMethod = (
 
         this.${object.form?.id}Form.
         ${array
-        ? `get([${getParentsControl}${getParentsControl && getParentsControl !== "" ? `,` : ``
+        ? `get([${getParentsControl && getParentsControl !== "" ? `${getParentsControl} ,` : ``
         }${parentArray && array
           ? `"${array.id}", ${TextTransformation.singularize(
             array.id
@@ -240,8 +235,8 @@ const setAutocompleteMethod = (
         code += `
 
 
-      this.${object.form?.id}Form.get([${getParentsControl}${getParentsControl && getParentsControl !== "" ? `,` : ``
-          }${parentArray && array
+      this.${object.form?.id}Form.get([${getParentsControl && getParentsControl !== "" ? `${getParentsControl} ,` : ``
+          }${array
             ? `"${array.id}", ${TextTransformation.singularize(array.id)}Index, `
             : ``
           }"${element.autocomplete.name
