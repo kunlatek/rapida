@@ -17,10 +17,10 @@ import { setFormControllerProperties } from "./properties/main";
 
 let _hasCondition = false;
 
-const setFormController = async (
+const setFormController = (
   object: MainInterface,
   mainArray: Array<MainInterface> | undefined = undefined
-): Promise<string> => {
+): string => {
   if (!object.form) {
     console.info("Only forms set here");
     return ``;

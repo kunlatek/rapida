@@ -19,10 +19,10 @@ import { setSelect } from "./select";
  * @param object
  * @returns
  */
-const setFormTemplate = async (
+const setFormTemplate = (
   object: MainInterface,
   mainArray: Array<MainInterface> | undefined = undefined
-): Promise<string> => {
+): string => {
   if (!object.form) {
     console.info("Only forms set here");
     return ``;
@@ -30,7 +30,7 @@ const setFormTemplate = async (
 
   let _specificStructure: string = ``;
 
-  await setArrayLayer(object.form.elements);
+  setArrayLayer(object.form.elements);
 
   object.form.elements.forEach((element) => {
     _specificStructure += setSpecificStructureOverFormElement(object, element);
