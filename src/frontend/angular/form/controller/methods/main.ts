@@ -23,6 +23,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
     return ``;
   }
 
+  _treatmentBeforeSubmitting = ``;
   _arrays = [];
 
   setArray(object);
