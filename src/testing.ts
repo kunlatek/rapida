@@ -22,7 +22,7 @@ MONGO_URL=mongodb+srv://kunlatek:Kunlatek751@cluster0.b0pfr.mongodb.net/aPlusEne
 DB=aPlusEnergyFundamento
 NODEMAILER_USER=administrativo@kunlatek.com
 NODEMAILER_PASS=yetyxhgzjzktuwef
-ADMIN_USERS=contato@kunlatek.com
+ADMIN_USERS=rabbadesalman@gmail.com
 `;
 
 const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitation-and-permission";
