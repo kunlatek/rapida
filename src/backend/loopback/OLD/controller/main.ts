@@ -1,8 +1,8 @@
 import * as fs from "fs";
 
-import { ComponentCodeTypeEnum } from "../../../enums/architecture";
-import { MainInterface } from "../../../interfaces/main";
-import { TextTransformation } from "../../../utils/text.transformation";
+import { ComponentCodeTypeEnum } from "../../../../enums/architecture";
+import { MainInterface } from "../../../../interfaces/main";
+import { TextTransformation } from "../../../../utils/text.transformation";
 import { setControllerConstructorParams } from "./constructor-params";
 import { setControllerImports } from "./imports";
 import { setControllerMethods } from "./methods";
@@ -38,11 +38,10 @@ const setControllerArchitectureAndWriteToFile = (
   object: MainInterface,
   code: string
 ) => {
-  const componentFilePath = `${
-    object.projectPath
-  }-api/src/controllers/${TextTransformation.kebabfy(
-    object.form?.id.replace("Form", "")!
-  )}.controller.ts`;
+  const componentFilePath = `${object.projectPath
+    }-api/src/controllers/${TextTransformation.kebabfy(
+      object.form?.id.replace("Form", "")!
+    )}.controller.ts`;
   const componentIndexFilePath = `${object.projectPath}-api/src/controllers/index.ts`;
 
   try {

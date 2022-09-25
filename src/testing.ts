@@ -14,6 +14,7 @@ export const environment = {
 };
 `;
 
+const db = `aPlusEnergyFundamento`;
 const envBackend = `
 PORT=3000
 SERVER_ROOT_URI=http://localhost:3000

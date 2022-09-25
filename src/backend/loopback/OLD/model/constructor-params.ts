@@ -1,5 +1,5 @@
-import { MainInterface } from "../../../interfaces/main";
-import { TextTransformation } from "../../../utils/text.transformation";
+import { MainInterface } from "../../../../interfaces/main";
+import { TextTransformation } from "../../../../utils/text.transformation";
 
 const setModelConstructorParams = (object: MainInterface): string => {
   if (!object.form) {
@@ -8,7 +8,7 @@ const setModelConstructorParams = (object: MainInterface): string => {
   }
 
   const modelName: string = object.form.id.replace("Form", "");
-  
+
   let code = `
   data?: Partial<${TextTransformation.pascalfy(modelName)}>
   `;

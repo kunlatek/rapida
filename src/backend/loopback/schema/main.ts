@@ -5,7 +5,8 @@ import { TextTransformation } from "../../../utils/text.transformation";
 import { setArrayTypeSchemas, setModelProperties } from "./properties";
 
 const schemaMain = (
-  object: MainInterface
+  object: MainInterface,
+  index: number,
 ): string => {
   const schemaName: string = object.form!.id.replace("Form", "");
   let _arrayTypeModels: string = setArrayTypeSchemas(object.form?.elements!);
@@ -45,6 +46,9 @@ const schemaMain = (
   });
 
   module.exports = mongoose.model('${TextTransformation.pascalfy(schemaName)}', ${TextTransformation.pascalfy(schemaName)}Schema, '${TextTransformation.pascalfy(schemaName)}');
+  
+  /* moduleName->${object.form?.title}<- */
+  /* moduleIndex->${index}<- */
   `;
 
   setModelArchitectureAndWriteToFile(object, code);

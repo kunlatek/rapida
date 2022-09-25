@@ -1,8 +1,8 @@
 import * as fs from "fs";
 
-import { ComponentCodeTypeEnum } from "../../../enums/architecture";
-import { MainInterface } from "../../../interfaces/main";
-import { TextTransformation } from "../../../utils/text.transformation";
+import { ComponentCodeTypeEnum } from "../../../../enums/architecture";
+import { MainInterface } from "../../../../interfaces/main";
+import { TextTransformation } from "../../../../utils/text.transformation";
 import { setRepositoryConstructorArguments } from "./constructor-args";
 import { setRepositoryConstructorParams } from "./constructor-params";
 import { setRepositoryImports } from "./imports";
@@ -43,7 +43,7 @@ const repositoryMain = (
 
   setRepositoryArchitectureAndWriteToFile(object, code);
   return code;
-}
+};
 
 /**
  * JOIN CODE AND ARCHITECTURE

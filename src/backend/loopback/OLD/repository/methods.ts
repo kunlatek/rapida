@@ -1,6 +1,6 @@
-import { FormElementInterface } from "../../../interfaces/form";
-import { MainInterface } from "../../../interfaces/main";
-import { getAllElements } from "../main";
+import { FormElementInterface } from "../../../../interfaces/form";
+import { MainInterface } from "../../../../interfaces/main";
+import { getAllElements } from "../../main";
 
 const setRepositoryMethods = (object: MainInterface): string => {
   if (!object.form) {
