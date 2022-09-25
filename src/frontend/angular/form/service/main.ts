@@ -15,10 +15,10 @@ let _hasAuthorization: boolean = false;
  * @param object
  * @returns
  */
-const setFormService = async (
+const setFormService = (
   object: MainInterface,
   mainArray: Array<MainInterface> | undefined = undefined
-): Promise<string> => {
+): string => {
   if (!object.form) {
     console.info("Only forms set here");
     return ``;
