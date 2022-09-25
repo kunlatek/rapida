@@ -146,4 +146,3 @@ dist
 
 #collection
 ./src/testing.ts
-./collections-frontend/*
