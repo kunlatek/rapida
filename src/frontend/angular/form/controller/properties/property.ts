@@ -2,13 +2,9 @@ import { ArrayFeaturesInterface } from "../../../../../interfaces/array";
 import { ArrayInterface, FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
-import { setArrayLayer } from "../../../core/array";
 import { setFormBuilderProperty } from "./form-builder";
 require("dotenv").config();
 
-let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
-  process.env.ARRAY_LAYER!
-);
 let _allParents: Array<string> = [];
 
 const setProperty = (
@@ -33,9 +29,7 @@ const setFormPropertiesByElements = (
 ) => {
   let code = ``;
 
-  setArrayLayer(object.form!.elements);
-
-  _arrayLayer = JSON.parse(
+  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
     process.env.ARRAY_LAYER!
   );
 
@@ -135,6 +129,9 @@ const setFormPropertiesByElements = (
 };
 
 const setAllParents = (lastParent: string) => {
+  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
   _allParents.push(lastParent);
 
   _arrayLayer.forEach((element: ArrayFeaturesInterface) => {

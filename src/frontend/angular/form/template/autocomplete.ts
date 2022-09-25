@@ -5,12 +5,8 @@ import {
 } from "../../../../interfaces/form";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
-import { setArrayLayer } from "../../core/array";
 require("dotenv").config();
 
-let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
-  process.env.ARRAY_LAYER!
-);
 let _allParents: Array<string> = [];
 
 const setAutocomplete = (
@@ -25,10 +21,9 @@ const setAutocomplete = (
     return code;
   }
 
-  setArrayLayer(object.form!.elements);
-
-  _arrayLayer = JSON.parse(process.env.ARRAY_LAYER!);
-
+  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
   let parentArray: string | undefined;
   let getParentsIndexes: string = ``;
   let getParentsControl: string = ``;
@@ -271,6 +266,9 @@ const setAutocomplete = (
 };
 
 const setAllParents = (lastParent: string) => {
+  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
   _allParents.push(lastParent);
 
   _arrayLayer.forEach((element: ArrayFeaturesInterface) => {

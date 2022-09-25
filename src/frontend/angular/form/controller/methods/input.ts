@@ -8,11 +8,7 @@ import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 require("dotenv").config();
 
-let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
-  process.env.ARRAY_LAYER!
-);
 let _allParents: Array<string> = [];
-
 
 const setInputMethod = (
   object: MainInterface,
@@ -24,6 +20,9 @@ const setInputMethod = (
     return code;
   }
 
+  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
   let parentArray: string | undefined;
   let getParents: string = ``;
   let getParentsIndexes: string = ``;
@@ -57,7 +56,8 @@ const setInputMethod = (
     code += `
     async on${TextTransformation.capitalization(
       element.input.name
-    )}FileSelected(${array ? `${TextTransformation.singularize(array.id)}: any, ` : ``}event: any) {
+    )}FileSelected(${array ? `${TextTransformation.singularize(array.id)}: any, ` : ``
+      }event: any) {
       if (event.target.files.length > 0) {
         ${array
         ? `
@@ -92,9 +92,8 @@ const setInputMethod = (
       }
       }
     }
-    delete${TextTransformation.capitalization(
-        element.input.name
-      )}File(${array ? `value: any, ` : ``}index: number) {
+    delete${TextTransformation.capitalization(element.input.name)}File(${array ? `value: any, ` : ``
+      }index: number) {
         ${array
         ? `
       const files = value.value;
@@ -115,17 +114,20 @@ const setInputMethod = (
     code += `
     set${TextTransformation.pascalfy(
       element.input.name
-    )}InputRequestToFind = async (${getParentsIndexes && getParentsIndexes !== ""
-      ? `${getParentsIndexes}, `
-      : ""
-      }${array ? `${TextTransformation.singularize(array.id)}Index: number` : ``}) => {
+    )}InputRequestToFind = async (${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
+      }${array ? `${TextTransformation.singularize(array.id)}Index: number` : ``
+      }) => {
       try {
         const array: any = await this._${object.form?.id}Service.${element.input.name
       }InputRequestToFind(this.${object.form?.id}Form.
           ${array
-        ? `get([${getParentsControl && getParentsControl !== "" ? `${getParentsControl}, ` : ``
+        ? `get([${getParentsControl && getParentsControl !== ""
+          ? `${getParentsControl}, `
+          : ``
         }${array
-          ? `"${array.id}", ${TextTransformation.singularize(array.id)}Index, `
+          ? `"${array.id}", ${TextTransformation.singularize(
+            array.id
+          )}Index, `
           : ``
         }"${element.input.name}"])?.value);`
         : `value?.${element.input.name});`
@@ -143,9 +145,7 @@ const setInputMethod = (
 
     callSet${TextTransformation.pascalfy(
         element.input.name
-      )}InputRequestToFind = MyPerformance.debounce((${getParentsIndexes && getParentsIndexes !== ""
-        ? `${getParentsIndexes}, `
-        : ""
+      )}InputRequestToFind = MyPerformance.debounce((${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
       }${array ? `${TextTransformation.singularize(array.id)}Index: number` : ``
       })=> this.set${TextTransformation.pascalfy(
         element.input.name
@@ -166,6 +166,9 @@ const fillFieldsOverApiRequest = (
 ) => {
   let code = ``;
 
+  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
   let parentArray: string | undefined;
   let getParents: string = ``;
   let getParentsIndexes: string = ``;
@@ -199,9 +202,13 @@ const fillFieldsOverApiRequest = (
     element.input.apiRequest?.formFieldsFilledByApiResponse.forEach((e) => {
       code += `this.${object.form?.id}Form.
       ${array
-          ? `get([${getParentsControl && getParentsControl !== "" ? `${getParentsControl} ,` : ``
+          ? `get([${getParentsControl && getParentsControl !== ""
+            ? `${getParentsControl} ,`
+            : ``
           }${array
-            ? `"${array.id}", ${TextTransformation.singularize(array.id)}Index, `
+            ? `"${array.id}", ${TextTransformation.singularize(
+              array.id
+            )}Index, `
             : ``
           }"${e.formFieldName}"])?.`
           : `get("${e.formFieldName}")?.`
@@ -214,6 +221,9 @@ const fillFieldsOverApiRequest = (
 };
 
 const setAllParents = (lastParent: string) => {
+  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
   _allParents.push(lastParent);
 
   _arrayLayer.forEach((element: ArrayFeaturesInterface) => {

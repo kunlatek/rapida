@@ -1,13 +1,14 @@
 import { ConditionEnum } from "../../../../../enums/form";
 import { ArrayFeaturesInterface } from "../../../../../interfaces/array";
-import { ArrayInterface, ConditionElementInterface, FormElementInterface } from "../../../../../interfaces/form";
+import {
+  ArrayInterface,
+  ConditionElementInterface,
+  FormElementInterface
+} from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 require("dotenv").config();
 
-let _arrayLayer: Array<ArrayFeaturesInterface> = [JSON.parse(
-  process.env.ARRAY_LAYER!
-)];
 let _allParents: Array<string> = [];
 
 let _conditionMethods: Array<string> = [];
@@ -40,7 +41,8 @@ const setCondition = (
         if (value.conditions.type === ConditionEnum.Form) {
           if (!_conditionMethods.includes(value.name ? value.name : value.id)) {
             if (!array) {
-              code += `this.${value.name ? value.name : value.id}FormCondition = (`;
+              code += `this.${value.name ? value.name : value.id
+                }FormCondition = (`;
 
               value.conditions.elements.forEach(
                 (condition: any, index: number) => {
@@ -64,7 +66,8 @@ const setCondition = (
 
         if (value.conditions.type === ConditionEnum.Code) {
           if (!_conditionMethods.includes(value.name ? value.name : value.id)) {
-            code += `this.${value.name ? value.name : value.id}CodeCondition = (`;
+            code += `this.${value.name ? value.name : value.id
+              }CodeCondition = (`;
 
             value.conditions.elements.forEach(
               (condition: any, index: number) => {
@@ -128,7 +131,11 @@ const setConditionOverEdition = (
     if (formElements.includes(type)) {
       if (value.conditions) {
         if (value.conditions.type === ConditionEnum.Form) {
-          if (!_conditionMethodsOverEdition.includes(value.name ? value.name : value.id)) {
+          if (
+            !_conditionMethodsOverEdition.includes(
+              value.name ? value.name : value.id
+            )
+          ) {
             let conditionId = "";
             if (array) {
               code += `
@@ -142,7 +149,8 @@ const setConditionOverEdition = (
 
               value.conditions.elements.forEach(
                 (condition: ConditionElementInterface, index: number) => {
-                  conditionId = `${value.name ? value.name : value.id}FormCondition`;
+                  conditionId = `${value.name ? value.name : value.id
+                    }FormCondition`;
                   if (index > 0) {
                     code += `${condition.logicalOperator
                       ? ` ${condition.logicalOperator} `
@@ -155,7 +163,9 @@ const setConditionOverEdition = (
                     : ` === `
                     } "${condition.value}"`;
 
-                  _conditionMethodsOverEdition.push(value.name ? value.name : value.id);
+                  _conditionMethodsOverEdition.push(
+                    value.name ? value.name : value.id
+                  );
                 }
               );
 
@@ -172,7 +182,8 @@ const setConditionOverEdition = (
 
               value.conditions.elements.forEach(
                 (condition: ConditionElementInterface, index: number) => {
-                  conditionId = `${value.name ? value.name : value.id}FormCondition`;
+                  conditionId = `${value.name ? value.name : value.id
+                    }FormCondition`;
                   if (index > 0) {
                     code += `${condition.logicalOperator
                       ? ` ${condition.logicalOperator} `
@@ -185,7 +196,9 @@ const setConditionOverEdition = (
                     : ` === `
                     } "${condition.value}"`;
 
-                  _conditionMethodsOverEdition.push(value.name ? value.name : value.id);
+                  _conditionMethodsOverEdition.push(
+                    value.name ? value.name : value.id
+                  );
                 }
               );
 
@@ -205,7 +218,11 @@ const setConditionOverEdition = (
     }
 
     if (element.array) {
-      code += setConditionOverEdition(object, element.array.elements, element.array);
+      code += setConditionOverEdition(
+        object,
+        element.array.elements,
+        element.array
+      );
     }
   });
 
@@ -228,6 +245,9 @@ const setConditionsInArray = (
     "array",
   ];
 
+  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
   let parentArray: string | undefined;
   let getParentsIndexes: string = ``;
   let getParentsControl: string = ``;
@@ -241,7 +261,7 @@ const setConditionsInArray = (
 
     if (parentArray) {
       setAllParents(parentArray);
-      console.log(_allParents.length, 249);
+
       _allParents.forEach((parent: string, index: number) => {
         getParentsIndexes += `${TextTransformation.singularize(
           parent
@@ -264,19 +284,25 @@ const setConditionsInArray = (
         if (value.conditions.type === ConditionEnum.Form) {
           if (!_conditionMethods.includes(value.name ? value.name : value.id)) {
             if (array) {
-              const conditionMethod = `setConditionIn${TextTransformation.pascalfy(value.conditions.elements[0].key)}`;
-              const stringToSplit = `setConditionIn${TextTransformation.pascalfy(value.conditions.elements[0].key)} = (${getParentsIndexes && getParentsIndexes !== ""
-                ? `${getParentsIndexes}, `
-                : ""
-                }${array ? `${TextTransformation.singularize(array.id)}Index: number, ` : ``
+              const conditionMethod = `setConditionIn${TextTransformation.pascalfy(
+                value.conditions.elements[0].key
+              )}`;
+              const stringToSplit = `setConditionIn${TextTransformation.pascalfy(
+                value.conditions.elements[0].key
+              )} = (${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
+                }${array
+                  ? `${TextTransformation.singularize(array.id)}Index: number, `
+                  : ``
                 }) => { if (typeof i === "number") {`;
               const stringToSplitExists = code.includes(stringToSplit);
               const conditionMethodExists = code.includes(conditionMethod);
 
-              let conditionMethodCode = `this.${value.name ? value.name : value.id}FormCondition[${getParentsIndexes && getParentsIndexes !== ""
-                ? `${getParentsIndexes?.replace(/: number/g, "")}, `
-                : ""
-                }${array ? `${TextTransformation.singularize(array.id)}Index` : ``}] = (`;
+              let conditionMethodCode = `this.${value.name ? value.name : value.id
+                }FormCondition[${getParentsIndexes && getParentsIndexes !== ""
+                  ? `${getParentsIndexes?.replace(/: number/g, "")}, `
+                  : ""
+                }${array ? `${TextTransformation.singularize(array.id)}Index` : ``
+                }] = (`;
 
               value.conditions.elements.forEach(
                 (condition: any, index: number) => {
@@ -287,25 +313,36 @@ const setConditionsInArray = (
                       }`;
                   }
 
-                  conditionMethodCode += `(this.${object.form!.id
-                    }Form.get([${getParentsControl && getParentsControl !== "" ? `${getParentsControl} ,` : ``
+                  conditionMethodCode += `(this.${object.form!.id}Form.get([${getParentsControl && getParentsControl !== ""
+                    ? `${getParentsControl} ,`
+                    : ``
                     }${array
-                      ? `"${array.id}", ${TextTransformation.singularize(array.id)}Index, `
+                      ? `"${array.id}", ${TextTransformation.singularize(
+                        array.id
+                      )}Index, `
                       : ``
                     }"])?.value[${getParentsIndexes && getParentsIndexes !== ""
                       ? `${getParentsIndexes.replace(/: number/g, "][")}`
                       : ""
-                    }${TextTransformation.singularize(array.id)}Index]?.${condition.key} ${condition.comparisonOperator
+                    }${TextTransformation.singularize(array.id)}Index]?.${condition.key
+                    } ${condition.comparisonOperator
                       ? ` ${condition.comparisonOperator} `
                       : ` === `
-                    } ${(typeof condition.value !== "string") ? condition.value : `"${condition.value}"`})`;
+                    } ${typeof condition.value !== "string"
+                      ? condition.value
+                      : `"${condition.value}"`
+                    })`;
                 }
               );
 
               if (stringToSplitExists) {
                 const codeSplited = code.split(stringToSplit);
-                codeSplited.splice(1, 0, `${stringToSplit} ${conditionMethodCode});`);
-                code = codeSplited.join('');
+                codeSplited.splice(
+                  1,
+                  0,
+                  `${stringToSplit} ${conditionMethodCode});`
+                );
+                code = codeSplited.join("");
               } else {
                 if (!conditionMethodExists) {
                   code += `${stringToSplit} ${conditionMethodCode}); } };`;
@@ -338,6 +375,9 @@ const setConditionsInArray = (
 };
 
 const setAllParents = (lastParent: string) => {
+  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
   _allParents.push(lastParent);
 
   _arrayLayer.forEach((element: ArrayFeaturesInterface) => {

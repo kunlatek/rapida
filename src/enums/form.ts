@@ -73,3 +73,8 @@ export enum ConditionEnum {
     Code = "code",
     Array = "array"
 }
+
+export enum ParamTypeEnum {
+    Query = "query",
+    Path = "path"
+}

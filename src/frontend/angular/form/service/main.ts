@@ -1,7 +1,10 @@
 import * as chp from "child_process";
 import * as fs from "fs";
 import { ServiceFunctionsEnum } from "../../../../enums/form";
-import { FormElementInterface, ServiceInterface } from "../../../../interfaces/form";
+import {
+  FormElementInterface,
+  ServiceInterface
+} from "../../../../interfaces/form";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
 
@@ -12,7 +15,10 @@ let _hasAuthorization: boolean = false;
  * @param object
  * @returns
  */
-const setFormService = (object: MainInterface, mainArray: Array<MainInterface> | undefined = undefined,): string => {
+const setFormService = async (
+  object: MainInterface,
+  mainArray: Array<MainInterface> | undefined = undefined
+): Promise<string> => {
   if (!object.form) {
     console.info("Only forms set here");
     return ``;
@@ -23,11 +29,10 @@ const setFormService = (object: MainInterface, mainArray: Array<MainInterface> |
   if (object.form.service) {
     _services += setFormServiceServices(object.form.service);
 
-    object.form.elements.forEach(element => {
+    object.form.elements.forEach((element) => {
       _services += setFormServiceServicesOverFormElement(element);
     });
   }
-
 
   let code = `
   import { HttpClient } from "@angular/common/http";
@@ -64,9 +69,7 @@ const setFormService = (object: MainInterface, mainArray: Array<MainInterface> |
   return code;
 };
 
-const setFormServiceServices = (
-  service: ServiceInterface
-): string => {
+const setFormServiceServices = (service: ServiceInterface): string => {
   let hasAuthorization = ``;
   if (service.hasAuthorization) {
     hasAuthorization = `"Authorization": \`Bearer \${sessionStorage.getItem("token")}\``;
@@ -282,14 +285,14 @@ const setFormServiceServicesOverFormElement = (
   }
 
   if (element.array) {
-    element.array.elements.forEach(arrayElement => {
+    element.array.elements.forEach((arrayElement) => {
       code += setFormServiceServicesOverFormElement(arrayElement);
     });
   }
 
   if (element.tabs) {
-    element.tabs.forEach(tab => {
-      tab.elements.forEach(tabElement => {
+    element.tabs.forEach((tab) => {
+      tab.elements.forEach((tabElement) => {
         code += setFormServiceServicesOverFormElement(tabElement);
       });
     });

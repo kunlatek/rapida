@@ -1,14 +1,7 @@
 import { FormInputTypeEnum } from "../../../../../enums/form";
-import { ArrayFeaturesInterface } from "../../../../../interfaces/array";
 import { FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
-import { setArrayLayer } from "../../../core/array";
-
 require('dotenv').config();
-
-let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
-  process.env.ARRAY_LAYER!
-);
 
 const setFormBuilderProperty = (
   object: MainInterface
@@ -19,13 +12,6 @@ const setFormBuilderProperty = (
     return code;
   }
 
-  _arrayLayer = [];
-
-  setArrayLayer(object.form.elements);
-
-  _arrayLayer = JSON.parse(
-    process.env.ARRAY_LAYER!
-  );
   code += `${object.form.id}Builder = { ${setFormBuilderByElements(object.form.elements)} };`;
 
   code += setFormArrayBuilderByElementsProperty(object.form.elements);

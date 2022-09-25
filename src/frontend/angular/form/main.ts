@@ -1,30 +1,22 @@
-import { ArrayFeaturesInterface } from "../../../interfaces/array";
 import { BuildedFrontendCode, MainInterface } from "../../../interfaces/main";
 import { setArrayLayer } from "../core/array";
 import { setFormController } from "./controller/main";
 import { setFormService } from "./service/main";
 import { setFormTemplate } from "./template/main";
-require("dotenv").config();
 
-let _arrayLayer: Array<ArrayFeaturesInterface> = [JSON.parse(
-  process.env.ARRAY_LAYER!
-)];
-
-const formMain = (object: MainInterface): BuildedFrontendCode => {
+const formMain = async (object: MainInterface): Promise<BuildedFrontendCode> => {
+  await setArrayLayer(object.form!.elements);
   let response: BuildedFrontendCode = {
     component: "",
     service: "",
     template: "",
   };
 
-  setArrayLayer(object.form!.elements);
-
-  _arrayLayer = JSON.parse(process.env.ARRAY_LAYER!);
 
   try {
-    const formControllerCode = setFormController(object);
-    const formServiceCode = setFormService(object);
-    const formTemplateCode = setFormTemplate(object);
+    const formControllerCode = await setFormController(object);
+    const formServiceCode = await setFormService(object);
+    const formTemplateCode = await setFormTemplate(object);
 
     response = {
       component: formControllerCode,

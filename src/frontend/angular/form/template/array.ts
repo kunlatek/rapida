@@ -2,19 +2,16 @@ import { ArrayFeaturesInterface } from "../../../../interfaces/array";
 import { FormElementInterface } from "../../../../interfaces/form";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
-import { setArrayLayer, setArraysInAFlow } from "../../core/array";
+import { setArraysInAFlow } from "../../core/array";
 import { setSpecificStructureOverFormElement } from "./main";
 require("dotenv").config();
 
-let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
-  process.env.ARRAY_LAYER!
-);
-let _arraysInAFlow: Array<ArrayFeaturesInterface> = JSON.parse(
-  process.env.ARRAYS_IN_A_FLOW!
-);
 let _allParents: Array<string> = [];
 
 const setArrayFlowIdentifier = (arrayId: string): string | undefined => {
+  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
   let code: string | undefined = undefined;
 
   _arrayLayer?.forEach(array => {
@@ -62,6 +59,9 @@ const setArrayIndexesToAdd = (arrayId: string): string => {
 };
 
 const setAllParents = (lastParent: string) => {
+  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
   _allParents.push(lastParent);
 
   _arrayLayer.forEach((element: ArrayFeaturesInterface) => {
@@ -77,15 +77,12 @@ const setArrayTemplate = (object: MainInterface, element: FormElementInterface, 
     return;
   }
 
-  setArrayLayer(object.form!.elements);
-
-  _arrayLayer = JSON.parse(
-    process.env.ARRAY_LAYER!
-  );
-
   const add = `add${TextTransformation.singularize(TextTransformation.pascalfy(element.array.id))}`;
   const remove = `remove${TextTransformation.singularize(TextTransformation.pascalfy(element.array.id))}`;
 
+  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
   let code = ``;
   let arrayStructure = ``;
   let arrayCurrentIndex: any;

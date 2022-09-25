@@ -1,6 +1,8 @@
 import {
+  ConditionEnum,
   FormButtonTypeEnum,
   FormInputTypeEnum,
+  ParamTypeEnum,
   ServiceFunctionsEnum
 } from "../../../src/enums/form";
 import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/main";
@@ -20,21 +22,6 @@ export const CHARACTER_FORM: MainInterface = {
             id: "mainTab",
             elements: [
               {
-                autocomplete: {
-                  label: "Animação",
-                  placeholder: "Animação do personagem",
-                  name: "animationId",
-                  type: FormInputTypeEnum.Text,
-                  optionsApi: {
-                    endpoint: "animations",
-                    labelField: "name",
-                    valueField: "_id",
-                    paramsToFilter: ["name", "startDate"],
-                  },
-                  isRequired: true,
-                },
-              },
-              {
                 input: {
                   label: "Nome",
                   placeholder: "Nome do personagem",
@@ -52,11 +39,142 @@ export const CHARACTER_FORM: MainInterface = {
                 }
               },
               {
+                autocomplete: {
+                  label: "Animação",
+                  placeholder: "Animação a qual pertence",
+                  name: "animationId",
+                  type: FormInputTypeEnum.Text,
+                  optionsApi: {
+                    endpoint: "animations",
+                    labelField: "name",
+                    valueField: "_id",
+                    paramsToFilter: ["name", "startDate"],
+                    paramType: ParamTypeEnum.Query,
+                  },
+                  isRequired: true,
+                },
+              },
+              {
                 input: {
                   label: "Imagem",
                   placeholder: "Imagem do personagem",
                   name: "img",
                   type: FormInputTypeEnum.File,
+                }
+              },
+              {
+                select: {
+                  label: "Tipo",
+                  name: "characterType",
+                  type: FormInputTypeEnum.Text,
+                  optionsObject: [
+                    {
+                      label: "Humano",
+                      value: "human",
+                    },
+                    {
+                      label: "Animal",
+                      value: "animal",
+                    },
+                    {
+                      label: "Extraterrestre",
+                      value: "extraterrestrial"
+                    },
+                    {
+                      label: "Outro",
+                      value: "other"
+                    },
+                  ],
+                  isTriggerToCondition: true
+                }
+              },
+              {
+                input: {
+                  label: "Tipo de animal",
+                  placeholder: "Ex.: Cachorro, Gato, Coelho",
+                  name: "animalType",
+                  type: FormInputTypeEnum.Text,
+                  conditions: {
+                    type: ConditionEnum.Form,
+                    elements: [
+                      {
+                        key: "characterType",
+                        value: "animal",
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                input: {
+                  label: "Planeta",
+                  placeholder: "Planeta de origem",
+                  name: "extraterrestrialPlanet",
+                  type: FormInputTypeEnum.Text,
+                  conditions: {
+                    type: ConditionEnum.Form,
+                    elements: [
+                      {
+                        key: "characterType",
+                        value: "extraterrestrial",
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                input: {
+                  label: "Descrição",
+                  placeholder: "Ex.: Demônio, Anjo, Ideia",
+                  name: "otherType",
+                  type: FormInputTypeEnum.Text,
+                  conditions: {
+                    type: ConditionEnum.Form,
+                    elements: [
+                      {
+                        key: "characterType",
+                        value: "other",
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                select: {
+                  label: "Sexo",
+                  name: "sex",
+                  type: FormInputTypeEnum.Text,
+                  optionsObject: [
+                    {
+                      label: "Homem",
+                      value: "man",
+                    },
+                    {
+                      label: "Mulher",
+                      value: "woman",
+                    },
+                    {
+                      label: "Homem transsexual",
+                      value: "transman",
+                    },
+                    {
+                      label: "Mulher transsexual",
+                      value: "transwoman",
+                    },
+                    {
+                      label: "Outro",
+                      value: "other",
+                    },
+                  ],
+                  conditions: {
+                    type: ConditionEnum.Form,
+                    elements: [
+                      {
+                        key: "characterType",
+                        value: "human",
+                      }
+                    ]
+                  }
                 }
               },
             ],
@@ -65,6 +183,15 @@ export const CHARACTER_FORM: MainInterface = {
             title: "Mais detalhes",
             id: "moreTab",
             elements: [
+              {
+                input: {
+                  label: "História",
+                  placeholder: "História do personagem",
+                  name: "history",
+                  type: FormInputTypeEnum.Text,
+                  isMultipleLines: true,
+                }
+              },
               {
                 array: {
                   title: "Dado genérico",
@@ -98,6 +225,7 @@ export const CHARACTER_FORM: MainInterface = {
                           labelField: ["name", "_id"],
                           valueField: "_id",
                           paramsToFilter: ["name", "startDate"],
+                          paramType: ParamTypeEnum.Query,
                         },
                         isMultiple: true,
                       }
@@ -112,20 +240,12 @@ export const CHARACTER_FORM: MainInterface = {
                           labelField: ["name"],
                           valueField: "_id",
                           paramsToFilter: ["name"],
+                          paramType: ParamTypeEnum.Query,
                         },
                       }
                     },
                   ],
                 },
-              },
-              {
-                input: {
-                  label: "História",
-                  placeholder: "História do personagem",
-                  name: "history",
-                  type: FormInputTypeEnum.Text,
-                  isMultipleLines: true,
-                }
               },
             ],
           },

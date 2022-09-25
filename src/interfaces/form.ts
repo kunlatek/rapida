@@ -6,6 +6,7 @@ import {
   FormInputTypeEnum,
   FormMethodEnum,
   FormTargetEnum,
+  ParamTypeEnum,
   ServiceFunctionsEnum
 } from "../enums/form";
 import {
@@ -183,6 +184,7 @@ export interface AutocompleteApiInterface {
   labelField: string | Array<string>;
   valueField: string;
   paramsToFilter: Array<string>;
+  paramType: ParamTypeEnum;
   isDisabled?: boolean;
   isSelected?: boolean;
   todo?: string;

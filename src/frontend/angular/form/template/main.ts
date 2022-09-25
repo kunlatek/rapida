@@ -1,6 +1,5 @@
 import * as chp from "child_process";
 import * as fs from "fs";
-import { ArrayFeaturesInterface } from "../../../../interfaces/array";
 import {
   ArrayInterface,
   FormElementInterface
@@ -14,31 +13,24 @@ import { setButton } from "./button";
 import { setConditions } from "./condition";
 import { setInput } from "./input";
 import { setSelect } from "./select";
-require('dotenv').config();
-
-let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
-  process.env.ARRAY_LAYER!
-);
 
 /**
  * SET CODE
  * @param object
  * @returns
  */
-const setFormTemplate = (object: MainInterface, mainArray: Array<MainInterface> | undefined = undefined,): string => {
+const setFormTemplate = async (
+  object: MainInterface,
+  mainArray: Array<MainInterface> | undefined = undefined
+): Promise<string> => {
   if (!object.form) {
     console.info("Only forms set here");
     return ``;
   }
 
   let _specificStructure: string = ``;
-  _arrayLayer = [];
 
-  setArrayLayer(object.form.elements);
-
-  _arrayLayer = JSON.parse(
-    process.env.ARRAY_LAYER!
-  );
+  await setArrayLayer(object.form.elements);
 
   object.form.elements.forEach((element) => {
     _specificStructure += setSpecificStructureOverFormElement(object, element);
@@ -137,7 +129,9 @@ const setSpecificStructureOverFormElement = (
   }
 
   if (element.slide) {
-    const setCondition = element.slide.isTriggerToCondition ? `(change)="setCondition()"` : "";
+    const setCondition = element.slide.isTriggerToCondition
+      ? `(change)="setCondition()"`
+      : "";
     code += `
     <mat-slide-toggle formControlName="${element.slide.name}" ${conditions} ${setCondition}>
       ${element.slide.label}

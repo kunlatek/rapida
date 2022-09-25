@@ -7,12 +7,6 @@ import { setFormBuilderByElements } from "../properties/form-builder";
 import { setFormMethodsByElements } from "./method";
 require("dotenv").config();
 
-let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
-  process.env.ARRAY_LAYER!
-);
-let _arraysInAFlow: Array<ArrayFeaturesInterface> = JSON.parse(
-  process.env.ARRAYS_IN_A_FLOW!
-);
 let _allParents: Array<string> = [];
 
 const setArrayNames = (arrayId: string): string => {
@@ -115,6 +109,9 @@ const setArrayMethod = (
     TextTransformation.singularize(array.id)
   )}`;
 
+  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
   let parentArray: string | undefined;
   let getParents: string = ``;
   let getParentsIndexes: string = ``;
@@ -169,10 +166,7 @@ const setArrayMethod = (
       TextTransformation.singularize(array.id)
     )});
   };
-
-  ${remove}(${getParentsIndexes && getParentsIndexes !== ""
-      ? `${getParentsIndexes}, `
-      : ``
+  ${remove}(${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ``
     }${TextTransformation.singularize(array.id)}Index: number) {
     this.${array.id}${_allParents?.length > 0 && getParentsIndexes !== ""
       ? `(${getParentsIndexes.replace(/: number/g, "")})`
@@ -187,6 +181,9 @@ const setArrayMethod = (
 };
 
 const setAllParents = (lastParent: string) => {
+  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
   _allParents.push(lastParent);
 
   _arrayLayer.forEach((element: ArrayFeaturesInterface) => {
@@ -199,6 +196,9 @@ const setAllParents = (lastParent: string) => {
 
 const setArraysToEdit = (array: Array<ArrayInterface>) => {
   let code = ``;
+  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
   for (let index = 0; index < array.length; index++) {
     const element = array[index];
 

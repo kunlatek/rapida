@@ -17,7 +17,10 @@ import { setFormControllerProperties } from "./properties/main";
 
 let _hasCondition = false;
 
-const setFormController = (object: MainInterface, mainArray: Array<MainInterface> | undefined = undefined,): string => {
+const setFormController = async (
+  object: MainInterface,
+  mainArray: Array<MainInterface> | undefined = undefined
+): Promise<string> => {
   if (!object.form) {
     console.info("Only forms set here");
     return ``;
@@ -30,7 +33,7 @@ const setFormController = (object: MainInterface, mainArray: Array<MainInterface
   let _constructorArguments = setFormControllerConstructorArguments(object);
   let code = ``;
 
-  object.form.elements.forEach(element => {
+  object.form.elements.forEach((element) => {
     verifyFormElement(element);
   });
 
@@ -46,7 +49,8 @@ const setFormController = (object: MainInterface, mainArray: Array<MainInterface
     object.form.id
   )}.component.scss"],
   })
-  export class ${TextTransformation.pascalfy(object.form.id)}Component ${_hasCondition ? `implements OnChanges` : ``}{
+  export class ${TextTransformation.pascalfy(object.form.id)}Component ${_hasCondition ? `implements OnChanges` : ``
+    }{
     ${_properties}
     
     constructor(

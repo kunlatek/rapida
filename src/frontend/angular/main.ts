@@ -21,11 +21,11 @@ import { setTableInfiniteScrollService } from "./table/service/infinite-scroll-t
 
 require("dotenv").config();
 
-const createAngularProject = (
+const createAngularProject = async (
   object: MainInterface,
   index: number,
   array: Array<MainInterface>,
-): BuildedFrontendCode => {
+): Promise<BuildedFrontendCode> => {
   process.env.ARRAY_LAYER = "[]";
   process.env.ARRAYS_IN_A_FLOW = "[]";
 
@@ -41,9 +41,9 @@ const createAngularProject = (
   }
 
   if (object.form) {
-    const controllerCode = setFormController(object, array);
-    const serviceCode = setFormService(object, array);
-    const templateCode = setFormTemplate(object, array);
+    const controllerCode = await setFormController(object, array);
+    const serviceCode = await setFormService(object, array);
+    const templateCode = await setFormTemplate(object, array);
 
     response = {
       component: controllerCode,

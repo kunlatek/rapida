@@ -1,6 +1,7 @@
 import {
   FormButtonTypeEnum,
   FormInputTypeEnum,
+  ParamTypeEnum,
   ServiceFunctionsEnum
 } from "../../../src/enums/form";
 import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../../../src/enums/main";
@@ -107,6 +108,7 @@ export const ANIMATION_FORM: MainInterface = {
                                 valueField: "_id",
                                 paramsToFilter: ["name"],
                                 endpoint: "characters",
+                                paramType: ParamTypeEnum.Query
                               },
                               isMultiple: true,
                             }
