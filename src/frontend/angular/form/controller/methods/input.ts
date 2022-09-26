@@ -58,12 +58,12 @@ const setInputMethod = (
       element.input.name
     )}FileSelected(${array ? `${TextTransformation.singularize(array.id)}: any, ` : ``
       }event: any) {
-      if (event.target.files.length > 0) {
-        ${array
-        ? `
+        if (event.target.files.length > 0) {
           for (let i = 0; i < event.target.files.length; i++) {
+          ${array
+        ? `
             const file = event.target.files[i];
-            const bufferFiles = await fileListToBase64([file]);
+            const formData = new FormData();
 
             let files = ${TextTransformation.singularize(array.id)}
             .get('${element.input.name}')?.value || [];
@@ -71,25 +71,34 @@ const setInputMethod = (
             files.push({
               name: file.name,
               fileName: file.name,
-              base64: bufferFiles[0]
             });
             ${TextTransformation.singularize(array.id)}.patchValue({
               ${element.input.name}: files
             });
-          }
-        `
+
+            for (let index = 0; index < files.length; index++) {
+              formData.append(files[i]["name"], files[i]);
+            }
+          `
         : `
-        const file = event.target.files[0];
-        const bufferFiles = await fileListToBase64([file]);
-        let files = this.${object.form?.id}Form.value.${element.input.name} || [];
-        files.push({
-          name: file.name,
-          fileName: file.name,
-          base64: bufferFiles[0]
-        });
-        this.${object.form?.id}Form.get("${element.input.name}")?.setValue(files);
-        `
+            const file = event.target.files[i];
+            const formData = new FormData();
+
+            let files = this.${object.form?.id}Form.value.${element.input.name} || [];
+
+            files.push({
+              name: file.name,
+              fileName: file.name,
+            });
+            
+            this.${object.form?.id}Form.get("${element.input.name}")?.setValue(files);
+
+            for (let index = 0; index < files.length; index++) {
+              formData.append(files[i]["name"], files[i]);
+            }
+          `
       }
+        }
       }
     }
     delete${TextTransformation.capitalization(element.input.name)}File(${array ? `value: any, ` : ``
