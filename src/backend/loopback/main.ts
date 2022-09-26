@@ -4,8 +4,6 @@ import * as fs from "fs";
 import { FormElementInterface } from "../../interfaces/form";
 import { BuildedBackendCode, MainInterface } from "../../interfaces/main";
 import { controllerMain } from "./controller/main";
-import { modelMain } from "./model/main";
-import { repositoryMain } from "./repository/main";
 import { schemaMain } from "./schema/main";
 
 const createLoopbackProject = (
@@ -13,10 +11,7 @@ const createLoopbackProject = (
   index: number
 ): BuildedBackendCode => {
   let response: BuildedBackendCode = {
-    model: "",
     controller: "",
-    repository: "",
-    service: "",
     mongooseSchema: "",
   };
 
@@ -26,14 +21,10 @@ const createLoopbackProject = (
 
   if (object.form) {
     const controllerCode = controllerMain(object);
-    const modelCode = modelMain(object);
-    const repositoryCode = repositoryMain(object, index);
-    const mongooseSchemaCode = schemaMain(object);
+    const mongooseSchemaCode = schemaMain(object, index);
 
     response = {
       controller: controllerCode,
-      model: modelCode,
-      repository: repositoryCode,
       mongooseSchema: mongooseSchemaCode,
     };
   }
@@ -119,24 +110,6 @@ const getAllElements = (
       });
 
     }
-    // else if (type === "array") {
-
-    //   if (element.array?.elements) {
-    //     elementsToReturn = [
-    //       {
-    //         select: {
-    //           label: element.array?.title,
-    //           name: element.array?.id,
-    //           isMultiple: true,
-    //           type: FormInputTypeEnum.Text,
-    //         },
-    //       },
-    //       ...getAllElements(element.array?.elements, elementsToReturn),
-    //     ];
-
-    //   }
-
-    // }
 
   });
 

@@ -1,8 +1,8 @@
-import { FormInputTypeEnum } from "../../../enums/form";
-import { FormElementInterface } from "../../../interfaces/form";
-import { MainInterface } from "../../../interfaces/main";
-import { TextTransformation } from "../../../utils/text.transformation";
-import { getAllElements } from "../main";
+import { FormInputTypeEnum } from "../../../../enums/form";
+import { FormElementInterface } from "../../../../interfaces/form";
+import { MainInterface } from "../../../../interfaces/main";
+import { TextTransformation } from "../../../../utils/text.transformation";
+import { getAllElements } from "../../main";
 
 const setGetRelatedElementsInArrayType = (object: MainInterface): string => {
   if (!object.form) {

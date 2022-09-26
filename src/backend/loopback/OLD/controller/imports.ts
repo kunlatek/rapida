@@ -1,7 +1,7 @@
-import { FormElementInterface } from "../../../interfaces/form";
-import { MainInterface } from "../../../interfaces/main";
-import { TextTransformation } from "../../../utils/text.transformation";
-import { getAllElements } from "../main";
+import { FormElementInterface } from "../../../../interfaces/form";
+import { MainInterface } from "../../../../interfaces/main";
+import { TextTransformation } from "../../../../utils/text.transformation";
+import { getAllElements } from "../../main";
 
 const setControllerImports = (object: MainInterface): string => {
   if (!object.form) {

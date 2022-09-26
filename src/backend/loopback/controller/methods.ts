@@ -295,7 +295,7 @@ const setControllerMethods = (object: MainInterface): string => {
             },
           },
         },
-      }) data: ${TextTransformation.pascalfy(modelName)},
+      }) data: any,
       @param.query.string('locale') locale?: LocaleEnum,
   ): Promise<IHttpResponse> {
       try {
