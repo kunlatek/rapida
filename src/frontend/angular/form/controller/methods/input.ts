@@ -63,39 +63,38 @@ const setInputMethod = (
           for (let i = 0; i < event.target.files.length; i++) {
           ${array
         ? `
-            const file = event.target.files[i];
-            const formData = new FormData();
+            const file = event.target.files[i];            
 
-            let files = ${TextTransformation.singularize(array.id)}
+            this.${object.form?.id}Files = ${TextTransformation.singularize(array.id)}
             .get('${element.input.name}')?.value || [];
 
-            files.push({
+            this.${object.form?.id}Files.push({
               name: file.name,
               fileName: file.name,
             });
+
             ${TextTransformation.singularize(array.id)}.patchValue({
-              ${element.input.name}: files
+              ${element.input.name}: this.${object.form?.id}Files
             });
 
-            for (let index = 0; index < files.length; index++) {
-              formData.append(files[i]["name"], files[i]);
+            for (let index = 0; index < this.${object.form?.id}Files.length; index++) {
+              this.formData.append(this.${object.form?.id}Files[i]["name"], this.${object.form?.id}Files[i]);
             }
           `
         : `
             const file = event.target.files[i];
-            const formData = new FormData();
 
-            let files = this.${object.form?.id}Form.value.${element.input.name} || [];
+            this.${object.form?.id}Files = this.${object.form?.id}Form.value.${element.input.name} || [];
 
-            files.push({
+            this.${object.form?.id}Files.push({
               name: file.name,
               fileName: file.name,
             });
             
-            this.${object.form?.id}Form.get("${element.input.name}")?.setValue(files);
+            this.${object.form?.id}Form.get("${element.input.name}")?.setValue(this.${object.form?.id}Files);
 
-            for (let index = 0; index < files.length; index++) {
-              formData.append(files[i]["name"], files[i]);
+            for (let index = 0; index < this.${object.form?.id}Files.length; index++) {
+              this.formData.append(this.${object.form?.id}Files[i]["name"], this.${object.form?.id}Files[i]);
             }
           `
       }

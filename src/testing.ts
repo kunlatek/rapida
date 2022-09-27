@@ -1,3 +1,4 @@
+import { BackendFrameworkEnum, FrontendFrameworkEnum } from "./enums/main";
 import { createProject } from "./index";
 
 const envFrontDev = `
@@ -14,7 +15,7 @@ export const environment = {
 };
 `;
 
-const db = `animation`;
+const db = `animacio`;
 const envBackend = `
 PORT=3000
 SERVER_ROOT_URI=http://localhost:3000
@@ -49,7 +50,9 @@ const array = [
 ];
 
 array.forEach((object) => {
-  object.projectPath = projectPath;
+  object.backendFramework = BackendFrameworkEnum.Loopback,
+    object.frontendFramework = FrontendFrameworkEnum.Angular,
+    object.projectPath = projectPath;
   object.cloneFrontendPath = cloneFrontendPath;
   object.cloneBackendPath = cloneBackendPath;
   object.envFrontendDev = envFrontDev;

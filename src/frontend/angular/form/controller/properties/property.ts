@@ -1,3 +1,4 @@
+import { FormInputTypeEnum } from "../../../../../enums/form";
 import { ArrayFeaturesInterface } from "../../../../../interfaces/array";
 import { ArrayInterface, FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
@@ -6,6 +7,7 @@ import { setFormBuilderProperty } from "./form-builder";
 require("dotenv").config();
 
 let _allParents: Array<string> = [];
+let _hasFile: boolean = false;
 
 const setProperty = (
   object: MainInterface
@@ -18,6 +20,13 @@ const setProperty = (
 
   code += setFormPropertiesByElements(object, object.form.elements);
   code += setFormBuilderProperty(object);
+
+  if (_hasFile) {
+    code += `
+          formData = new FormData();
+          ${object.form?.id}Files: any[] = [];
+          `;
+  }
 
   return code;
 };
@@ -112,6 +121,12 @@ const setFormPropertiesByElements = (
       
         @ViewChild('${element.autocomplete.name}Input') ${element.autocomplete.name}Input!: ElementRef<HTMLInputElement>;
         `;
+      }
+    }
+
+    if (element.input) {
+      if (element.input.type === FormInputTypeEnum.File) {
+        _hasFile = true;
       }
     }
 

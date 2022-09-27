@@ -47,7 +47,6 @@ const setFormControllerImports = (object: MainInterface): string => {
   import { ${TextTransformation.pascalfy(
       object.form.id
     )}Service } from "./${TextTransformation.kebabfy(object.form.id)}.service";
-  import { fileListToBase64 } from "src/app/utils/file";
   `;
 
   return code;

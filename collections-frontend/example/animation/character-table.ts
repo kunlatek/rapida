@@ -1,11 +1,9 @@
 import { ServiceFunctionsEnum } from "../../../src/enums/form";
-import { FrontendFrameworkEnum } from "../../../src/enums/main";
 import { RequestTypeEnum } from "../../../src/enums/request";
 import { MainInterface } from "../../../src/interfaces/main";
 
 
 export const CHARACTER_TABLE: MainInterface = {
-  frontendFramework: FrontendFrameworkEnum.Angular,
   table: {
     id: "characterTable",
     title: "Personagens",
