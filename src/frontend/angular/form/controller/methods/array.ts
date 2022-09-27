@@ -123,6 +123,7 @@ const setArrayMethod = (
   });
 
   if (parentArray) {
+    _allParents = [];
     setAllParents(parentArray);
 
     _allParents.forEach((parent: string, index: number) => {
