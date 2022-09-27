@@ -14,14 +14,13 @@ export const environment = {
 };
 `;
 
-const db = `aPlusEnergyFundamento`;
+const db = `animation`;
 const envBackend = `
-AUTH_DB=uzanto
 PORT=3000
 SERVER_ROOT_URI=http://localhost:3000
 CLIENT_REDIRECT_URI=http://localhost:4200
-MONGO_URL=mongodb+srv://kunlatek:Kunlatek751@cluster0.b0pfr.mongodb.net/animation?authSource=admin&replicaSet=atlas-zft6fn-shard-0&readPreference=primary&ssl=true
-DB=animation
+MONGO_URL=mongodb+srv://kunlatek:Kunlatek751@cluster0.b0pfr.mongodb.net/${db}?authSource=admin&replicaSet=atlas-zft6fn-shard-0&readPreference=primary&ssl=true
+DB=${db}
 NODEMAILER_USER=administrativo@kunlatek.com
 NODEMAILER_PASS=yetyxhgzjzktuwef
 ADMIN_USERS=rabbadesalman@gmail.com
@@ -29,24 +28,24 @@ ADMIN_USERS=rabbadesalman@gmail.com
 
 const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitation-and-permission";
 const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api";
-const projectPath = "/home/ryzzan/Projects/kliento";
+const projectPath = "/home/ryzzan/Projects/animation";
 
-import { CLIENT_PERSON } from "../collections-frontend/kunlatek/kliento/client-person";
-import { CLIENT_PERSON_FORM } from "../collections-frontend/kunlatek/kliento/client-person-form";
-import { CLIENT_PERSON_TABLE } from "../collections-frontend/kunlatek/kliento/client-person-table";
+import { ANIMATION } from "../collections-frontend/example/animation/animation";
+import { ANIMATION_FORM } from "../collections-frontend/example/animation/animation-form";
+import { ANIMATION_TABLE } from "../collections-frontend/example/animation/animation-table";
 
-import { CLIENT_COMPANY } from "../collections-frontend/kunlatek/kliento/client-company";
-import { CLIENT_COMPANY_FORM } from "../collections-frontend/kunlatek/kliento/client-company-form";
-import { CLIENT_COMPANY_TABLE } from "../collections-frontend/kunlatek/kliento/client-company-table";
+import { CHARACTER } from "../collections-frontend/example/animation/character";
+import { CHARACTER_FORM } from "../collections-frontend/example/animation/character-form";
+import { CHARACTER_TABLE } from "../collections-frontend/example/animation/character-table";
 
 const array = [
-  CLIENT_PERSON_FORM,
-  CLIENT_PERSON_TABLE,
-  CLIENT_PERSON,
+  ANIMATION_FORM,
+  ANIMATION_TABLE,
+  ANIMATION,
 
-  CLIENT_COMPANY_FORM,
-  CLIENT_COMPANY_TABLE,
-  CLIENT_COMPANY,
+  CHARACTER_FORM,
+  CHARACTER_TABLE,
+  CHARACTER,
 ];
 
 array.forEach((object) => {
