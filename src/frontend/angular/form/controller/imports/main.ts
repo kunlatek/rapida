@@ -1,3 +1,4 @@
+import { FormInputTypeEnum } from "../../../../../enums/form";
 import { FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
@@ -8,6 +9,7 @@ let _hasAutocompleteMultiple: boolean = false;
 let _hasAutocomplete: boolean = false;
 let _hasCondition: boolean = false;
 let _hasInputApiRequest: boolean = false;
+let _hasFile: boolean = false;
 
 const setFormControllerImports = (object: MainInterface): string => {
   if (!object.form) {
@@ -21,6 +23,7 @@ const setFormControllerImports = (object: MainInterface): string => {
   _hasAutocomplete = false;
   _hasCondition = false;
   _hasInputApiRequest = false;
+  _hasFile = false;
 
   object.form.elements.map((element) => {
     verifyFormElement(element);
@@ -41,6 +44,10 @@ const setFormControllerImports = (object: MainInterface): string => {
       ? `import { COMMA, ENTER } from "@angular/cdk/keycodes";
       import {MatChipInputEvent} from '@angular/material/chips';
       import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';`
+      : ``
+    }
+  ${_hasFile
+      ? `import { fileListToBase64 } from "src/app/utils/file";`
       : ``
     }
   import { MyErrorHandler } from "../../utils/error-handler";
@@ -78,6 +85,12 @@ const verifyFormElement = (element: FormElementInterface): void => {
     element.array.elements.forEach((arrayElement) => {
       verifyFormElement(arrayElement);
     });
+  }
+
+  if (element.input) {
+    if (element.input.type === FormInputTypeEnum.File) {
+      _hasFile = true;
+    }
   }
 
   if (element.autocomplete) {

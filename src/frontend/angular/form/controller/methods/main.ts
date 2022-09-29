@@ -8,7 +8,7 @@ import {
   setConditionOverEdition,
   setConditionsInArray
 } from "./condition";
-import { setFileSubmit, setMethod, setValueBeforeSubmit } from "./method";
+import { setMethod, setValueBeforeSubmit } from "./method";
 
 let _hasCondition: boolean = false;
 let _hasConditionInArray: boolean = false;
@@ -34,7 +34,6 @@ const setFormControllerMethods = (object: MainInterface): string => {
     object.form.elements
   );
   let _methods = setMethod(object);
-  let _fileSubmit = setFileSubmit(object);
   let _valueTreatmentBeforeSubmit = setValueBeforeSubmit(
     object,
     object.form.elements
@@ -102,7 +101,6 @@ const setFormControllerMethods = (object: MainInterface): string => {
       this.isLoading = true;
       ${_valueTreatmentBeforeSubmit}
       try {
-        ${_fileSubmit}
         if(this.isAddModule) {
             await this._${object.form.id}Service.save(
               this.${object.form.id}Form.value

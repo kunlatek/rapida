@@ -63,21 +63,21 @@ const setInputMethod = (
           for (let i = 0; i < event.target.files.length; i++) {
           ${array
         ? `
-            const file = event.target.files[i];            
+            const file = event.target.files[i];
 
-            this.${object.form?.id}Files = ${TextTransformation.singularize(array.id)}
+            let ${object.form?.id}Files = ${TextTransformation.singularize(array.id)}
             .get('${element.input.name}')?.value || [];
 
             this.${object.form?.id}Files.push(file);
 
             ${TextTransformation.singularize(array.id)}.patchValue({
-              ${element.input.name}: this.${object.form?.id}Files
+              ${element.input.name}: ${object.form?.id}Files
             });
           `
         : `
             const file = event.target.files[i];
 
-            this.${object.form?.id}Files = this.${object.form?.id}Form.value.${element.input.name} || [];
+            let ${object.form?.id}Files = this.${object.form?.id}Form.value.${element.input.name} || [];
 
             this.${object.form?.id}Files.push(file);
             
@@ -87,6 +87,7 @@ const setInputMethod = (
         }
       }
     }
+    
     delete${TextTransformation.capitalization(element.input.name)}File(${array ? `value: any, ` : ``
       }index: number) {
         ${array

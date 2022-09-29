@@ -1,4 +1,3 @@
-import { FormInputTypeEnum } from "../../../../../enums/form";
 import {
   ArrayInterface,
   FormElementInterface
@@ -76,21 +75,6 @@ const setFormMethodsByElements = (
   return code;
 };
 
-const setFileSubmit = (object: MainInterface) => {
-  let code = ``;
-
-  object.form?.elements.forEach((element) => {
-    if (element.input?.type === FormInputTypeEnum.File) {
-      code += `
-      const formData = new FormData();
-      formData.append("myFile", this.${object.form?.id}Form.get("${element.input.name}")?.value);
-      `;
-    }
-  });
-
-  return code;
-};
-
 const setValueBeforeSubmit = (
   object: MainInterface,
   elements: Array<FormElementInterface>
@@ -121,6 +105,5 @@ const setValueBeforeSubmit = (
 export {
   setMethod,
   setFormMethodsByElements,
-  setFileSubmit,
   setValueBeforeSubmit,
 };
