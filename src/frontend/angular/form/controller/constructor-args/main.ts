@@ -1,8 +1,14 @@
-import { FormElementInterface } from "../../../../../interfaces/form";
+import { ArrayFeaturesInterface } from "../../../../../interfaces/array";
+import {
+  ArrayInterface,
+  FormElementInterface
+} from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 import { setFormSelectOptions } from "./form-select-options";
+require("dotenv").config();
 
+let _allParents: Array<string> = [];
 let _hasCondition = false;
 let _hasArray = false;
 
@@ -20,7 +26,10 @@ const setFormControllerConstructorArguments = (
   let _selectToEdit: string = ``;
 
   _optionsCreation += setFormSelectOptions(object);
-  _autocompleteToEdit += setAutocompleteTestToEdit(object, object.form.elements);
+  _autocompleteToEdit += setAutocompleteToEdit(
+    object,
+    object.form.elements
+  );
   _selectToEdit += setSelectToEdit(object, object.form.elements);
   object.form.elements.forEach((element: any) => {
     verifyFormElement(element);
@@ -112,7 +121,7 @@ const verifyFormElement = (element: FormElementInterface): void => {
 const setAutocompleteToEdit = (
   object: MainInterface,
   formElements: FormElementInterface[],
-  array: string | undefined = undefined
+  array: ArrayInterface | undefined = undefined
 ): string => {
   let code = ``;
   formElements.forEach((element: any) => {
@@ -141,11 +150,11 @@ const setAutocompleteToEdit = (
         )}) {
           this.chosen${TextTransformation.pascalfy(
           element.autocomplete.name
-        )}View${array ? `[${TextTransformation.singularize(array)}Index]` : ``
+        )}View${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``
           } = [];
           this.chosen${TextTransformation.pascalfy(
             element.autocomplete.name
-          )}Value${array ? `[${TextTransformation.singularize(array)}Index]` : ``
+          )}Value${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``
           } = [];
           this.${object.form?.id}ToEdit.data
           .${TextTransformation.singularize(
@@ -154,11 +163,11 @@ const setAutocompleteToEdit = (
           .forEach((element: any) => {
             this.chosen${TextTransformation.pascalfy(
             element.autocomplete.name
-          )}View${array ? `[${TextTransformation.singularize(array)}Index]` : ``
+          )}View${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``
           }.push(element.${element.autocomplete.optionsApi.labelField[0]});
             this.chosen${TextTransformation.pascalfy(
             element.autocomplete.name
-          )}Value${array ? `[${TextTransformation.singularize(array)}Index]` : ``
+          )}Value${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``
           }.push(element.${element.autocomplete.optionsApi.valueField});
           });
         }
@@ -170,55 +179,42 @@ const setAutocompleteToEdit = (
   return code;
 };
 
-const setAutocompleteTestToEdit = (
-  object: MainInterface,
-  formElements: FormElementInterface[],
-  array: string | undefined = undefined
-): string => {
-  let code = ``;
-  formElements.forEach((element: any) => {
-    if (element.tabs) {
-      element.tabs.forEach((tabElement: any) => {
-        code += setAutocompleteTestToEdit(object, tabElement.elements);
-      });
-    }
-
-    if (element.array) {
-      code += setAutocompleteTestToEdit(object, element.array.elements, element.array.id);
-    }
-
-    if (element.autocomplete) {
-      if (element.autocomplete.isMultiple) {
-        code += `
-        const new${TextTransformation.pascalfy(
-          element.autocomplete.name
-        )}: any[] = [];
-        this.${object.form?.id}ToEdit.data.${element.autocomplete.name
-          }.forEach((element: any) => {
-          new${TextTransformation.pascalfy(element.autocomplete.name)}.push(element.${element.autocomplete.optionsApi.valueField
-          });
-        });
-        this.${object.form?.id}ToEdit.data.${element.autocomplete.name} = [];
-        new${TextTransformation.pascalfy(
-            element.autocomplete.name
-          )}.forEach((element: any) => {
-          this.${object.form?.id}ToEdit.data.${element.autocomplete.name
-          }.push(element);
-        });
-        `;
-      }
-    }
-  });
-
-  return code;
-};
-
 const setSelectToEdit = (
   object: MainInterface,
   formElements: FormElementInterface[],
-  array: string | undefined = undefined
+  array: ArrayInterface | undefined = undefined
 ): string => {
   let code = ``;
+
+  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
+  let parentArray: string | undefined;
+  let getParentsIndexes: string = ``;
+  let getParentsControl: string = ``;
+
+  if (array) {
+    _arrayLayer?.forEach((arrayLayer: ArrayFeaturesInterface) => {
+      if (arrayLayer.name === array.id) {
+        parentArray = arrayLayer.parentArray;
+      }
+    });
+
+    if (parentArray) {
+      _allParents = [];
+      setAllParents(parentArray);
+
+      _allParents.forEach((parent: string, index: number) => {
+        getParentsIndexes += `${TextTransformation.singularize(
+          parent
+        )}Index: number${index < _allParents.length - 1 ? ", " : ""}`;
+        getParentsControl += `"${parent}", ${TextTransformation.singularize(
+          parent
+        )}Index${index < _allParents.length - 1 ? ", " : ""}`;
+      });
+    }
+  }
+
   formElements.forEach((element: any) => {
     if (element.tabs) {
       element.tabs.forEach((tabElement: any) => {
@@ -232,6 +228,32 @@ const setSelectToEdit = (
 
     if (element.select) {
       if (element.select.optionsApi) {
+        if (array) {
+          code += `this.${object.form?.id}ToEdit.data.${_arrayLayer[0].name}?.map((${_arrayLayer[0].name}Element: any) => {`;
+          _arrayLayer.forEach((arrayLayerElement: any, index: number) => {
+            if (index > 0) {
+              code += `${_arrayLayer[index - 1].name}Element.${arrayLayerElement.name}?.map((${arrayLayerElement.name}Element: any) => {`;
+            }
+
+            if (index + 1 === _arrayLayer.length) {
+              code += `
+                    ${arrayLayerElement.name}Element.${element.select.name}?.map((${element.select.name}Element: any) => {
+                      ${arrayLayerElement.name}Element.${element.select.name}
+                      .push(${element.select.name}Element
+                        .${element.select.optionsApi.valueField});
+                    })
+                  `;
+            }
+          });
+
+          _arrayLayer.forEach((arrayLayerElement: any, index: number) => {
+            if (index > 0) {
+              code += `})`;
+            }
+          });
+
+          code += `})`;
+        }
         code += `
         this.${object.form?.id}ToEdit.data.${element.autocomplete.name} = this.${object.form?.id}ToEdit.data.${element.autocomplete.name}
         .map((element: any) => element.${element.autocomplete.optionsApi.valueField});
@@ -241,6 +263,20 @@ const setSelectToEdit = (
   });
 
   return code;
+};
+
+const setAllParents = (lastParent: string) => {
+  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
+  _allParents.push(lastParent);
+
+  _arrayLayer.forEach((element: ArrayFeaturesInterface) => {
+    if (element.name === lastParent && element.parentArray) {
+      _allParents.push(element.parentArray);
+      setAllParents(element.parentArray);
+    }
+  });
 };
 
 export { setFormControllerConstructorArguments };

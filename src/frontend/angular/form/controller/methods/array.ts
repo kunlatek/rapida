@@ -200,6 +200,7 @@ const setArraysToEdit = (array: Array<ArrayInterface>) => {
   let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
     process.env.ARRAY_LAYER!
   );
+
   for (let index = 0; index < array.length; index++) {
     const element = array[index];
 
