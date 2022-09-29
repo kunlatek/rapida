@@ -293,7 +293,8 @@ const setAutocompleteMethod = (
     displayFnTo${TextTransformation.pascalfy(
       element.autocomplete.name
     )} = (value?: any) => {
-        const treatedValue = value?._id ? `;
+
+      if (value._id) return `;
     if (Array.isArray(element.autocomplete.optionsApi.labelField)) {
       const labelFieldLength =
         element.autocomplete.optionsApi.labelField.length;
@@ -306,12 +307,14 @@ const setAutocompleteMethod = (
         }
       );
     }
-
     if (!Array.isArray(element.autocomplete.optionsApi.labelField)) {
       code += `value?.${element.autocomplete.optionsApi.labelField}`;
     }
-    code += ` : `;
-
+    code += `;
+    if (this.filtered${TextTransformation.pascalfy(
+      element.autocomplete.name
+    )}.length > 0) {
+      return `;
     if (Array.isArray(element.autocomplete.optionsApi.labelField)) {
       const labelFieldLength =
         element.autocomplete.optionsApi.labelField.length;
@@ -336,11 +339,10 @@ const setAutocompleteMethod = (
         } === value)?.${element.autocomplete.optionsApi.labelField}`;
     }
 
-    code += `;`;
-
     code += `
-      return treatedValue;
-    };`;
+      }
+      return "";
+    }`;
   }
 
   /**

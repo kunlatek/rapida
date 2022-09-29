@@ -63,44 +63,41 @@ const setInputMethod = (
           for (let i = 0; i < event.target.files.length; i++) {
           ${array
         ? `
-            const file = event.target.files[i];            
+            const file = event.target.files[i];
+            const bufferFiles = await fileListToBase64([file]);
 
-            this.${object.form?.id}Files = ${TextTransformation.singularize(array.id)}
+            let ${object.form?.id}Files = ${TextTransformation.singularize(array.id)}
             .get('${element.input.name}')?.value || [];
 
-            this.${object.form?.id}Files.push({
+            ${object.form?.id}Files.push({
               name: file.name,
               fileName: file.name,
+              base64: bufferFiles[0],
             });
 
             ${TextTransformation.singularize(array.id)}.patchValue({
-              ${element.input.name}: this.${object.form?.id}Files
+              ${element.input.name}: ${object.form?.id}Files
             });
-
-            for (let index = 0; index < this.${object.form?.id}Files.length; index++) {
-              this.formData.append(this.${object.form?.id}Files[i]["name"], this.${object.form?.id}Files[i]);
-            }
           `
         : `
             const file = event.target.files[i];
+            const bufferFiles = await fileListToBase64([file]);
 
-            this.${object.form?.id}Files = this.${object.form?.id}Form.value.${element.input.name} || [];
+            let ${object.form?.id}Files = this.${object.form?.id}Form.value.${element.input.name} || [];
 
-            this.${object.form?.id}Files.push({
+            ${object.form?.id}Files.push({
               name: file.name,
               fileName: file.name,
+              base64: bufferFiles[0],
             });
             
-            this.${object.form?.id}Form.get("${element.input.name}")?.setValue(this.${object.form?.id}Files);
-
-            for (let index = 0; index < this.${object.form?.id}Files.length; index++) {
-              this.formData.append(this.${object.form?.id}Files[i]["name"], this.${object.form?.id}Files[i]);
-            }
+            this.${object.form?.id}Form.get("${element.input.name}")?.setValue(${object.form?.id}Files);
           `
       }
         }
       }
     }
+    
     delete${TextTransformation.capitalization(element.input.name)}File(${array ? `value: any, ` : ``
       }index: number) {
         ${array

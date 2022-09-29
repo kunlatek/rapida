@@ -13,6 +13,7 @@ const setProperty = (
   object: MainInterface
 ): string => {
   let code = ``;
+  _hasFile = false;
 
   if (!object.form) {
     return code;
@@ -20,13 +21,6 @@ const setProperty = (
 
   code += setFormPropertiesByElements(object, object.form.elements);
   code += setFormBuilderProperty(object);
-
-  if (_hasFile) {
-    code += `
-          formData = new FormData();
-          ${object.form?.id}Files: any[] = [];
-          `;
-  }
 
   return code;
 };

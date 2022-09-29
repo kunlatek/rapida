@@ -13,7 +13,7 @@ const setFormControllerProperties = (object: MainInterface): string => {
   ${object.form?.id}Form: FormGroup;
   ${object.form?.id}ToEdit: any;
   isAddModule: boolean = true;
-  isLoading: boolean = false;
+  isLoading: boolean = true;
   
   permissionsToCheck = JSON.parse(sessionStorage.getItem("permission")!)[0].modulePermissions;
   updateOnePermission: any;
@@ -28,4 +28,4 @@ const setFormControllerProperties = (object: MainInterface): string => {
 
 export {
   setFormControllerProperties
-}
+};
