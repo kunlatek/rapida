@@ -37,6 +37,7 @@ const setFormService = (
   let code = `
   import { HttpClient } from "@angular/common/http";
   import { Injectable } from "@angular/core";
+  import { convertJsonToFormData } from "src/app/utils/convert-json-to-form-data";
 
   @Injectable({
   providedIn: "root",
@@ -112,6 +113,8 @@ const setFormServiceServices = (service: ServiceInterface): string => {
       case ServiceFunctionsEnum.Save:
         code += `
         save(body: any) {
+          body = convertJsonToFormData(body, null, new FormData())
+
           return this._httpClient.post(
           \`\${this.BASE_URL}/${service.endpoint}\`, 
           body,
@@ -128,6 +131,8 @@ const setFormServiceServices = (service: ServiceInterface): string => {
       case ServiceFunctionsEnum.Update:
         code += `
         update(body: any, id: string) {
+          body = convertJsonToFormData(body, null, new FormData())
+          
           return this._httpClient.put(
             \`\${this.BASE_URL}/${service.endpoint}/\${id}\`, 
             body,

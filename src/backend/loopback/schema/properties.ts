@@ -9,8 +9,6 @@ const stringTypes = [
   "tel",
   "text",
   "url",
-  "date",
-  "datetime-local",
   "month",
   "range",
   "time",
@@ -20,6 +18,8 @@ const stringTypes = [
 const numberTypes = ["number"];
 
 const booleanTypes = ["slide"];
+
+const dateTypes = ["date", "datetime-local"];
 
 const setArrayTypeSchemas = (formElements: Array<FormElementInterface>): string => {
 
@@ -92,7 +92,10 @@ const setByElementInArrayType = (
       stringTypes.includes(value.type || type) ? 'String' :
         (
           numberTypes.includes(value.type || type) ? 'Number' :
-            (booleanTypes.includes(value.type || type) ? 'Boolean' : 'Object')
+            (
+              booleanTypes.includes(value.type || type) ? 'Boolean' :
+                (dateTypes.includes(value.type || type) ? 'Date' : 'Object')
+            )
         )
     );
 
@@ -158,10 +161,8 @@ const setModelProperties = (object: MainInterface): string => {
 };
 
 const setByElement = (
-  // object: MainInterface,
   element: FormElementInterface
 ): string => {
-  // const modelName = object.form!.id.replace("Form", "");
   const type = Object.keys(element)[0];
   const value = Object.values(element)[0];
 
@@ -173,14 +174,15 @@ const setByElement = (
       stringTypes.includes(value.type || type) ? 'String' :
         (
           numberTypes.includes(value.type || type) ? 'Number' :
-            (booleanTypes.includes(value.type || type) ? 'Boolean' : 'Object')
+            (
+              booleanTypes.includes(value.type || type) ? 'Boolean' :
+                (dateTypes.includes(value.type || type) ? 'Date' : 'Object')
+            )
         )
     );
 
   if (value.optionsApi && value.optionsApi.endpoint) {
     const className = TextTransformation.setIdToClassName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
-    // const propertyName = TextTransformation.setIdToPropertyName(TextTransformation.pascalfy(TextTransformation.singularize(value.optionsApi.endpoint.split('-').join(' '))));
-    // const modelNameClass = TextTransformation.setIdToClassName(modelName);
 
     if (value.isMultiple) {
       code += `

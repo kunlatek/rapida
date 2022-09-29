@@ -551,7 +551,7 @@ const setStorageFileInArrayType = (object: MainInterface): string => {
                   if(!file.url){
                     const url = await this.storageService.uploadBufferFiles('${TextTransformation.kebabfy(modelName)}', file)
                     ${TextTransformation.singularize(relatedId)}.${elementValue.name}![fileIndex] = {
-                      name: file.fileName,
+                      name: file.originalname,
                       url
                     }
                   }
