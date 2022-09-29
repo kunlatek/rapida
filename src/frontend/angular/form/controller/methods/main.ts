@@ -1,4 +1,3 @@
-import { FormInputTypeEnum } from "../../../../../enums/form";
 import { ArrayInterface, FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
@@ -13,7 +12,6 @@ import { setFileSubmit, setMethod, setValueBeforeSubmit } from "./method";
 
 let _hasCondition: boolean = false;
 let _hasConditionInArray: boolean = false;
-let _hasFile: boolean = false;
 let _arrays: Array<ArrayInterface> = [];
 
 let _arraysToEdit: string = ``;
@@ -107,10 +105,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
         ${_fileSubmit}
         if(this.isAddModule) {
             await this._${object.form.id}Service.save(
-              ${_hasFile
-      ? `this.formData`
-      : `this.${object.form.id}Form.value`
-    }
+              this.${object.form.id}Form.value
             );
         }
 
@@ -221,11 +216,11 @@ const verifyFormElement = (
     });
   }
 
-  if (element.input) {
-    if (element.input.type === FormInputTypeEnum.File) {
-      _hasFile = true;
-    }
-  }
+  // if (element.input) {
+  //   if (element.input.type === FormInputTypeEnum.File) {
+  //     _hasFile = true;
+  //   }
+  // }
 
   if (element.autocomplete) {
     if (!array) {
