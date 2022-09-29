@@ -65,48 +65,53 @@ const setControllerMethods = (object: MainInterface): string => {
   async create(
     @requestBody({
       content: {
-        'application/json': {
+        'multipart/form-data': {
+          // Skip body parsing
+          'x-parser': 'stream',
+          // 'application/json': {
           schema: {
             properties: ${setRequestBodyContent(object)}
           },
         },
       },
-    }) data: any,
+    }) request: Request,
     @param.query.string('locale') locale?: LocaleEnum,
   ): Promise<IHttpResponse> {
       try {
-  
-          const createdBy = this.currentUser?.[securityId] as string;
-          const ownerId = this.currentUser?.ownerId as string;
-          const dataWithoutNullProperties = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null));
-          
-          ${_storageFile}
-          ${setStorageFileInArrayType(object)}
-      
-          const dataCreated = await ${TextTransformation.pascalfy(modelName)}Schema.create({
-            ...dataWithoutNullProperties, 
-            _createdBy: createdBy, 
-            _ownerId: ownerId
-          });
-          
-          const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
 
-          return HttpResponseToClient.createHttpResponse({
-              data: dataCreated,
-              tokens,
-              locale,
-              request: this.httpRequest,
-              response: this.httpResponse,
-          })
+        const bodyAndFiles: any = await this.storageService.getBodyAndFiles(request, this.httpResponse)
+        let data = bodyAndFiles.body;
+  
+        const createdBy = this.currentUser?.[securityId] as string;
+        const ownerId = this.currentUser?.ownerId as string;
+        
+        ${_storageFile}
+        ${setStorageFileInArrayType(object)}
+    
+        const dataCreated = await ${TextTransformation.pascalfy(modelName)}Schema.create({
+          ...data, 
+          _createdBy: createdBy, 
+          _ownerId: ownerId
+        });
+        
+        const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+
+        return HttpResponseToClient.createHttpResponse({
+          data: dataCreated,
+          tokens,
+          locale,
+          request: this.httpRequest,
+          response: this.httpResponse,
+        })
   
       } catch (err: any) {
   
-          return HttpResponseToClient.badRequestErrorHttpResponse({
-              logMessage: err.message,
-              locale,
-              request: this.httpRequest,
-              response: this.httpResponse,
-          })
+        return HttpResponseToClient.badRequestErrorHttpResponse({
+          logMessage: err.message,
+          locale,
+          request: this.httpRequest,
+          response: this.httpResponse,
+        })
   
       }
   }
@@ -243,41 +248,45 @@ const setControllerMethods = (object: MainInterface): string => {
       @param.path.string('id') id: string,
       @requestBody({
         content: {
-          'application/json': {
+          'multipart/form-data': {
+            // Skip body parsing
+            'x-parser': 'stream',
+            // 'application/json': {
             schema: {
               properties: ${setRequestBodyContent(object)}
             },
           },
         },
-      }) data: any,
+      }) request: Request,
       @param.query.string('locale') locale?: LocaleEnum,
   ): Promise<IHttpResponse> {
       try {
           
-          const dataWithoutNullProperties = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null));
-          
-          ${_storageFile}
-          ${setStorageFileInArrayType(object)}
-  
-          await ${TextTransformation.pascalfy(modelName)}Schema.findByIdAndUpdate(id, dataWithoutNullProperties);
-          
-          const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
-      
-          return HttpResponseToClient.noContentHttpResponse({
-              tokens,
-              locale,
-              request: this.httpRequest,
-              response: this.httpResponse,
-          })
+        const bodyAndFiles: any = await this.storageService.getBodyAndFiles(request, this.httpResponse)
+        let data = bodyAndFiles.body;
+        
+        ${_storageFile}
+        ${setStorageFileInArrayType(object)}
+
+        await ${TextTransformation.pascalfy(modelName)}Schema.findByIdAndUpdate(id, data);
+        
+        const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+    
+        return HttpResponseToClient.noContentHttpResponse({
+          tokens,
+          locale,
+          request: this.httpRequest,
+          response: this.httpResponse,
+        })
   
       } catch (err: any) {
   
-          return HttpResponseToClient.badRequestErrorHttpResponse({
-              logMessage: err.message,
-              locale,
-              request: this.httpRequest,
-              response: this.httpResponse,
-          })
+        return HttpResponseToClient.badRequestErrorHttpResponse({
+          logMessage: err.message,
+          locale,
+          request: this.httpRequest,
+          response: this.httpResponse,
+        })
   
       }
   }
@@ -289,41 +298,45 @@ const setControllerMethods = (object: MainInterface): string => {
       @param.path.string('id') id: string,
       @requestBody({
         content: {
-          'application/json': {
+          'multipart/form-data': {
+            // Skip body parsing
+            'x-parser': 'stream',
+            // 'application/json': {
             schema: {
               properties: ${setRequestBodyContent(object)}
             },
           },
         },
-      }) data: any,
+      }) request: Request,
       @param.query.string('locale') locale?: LocaleEnum,
   ): Promise<IHttpResponse> {
       try {
           
-          const dataWithoutNullProperties = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null));
+        const bodyAndFiles: any = await this.storageService.getBodyAndFiles(request, this.httpResponse)
+        let data = bodyAndFiles.body;
           
-          ${_storageFile}
-          ${setStorageFileInArrayType(object)}
+        ${_storageFile}
+        ${setStorageFileInArrayType(object)}
 
-          await ${TextTransformation.pascalfy(modelName)}Schema.findByIdAndUpdate(id, dataWithoutNullProperties);
+        await ${TextTransformation.pascalfy(modelName)}Schema.findByIdAndUpdate(id, data);
 
-          const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
-      
-          return HttpResponseToClient.noContentHttpResponse({
-              tokens,
-              locale,
-              request: this.httpRequest,
-              response: this.httpResponse,
-          })
+        const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+    
+        return HttpResponseToClient.noContentHttpResponse({
+          tokens,
+          locale,
+          request: this.httpRequest,
+          response: this.httpResponse,
+        })
   
       } catch (err: any) {
   
-          return HttpResponseToClient.badRequestErrorHttpResponse({
-              logMessage: err.message,
-              locale,
-              request: this.httpRequest,
-              response: this.httpResponse,
-          })
+        return HttpResponseToClient.badRequestErrorHttpResponse({
+          logMessage: err.message,
+          locale,
+          request: this.httpRequest,
+          response: this.httpResponse,
+        })
   
       }
   }
@@ -337,25 +350,25 @@ const setControllerMethods = (object: MainInterface): string => {
   ): Promise<IHttpResponse> {
       try {
   
-          await ${TextTransformation.pascalfy(modelName)}Schema.findByIdAndUpdate(id, {_deletedAt: new Date()});
+        await ${TextTransformation.pascalfy(modelName)}Schema.findByIdAndUpdate(id, {_deletedAt: new Date()});
 
-          const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+        const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
 
-          return HttpResponseToClient.noContentHttpResponse({
-              tokens,
-              locale,
-              request: this.httpRequest,
-              response: this.httpResponse,
-          })
+        return HttpResponseToClient.noContentHttpResponse({
+          tokens,
+          locale,
+          request: this.httpRequest,
+          response: this.httpResponse,
+        })
   
       } catch (err: any) {
   
-          return HttpResponseToClient.badRequestErrorHttpResponse({
-              logMessage: err.message,
-              locale,
-              request: this.httpRequest,
-              response: this.httpResponse,
-          })
+        return HttpResponseToClient.badRequestErrorHttpResponse({
+          logMessage: err.message,
+          locale,
+          request: this.httpRequest,
+          response: this.httpResponse,
+        })
   
       }
   }
@@ -474,15 +487,17 @@ const setStorageFileByElement = (
 
   if (value.type === FormInputTypeEnum.File) {
     code += `
-      if(data.${value.name}){
-        for (let fileIndex = 0; fileIndex < data.${value.name}!.length; fileIndex++) {
-          const file = data.${value.name}![fileIndex];
-          if(!file.url){
-            const url = await this.storageService.uploadFiles('${TextTransformation.kebabfy(modelName)}', file)
-            data.${value.name}![fileIndex] = {
-              name: file.fileName,
-              url
-            }
+      data.${value.name} = [
+        ...(data.${value.name} || []),
+        ...(await this.storageService.getFilesByFieldname(bodyAndFiles.files || [], '${value.name}') || []),
+      ]
+      for (let fileIndex = 0; fileIndex < data.${value.name}?.length || 0; fileIndex++) {
+        const file = data.${value.name}![fileIndex];
+        if(!file.url){
+          const url = await this.storageService.uploadBufferFiles('${TextTransformation.kebabfy(modelName)}', file)
+          data.${value.name}![fileIndex] = {
+            name: file.originalname,
+            url
           }
         }
       }
@@ -527,15 +542,17 @@ const setStorageFileInArrayType = (object: MainInterface): string => {
               hasFileInArrayType = true;
 
               _storageFileToReturn += `
-                if(${TextTransformation.singularize(relatedId)}.${elementValue.name}){
-                  for (let fileIndex = 0; fileIndex < ${TextTransformation.singularize(relatedId)}.${elementValue.name}!.length; fileIndex++) {
-                    const file = ${TextTransformation.singularize(relatedId)}.${elementValue.name}![fileIndex];
-                    if(!file.url){
-                      const url = await this.storageService.uploadFiles('${TextTransformation.kebabfy(modelName)}', file)
-                      ${TextTransformation.singularize(relatedId)}.${elementValue.name}![fileIndex] = {
-                        name: file.fileName,
-                        url
-                      }
+                ${TextTransformation.singularize(relatedId)}.${elementValue.name} = [
+                  ...(${TextTransformation.singularize(relatedId)}.${elementValue.name} || []),
+                  ...(await this.storageService.getFilesByFieldname(bodyAndFiles.files || [], '${elementValue.name}') || []),
+                ]
+                for (let fileIndex = 0; fileIndex < ${TextTransformation.singularize(relatedId)}.${elementValue.name}!.length; fileIndex++) {
+                  const file = ${TextTransformation.singularize(relatedId)}.${elementValue.name}![fileIndex];
+                  if(!file.url){
+                    const url = await this.storageService.uploadBufferFiles('${TextTransformation.kebabfy(modelName)}', file)
+                    ${TextTransformation.singularize(relatedId)}.${elementValue.name}![fileIndex] = {
+                      name: file.fileName,
+                      url
                     }
                   }
                 }
@@ -546,7 +563,7 @@ const setStorageFileInArrayType = (object: MainInterface): string => {
                 `
                 for(
                   let ${elementProperty.array?.id}Index = 0; 
-                  ${elementProperty.array?.id}Index < ${TextTransformation.singularize(relatedId)}?.${elementProperty.array?.id}?.length!; 
+                  ${elementProperty.array?.id}Index < ${TextTransformation.singularize(relatedId)}?.${elementProperty.array?.id}?.length || 0; 
                   ${elementProperty.array?.id}Index++
                 ){
                   
