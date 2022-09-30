@@ -46,10 +46,6 @@ const setFormControllerImports = (object: MainInterface): string => {
       import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';`
       : ``
     }
-  ${_hasFile
-      ? `import { fileListToBase64 } from "src/app/utils/file";`
-      : ``
-    }
   import { MyErrorHandler } from "../../utils/error-handler";
   import { ${TextTransformation.pascalfy(
       object.form.id

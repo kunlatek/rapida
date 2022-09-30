@@ -9,6 +9,9 @@ import { TextTransformation } from "../../../../../utils/text.transformation";
 require("dotenv").config();
 
 let _allParents: Array<string> = [];
+let parentArray: string | undefined;
+let getParentsIndexes: string = ``;
+let getParentsControl: string = ``;
 
 const setAutocompleteMethod = (
   object: MainInterface,
@@ -24,9 +27,10 @@ const setAutocompleteMethod = (
   let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
     process.env.ARRAY_LAYER!
   );
-  let parentArray: string | undefined;
-  let getParentsIndexes: string = ``;
-  let getParentsControl: string = ``;
+
+  parentArray = undefined;
+  getParentsIndexes = ``;
+  getParentsControl = ``;
 
   if (array) {
     _arrayLayer?.forEach((arrayLayer: ArrayFeaturesInterface) => {
@@ -51,315 +55,468 @@ const setAutocompleteMethod = (
   }
 
   if (element.autocomplete.isMultiple) {
-    code += `
+    code += addMultipleAutocomplete(object, element, array);
+    code += removeChipFromMultipleAutocomplete(object, element, array);
+    code += selectAsChipFromMultipleAutocomplete(object, element, array);
+    code += setMultipleAutocompleteToEdit(object, element, array);
+  }
+
+  if (!element.autocomplete.isMultiple) {
+    code += displayNoMultipleAutocomplete(object, element, array);
+  }
+
+  code += filterAutocompleteOption(object, element, array);
+
+  return code;
+};
+
+const setMultipleAutocompleteToEdit = (
+  object: MainInterface,
+  element: FormElementInterface,
+  array: ArrayInterface | undefined = undefined
+) => {
+  if (!element.autocomplete) {
+    return;
+  }
+  const name = element.autocomplete.name;
+  const labelField = element.autocomplete.optionsApi.labelField;
+  const valueField = element.autocomplete.optionsApi.valueField;
+
+  let code = ``;
+
+  if (!array) {
+    if (Array.isArray(labelField)) {
+      code += `
+        set${TextTransformation.pascalfy(name)}ToEdit = () => {
+          this.${object.form?.id}ToEdit?.data?.${name}.map((element: any) => {
+          this.chosen${TextTransformation.pascalfy(name)}View.push(`;
+      labelField.forEach((labelFieldElement: any, index: number) => {
+        code += `element.${labelFieldElement}${index + 1 < labelField.length ? `,` : ``
+          }`;
+      });
+      code += `
+      );
+      this.chosen${TextTransformation.pascalfy(name)}Value.push(element});
+          });
+        }
+        `;
+    }
+
+    if (!Array.isArray(labelField)) {
+      code += `
+        set${TextTransformation.pascalfy(name)}ToEdit = () => {
+          this.${object.form?.id}ToEdit?.data?.${name}.map((element: any) => {
+            this.chosen${TextTransformation.pascalfy(name)}View
+            .push(element.${labelField});
+            
+            this.chosen${TextTransformation.pascalfy(name)}Value
+            .push(element.${valueField});
+          });
+        }
+        `;
+    }
+  }
+
+  if (array) {
+    if (Array.isArray(labelField)) {
+      code += `
+        set${TextTransformation.pascalfy(name)}ToEdit = () => {
+          
+        }
+        `;
+    }
+
+    if (!Array.isArray(labelField)) {
+      code += `
+        set${TextTransformation.pascalfy(name)}ToEdit = () => {
+          
+        }
+        `;
+    }
+  }
+
+  return code;
+};
+
+const addMultipleAutocomplete = (
+  object: MainInterface,
+  element: FormElementInterface,
+  array: ArrayInterface | undefined = undefined
+) => {
+  let code = ``;
+
+  if (!element.autocomplete) {
+    return;
+  }
+  code += `
     add${TextTransformation.pascalfy(
-      element.autocomplete.name
-    )}(${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
-      }${array ? `${TextTransformation.singularize(array.id)}Index: number, ` : ``
-      }event: MatChipInputEvent): void {
+    element.autocomplete.name
+  )}(${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
+    }${array ? `${TextTransformation.singularize(array.id)}Index: number, ` : ``
+    }event: MatChipInputEvent): void {
       const value = (event.value || '').trim();
       
       if (value) {
         this.chosen${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}View${array
-        ? `[${getParentsIndexes && getParentsIndexes !== ""
-          ? `${getParentsIndexes.replace(/: number/g, "][")}`
-          : ""
-        }${TextTransformation.singularize(array.id)}Index]`
-        : ``
-      }.push(value);
+      element.autocomplete.name
+    )}View${array
+      ? `[${getParentsIndexes && getParentsIndexes !== ""
+        ? `${getParentsIndexes.replace(/: number/g, "][")}`
+        : ""
+      }${TextTransformation.singularize(array.id)}Index]`
+      : ``
+    }.push(value);
       }
       event.chipInput!.clear();
       this.${object.form?.id}Form.
       ${array
-        ? `get([${getParentsControl && getParentsControl !== ""
-          ? `${getParentsControl}, `
-          : ``
-        }${array
-          ? `"${array.id}", ${TextTransformation.singularize(
-            array.id
-          )}Index, `
-          : ``
-        }"${element.autocomplete.name}"])?.setValue(null);`
-        : `get('${element.autocomplete.name}}')?.setValue(null);`
-      }
+      ? `get([${getParentsControl && getParentsControl !== ""
+        ? `${getParentsControl}, `
+        : ``
+      }${array
+        ? `"${array.id}", ${TextTransformation.singularize(
+          array.id
+        )}Index, `
+        : ``
+      }"${element.autocomplete.name}"])?.setValue(null);`
+      : `get('${element.autocomplete.name}}')?.setValue(null);`
+    }
     };`;
-    /**
-     * Remove chip from multiple autocomplete
-     */
-    code += `
+
+  return code;
+};
+
+const removeChipFromMultipleAutocomplete = (
+  object: MainInterface,
+  element: FormElementInterface,
+  array: ArrayInterface | undefined = undefined
+) => {
+  let code = ``;
+
+  if (!element.autocomplete) {
+    return;
+  }
+
+  code += `
     remove${TextTransformation.pascalfy(
-      element.autocomplete.name
-    )}(${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
-      }${array ? `${TextTransformation.singularize(array.id)}Index: number, ` : ``
-      }element: string): void {
+    element.autocomplete.name
+  )}(${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
+    }${array ? `${TextTransformation.singularize(array.id)}Index: number, ` : ``
+    }element: string): void {
       const index = this.chosen${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}View
+      element.autocomplete.name
+    )}View
       ${getParentsIndexes && getParentsIndexes !== ""
-        ? `[${getParentsIndexes.replace(/: number/g, "][")}]`.replace(
-          "[]",
-          ""
-        )
-        : ""
-      }
+      ? `[${getParentsIndexes.replace(/: number/g, "][")}]`.replace(
+        "[]",
+        ""
+      )
+      : ""
+    }
       ${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``
-      }.indexOf(element);
+    }.indexOf(element);
   
       if (index >= 0) {
         this.chosen${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}View${getParentsIndexes && getParentsIndexes !== ""
-        ? `[${getParentsIndexes.replace(/: number/g, "][")}]`.replace("[]", "")
-        : ""
-      }
+      element.autocomplete.name
+    )}View${getParentsIndexes && getParentsIndexes !== ""
+      ? `[${getParentsIndexes.replace(/: number/g, "][")}]`.replace("[]", "")
+      : ""
+    }
       ${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``
-      }.splice(index, 1);
+    }.splice(index, 1);
         this.chosen${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}Value${getParentsIndexes && getParentsIndexes !== ""
-        ? `[${getParentsIndexes.replace(/: number/g, "][")}]`.replace("[]", "")
-        : ""
-      }
+      element.autocomplete.name
+    )}Value${getParentsIndexes && getParentsIndexes !== ""
+      ? `[${getParentsIndexes.replace(/: number/g, "][")}]`.replace("[]", "")
+      : ""
+    }
       ${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``
-      }.splice(index, 1);
+    }.splice(index, 1);
 
         this.${object.form?.id}Form.
         ${array
-        ? `get([${getParentsControl && getParentsControl !== ""
-          ? `${getParentsControl} ,`
-          : ``
-        }${parentArray && array
-          ? `"${array.id}", ${TextTransformation.singularize(
-            array.id
-          )}Index, `
-          : ``
-        }"${element.autocomplete.name
-        }"])?.setValue(this.chosen${TextTransformation.pascalfy(
-          element.autocomplete.name
-        )}Value[${TextTransformation.singularize(array.id)}Index]);`
-        : `get("${element.autocomplete.name
-        }")?.setValue(this.chosen${TextTransformation.pascalfy(
-          element.autocomplete.name
-        )}Value);`
-      }
+      ? `get([${getParentsControl && getParentsControl !== ""
+        ? `${getParentsControl} ,`
+        : ``
+      }${parentArray && array
+        ? `"${array.id}", ${TextTransformation.singularize(
+          array.id
+        )}Index, `
+        : ``
+      }"${element.autocomplete.name
+      }"])?.setValue(this.chosen${TextTransformation.pascalfy(
+        element.autocomplete.name
+      )}Value[${TextTransformation.singularize(array.id)}Index]);`
+      : `get("${element.autocomplete.name
+      }")?.setValue(this.chosen${TextTransformation.pascalfy(
+        element.autocomplete.name
+      )}Value);`
+    }
       }
     };`;
-    code.replace(/[]/g, "");
-    /**
-     * Selected as chip in multiple autocomplete options
-     */
-    const matrixLayers = getParentsIndexes
-      .split(": number")
-      .toString()
-      .split(",");
-    let matrixCreation: any = [];
-    let layerCode = ``;
 
-    matrixLayers.forEach((e: any, index: number) => {
-      let bracketCount = matrixLayers.length - index;
-      let eventOptionView = ``;
-      let eventOptionValue = ``;
-      let layerCodeMinusOne = ``;
+  code.replace(/[]/g, "");
 
-      for (let index = 0; index < bracketCount; index++) {
-        eventOptionValue += `[`;
-      }
-      eventOptionValue += `event.option.value`;
-      for (let index = 0; index < bracketCount; index++) {
-        eventOptionValue += `]`;
-      }
+  return code;
+};
 
-      for (let index = 0; index < bracketCount; index++) {
-        eventOptionView += `[`;
-      }
-      eventOptionView += `event.option.viewValue`;
-      for (let index = 0; index < bracketCount; index++) {
-        eventOptionView += `]`;
-      }
-      if (e !== "") {
-        layerCode += `[${e}]`;
-      }
-      layerCodeMinusOne =
-        index + 1 === matrixLayers.length
-          ? `[${matrixLayers[0]}]`.replace("[]", "")
-          : layerCode.replace(`[${e}]`, "").replace("[]", "");
-      let matrixCode = `
+const selectAsChipFromMultipleAutocomplete = (
+  object: MainInterface,
+  element: FormElementInterface,
+  array: ArrayInterface | undefined = undefined
+) => {
+  let code = ``;
+
+  if (!element.autocomplete) {
+    return;
+  }
+
+  const matrixLayers = getParentsIndexes
+    .split(": number")
+    .toString()
+    .split(",");
+  let matrixCreation: any = [];
+  let layerCode = ``;
+
+  matrixLayers.forEach((e: any, index: number) => {
+    let bracketCount = matrixLayers.length - index;
+    let eventOptionView = ``;
+    let eventOptionValue = ``;
+    let layerCodeMinusOne = ``;
+
+    for (let index = 0; index < bracketCount; index++) {
+      eventOptionValue += `[`;
+    }
+    eventOptionValue += `event.option.value`;
+    for (let index = 0; index < bracketCount; index++) {
+      eventOptionValue += `]`;
+    }
+
+    for (let index = 0; index < bracketCount; index++) {
+      eventOptionView += `[`;
+    }
+    eventOptionView += `event.option.viewValue`;
+    for (let index = 0; index < bracketCount; index++) {
+      eventOptionView += `]`;
+    }
+    if (e !== "") {
+      layerCode += `[${e}]`;
+    }
+    layerCodeMinusOne =
+      index + 1 === matrixLayers.length
+        ? `[${matrixLayers[0]}]`.replace("[]", "")
+        : layerCode.replace(`[${e}]`, "").replace("[]", "");
+    let matrixCode = `
         if (!this.chosen${TextTransformation.pascalfy(
-        element.autocomplete!.name
-      )}View${layerCode}${array && index + 1 === matrixLayers.length
-        ? `[${TextTransformation.singularize(array.id)}Index]`
-        : ``
-        }) {
+      element.autocomplete!.name
+    )}View${layerCode}${array && index + 1 === matrixLayers.length
+      ? `[${TextTransformation.singularize(array.id)}Index]`
+      : ``
+      }) {
           this.chosen${TextTransformation.pascalfy(
-          element.autocomplete!.name
-        )}View${layerCodeMinusOne}
+        element.autocomplete!.name
+      )}View${layerCodeMinusOne}
           .push(${eventOptionView});
           this.chosen${TextTransformation.pascalfy(
-          element.autocomplete!.name
-        )}Value${layerCodeMinusOne}
+        element.autocomplete!.name
+      )}Value${layerCodeMinusOne}
           .push(${eventOptionValue});
         }
       `;
 
-      matrixCreation.push(matrixCode);
-    });
+    matrixCreation.push(matrixCode);
+  });
 
-    code += `
+  code += `
     selected${TextTransformation.pascalfy(
-      element.autocomplete.name
-    )}(${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
-      }${array ? `${TextTransformation.singularize(array.id)}Index: number, ` : ``
-      }event: MatAutocompleteSelectedEvent): void {
+    element.autocomplete.name
+  )}(${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
+    }${array ? `${TextTransformation.singularize(array.id)}Index: number, ` : ``
+    }event: MatAutocompleteSelectedEvent): void {
     `;
 
-    if (array) {
-      code += `
+  if (array) {
+    code += `
       if (this.chosen${TextTransformation.pascalfy(
+      element.autocomplete.name
+    )}View[${getParentsIndexes && getParentsIndexes !== ""
+      ? `${getParentsIndexes.replace(/: number/g, "][")}`
+      : ""
+      }${TextTransformation.singularize(array.id)}Index]) {
+        this.chosen${TextTransformation.pascalfy(
         element.autocomplete.name
       )}View[${getParentsIndexes && getParentsIndexes !== ""
         ? `${getParentsIndexes.replace(/: number/g, "][")}`
         : ""
-        }${TextTransformation.singularize(array.id)}Index]) {
-        this.chosen${TextTransformation.pascalfy(
-          element.autocomplete.name
-        )}View[${getParentsIndexes && getParentsIndexes !== ""
-          ? `${getParentsIndexes.replace(/: number/g, "][")}`
-          : ""
-        }${TextTransformation.singularize(
-          array.id
-        )}Index].push(event.option.viewValue);
+      }${TextTransformation.singularize(
+        array.id
+      )}Index].push(event.option.viewValue);
       this.chosen${TextTransformation.pascalfy(
+        element.autocomplete.name
+      )}Value[${getParentsIndexes && getParentsIndexes !== ""
+        ? `${getParentsIndexes.replace(/: number/g, "][")}`
+        : ""
+      }${TextTransformation.singularize(array.id)}Index].push(event.option.value);
+        }`;
+    if (matrixCreation.length > 0) {
+      matrixCreation.forEach((m: any) => {
+        code += m;
+      });
+      code += `
+
+
+      this.${object.form?.id}Form.get([${getParentsControl && getParentsControl !== ""
+          ? `${getParentsControl} ,`
+          : ``
+        }${array
+          ? `"${array.id}", ${TextTransformation.singularize(array.id)}Index, `
+          : ``
+        }"${element.autocomplete.name
+        }"])?.setValue(this.chosen${TextTransformation.pascalfy(
           element.autocomplete.name
         )}Value[${getParentsIndexes && getParentsIndexes !== ""
           ? `${getParentsIndexes.replace(/: number/g, "][")}`
           : ""
-        }${TextTransformation.singularize(
-          array.id
-        )}Index].push(event.option.value);
-        }`;
-      if (matrixCreation.length > 0) {
-        matrixCreation.forEach((m: any) => {
-          code += m;
-        });
-        code += `
-
-
-      this.${object.form?.id}Form.get([${getParentsControl && getParentsControl !== ""
-            ? `${getParentsControl} ,`
-            : ``
-          }${array
-            ? `"${array.id}", ${TextTransformation.singularize(
-              array.id
-            )}Index, `
-            : ``
-          }"${element.autocomplete.name
-          }"])?.setValue(this.chosen${TextTransformation.pascalfy(
-            element.autocomplete.name
-          )}Value[${getParentsIndexes && getParentsIndexes !== ""
-            ? `${getParentsIndexes.replace(/: number/g, "][")}`
-            : ""
-          }${TextTransformation.singularize(array.id)}Index]);
+        }${TextTransformation.singularize(array.id)}Index]);
         `;
-      }
     }
+  }
 
-    if (!array) {
-      code += `
+  if (!array) {
+    code += `
       this.chosen${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}View.push(event.option.viewValue);
+      element.autocomplete.name
+    )}View.push(event.option.viewValue);
       this.chosen${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}Value.push(event.option.value);
+      element.autocomplete.name
+    )}Value.push(event.option.value);
 
       this.${object.form?.id}Form.get("${element.autocomplete.name
-        }")?.setValue(this.chosen${TextTransformation.pascalfy(
-          element.autocomplete.name
-        )}Value);
+      }")?.setValue(this.chosen${TextTransformation.pascalfy(
+        element.autocomplete.name
+      )}Value);
       `;
-    }
-    code += `
+  }
+  code += `
   }
     `;
-  }
 
-  if (!element.autocomplete.isMultiple) {
-    /**
-     * Display selected option to autocomplete
-     */
-    code += `
+  return code;
+};
+
+const displayNoMultipleAutocomplete = (
+  object: MainInterface,
+  element: FormElementInterface,
+  array: ArrayInterface | undefined = undefined
+) => {
+  if (!element.autocomplete) {
+    return;
+  }
+  const labelField = element.autocomplete.optionsApi.labelField;
+  const valueField = element.autocomplete.optionsApi.valueField;
+  const name = element.autocomplete.name;
+  const labelFieldLength = labelField.length;
+
+  let code = ``;
+
+  code += `
     displayFnTo${TextTransformation.pascalfy(
-      element.autocomplete.name
-    )} = (value?: any) => {
-        const treatedValue = value?._id ? `;
-    if (Array.isArray(element.autocomplete.optionsApi.labelField)) {
-      const labelFieldLength =
-        element.autocomplete.optionsApi.labelField.length;
-      element.autocomplete.optionsApi.labelField.forEach(
-        (e: string, index: number) => {
-          code += `value.${e}`;
-          if (labelFieldLength > index + 1) {
-            code += ` + " - " + `;
-          }
+    element.autocomplete.name
+  )} = (value?: any) => {
+          if (value?.${valueField}) {
+            return `;
+  if (Array.isArray(labelField)) {
+    labelField.forEach(
+      (e: string, index: number) => {
+        code += `value.${e}`;
+        if (labelFieldLength > index + 1) {
+          code += ` + " - " + `;
         }
-      );
-    }
-
-    if (!Array.isArray(element.autocomplete.optionsApi.labelField)) {
-      code += `value?.${element.autocomplete.optionsApi.labelField}`;
-    }
-    code += ` : `;
-
-    if (Array.isArray(element.autocomplete.optionsApi.labelField)) {
-      const labelFieldLength =
-        element.autocomplete.optionsApi.labelField.length;
-      const name = element.autocomplete.name;
-      const valueField = element.autocomplete.optionsApi.valueField;
-      element.autocomplete.optionsApi.labelField.forEach(
-        (e: string, index: number) => {
-          code += `this.filtered${TextTransformation.pascalfy(
-            name
-          )}.find((_) => _.${valueField} === value)?.${e}`;
-          if (labelFieldLength > index + 1) {
-            code += ` + " - " + `;
-          }
-        }
-      );
-    }
-
-    if (!Array.isArray(element.autocomplete.optionsApi.labelField)) {
-      code += `this.filtered${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}.find((_) => _.${element.autocomplete.optionsApi.valueField
-        } === value)?.${element.autocomplete.optionsApi.labelField}`;
-    }
-
-    code += `;`;
-
-    code += `
-      return treatedValue;
-    };`;
+      }
+    );
   }
 
-  /**
-   * Show options according to what is writen in input
-   */
+  if (!Array.isArray(labelField)) {
+    code += `value?.${labelField}`;
+  }
+  code += `} 
+  if (`;
+
+  if (Array.isArray(labelField)) {
+    const labelFieldLength = labelField.length;
+
+    labelField.forEach(
+      (e: string, index: number) => {
+        code += `this.filtered${TextTransformation.pascalfy(name)}.find((_) => _.${valueField} === value)?.${e}`;
+        if (labelFieldLength > index + 1) {
+          code += ` + " - " + `;
+        }
+      }
+    );
+  }
+
+  if (!Array.isArray(labelField)) {
+    code += `this.filtered${TextTransformation.pascalfy(
+      element.autocomplete.name
+    )}.find((_) => _.${element.autocomplete.optionsApi.valueField
+      } === value)?.${labelField}`;
+  }
+
+  code += `){
+            return `;
+
+  if (Array.isArray(labelField)) {
+    const labelFieldLength = labelField.length;
+    labelField.forEach(
+      (e: string, index: number) => {
+        code += `this.filtered${TextTransformation.pascalfy(
+          name
+        )}.find((_) => _.${valueField} === value)?.${e}`;
+        if (labelFieldLength > index + 1) {
+          code += ` + " - " + `;
+        }
+      }
+    );
+  }
+
+  if (!Array.isArray(labelField)) {
+    code += `this.filtered${TextTransformation.pascalfy(
+      element.autocomplete.name
+    )}.find((_) => _.${element.autocomplete.optionsApi.valueField
+      } === value)?.${labelField}`;
+  }
+
+  code += `}
+        
+        return "";
+      };`;
+
+  return code;
+};
+
+const filterAutocompleteOption = (
+  object: MainInterface,
+  element: FormElementInterface,
+  array: ArrayInterface | undefined = undefined
+) => {
+  if (!element.autocomplete) {
+    return;
+  }
+  const name = element.autocomplete.name;
+  let code = ``;
+
   code += `
   setFiltered${TextTransformation.pascalfy(
-    element.autocomplete.name
+    name
   )} = async (${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
     }${array ? `${TextTransformation.singularize(array.id)}Index: number` : ``
     }) => {
     try {
       ${array && getParentsIndexes && getParentsIndexes !== ""
-      ? `this.loading${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}[${getParentsIndexes?.split(": number")[0]}] = true;`
-      : `this.loading${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )} = true;`
+      ? `this.loading${TextTransformation.pascalfy(name)}[${getParentsIndexes?.split(": number")[0]
+      }] = true;`
+      : `this.loading${TextTransformation.pascalfy(name)} = true;`
     }
       const paramsToFilter = [${element.autocomplete.optionsApi.paramsToFilter.map(
       (element) => {
@@ -376,14 +533,13 @@ const setAutocompleteMethod = (
           array.id
         )}Index, `
         : ``
-      }"${element.autocomplete.name}"])?.value`
-      : `value.${element.autocomplete.name}`
+      }"${name}"])?.value`
+      : `value.${name}`
     }
       .length > 0) {
         const filter =
         ${element.autocomplete.optionsApi.paramType === ParamTypeEnum.Query
-      ?
-      `\`?filters={"$or":[\${paramsToFilter.map((element: string) => {
+      ? `\`?filters={"$or":[\${paramsToFilter.map((element: string) => {
           if(element !== "undefined") {
             return \`{"\${element}":{"$regex": "\${
               this.${object.form?.id}Form.
@@ -396,8 +552,8 @@ const setAutocompleteMethod = (
             array.id
           )}Index, `
           : ``
-        }"${element.autocomplete.name}"])?.value`
-        : `value.${element.autocomplete.name}`
+        }"${name}"])?.value`
+        : `value.${name}`
       }
             }", "$options": "i"}}\`
             
@@ -417,39 +573,35 @@ const setAutocompleteMethod = (
             array.id
           )}Index, `
           : ``
-        }"${element.autocomplete.name}"])?.value}`
-        : `value.${element.autocomplete.name}}`
+        }"${name}"])?.value}`
+        : `value.${name}}`
       }\`
       }
       return;
     })}\``
     }
         
-        this._${object.form?.id}Service.${element.autocomplete.name
-    }SelectObjectGetAll(filter.replace("},]", "}]"))
+        this._${object.form?.id
+    }Service.${name}SelectObjectGetAll(filter.replace("},]", "}]"))
         .then((result: any) => {
           this.filtered${TextTransformation.pascalfy(
-      element.autocomplete.name
+      name
     )} = result.data.result;
           ${array && getParentsIndexes && getParentsIndexes !== ""
-      ? `this.loading${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}[${getParentsIndexes?.split(": number")[0]}] = false;`
-      : `this.loading${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )} = false;`
+      ? `this.loading${TextTransformation.pascalfy(name)}[${getParentsIndexes?.split(": number")[0]
+      }] = false;`
+      : `this.loading${TextTransformation.pascalfy(name)} = false;`
     }
         })
         ${!element.autocomplete.optionsApi.externalEndpoint
       ? `.catch(async err => {
             if (err.error.logMessage === 'jwt expired') {
               await this.refreshToken();
-              this.setFiltered${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}(${getParentsIndexes && getParentsIndexes !== ""
+              this.setFiltered${TextTransformation.pascalfy(name)}(${getParentsIndexes && getParentsIndexes !== ""
         ? `${getParentsIndexes?.replace(/: number/g, "")}, `
         : ""
-      }${array ? `${TextTransformation.singularize(array.id)}Index` : ``});
+      }${array ? `${TextTransformation.singularize(array.id)}Index` : ``
+      });
             } else {
                 const message = this._errorHandler.apiErrorMessage(err.error.message);
                 this.sendErrorMessage(message);
@@ -466,17 +618,13 @@ const setAutocompleteMethod = (
     };
   };`;
 
-  /**
-   * Call with debounce to setFiltered function
-   */
+  // Call to setFiltered function with debounce
   code += `
   callSetFiltered${TextTransformation.pascalfy(
-    element.autocomplete.name
+    name
   )} = MyPerformance.debounce((${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
     }${array ? `${TextTransformation.singularize(array.id)}Index: number` : ``
-    }) => this.setFiltered${TextTransformation.pascalfy(
-      element.autocomplete.name
-    )}(${getParentsIndexes && getParentsIndexes !== ""
+    }) => this.setFiltered${TextTransformation.pascalfy(name)}(${getParentsIndexes && getParentsIndexes !== ""
       ? `${getParentsIndexes?.replace(/: number/g, "")}, `
       : ""
     }${array ? `${TextTransformation.singularize(array.id)}Index` : ``}));

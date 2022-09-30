@@ -30,7 +30,10 @@ const setFormControllerConstructorArguments = (
     object,
     object.form.elements
   );
-  _selectToEdit += setSelectToEdit(object, object.form.elements);
+  _selectToEdit += setSelectToEdit(
+    object,
+    object.form.elements
+  );
   object.form.elements.forEach((element: any) => {
     verifyFormElement(element);
   });
@@ -53,6 +56,7 @@ const setFormControllerConstructorArguments = (
       ? `this._createAllArray(this.${object.form.id}ToEdit.data);`
       : ``
     }
+          ${_autocompleteToEdit}
           ${_selectToEdit}
 
           this.${object.form.id}Form.patchValue(this.${object.form.id
@@ -138,38 +142,38 @@ const setAutocompleteToEdit = (
     }
 
     if (element.autocomplete) {
-      code += `
-      this.set${TextTransformation.pascalfy(element.autocomplete.name)}ToEdit();
-      `;
       if (element.autocomplete.isMultiple) {
         code += `
-        if (this.${object.form?.id}ToEdit.data.${TextTransformation.singularize(
-          element.autocomplete.optionsApi.endpoint
-        )}) {
-          this.chosen${TextTransformation.pascalfy(
-          element.autocomplete.name
-        )}View${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``
-          } = [];
-          this.chosen${TextTransformation.pascalfy(
-            element.autocomplete.name
-          )}Value${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``
-          } = [];
-          this.${object.form?.id}ToEdit.data
-          .${TextTransformation.singularize(
-            element.autocomplete.optionsApi.endpoint
-          )}
-          .forEach((element: any) => {
-            this.chosen${TextTransformation.pascalfy(
-            element.autocomplete.name
-          )}View${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``
-          }.push(element.${element.autocomplete.optionsApi.labelField[0]});
-            this.chosen${TextTransformation.pascalfy(
-            element.autocomplete.name
-          )}Value${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``
-          }.push(element.${element.autocomplete.optionsApi.valueField});
-          });
-        }
+        this.set${TextTransformation.pascalfy(element.autocomplete.name)}ToEdit();
         `;
+        // code += `
+        // if (this.${object.form?.id}ToEdit.data.${TextTransformation.singularize(
+        //   element.autocomplete.optionsApi.endpoint
+        // )}) {
+        //   this.chosen${TextTransformation.pascalfy(
+        //   element.autocomplete.name
+        // )}View${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``
+        //   } = [];
+        //   this.chosen${TextTransformation.pascalfy(
+        //     element.autocomplete.name
+        //   )}Value${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``
+        //   } = [];
+        //   this.${object.form?.id}ToEdit.data
+        //   .${TextTransformation.singularize(
+        //     element.autocomplete.optionsApi.endpoint
+        //   )}
+        //   .forEach((element: any) => {
+        //     this.chosen${TextTransformation.pascalfy(
+        //     element.autocomplete.name
+        //   )}View${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``
+        //   }.push(element.${element.autocomplete.optionsApi.labelField[0]});
+        //     this.chosen${TextTransformation.pascalfy(
+        //     element.autocomplete.name
+        //   )}Value${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``
+        //   }.push(element.${element.autocomplete.optionsApi.valueField});
+        //   });
+        // }
+        // `;
       }
     }
   });

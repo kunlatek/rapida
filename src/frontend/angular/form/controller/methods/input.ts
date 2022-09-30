@@ -9,6 +9,10 @@ import { TextTransformation } from "../../../../../utils/text.transformation";
 require("dotenv").config();
 
 let _allParents: Array<string> = [];
+let parentArray: string | undefined;
+let getParents: string = ``;
+let getParentsIndexes: string = ``;
+let getParentsControl: string = ``;
 
 const setInputMethod = (
   object: MainInterface,
@@ -23,10 +27,10 @@ const setInputMethod = (
   let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
     process.env.ARRAY_LAYER!
   );
-  let parentArray: string | undefined;
-  let getParents: string = ``;
-  let getParentsIndexes: string = ``;
-  let getParentsControl: string = ``;
+  parentArray = undefined;
+  getParents = ``;
+  getParentsIndexes = ``;
+  getParentsControl = ``;
 
   if (array) {
     _arrayLayer?.forEach((arrayLayer: ArrayFeaturesInterface) => {
@@ -54,90 +58,130 @@ const setInputMethod = (
   }
 
   if (element.input.type === FormInputTypeEnum.File) {
-    code += `
+    code += selectFileToUpload(object, element, array);
+    code += deleteFileToUpload(object, element, array);
+  }
+
+  if (element.input.apiRequest) {
+    code += setInputRequestToFind(object, element, array);
+  }
+
+  return code;
+};
+
+const selectFileToUpload = (
+  object: MainInterface,
+  element: FormElementInterface,
+  array: ArrayInterface | undefined = undefined
+) => {
+  if (!element.input) {
+    return;
+  }
+
+  let code = ``;
+
+  code += `
     async on${TextTransformation.capitalization(
-      element.input.name
-    )}FileSelected(${array ? `${TextTransformation.singularize(array.id)}: any, ` : ``
-      }event: any) {
+    element.input.name
+  )}FileSelected(${array ? `${TextTransformation.singularize(array.id)}: any, ` : ``
+    }event: any) {
         if (event.target.files.length > 0) {
           for (let i = 0; i < event.target.files.length; i++) {
           ${array
-        ? `
+      ? `
             const file = event.target.files[i];
-            const bufferFiles = await fileListToBase64([file]);
 
-            let ${object.form?.id}Files = ${TextTransformation.singularize(array.id)}
+            const ${object.form?.id}Files = ${TextTransformation.singularize(array.id)}
             .get('${element.input.name}')?.value || [];
 
-            ${object.form?.id}Files.push({
-              name: file.name,
-              fileName: file.name,
-              base64: bufferFiles[0],
-            });
+            ${object.form?.id}Files.push(file);
 
             ${TextTransformation.singularize(array.id)}.patchValue({
               ${element.input.name}: ${object.form?.id}Files
             });
           `
-        : `
+      : `
             const file = event.target.files[i];
-            const bufferFiles = await fileListToBase64([file]);
 
-            let ${object.form?.id}Files = this.${object.form?.id}Form.value.${element.input.name} || [];
+            const ${object.form?.id}Files = this.${object.form?.id}Form.value.${element.input.name} || [];
 
-            ${object.form?.id}Files.push({
-              name: file.name,
-              fileName: file.name,
-              base64: bufferFiles[0],
-            });
+            ${object.form?.id}Files.push(file);
             
             this.${object.form?.id}Form.get("${element.input.name}")?.setValue(${object.form?.id}Files);
           `
-      }
+    }
         }
       }
     }
-    
+    `;
+
+  return code;
+};
+
+const deleteFileToUpload = (
+  object: MainInterface,
+  element: FormElementInterface,
+  array: ArrayInterface | undefined = undefined
+) => {
+  if (!element.input) {
+    return;
+  }
+
+  let code = ``;
+
+  code += `
     delete${TextTransformation.capitalization(element.input.name)}File(${array ? `value: any, ` : ``
-      }index: number) {
+    }index: number) {
         ${array
-        ? `
+      ? `
       const files = value.value;
       files.splice(index, 1);
       value.setValue(files);
       `
-        : `
+      : `
       let files = this.${object.form?.id}Form.value.${element.input.name};
       files.splice(index, 1);
       this.${object.form?.id}Form.get("${element.input.name}")?.setValue(files);
       `
-      }
+    }
     }
     `;
+
+  return code;
+};
+
+const setInputRequestToFind = (
+  object: MainInterface,
+  element: FormElementInterface,
+  array: ArrayInterface | undefined = undefined
+) => {
+  if (!element.input) {
+    return;
   }
 
-  if (element.input.apiRequest) {
-    code += `
+  let code = ``;
+
+  code += `
     set${TextTransformation.pascalfy(
-      element.input.name
-    )}InputRequestToFind = async (${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
-      }${array ? `${TextTransformation.singularize(array.id)}Index: number` : ``
-      }) => {
+    element.input.name
+  )}InputRequestToFind = async (${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
+    }${array ? `${TextTransformation.singularize(array.id)}Index: number` : ``
+    }) => {
       try {
         const array: any = await this._${object.form?.id}Service.${element.input.name
-      }InputRequestToFind(this.${object.form?.id}Form.
+    }InputRequestToFind(this.${object.form?.id}Form.
           ${array
-        ? `get([${getParentsControl && getParentsControl !== ""
-          ? `${getParentsControl}, `
-          : ``
-        }${array
-          ? `"${array.id}", ${TextTransformation.singularize(
-            array.id
-          )}Index, `
-          : ``
-        }"${element.input.name}"])?.value);`
-        : `value?.${element.input.name});`
-      }
+      ? `get([${getParentsControl && getParentsControl !== ""
+        ? `${getParentsControl}, `
+        : ``
+      }${array
+        ? `"${array.id}", ${TextTransformation.singularize(
+          array.id
+        )}Index, `
+        : ``
+      }"${element.input.name}"])?.value);`
+      : `value?.${element.input.name});`
+    }
         if (array.data) {
           ${fillFieldsOverApiRequest(object, element, array)}
         }
@@ -150,17 +194,16 @@ const setInputMethod = (
     };
 
     callSet${TextTransformation.pascalfy(
-        element.input.name
-      )}InputRequestToFind = MyPerformance.debounce((${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
-      }${array ? `${TextTransformation.singularize(array.id)}Index: number` : ``
-      })=> this.set${TextTransformation.pascalfy(
-        element.input.name
-      )}InputRequestToFind(${getParentsIndexes && getParentsIndexes !== ""
-        ? `${getParentsIndexes?.replace(/: number/g, "")}, `
-        : ""
-      }${array ? `${TextTransformation.singularize(array.id)}Index` : ``}));
+      element.input.name
+    )}InputRequestToFind = MyPerformance.debounce((${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
+    }${array ? `${TextTransformation.singularize(array.id)}Index: number` : ``
+    })=> this.set${TextTransformation.pascalfy(
+      element.input.name
+    )}InputRequestToFind(${getParentsIndexes && getParentsIndexes !== ""
+      ? `${getParentsIndexes?.replace(/: number/g, "")}, `
+      : ""
+    }${array ? `${TextTransformation.singularize(array.id)}Index` : ``}));
     `;
-  }
 
   return code;
 };

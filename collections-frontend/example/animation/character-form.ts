@@ -45,7 +45,7 @@ export const CHARACTER_FORM: MainInterface = {
                     endpoint: "animations",
                     labelField: "name",
                     valueField: "_id",
-                    paramsToFilter: ["name", "startDate"],
+                    paramsToFilter: ["name"],
                     paramType: ParamTypeEnum.Query,
                   },
                   isRequired: true,
