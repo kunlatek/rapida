@@ -55,8 +55,6 @@ const setFormControllerConstructorArguments = (
     }
           ${_selectToEdit}
 
-          ${_autocompleteToEdit}
-
           this.${object.form.id}Form.patchValue(this.${object.form.id
     }ToEdit.data);
 
@@ -255,8 +253,8 @@ const setSelectToEdit = (
           code += `})`;
         }
         code += `
-        this.${object.form?.id}ToEdit.data.${element.autocomplete.name} = this.${object.form?.id}ToEdit.data.${element.autocomplete.name}
-        .map((element: any) => element.${element.autocomplete.optionsApi.valueField});
+        this.${object.form?.id}ToEdit.data.${element.select.name} = this.${object.form?.id}ToEdit.data.${element.select.name}
+        .map((element: any) => element.${element.select.optionsApi.valueField});
         `;
       }
     }
