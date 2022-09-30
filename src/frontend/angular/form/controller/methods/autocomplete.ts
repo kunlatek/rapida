@@ -18,11 +18,11 @@ const setAutocompleteMethod = (
   element: FormElementInterface,
   array: ArrayInterface | undefined = undefined
 ): string => {
-  let code = ``;
-
   if (!element.autocomplete) {
-    return code;
+    return ``;
   }
+
+  let code = ``;
 
   let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
     process.env.ARRAY_LAYER!
