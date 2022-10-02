@@ -17,7 +17,7 @@ const setControllerImports = (object: MainInterface): string => {
   import {LocaleEnum} from '../enums/locale.enum';
   import {HttpDocumentation, HttpResponseToClient, Autentikigo} from '../implementations/index';
   import {IHttpResponse} from '../interfaces/http.interface';
-  import {ChartService, StorageService} from '../services';
+  import {ChartService, StorageService, ${TextTransformation.pascalfy(modelName)}Service} from '../services';
   import {serverMessages} from '../utils/server-messages';
   const ${TextTransformation.pascalfy(modelName)}Schema = require('../mongoose-schemas/${TextTransformation.kebabfy(modelName)}.schema');
   `;

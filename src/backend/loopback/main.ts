@@ -5,6 +5,7 @@ import { FormElementInterface } from "../../interfaces/form";
 import { BuildedBackendCode, MainInterface } from "../../interfaces/main";
 import { controllerMain } from "./controller/main";
 import { schemaMain } from "./schema/main";
+import { serviceMain } from "./service/main";
 
 const createLoopbackProject = (
   object: MainInterface,
@@ -13,6 +14,7 @@ const createLoopbackProject = (
   let response: BuildedBackendCode = {
     controller: "",
     mongooseSchema: "",
+    service: "",
   };
 
   if (!doesProjectFolderExists(object)) {
@@ -22,10 +24,12 @@ const createLoopbackProject = (
   if (object.form) {
     const controllerCode = controllerMain(object);
     const mongooseSchemaCode = schemaMain(object, index);
+    const serviceCode = serviceMain(object);
 
     response = {
       controller: controllerCode,
       mongooseSchema: mongooseSchemaCode,
+      service: serviceCode,
     };
   }
 
