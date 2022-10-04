@@ -518,38 +518,28 @@ const filterAutocompleteOption = (
       return;
     })}\``
     }
-        
-        await lastValueFrom(this._${object.form?.id
-    }Service.${autocompleteName}SelectObjectGetAll(filter.replace("},]", "}]")))
-        .then((result: any) => {
-          this.filtered${autocompleteNamePascal} = result.data.result;
-          ${array && getParentsIndexes && getParentsIndexes !== ""
+
+      const result: any = await lastValueFrom(this._${object.form?.id}Service
+      .${autocompleteName}SelectObjectGetAll(filter.replace("},]", "}]")));
+    
+      this.filtered${autocompleteNamePascal} = result.data.result;
+      ${array && getParentsIndexes && getParentsIndexes !== ""
       ? `this.loading${autocompleteNamePascal}[${getParentsIndexes?.split(": number")[0]
       }] = false;`
       : `this.loading${autocompleteNamePascal} = false;`
     }
-        })
-        ${!element.autocomplete.optionsApi.externalEndpoint
-      ? `.catch(async err => {
-            if (err.error.logMessage === 'jwt expired') {
+  }
+    } catch (error: any) {
+      if (error.logMessage === 'jwt expired') {
               await this.refreshToken();
               this.setFiltered${autocompleteNamePascal}(${getParentsIndexes && getParentsIndexes !== ""
-        ? `${getParentsIndexes?.replace(/: number/g, "")}, `
-        : ""
-      }${array ? `${arrayIdSingular}Index` : ``});
+      ? `${getParentsIndexes?.replace(/: number/g, "")}, `
+      : ""
+    }${array ? `${arrayIdSingular}Index` : ``});
             } else {
-                const message = this._errorHandler.apiErrorMessage(err.error.message);
+                const message = this._errorHandler.apiErrorMessage(error.message);
                 this.sendErrorMessage(message);
             };
-        });`
-      : ``
-    }
-      }
-    } catch (error: any) {
-      const message = this._errorHandler.apiErrorMessage(
-        error.message
-      );
-      this.sendErrorMessage(message);
     };
   };`;
 

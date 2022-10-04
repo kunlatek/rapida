@@ -148,11 +148,14 @@ const setFormControllerMethods = (object: MainInterface): string => {
       };
   };
   
-  redirectTo = (uri:string) => {
-      this._router.navigateByUrl('/main', {skipLocationChange: true})
-      .then(() => {
-        this._router.navigate([uri]);
-      });
+  redirectTo = async (uri:string) => {
+    try {
+      await this._router.navigateByUrl('/main', { skipLocationChange: true });
+      this._router.navigate([uri]);
+    } catch (error: any) {
+      const message = this._errorHandler.apiErrorMessage(error.message);
+      this.sendErrorMessage(message);
+    }
   };
   
   checkOptionsCreation = async(functions: Array<Function>, index: number) => {

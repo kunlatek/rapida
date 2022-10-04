@@ -57,10 +57,9 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
   set${TextTransformation.pascalfy(
       table.id
     )}Service = async (params: HttpParams, isPagination: boolean) => {
-    await lastValueFrom(this._${table.id}Service
-      .getAll(params))
-      .then((result: any) => {
-        const currentData = ${hasInfiniteScroll
+    try {
+      const result: any = await lastValueFrom(this._${table.id}Service.getAll(params));
+      const currentData = ${hasInfiniteScroll
       ? "this.dataSource.matTableDataSource.data"
       : "this.dataSource"
     }
@@ -77,17 +76,16 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
       : "this.dataSource"
     } = newData;
         this.isLoading = false;
-      })
-      .catch(async (err: any) => {
-        if (err.error.logMessage === "jwt expired") {
+    } catch (error: any) {
+      if (error.logMessage === "jwt expired") {
           await this.refreshToken();
           this._setFiltersParams();
         } else {
-          const message = this._errorHandler.apiErrorMessage(err.error.message);
+          const message = this._errorHandler.apiErrorMessage(error.message);
           this.isLoading = false;
           this.sendErrorMessage(message);
         }
-      });
+    }
   };
 
   ${_hasRemoveConfirmationDialog
@@ -146,12 +144,15 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
 
   ${_hasRemoveConfirmationDialog
       ? `
-      redirectTo = (uri: string) => {
-        this._router
-          .navigateByUrl("/main", { skipLocationChange: true })
-          .then(() => {
-            this._router.navigate([uri]);
-          });
+      
+      redirectTo = async (uri: string) => {
+        try {
+          await this._router.navigateByUrl('/main', { skipLocationChange: true });
+          this._router.navigate([uri]);
+        } catch (error: any) {
+          const message = this._errorHandler.apiErrorMessage(error.message);
+          this.sendErrorMessage(message);
+        }
       };
       `
       : ``
