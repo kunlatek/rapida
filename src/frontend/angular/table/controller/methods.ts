@@ -56,9 +56,9 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
 
   set${TextTransformation.pascalfy(
       table.id
-    )}Service = (params: HttpParams, isPagination: boolean) => {
-    this._${table.id}Service
-      .getAll(params)
+    )}Service = async (params: HttpParams, isPagination: boolean) => {
+    await lastValueFrom(this._${table.id}Service
+      .getAll(params))
       .then((result: any) => {
         const currentData = ${hasInfiniteScroll
       ? "this.dataSource.matTableDataSource.data"
@@ -107,7 +107,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
                   ? this._router.url.split(\`/\${this.${table.id}Id}\`)[0]
                   : this._router.url;
               this.isLoading = true;
-              await this._${table.id}Service.delete(res.id);
+              await lastValueFrom(this._${table.id}Service.delete(res.id));
               this.redirectTo(routeToGo);
               this.isLoading = false;
             } catch (error: any) {
@@ -127,7 +127,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
       ? `
     refreshToken = async () => {
       try {
-        const res: any = await this._${table.id}Service.refreshToken();
+        const res: any = await lastValueFrom(this._${table.id}Service.refreshToken());
         if (res) {
           sessionStorage.setItem("token", res?.data.authToken);
           sessionStorage.setItem("refreshToken", res?.data.authRefreshToken);

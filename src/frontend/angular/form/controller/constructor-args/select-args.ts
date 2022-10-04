@@ -121,7 +121,7 @@ const setFormSelectOptionsByElements = (
         const checkboxValueField: string = element.checkbox.optionsApi.valueField;
 
         code += ` 
-        this._${objectId}Service.${checkboxName}SelectObjectGetAll()
+        await lastValueFrom(this._${objectId}Service.${checkboxName}SelectObjectGetAll())
         .then(
           (array: any) => {
             const data = array.data;

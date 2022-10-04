@@ -58,7 +58,7 @@ const setFormService = (
               'Authorization': \`Bearer \${sessionStorage.getItem('refreshToken')}\`
             }
           }
-          ).toPromise();
+          );
         }
         `
       : ``
@@ -90,7 +90,7 @@ const setFormServiceServices = (service: ServiceInterface): string => {
                 ${hasAuthorization}
               }
             }
-          ).toPromise();
+          );
         };
         `;
         break;
@@ -105,7 +105,7 @@ const setFormServiceServices = (service: ServiceInterface): string => {
                 ${hasAuthorization}
               }
             }
-          ).toPromise();
+          );
         };
         `;
         break;
@@ -122,7 +122,7 @@ const setFormServiceServices = (service: ServiceInterface): string => {
               ${hasAuthorization}
             }
           }
-          ).toPromise();
+          );
         };
         `;
         break;
@@ -139,7 +139,7 @@ const setFormServiceServices = (service: ServiceInterface): string => {
                 ${hasAuthorization}
               }
             }
-          ).toPromise();
+          );
         };
         `;
         break;
@@ -154,7 +154,7 @@ const setFormServiceServices = (service: ServiceInterface): string => {
                 ${hasAuthorization}
               }
             }
-          ).toPromise();
+          );
         };
         `;
         break;
@@ -169,7 +169,7 @@ const setFormServiceServices = (service: ServiceInterface): string => {
                 ${hasAuthorization}
               }
             }
-          ).toPromise();
+          );
         };
         `;
         break;
@@ -202,7 +202,7 @@ const setFormServiceServicesOverFormElement = (
                 ${hasAuthorization}
               }
             }
-            ).toPromise();
+            );
         }
         `;
       }
@@ -216,7 +216,7 @@ const setFormServiceServicesOverFormElement = (
                 ${hasAuthorization}
               }
             }
-            ).toPromise();
+            );
         }
         `;
       }
@@ -234,7 +234,7 @@ const setFormServiceServicesOverFormElement = (
                 ${hasAuthorization}
               }
             }
-            ).toPromise();
+            );
         }
         `;
       }
@@ -248,7 +248,7 @@ const setFormServiceServicesOverFormElement = (
                 ${hasAuthorization}
               }
             }
-            ).toPromise();
+            );
         }
         `;
       }
@@ -266,7 +266,7 @@ const setFormServiceServicesOverFormElement = (
               ${hasAuthorization}
             }
           }
-          ).toPromise();
+          );
         }
         `;
       }
@@ -280,7 +280,7 @@ const setFormServiceServicesOverFormElement = (
               ${hasAuthorization}
             }
           }
-          ).toPromise();
+          );
         }
         `;
       }

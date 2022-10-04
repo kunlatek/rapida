@@ -25,6 +25,7 @@ const setTableControllerImports = ({ table }: MainInterface): string => {
   import { MyErrorHandler } from "../../utils/error-handler";
   import { HttpParams } from "@angular/common/http";
   ${_hasDialog ? `import { MatDialog } from "@angular/material/dialog";` : ``}
+  import { lastValueFrom } from 'rxjs';
   ${_hasRemoveConfirmationDialog
       ? `import { RemoveConfirmationDialogComponent } from "../remove-confirmation-dialog/remove-confirmation-dialog.component";`
       : ``

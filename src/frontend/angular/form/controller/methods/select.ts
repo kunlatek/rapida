@@ -20,7 +20,7 @@ const setSelectMethod = (
     code += `
       set${selectNamePascal}SelectObject = async () => {
         try {
-          const array: any = await this._${objectId}Service.${selectName}SelectObjectGetAll();
+          const array: any = await lastValueFrom(this._${objectId}Service.${selectName}SelectObjectGetAll());
           if (array.data?.result) {
             array.data?.result.map((object: any) => {
               this.${selectName}SelectObject.push({

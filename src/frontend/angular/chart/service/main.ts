@@ -39,8 +39,7 @@ const setChartService = (object: MainInterface, mainArray: Array<MainInterface> 
             headers: {
               Authorization: \`Bearer \${sessionStorage.getItem("token")}\`,
             },
-          })
-          .toPromise();
+          });
       }
       
       ${_services}
@@ -54,7 +53,7 @@ const setChartService = (object: MainInterface, mainArray: Array<MainInterface> 
               'Authorization': \`Bearer \${sessionStorage.getItem('refreshToken')}\`
             }
           }
-          ).toPromise();
+          );
         }
         `
       : ``
@@ -103,7 +102,7 @@ const setChartServiceServicesOverChartElement = (
                 ${hasAuthorization}
               }
             }
-          ).toPromise();
+          );
         };
         `;
         break;
@@ -118,7 +117,7 @@ const setChartServiceServicesOverChartElement = (
                 ${hasAuthorization}
               }
             }
-          ).toPromise();
+          );
         };
         `;
         break;
@@ -134,7 +133,7 @@ const setChartServiceServicesOverChartElement = (
               ${hasAuthorization}
             }
           }
-          ).toPromise();
+          );
         };
         `;
         break;
@@ -150,7 +149,7 @@ const setChartServiceServicesOverChartElement = (
                 ${hasAuthorization}
               }
             }
-          ).toPromise();
+          );
         };
         `;
         break;
@@ -165,7 +164,7 @@ const setChartServiceServicesOverChartElement = (
                 ${hasAuthorization}
               }
             }
-          ).toPromise();
+          );
         };
         `;
         break;
@@ -180,7 +179,7 @@ const setChartServiceServicesOverChartElement = (
                 ${hasAuthorization}
               }
             }
-          ).toPromise();
+          );
         };
         `;
         break;

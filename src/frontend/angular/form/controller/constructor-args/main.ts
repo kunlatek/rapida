@@ -55,7 +55,7 @@ const setFormControllerConstructorArguments = (
     
         if (this.${objectId}Id) {
           this.${objectId}ToEdit = 
-          await this._${objectId}Service.find(this.${objectId}Id);
+          await lastValueFrom(this._${objectId}Service.find(this.${objectId}Id));
           ${_hasArray
       ? `this._createAllArray(this.${objectId}ToEdit.data);`
       : ``

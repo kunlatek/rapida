@@ -183,7 +183,7 @@ const setInputRequestToFind = (
       ${array ? `${arrayIdSingular}Index: number` : ``}
     ) => {
       try {
-        const array: any = await this._${objectId}Service
+        const array: any = await lastValueFrom(this._${objectId}Service
         .${inputName}InputRequestToFind(this.${objectId}Form.
         ${array
       ? `get([
@@ -192,8 +192,8 @@ const setInputRequestToFind = (
         : ``
       }
       ${array ? `"${arrayId}", ${arrayIdSingular}Index, ` : ``
-      }"${inputName}"])?.value);`
-      : `value?.${inputName});`
+      }"${inputName}"])?.value));`
+      : `value?.${inputName}));`
     }
         if (array.data) {
           ${fillFieldsOverApiRequest(object, element, array)}

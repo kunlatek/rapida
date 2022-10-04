@@ -40,6 +40,7 @@ const setFormControllerImports = (object: MainInterface): string => {
   ${_hasValidator ? "Validators," : ""} } from "@angular/forms";
   import { ActivatedRoute, Router } from "@angular/router";
   import { MatSnackBar } from "@angular/material/snack-bar";
+  import { lastValueFrom } from 'rxjs';
   ${_hasAutocomplete || _hasInputApiRequest
       ? `import { MyPerformance } from "src/app/utils/performance";`
       : ``

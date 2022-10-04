@@ -44,7 +44,7 @@ const setTableService = ({ table, projectPath }: MainInterface): string => {
               'Authorization': \`Bearer \${sessionStorage.getItem('refreshToken')}\`
             }
           }
-          ).toPromise();
+          );
         }
         `
       : ``
@@ -98,7 +98,7 @@ const setTableServiceServicesOverTableElement = (
                 ${hasAuthorization}
               }
             }
-          ).toPromise();
+          );
         };
         `;
         break;
@@ -113,7 +113,7 @@ const setTableServiceServicesOverTableElement = (
                 ${hasAuthorization}
               }
             }
-          ).toPromise();
+          );
         };
         `;
         break;
@@ -129,7 +129,7 @@ const setTableServiceServicesOverTableElement = (
               ${hasAuthorization}
             }
           }
-          ).toPromise();
+          );
         };
         `;
         break;
@@ -145,7 +145,7 @@ const setTableServiceServicesOverTableElement = (
                 ${hasAuthorization}
               }
             }
-          ).toPromise();
+          );
         };
         `;
         break;
@@ -160,7 +160,7 @@ const setTableServiceServicesOverTableElement = (
                 ${hasAuthorization}
               }
             }
-          ).toPromise();
+          );
         };
         `;
         break;
@@ -175,7 +175,7 @@ const setTableServiceServicesOverTableElement = (
                 ${hasAuthorization}
               }
             }
-          ).toPromise();
+          );
         };
         `;
         break;
