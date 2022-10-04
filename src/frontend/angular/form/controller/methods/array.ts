@@ -166,7 +166,7 @@ const setArrayMethod = (
   
   ${add}${_allParents?.length > 0 && getParentsIndexes !== ""
       ? `(${getParentsIndexes})`
-      : `()`
+      : `(i: any = null)`
     } {
     const new${TextTransformation.pascalfy(
       TextTransformation.singularize(array.id)
@@ -239,6 +239,19 @@ const setArraysToEdit = (array: Array<ArrayInterface>) => {
   return code;
 };
 
+const setArrayOfElementsToCreateArray = (array: Array<ArrayInterface>) => {
+  let code = ``;
+
+  for (let index = 0; index < array.length; index++) {
+    const element = array[index];
+
+    code += `{ element: '${element.id}', addFunction: (v: any) => this.add${TextTransformation.pascalfy(TextTransformation.singularize(element.id))}(v) },
+    `;
+  }
+
+  return code;
+};
+
 export {
   setArrayNames,
   setArrayControls,
@@ -247,4 +260,5 @@ export {
   setArrayIndexesToAdd,
   setArrayMethod,
   setArraysToEdit,
+  setArrayOfElementsToCreateArray,
 };

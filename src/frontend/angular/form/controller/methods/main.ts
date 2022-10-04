@@ -5,7 +5,7 @@ import {
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 import { setArray } from "../../../core/array";
-import { setArraysToEdit } from "./array";
+import { setArrayOfElementsToCreateArray, setArraysToEdit } from "./array";
 import {
   setCondition,
   setConditionOverEdition,
@@ -45,34 +45,70 @@ const setFormControllerMethods = (object: MainInterface): string => {
 
   const code = `
   ${_arrays.length > 0
-      ? `private _createAllArray(data: any, indexArray: any = null) {
-          const arr: any = [];
-          Object.keys(data).forEach((item) => {
-            if (Array.isArray(data[item]) && data[item].length) {
-              arr.push(...data[item]);
-              if (data[item].length > 0) {
-                this.addNewFormArrayItem(item, data[item].length, indexArray);
-              }
-            }
-          });
-          this._createAllFormGroupInArray(arr);
-        }
+      ?
+      `
+      private _createAllArray(data: any) {
+        const addNewFormArrayItem = (
+          functionName: string,
+          array: [],
+          index: number = 0,
+        ) => {
+          const araryOfElementsToCreateArray: any[] = [
+            ${setArrayOfElementsToCreateArray(_arrays)}
+          ]
 
-        private _createAllFormGroupInArray(arr: any) {
-          arr.forEach((element: any, index: number) => {
-            this._createAllArray(element, index);
-          });
-        }
-        
-        private addNewFormArrayItem(functionName: string, howManyTimes: number, indexArr: number) {
-          for (let index = 0; index < howManyTimes; index++) {
-            switch (functionName) {
-              ${_arraysToEdit}
-              default:
-                break;
+          if (araryOfElementsToCreateArray.map(el => el.element).includes(functionName)) {
+            for (let elementIndex = 0; elementIndex < array.length; elementIndex++) {
+
+              const addFunction = araryOfElementsToCreateArray.find(el => el.element === functionName).addFunction
+              addFunction(index)
+
+              const childData: any = array[elementIndex];
+              Object.keys(childData).forEach((item) => {
+                if (Array.isArray(childData[item]) && childData[item].length) {
+                  addNewFormArrayItem(item, childData[item], elementIndex)
+                }
+              })
             }
           }
-        }`
+        }
+
+        Object.keys(data).forEach((item) => {
+          if (Array.isArray(data[item]) && data[item].length) {
+            addNewFormArrayItem(item, data[item])
+          }
+        });
+      }
+    `
+      // `private _createAllArray(data: any, indexArray: any = null) {
+      //     const arr: any = [];
+      //     Object.keys(data).forEach((item) => {
+      //       if (Array.isArray(data[item]) && data[item].length) {
+      //         arr.push(...data[item]);
+      //         if (data[item].length > 0) {
+      //           this.addNewFormArrayItem(item, data[item].length, indexArray);
+      //         }
+      //       }
+      //     });
+      //     this._createAllFormGroupInArray(arr);
+      //   }
+
+      //   private _createAllFormGroupInArray(arr: any) {
+      //     arr.forEach((element: any, index: number) => {
+      //       this._createAllArray(element, index);
+      //     });
+      //   }
+
+      //   private addNewFormArrayItem(functionName: string, howManyTimes: number, indexArr: number) {
+      //     for (let index = 0; index < howManyTimes; index++) {
+      //       switch (functionName) {
+      //         ${_arraysToEdit}
+      //         default:
+      //           break;
+      //       }
+      //     }
+      //   }`
+
       : ``
     }
 
