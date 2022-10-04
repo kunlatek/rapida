@@ -12,7 +12,6 @@ const formMain = async (object: MainInterface): Promise<BuildedFrontendCode> => 
     template: "",
   };
 
-
   try {
     const formControllerCode = await setFormController(object);
     const formServiceCode = await setFormService(object);

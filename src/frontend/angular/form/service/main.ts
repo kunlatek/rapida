@@ -113,8 +113,7 @@ const setFormServiceServices = (service: ServiceInterface): string => {
       case ServiceFunctionsEnum.Save:
         code += `
         save(body: any) {
-          body = convertJsonToFormData(body, null, new FormData())
-
+          body = convertJsonToFormData(body, null, new FormData());
           return this._httpClient.post(
           \`\${this.BASE_URL}/${service.endpoint}\`, 
           body,
@@ -131,8 +130,7 @@ const setFormServiceServices = (service: ServiceInterface): string => {
       case ServiceFunctionsEnum.Update:
         code += `
         update(body: any, id: string) {
-          body = convertJsonToFormData(body, null, new FormData())
-          
+          body = convertJsonToFormData(body, null, new FormData());
           return this._httpClient.put(
             \`\${this.BASE_URL}/${service.endpoint}/\${id}\`, 
             body,
@@ -318,29 +316,26 @@ const setFormServiceArchitectureAndWriteToFile = (
   if (!object.form) {
     return;
   }
-
-  const filePath = `${object.projectPath
-    }/src/app/components/${TextTransformation.kebabfy(
-      object.form.id
-    )}/${TextTransformation.kebabfy(object.form.id)}.service.ts`;
+  const objectId = object.form.id;
+  const objectIdKebab = TextTransformation.kebabfy(objectId);
+  const projectPath = object.projectPath;
+  const filePath = `${projectPath}/src/app/components/${objectIdKebab}/${objectIdKebab}.service.ts`;
 
   try {
     fs.writeFileSync(filePath, code);
     console.info(
-      `File ${TextTransformation.kebabfy(object.form.id)} already exists.`
+      `File ${objectIdKebab} already exists.`
     );
     console.info(`File successfully written in ${filePath}.`);
   } catch (error) {
     console.info(
-      `File ${TextTransformation.kebabfy(object.form.id)} doesn't exist.`
+      `File ${objectIdKebab} doesn't exist.`
     );
 
     try {
       chp.execSync(
-        `ng g c components/${TextTransformation.kebabfy(
-          object.form.id
-        )} --skip-import`,
-        { cwd: object.projectPath }
+        `ng g c components/${objectIdKebab} --skip-import`,
+        { cwd: projectPath }
       );
     } catch (error) {
       console.warn(error);

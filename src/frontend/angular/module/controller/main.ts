@@ -1,11 +1,9 @@
-import * as fs from "fs";
 import * as chp from "child_process";
+import * as fs from "fs";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
 import {
-  setModuleControllerImports,
-  setNgModuleImports,
-  setNgModuleDeclarations,
+  setModuleControllerImports, setNgModuleDeclarations, setNgModuleImports
 } from "./imports";
 
 /**
@@ -18,7 +16,7 @@ const setModuleController = (object: MainInterface, mainArray: Array<MainInterfa
     console.info("Only modules set here");
     return ``;
   }
-  
+
   let _imports = setModuleControllerImports(object);
   let _ngModuleDeclarations = setNgModuleDeclarations(object);
   let _ngModuleImports = setNgModuleImports(object);
@@ -63,11 +61,10 @@ const setModuleControllerArchitectureAndWriteToFile = (
     return ``;
   }
 
-  const filePath = `${
-    object.projectPath
-  }/src/app/modules/${TextTransformation.kebabfy(
-    object.module.id
-  )}/${TextTransformation.kebabfy(object.module.id)}.module.ts`;
+  const filePath = `${object.projectPath
+    }/src/app/modules/${TextTransformation.kebabfy(
+      object.module.id
+    )}/${TextTransformation.kebabfy(object.module.id)}.module.ts`;
 
   try {
     fs.writeFileSync(filePath, code);
@@ -123,28 +120,28 @@ const setModuleControllerLazyLoad = (object: MainInterface) => {
         .search(`path: '${TextTransformation.kebabfy(object.module.id)}'`) >= 0
         ? ""
         : `{path: '${TextTransformation.kebabfy(
-            object.module.id
-          )}', loadChildren: () => import('../${TextTransformation.kebabfy(
-            object.module.id
-          )}/${TextTransformation.kebabfy(
-            object.module.id
-          )}.module').then(m => m.${TextTransformation.setIdToClassName(
-            object.module.id
-          )}Module)}, `;
+          object.module.id
+        )}', loadChildren: () => import('../${TextTransformation.kebabfy(
+          object.module.id
+        )}/${TextTransformation.kebabfy(
+          object.module.id
+        )}.module').then(m => m.${TextTransformation.setIdToClassName(
+          object.module.id
+        )}Module)}, `;
     const editRouteCode =
       file
         .toString()
         .search(`path: '${TextTransformation.kebabfy(object.module.id)}'`) >= 0
         ? ""
         : `{path: '${TextTransformation.kebabfy(
-            object.module.id
-          )}/:id', loadChildren: () => import('../${TextTransformation.kebabfy(
-            object.module.id
-          )}/${TextTransformation.kebabfy(
-            object.module.id
-          )}.module').then(m => m.${TextTransformation.setIdToClassName(
-            object.module.id
-          )}Module)}, `;
+          object.module.id
+        )}/:id', loadChildren: () => import('../${TextTransformation.kebabfy(
+          object.module.id
+        )}/${TextTransformation.kebabfy(
+          object.module.id
+        )}.module').then(m => m.${TextTransformation.setIdToClassName(
+          object.module.id
+        )}Module)}, `;
 
     let code = ``;
 
@@ -165,11 +162,10 @@ const setModuleControllerComponentRoute = (object: MainInterface) => {
     return ``;
   }
 
-  const moduleRoutingPath = `${
-    object.projectPath
-  }/src/app/modules/${TextTransformation.kebabfy(
-    object.module.id
-  )}/${TextTransformation.kebabfy(object.module.id)}-routing.module.ts`;
+  const moduleRoutingPath = `${object.projectPath
+    }/src/app/modules/${TextTransformation.kebabfy(
+      object.module.id
+    )}/${TextTransformation.kebabfy(object.module.id)}-routing.module.ts`;
 
   try {
     const file = fs.readFileSync(moduleRoutingPath);
@@ -177,12 +173,12 @@ const setModuleControllerComponentRoute = (object: MainInterface) => {
       file.toString().search(`const routes: Routes = [];`) >= 0
         ? ""
         : `import { ${TextTransformation.setIdToClassName(
-            object.module.id
-          )}Component } from './${TextTransformation.kebabfy(
-            object.module.id
-          )}.component'; const routes: Routes = [{ path: '', component: ${TextTransformation.setIdToClassName(
-            object.module.id
-          )}Component }];`;
+          object.module.id
+        )}Component } from './${TextTransformation.kebabfy(
+          object.module.id
+        )}.component'; const routes: Routes = [{ path: '', component: ${TextTransformation.setIdToClassName(
+          object.module.id
+        )}Component }];`;
     let code = "";
 
     code = file

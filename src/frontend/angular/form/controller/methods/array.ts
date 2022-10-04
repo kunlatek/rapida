@@ -8,6 +8,9 @@ import { setFormMethodsByElements } from "./method";
 require("dotenv").config();
 
 let _allParents: Array<string> = [];
+let parentArray: string | undefined;
+let getParentsIndexes: string = ``;
+let getParentsControl: string = ``;
 
 const setArrayNames = (arrayId: string): string => {
   let code = ``;
@@ -96,56 +99,66 @@ const setArrayMethod = (
   object: MainInterface,
   array: ArrayInterface
 ): string => {
-  let code = ``;
-
-  if (!array) {
-    return code;
+  if (!array || !object.form) {
+    return "";
   }
+  const objectId = object.form.id;
+  const arrayId = array.id;
+  const arrayIdSingular = TextTransformation.singularize(arrayId);
+  const arrayIdPascalSingular = TextTransformation.pascalfy(arrayIdSingular);
 
-  const add = `add${TextTransformation.pascalfy(
-    TextTransformation.singularize(array.id)
-  )}`;
-  const remove = `remove${TextTransformation.pascalfy(
-    TextTransformation.singularize(array.id)
-  )}`;
+  const add = `add${arrayIdPascalSingular}`;
+  const remove = `remove${arrayIdPascalSingular}`;
 
   let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
     process.env.ARRAY_LAYER!
   );
-  let parentArray: string | undefined;
-  let getParents: string = ``;
-  let getParentsIndexes: string = ``;
 
-  _arrayLayer?.forEach((arrayLayer: ArrayFeaturesInterface) => {
-    if (arrayLayer.name === array.id) {
-      parentArray = arrayLayer.parentArray;
-    }
-  });
+  parentArray = undefined;
+  getParentsIndexes = ``;
+  getParentsControl = ``;
 
-  if (parentArray) {
-    _allParents = [];
-    setAllParents(parentArray);
-
-    _allParents.forEach((parent: string, index: number) => {
-      getParents += `this.${parent}.at(${TextTransformation.singularize(
-        parent
-      )}Index).`;
-      getParentsIndexes += `${TextTransformation.singularize(
-        parent
-      )}Index: number${index < _allParents.length - 1 ? ", " : ""}`;
+  if (array) {
+    _arrayLayer?.forEach((arrayLayer: ArrayFeaturesInterface) => {
+      if (arrayLayer.name === array.id) {
+        parentArray = arrayLayer.parentArray;
+      }
     });
+
+    if (parentArray) {
+      _allParents = [];
+      setAllParents(parentArray);
+
+      _allParents.forEach((parent: string, index: number) => {
+        const singularParent: string = TextTransformation.singularize(parent);
+
+        getParentsIndexes += `${singularParent}Index: number${index < _allParents.length - 1 ? ", " : ""
+          }`;
+        getParentsControl += `"${parent}", ${singularParent}Index${index < _allParents.length - 1 ? ", " : ""
+          }`;
+      });
+    }
   }
+
+  let code = "";
 
   code += `
   ${parentArray
       ? `
     ${array.id}(${getParentsIndexes}) {
-      return ${getParents}get("${array.id}") as FormArray;
+      return this.${objectId}Form.get(
+        [
+          ${getParentsControl && getParentsControl !== ""
+        ? `${getParentsControl}, `
+        : ``
+      }${array ? `"${array.id}"` : ``}
+        ]
+      ) as FormArray;
     }
     `
       : `
     get ${array.id}() {
-      return this.${object.form?.id}Form.get("${array.id}") as FormArray;
+      return this.${objectId}Form.get("${arrayId}") as FormArray;
     };
     `
     }

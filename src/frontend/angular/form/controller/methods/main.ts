@@ -1,4 +1,7 @@
-import { ArrayInterface, FormElementInterface } from "../../../../../interfaces/form";
+import {
+  ArrayInterface,
+  FormElementInterface
+} from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 import { setArray } from "../../../core/array";
@@ -8,7 +11,7 @@ import {
   setConditionOverEdition,
   setConditionsInArray
 } from "./condition";
-import { setMethod, setValueBeforeSubmit } from "./method";
+import { setMethod } from "./method";
 
 let _hasCondition: boolean = false;
 let _hasConditionInArray: boolean = false;
@@ -19,11 +22,10 @@ let _treatmentBeforeSubmitting = ``;
 
 const setFormControllerMethods = (object: MainInterface): string => {
   if (!object.form) {
-    console.info("Only forms set here");
-    return ``;
+    return "";
   }
-
-  _treatmentBeforeSubmitting = ``;
+  const objectId = object.form.id;
+  _treatmentBeforeSubmitting = "";
   _arrays = [];
 
   setArray(object);
@@ -34,10 +36,6 @@ const setFormControllerMethods = (object: MainInterface): string => {
     object.form.elements
   );
   let _methods = setMethod(object);
-  let _valueTreatmentBeforeSubmit = setValueBeforeSubmit(
-    object,
-    object.form.elements
-  );
 
   object.form.elements.forEach((element) => {
     verifyFormElement(object, element);
@@ -46,7 +44,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
   _arraysToEdit = setArraysToEdit(_arrays);
 
   const code = `
-  ${(_arrays.length > 0)
+  ${_arrays.length > 0
       ? `private _createAllArray(data: any, indexArray: any = null) {
           const arr: any = [];
           Object.keys(data).forEach((item) => {
@@ -95,34 +93,34 @@ const setFormControllerMethods = (object: MainInterface): string => {
     }
 
   ${_methods}
-  ${object.form.id}Submit = async (
-    ${object.form?.id}Directive: FormGroupDirective
+  
+  ${objectId}Submit = async (
+    ${objectId}Directive: FormGroupDirective
   ) => {
       this.isLoading = true;
-      ${_valueTreatmentBeforeSubmit}
+
       try {
         if(this.isAddModule) {
-            await this._${object.form.id}Service.save(
-              this.${object.form.id}Form.value
+            await this._${objectId}Service.save(
+              this.${objectId}Form.value
             );
         }
 
         if(!this.isAddModule) {
           ${_treatmentBeforeSubmitting}
-            await this._${object.form.id}Service.update(
-              this.${object.form.id}Form.value,
-              this.${object.form.id}Id
+            await this._${objectId}Service.update(
+              this.${objectId}Form.value,
+              this.${objectId}Id
             );
         }
-        this.redirectTo("main/${TextTransformation.kebabfy(
-      object.form.id.split("Form")[0]
-    )}");
+        this.redirectTo
+        ("main/${TextTransformation.kebabfy(objectId.split("Form")[0])}");
         
         this.isLoading = false;
       } catch (error: any) {
         if (error.logMessage === 'jwt expired') {
           await this.refreshToken();
-          this.${object.form.id}Submit(${object.form?.id}Directive);
+          this.${objectId}Submit(${objectId}Directive);
         } else {
           const message = this._errorHandler.apiErrorMessage(error.message);
           this.isLoading = false;
@@ -130,13 +128,13 @@ const setFormControllerMethods = (object: MainInterface): string => {
         }
       };
       
-      this.${object.form?.id}Form.reset();
-      ${object.form?.id}Directive.resetForm();
+      this.${objectId}Form.reset();
+      ${objectId}Directive.resetForm();
   };
   
   refreshToken = async () => {
       try {
-        const res: any = await this._${object.form.id}Service.refreshToken();
+        const res: any = await this._${objectId}Service.refreshToken();
         if (res) {
           sessionStorage.setItem('token', res?.data.authToken);
           sessionStorage.setItem('refreshToken', res?.data.authRefreshToken);
@@ -186,7 +184,7 @@ const verifyFormElement = (
   if (!object.form) {
     return;
   }
-
+  const objectId = object.form.id;
   const formElements = [
     "input",
     "autocomplete",
@@ -214,15 +212,9 @@ const verifyFormElement = (
     });
   }
 
-  // if (element.input) {
-  //   if (element.input.type === FormInputTypeEnum.File) {
-  //     _hasFile = true;
-  //   }
-  // }
-
   if (element.autocomplete) {
     if (!array) {
-      _treatmentBeforeSubmitting += `this.${object.form.id}Form.get("${element.autocomplete.name}")?.setValue(this.${object.form.id}Form.get("${element.autocomplete.name}")?.value.${element.autocomplete.optionsApi.valueField});`;
+      _treatmentBeforeSubmitting += `this.${objectId}Form.get("${element.autocomplete.name}")?.setValue(this.${objectId}Form.get("${element.autocomplete.name}")?.value.${element.autocomplete.optionsApi.valueField});`;
     }
   }
 

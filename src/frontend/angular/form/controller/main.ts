@@ -22,16 +22,18 @@ const setFormController = (
   mainArray: Array<MainInterface> | undefined = undefined
 ): string => {
   if (!object.form) {
-    console.info("Only forms set here");
     return ``;
   }
 
-  let _methods = setFormControllerMethods(object);
-  let _imports = setFormControllerImports(object);
-  let _properties = setFormControllerProperties(object);
-  let _constructorParams = setFormControllerConstructorParams(object);
-  let _constructorArguments = setFormControllerConstructorArguments(object);
-  let code = ``;
+  const _methods: string = setFormControllerMethods(object);
+  const _imports: string = setFormControllerImports(object);
+  const _properties: string = setFormControllerProperties(object);
+  const _constructorParams: string = setFormControllerConstructorParams(object);
+  const _constructorArguments: string = setFormControllerConstructorArguments(object);
+  const objectIdKebab: string = TextTransformation.kebabfy(object.form.id);
+  const objectIdPascal: string = TextTransformation.pascalfy(object.form.id);
+
+  let code = "";
 
   object.form.elements.forEach((element) => {
     verifyFormElement(element);
@@ -41,16 +43,11 @@ const setFormController = (
   ${_imports}
 
   @Component({
-    selector: "app-${TextTransformation.kebabfy(object.form.id)}",
-    templateUrl: "./${TextTransformation.kebabfy(
-    object.form.id
-  )}.component.html",
-    styleUrls: ["./${TextTransformation.kebabfy(
-    object.form.id
-  )}.component.scss"],
+    selector: "app-${objectIdKebab}",
+    templateUrl: "./${objectIdKebab}.component.html",
+    styleUrls: ["./${objectIdKebab}.component.scss"],
   })
-  export class ${TextTransformation.pascalfy(object.form.id)}Component ${_hasCondition ? `implements OnChanges` : ``
-    }{
+  export class ${objectIdPascal}Component {
     ${_properties}
     
     constructor(
@@ -98,28 +95,22 @@ const setFormArchitectureAndWriteToFile = (
   if (!object.form) {
     return;
   }
+  const objectId = object.form.id;
+  const objectIdKebab = TextTransformation.kebabfy(objectId);
+  const projectPath = object.projectPath;
 
-  const filePath = `${object.projectPath
-    }/src/app/components/${TextTransformation.kebabfy(
-      object.form.id
-    )}/${TextTransformation.kebabfy(object.form.id)}.component.ts`;
+  const filePath = `${projectPath}/src/app/components/${objectIdKebab}/${objectIdKebab}.component.ts`;
 
   try {
     fs.writeFileSync(filePath, code);
-    console.info(
-      `File ${TextTransformation.kebabfy(object.form.id)} already exists.`
-    );
+    console.info(`File ${objectIdKebab} already exists.`);
     console.info(`File successfully written in ${filePath}.`);
   } catch (error) {
-    console.info(
-      `File ${TextTransformation.kebabfy(object.form.id)} doesn't exist.`
-    );
+    console.info(`File ${objectIdKebab} doesn't exist.`);
 
     try {
       chp.execSync(
-        `ng g c components/${TextTransformation.kebabfy(
-          object.form.id
-        )} --skip-import`,
+        `ng g c components/${objectIdKebab} --skip-import`,
         { cwd: object.projectPath }
       );
     } catch (error) {
@@ -132,4 +123,6 @@ const setFormArchitectureAndWriteToFile = (
   }
 };
 
-export { setFormController };
+export {
+  setFormController
+};

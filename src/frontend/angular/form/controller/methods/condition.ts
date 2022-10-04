@@ -234,6 +234,17 @@ const setConditionsInArray = (
   elements: Array<FormElementInterface>,
   array: ArrayInterface | undefined = undefined
 ): string => {
+
+  if (!object.form) {
+    return "";
+  }
+
+  const objectId = object.form.id;
+  const arrayId = array?.id ? array.id : "";
+  const arrayIdSingular = array?.id
+    ? TextTransformation.singularize(arrayId)
+    : "";
+
   const formElements = [
     "input",
     "autocomplete",
@@ -264,12 +275,10 @@ const setConditionsInArray = (
       setAllParents(parentArray);
 
       _allParents.forEach((parent: string, index: number) => {
-        getParentsIndexes += `${TextTransformation.singularize(
-          parent
-        )}Index: number${index < _allParents.length - 1 ? ", " : ""}`;
-        getParentsControl += `"${parent}", ${TextTransformation.singularize(
-          parent
-        )}Index${index < _allParents.length - 1 ? ", " : ""}`;
+        const singularParent: string = TextTransformation.singularize(parent);
+
+        getParentsIndexes += `${singularParent}Index: number${index < _allParents.length - 1 ? ", " : ""}`;
+        getParentsControl += `"${parent}", ${singularParent}Index${index < _allParents.length - 1 ? ", " : ""}`;
       });
     }
   }
@@ -292,7 +301,7 @@ const setConditionsInArray = (
                 value.conditions.elements[0].key
               )} = (${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
                 }${array
-                  ? `${TextTransformation.singularize(array.id)}Index: number, `
+                  ? `${arrayIdSingular}Index: number, `
                   : ``
                 }) => { if (typeof i === "number") {`;
               const stringToSplitExists = code.includes(stringToSplit);
@@ -302,7 +311,7 @@ const setConditionsInArray = (
                 }FormCondition[${getParentsIndexes && getParentsIndexes !== ""
                   ? `${getParentsIndexes?.replace(/: number/g, "")}, `
                   : ""
-                }${array ? `${TextTransformation.singularize(array.id)}Index` : ``
+                }${array ? `${arrayIdSingular}Index` : ``
                 }] = (`;
 
               value.conditions.elements.forEach(
@@ -318,14 +327,12 @@ const setConditionsInArray = (
                     ? `${getParentsControl} ,`
                     : ``
                     }${array
-                      ? `"${array.id}", ${TextTransformation.singularize(
-                        array.id
-                      )}Index, `
+                      ? `"${array.id}", ${arrayIdSingular}Index, `
                       : ``
                     }"])?.value[${getParentsIndexes && getParentsIndexes !== ""
                       ? `${getParentsIndexes.replace(/: number/g, "][")}`
                       : ""
-                    }${TextTransformation.singularize(array.id)}Index]?.${condition.key
+                    }${arrayIdSingular}Index]?.${condition.key
                     } ${condition.comparisonOperator
                       ? ` ${condition.comparisonOperator} `
                       : ` === `

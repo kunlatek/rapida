@@ -40,12 +40,10 @@ const setAutocomplete = (
       setAllParents(parentArray);
 
       _allParents.forEach((parent: string, index: number) => {
-        getParentsIndexes += `${TextTransformation.singularize(
-          parent
-        )}Index: number${index < _allParents.length - 1 ? ", " : ""}`;
-        getParentsControl += `"${parent}", ${TextTransformation.singularize(
-          parent
-        )}Index${index < _allParents.length - 1 ? ", " : ""}`;
+        const singularParent: string = TextTransformation.singularize(parent);
+
+        getParentsIndexes += `${singularParent}Index: number${index < _allParents.length - 1 ? ", " : ""}`;
+        getParentsControl += `"${parent}", ${singularParent}Index${index < _allParents.length - 1 ? ", " : ""}`;
       });
     }
   }

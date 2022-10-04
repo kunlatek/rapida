@@ -15,7 +15,7 @@ export const environment = {
 };
 `;
 
-const db = `animation`;
+const db = "animation";
 const envBackend = `
 PORT=3000
 SERVER_ROOT_URI=http://localhost:3000

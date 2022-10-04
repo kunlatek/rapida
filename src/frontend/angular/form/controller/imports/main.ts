@@ -16,6 +16,8 @@ const setFormControllerImports = (object: MainInterface): string => {
     console.info("Only forms set here");
     return ``;
   }
+  const objectIdKebab: string = TextTransformation.kebabfy(object.form.id);
+  const objectIdPascal: string = TextTransformation.pascalfy(object.form.id);
 
   _hasArray = false;
   _hasValidator = false;
@@ -30,13 +32,15 @@ const setFormControllerImports = (object: MainInterface): string => {
   });
 
   let code = `
-  import { Component, ${_hasAutocompleteMultiple ? `ElementRef, ViewChild,` : ``} ${_hasCondition ? `OnChanges,` : ``
+  import { Component, 
+  ${_hasAutocompleteMultiple ? `ElementRef, ViewChild,` : ``
     }} from "@angular/core";
-  import { FormBuilder, FormGroupDirective, FormGroup, FormControl, ${_hasArray ? "FormArray," : ""
-    } ${_hasValidator ? "Validators," : ""} } from "@angular/forms";
+  import { FormBuilder, FormGroupDirective, FormGroup, FormControl, 
+  ${_hasArray ? "FormArray," : ""} 
+  ${_hasValidator ? "Validators," : ""} } from "@angular/forms";
   import { ActivatedRoute, Router } from "@angular/router";
   import { MatSnackBar } from "@angular/material/snack-bar";
-  ${(_hasAutocomplete || _hasInputApiRequest)
+  ${_hasAutocomplete || _hasInputApiRequest
       ? `import { MyPerformance } from "src/app/utils/performance";`
       : ``
     }
@@ -46,14 +50,8 @@ const setFormControllerImports = (object: MainInterface): string => {
       import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';`
       : ``
     }
-  ${_hasFile
-      ? `import { fileListToBase64 } from "src/app/utils/file";`
-      : ``
-    }
   import { MyErrorHandler } from "../../utils/error-handler";
-  import { ${TextTransformation.pascalfy(
-      object.form.id
-    )}Service } from "./${TextTransformation.kebabfy(object.form.id)}.service";
+  import { ${objectIdPascal}Service } from "./${objectIdKebab}.service";
   `;
 
   return code;

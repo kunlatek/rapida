@@ -13,12 +13,19 @@ const setInput = (
   conditions: string,
   array: ArrayInterface | undefined = undefined
 ) => {
-  let code = ``;
-
-  if (!element.input) {
-    return code;
+  if (!object.form || !element.input) {
+    return "";
   }
 
+  const objectId = object.form.id;
+  const inputName = element.input.name;
+  const inputNamePascal = TextTransformation.pascalfy(inputName);
+  const arrayId = array?.id ? array.id : "";
+  const arrayIdSingular = array?.id
+    ? TextTransformation.singularize(arrayId)
+    : "";
+
+  let code = ``;
   let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
     process.env.ARRAY_LAYER!
   );
@@ -39,27 +46,21 @@ const setInput = (
       setAllParents(parentArray);
 
       _allParents.forEach((parent: string, index: number) => {
-        getParents += `this.${parent}.at(${TextTransformation.singularize(
-          parent
-        )}Index).`;
-        getParentsIndexes += `${TextTransformation.singularize(
-          parent
-        )}Index: number${index < _allParents.length - 1 ? ", " : ""}`;
-        getParentsControl += `"${parent}", ${TextTransformation.singularize(
-          parent
-        )}Index${index < _allParents.length - 1 ? ", " : ""}`;
+        const singularParent: string = TextTransformation.singularize(parent);
+
+        getParents += `this.${parent}.at(${singularParent}Index).`;
+        getParentsIndexes += `${singularParent}Index: number${index < _allParents.length - 1 ? ", " : ""}`;
+        getParentsControl += `"${parent}", ${singularParent}Index${index < _allParents.length - 1 ? ", " : ""}`;
       });
     }
   }
 
   const callMethod = element.input.apiRequest
-    ? `(focusout)="callSet${TextTransformation.pascalfy(
-      element.input.name
-    )}InputRequestToFind(${getParentsIndexes && getParentsIndexes !== ""
+    ? `(focusout)="callSet${inputNamePascal}InputRequestToFind(${getParentsIndexes && getParentsIndexes !== ""
       ? `${getParentsIndexes?.replace(/: number/g, "")}, `
       : ``
     }
-        ${array ? `${TextTransformation.singularize(array.id)}Index` : ""})"`
+        ${array ? `${arrayIdSingular}Index` : ""})"`
     : "";
   const placeholder = element.input.placeholder
     ? `placeholder="${element.input.placeholder}"`
@@ -73,28 +74,24 @@ const setInput = (
 
   if (element.input.type === FormInputTypeEnum.File) {
     code += `
-        <input type="file" class="file-input" (change)="on${TextTransformation.capitalization(
-      element.input.name
-    )}FileSelected(${array ? `_${TextTransformation.singularize(array.id)}, ` : ""}$event)" ${tooltip}
-        #${element.input.name}Upload 
+        <input type="file" class="file-input" (change)="on${inputNamePascal}FileSelected(${array ? `_${arrayIdSingular}, ` : ""}$event)" ${tooltip}
+        #${inputName}Upload 
         onclick="this.value = null" 
         multiple>
         <div class="file-upload">
             <button type="button" mat-raised-button color="primary" 
-            (click)="${element.input.name}Upload.click()">
+            (click)="${inputName}Upload.click()">
                 <mat-icon>attach_file</mat-icon>
                 Enviar arquivo
             </button>
         </div>
         <mat-list>
           <mat-list-item *ngFor="let file of ${array
-        ? `_${TextTransformation.singularize(array.id)}.get('${element.input.name}')?.value; `
-        : `${object.form?.id}Form.value.${element.input.name}; `}index as i;">
+        ? `_${arrayIdSingular}.get('${inputName}')?.value; `
+        : `${object.form?.id}Form.value.${inputName}; `}index as i;">
             <a href="{{file.url}}" target="_blank">{{file.name}}</a>
             <button mat-icon-button type="button"
-            (click)="delete${TextTransformation.capitalization(
-          element.input.name
-        )}File(${array ? `_${TextTransformation.singularize(array.id)}.get('${element.input.name}'), ` : ``}i)">
+            (click)="delete${inputNamePascal}File(${array ? `_${arrayIdSingular}.get('${inputName}'), ` : ``}i)">
               <mat-icon>delete</mat-icon>
             </button>
           </mat-list-item>
@@ -104,14 +101,14 @@ const setInput = (
     code += `
       <mat-form-field class="full-width" ${conditions}>
         <mat-label>${element.input.label}</mat-label>
-          <textarea matInput formControlName="${element.input.name}" ${placeholder} ${tooltip} ${required}>
+          <textarea matInput formControlName="${inputName}" ${placeholder} ${tooltip} ${required}>
         </textarea>
       </mat-form-field>
       `;
   } else if (element.input.type === FormInputTypeEnum.Date) {
     code += `
       <mat-form-field ${conditions}>
-        <input matInput formControlName="${element.input.name}" ${placeholder ? placeholder : `placeholder="${element.input.label}"`
+        <input matInput formControlName="${inputName}" ${placeholder ? placeholder : `placeholder="${element.input.label}"`
       } ${tooltip} ${required} ${mask} ${callMethod} [matDatepicker]="${element.input.name
       }Picker" [disabled]="true">
         <mat-datepicker-toggle matSuffix [for]="${element.input.name
@@ -124,7 +121,7 @@ const setInput = (
     code += `
       <mat-form-field ${conditions}>
         <mat-label>${element.input.label}</mat-label>
-        <input matInput type="${element.input.type}" formControlName="${element.input.name}" ${placeholder} ${tooltip} ${required} ${mask} ${callMethod} autocomplete="new-password">
+        <input matInput type="${element.input.type}" formControlName="${inputName}" ${placeholder} ${tooltip} ${required} ${mask} ${callMethod} autocomplete="new-password">
       </mat-form-field>
       `;
   }

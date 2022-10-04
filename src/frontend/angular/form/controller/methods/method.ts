@@ -3,10 +3,10 @@ import {
   FormElementInterface
 } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
-import { TextTransformation } from "../../../../../utils/text.transformation";
 import { setArrayMethod } from "./array";
 import { setAutocompleteMethod } from "./autocomplete";
 import { setInputMethod } from "./input";
+import { setSelectMethod } from "./select";
 
 const setMethod = (object: MainInterface): string => {
   let code = ``;
@@ -25,36 +25,21 @@ const setFormMethodsByElements = (
   elements: Array<FormElementInterface>,
   array: ArrayInterface | undefined = undefined
 ): string => {
-  let code = ``;
+  let code = "";
+
+  if (!object.form) {
+    return code;
+  }
+
+  const objectId = object.form.id;
+
   elements.forEach((element) => {
     if (element.input) {
       code += setInputMethod(object, element, array);
     }
 
-    if (element.select?.optionsApi) {
-      code += `
-      set${TextTransformation.pascalfy(
-        element.select?.name
-      )}SelectObject = async () => {
-        try {
-          const array: any = await this._${object.form?.id}Service.${element.select.name
-        }SelectObjectGetAll();
-          if (array.data?.result) {
-            array.data?.result.map((object: any) => {
-              this.${element.select?.name}SelectObject.push({
-                label: object.name,
-                value: object._id,
-              });
-            });
-          }
-        } catch (error: any) {
-          const message = this._errorHandler.apiErrorMessage(
-            error.message
-          );
-          this.sendErrorMessage(message);
-        };
-      };
-      `;
+    if (element.select) {
+      code += setSelectMethod(object, element, array);
     }
 
     if (element.autocomplete) {
@@ -75,35 +60,7 @@ const setFormMethodsByElements = (
   return code;
 };
 
-const setValueBeforeSubmit = (
-  object: MainInterface,
-  elements: Array<FormElementInterface>
-): string => {
-  let code = ``;
-
-  elements.forEach((element) => {
-    if (element.input) {
-      // if (element.input.type === FormInputTypeEnum.Date) {
-      //   code += `this.${object.form!.id}Form.get("${
-      //     element.input.name
-      //   }")?.value
-      //   ? this.${object.form!.id}Form.get("${
-      //     element.input.name
-      //   }")?.setValue(this.${object.form!.id}Form.get("${
-      //     element.input.name
-      //   }")?.value.toISOString().split("T")[0])
-      //   : this.${object.form!.id}Form.get("${
-      //     element.input.name
-      //   }");`;
-      // }
-    }
-  });
-
-  return code;
-};
-
 export {
   setMethod,
   setFormMethodsByElements,
-  setValueBeforeSubmit,
 };

@@ -108,12 +108,10 @@ const setArrayTemplate = (
     setAllParents(parentArray);
 
     _allParents.forEach((parent: string, index: number) => {
-      getParents += `this.${parent}.at(${TextTransformation.singularize(
-        parent
-      )}Index).`;
-      getParentsIndexes += `${TextTransformation.singularize(
-        parent
-      )}Index: number${index < _allParents.length - 1 ? ", " : ""}`;
+      const singularParent: string = TextTransformation.singularize(parent);
+
+      getParents += `this.${parent}.at(${singularParent}Index).`;
+      getParentsIndexes += `${singularParent}Index: number${index < _allParents.length - 1 ? ", " : ""}`;
     });
   }
 
@@ -138,8 +136,8 @@ const setArrayTemplate = (
         <mat-list *ngFor="let _${TextTransformation.singularize(
     element.array?.id
   )} of ${element.array?.id}${_allParents?.length > 0 && getParentsIndexes !== ""
-      ? `(${getParentsIndexes.replace(/: number/g, "")})`
-      : ``
+    ? `(${getParentsIndexes.replace(/: number/g, "")})`
+    : ``
     }.controls; index as ${TextTransformation.singularize(
       element.array?.id
     )}Index">
