@@ -29,7 +29,7 @@ ADMIN_USERS=rabbadesalman@gmail.com
 
 const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitation-and-permission";
 const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api";
-const projectPath = "/home/ryzzan/Projects/animation";
+const projectPath = "/home/ryzzan/Projects/a-plus-energy-fundamento";
 
 import { ANIMATION } from "../collections-frontend/example/animation/animation";
 import { ANIMATION_FORM } from "../collections-frontend/example/animation/animation-form";

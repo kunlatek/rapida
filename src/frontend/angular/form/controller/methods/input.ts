@@ -27,7 +27,6 @@ const setInputMethod = (
   let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
     process.env.ARRAY_LAYER!
   );
-
   parentArray = undefined;
   getParents = ``;
   getParentsIndexes = ``;
