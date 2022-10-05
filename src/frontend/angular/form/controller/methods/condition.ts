@@ -19,6 +19,10 @@ const setCondition = (
   elements: Array<FormElementInterface>,
   array: string | undefined = undefined
 ): string => {
+  if (!object.form) {
+    return "";
+  }
+
   const formElements = [
     "input",
     "autocomplete",
@@ -283,7 +287,7 @@ const setConditionsInArray = (
     }
   }
 
-  let code = ``;
+  let code = "";
 
   elements.forEach((element) => {
     const type = Object.keys(element)[0];
@@ -303,7 +307,7 @@ const setConditionsInArray = (
                 }${array
                   ? `${arrayIdSingular}Index: number, `
                   : ``
-                }) => { if (typeof i === "number") {`;
+                }) => {`;
               const stringToSplitExists = code.includes(stringToSplit);
               const conditionMethodExists = code.includes(conditionMethod);
 
@@ -329,7 +333,7 @@ const setConditionsInArray = (
                     }${array
                       ? `"${array.id}", ${arrayIdSingular}Index, `
                       : ``
-                    }"])?.value[${getParentsIndexes && getParentsIndexes !== ""
+                    }])?.value[${getParentsIndexes && getParentsIndexes !== ""
                       ? `${getParentsIndexes.replace(/: number/g, "][")}`
                       : ""
                     }${arrayIdSingular}Index]?.${condition.key
@@ -353,7 +357,7 @@ const setConditionsInArray = (
                 code = codeSplited.join("");
               } else {
                 if (!conditionMethodExists) {
-                  code += `${stringToSplit} ${conditionMethodCode}); } };`;
+                  code += `${stringToSplit} ${conditionMethodCode}); };`;
                 }
               }
 

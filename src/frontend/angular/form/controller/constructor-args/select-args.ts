@@ -48,25 +48,18 @@ const setSelectToEdit = (
       if (element.select.optionsApi) {
         if (array) {
           code += `
-          this.${objectId}ToEdit.data
-          .${_arrayLayer[0].name}?
-          .map((${_arrayLayer[0].name}Element: any) => {`;
+          this.${objectId}ToEdit.data.${_arrayLayer[0].name}?.map((${_arrayLayer[0].name}Element: any) => {`;
           _arrayLayer.forEach((arrayLayerElement: any, index: number) => {
             const arrayLayerName = arrayLayerElement.name;
             if (index > 0) {
               code += `
-              ${_arrayLayer[index - 1].name}Element
-              .${arrayLayerName}?
-              .map((${arrayLayerName}Element: any) => {`;
+              ${_arrayLayer[index - 1].name}Element.${arrayLayerName}?.map((${arrayLayerName}Element: any) => {`;
             }
 
             if (index + 1 === _arrayLayer.length) {
               code += `
-                    ${arrayLayerName}Element.${selectName}?
-                    .map((${selectName}Element: any) => {
-                      ${arrayLayerName}Element.${selectName}
-                      .push(${selectName}Element
-                        .${selectValueField});
+                    ${arrayLayerName}Element.${selectName}?.map((${selectName}Element: any) => {
+                      ${arrayLayerName}Element.${selectName}.push(${selectName}Element.${selectValueField});
                     })
                   `;
             }
@@ -82,8 +75,7 @@ const setSelectToEdit = (
         }
         code += `
         this.${objectId}ToEdit.data.${selectName} = 
-        this.${objectId}ToEdit.data.${selectName}
-        .map((element: any) => {
+        this.${objectId}ToEdit.data.${selectName}.map((element: any) => {
           return element.${selectValueField}
         });
         `;
