@@ -74,13 +74,14 @@ const setAllParents = (lastParent: string) => {
 const setArrayTemplate = (
   object: MainInterface,
   element: FormElementInterface,
-  conditions: string
+  conditions: string,
+  parentsIndexes: any[],
 ) => {
   if (!element.array) {
     return;
   }
 
-  const add = `add${TextTransformation.singularize(
+  const add = `get${TextTransformation.singularize(
     TextTransformation.pascalfy(element.array.id)
   )}`;
   const remove = `remove${TextTransformation.singularize(
@@ -121,43 +122,47 @@ const setArrayTemplate = (
     }
   });
 
-  element.array.elements.forEach((arrayElement) => {
+  for (let arrayElementIndex = 0; arrayElementIndex < element.array.elements.length; arrayElementIndex++) {
+    const arrayElement = element.array.elements[arrayElementIndex];
     arrayStructure += setSpecificStructureOverFormElement(
       object,
       arrayElement,
       element.array,
-      arrayCurrentIndex
+      arrayCurrentIndex,
+      [...parentsIndexes, `${TextTransformation.singularize(element.array.id)}Index`, (arrayElement.array && arrayElement.array.id)],
     );
-  });
+  };
+
+  const parentsIndexesArrayCode = `
+    [
+      ${parentsIndexes
+      .filter(el => el && el.length > 1)
+      .map((el, index) => {
+        if (index % 2 === 0) {
+          return `'${el}'`;
+        } else {
+          return `${el}`;
+        }
+      })
+    }
+    ]
+  `;
 
   code += `
     <div ${conditions}>
       <ng-container formArrayName="${element.array?.id}">
-        <mat-list *ngFor="let _${TextTransformation.singularize(
-    element.array?.id
-  )} of ${element.array?.id}${_allParents?.length > 0 && getParentsIndexes !== ""
-    ? `(${getParentsIndexes.replace(/: number/g, "")})`
-    : ``
-    }.controls; index as ${TextTransformation.singularize(
-      element.array?.id
-    )}Index">
-          <ng-container [formGroupName]="${TextTransformation.singularize(
-      element.array?.id
-    )}Index">
+        <mat-list *ngFor="let _${TextTransformation.singularize(element.array?.id)} of getMultidimensionalArrayValue(${parentsIndexesArrayCode})
+        .controls; index as ${TextTransformation.singularize(element.array?.id)}Index">
+          <ng-container [formGroupName]="${TextTransformation.singularize(element.array?.id)}Index">
             <mat-list-item>
-              ${element.array?.title} {{1 + ${TextTransformation.singularize(
-      element.array?.id
-    )}Index}}
+              ${element.array?.title} {{1 + ${TextTransformation.singularize(element.array?.id)}Index}}
             </mat-list-item>
             <div>
               ${arrayStructure}
             </div>
             <div>
-              <button mat-button type="button" color="warn" (click)="${remove}${_allParents?.length > 0 && getParentsIndexes !== ""
-      ? `(${getParentsIndexes.replace(/: number/g, "")}${_allParents?.length > 0 && getParentsIndexes !== "" ? `, ` : ``
-      }${TextTransformation.singularize(element.array.id)}Index)`
-      : `(${TextTransformation.singularize(element.array.id)}Index)`
-    }">
+              <button mat-button type="button" color="warn" (click)="deleteFromMultidimensionalArray(${parentsIndexesArrayCode}, ${TextTransformation.singularize(element.array.id)}Index)
+              ">
                 Remover ${element.array?.title.toLowerCase()}
               </button>
             </div>
@@ -167,10 +172,8 @@ const setArrayTemplate = (
       </ng-container>
     </div>
     <div style="margin: 10px 0;" ${conditions}>
-      <button mat-raised-button type="button" (click)="${add}${_allParents?.length > 0 && getParentsIndexes !== ""
-      ? `(${getParentsIndexes.replace(/: number/g, "")})`
-      : `()`
-    }">
+      <button mat-raised-button type="button" (click)="addInMultidimensionalArray(${parentsIndexesArrayCode},${add}())
+      ">
         Adicionar ${element.array?.title.toLowerCase()}
       </button>
       <mat-divider></mat-divider>

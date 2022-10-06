@@ -102,13 +102,11 @@ const setArrayMethod = (
   if (!array || !object.form) {
     return "";
   }
-  const objectId = object.form.id;
   const arrayId = array.id;
   const arrayIdSingular = TextTransformation.singularize(arrayId);
   const arrayIdPascalSingular = TextTransformation.pascalfy(arrayIdSingular);
 
-  const add = `add${arrayIdPascalSingular}`;
-  const remove = `remove${arrayIdPascalSingular}`;
+  const get = `get${arrayIdPascalSingular}`;
 
   let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
     process.env.ARRAY_LAYER!
@@ -143,51 +141,26 @@ const setArrayMethod = (
   let code = "";
 
   code += `
-  ${parentArray
-      ? `
-    ${array.id}(${getParentsIndexes}) {
-      return this.${objectId}Form.get(
-        [
-          ${getParentsControl && getParentsControl !== ""
-        ? `${getParentsControl}, `
-        : ``
-      }${array ? `"${array.id}"` : ``}
-        ]
-      ) as FormArray;
-    }
-    `
-      : `
-    get ${array.id}() {
-      return this.${objectId}Form.get("${arrayId}") as FormArray;
-    };
-    `
-    }
-  
-  
-  ${add}${_allParents?.length > 0 && getParentsIndexes !== ""
-      ? `(${getParentsIndexes})`
-      : `(i: any = null)`
-    } {
+  ${get}() {
     const new${TextTransformation.pascalfy(
-      TextTransformation.singularize(array.id)
-    )} = 
+    TextTransformation.singularize(array.id)
+  )} = 
     new FormGroup({${setFormBuilderByElements(array.elements)}});
+
+    return new${TextTransformation.pascalfy(
+    TextTransformation.singularize(array.id)
+  )}
     
+    /*
     this.${array.id}${_allParents?.length > 0 && getParentsIndexes !== ""
       ? `(${getParentsIndexes.replace(/: number/g, "")})`
       : ``
     }.push(new${TextTransformation.pascalfy(
       TextTransformation.singularize(array.id)
     )});
+    */
   };
-  ${remove}(${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ``
-    }${TextTransformation.singularize(array.id)}Index: number) {
-    this.${array.id}${_allParents?.length > 0 && getParentsIndexes !== ""
-      ? `(${getParentsIndexes.replace(/: number/g, "")})`
-      : ``
-    }.removeAt(${TextTransformation.singularize(array.id)}Index);
-  };
-  `;
+ `;
 
   code += setFormMethodsByElements(object, array.elements, array);
 
@@ -245,7 +218,7 @@ const setArrayOfElementsToCreateArray = (array: Array<ArrayInterface>) => {
   for (let index = 0; index < array.length; index++) {
     const element = array[index];
 
-    code += `{ element: '${element.id}', addFunction: (v: any) => this.add${TextTransformation.pascalfy(TextTransformation.singularize(element.id))}(v) },
+    code += `{ element: '${element.id}', getFormGroup: () => this.get${TextTransformation.pascalfy(TextTransformation.singularize(element.id))}() },
     `;
   }
 

@@ -76,7 +76,8 @@ const setSpecificStructureOverFormElement = (
   object: MainInterface,
   element: FormElementInterface,
   array: ArrayInterface | undefined = undefined,
-  arrayCurrentIndexAsParam: string | undefined = undefined
+  arrayCurrentIndexAsParam: string | undefined = undefined,
+  parentsIndexesParam: any[] = [],
 ): string => {
   let code = ``;
   let conditions = setConditions(element, array, arrayCurrentIndexAsParam);
@@ -152,7 +153,12 @@ const setSpecificStructureOverFormElement = (
   }
 
   if (element.array) {
-    code += setArrayTemplate(object, element, conditions);
+    code += setArrayTemplate(
+      object,
+      element,
+      conditions,
+      arrayCurrentIndexAsParam ? [...parentsIndexesParam, arrayCurrentIndexAsParam] : [element.array.id],
+    );
   }
 
   return code;
