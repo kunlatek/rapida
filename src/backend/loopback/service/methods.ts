@@ -224,9 +224,11 @@ const setStorageFileInArrayType = (object: MainInterface): string => {
               hasFileInArrayType = true;
 
               _storageFileToReturn += `
+                let fieldname_${elementValue.name} = fieldname_${relatedId} + '[' + ${relatedId}Index + '][${elementValue.name}]';
+
                 ${TextTransformation.singularize(relatedId)}.${elementValue.name} = [
                   ...(${TextTransformation.singularize(relatedId)}.${elementValue.name} || []),
-                  ...(await this.storageService!.getFilesByFieldname(bodyAndFiles.files || [], '${elementValue.name}') || []),
+                  ...(await this.storageService!.getFilesByFieldname(bodyAndFiles.files || [], fieldname_${elementValue.name}) || []),
                 ]
                 for (let fileIndex = 0; fileIndex < ${TextTransformation.singularize(relatedId)}.${elementValue.name}!.length; fileIndex++) {
                   const file = ${TextTransformation.singularize(relatedId)}.${elementValue.name}![fileIndex];
@@ -243,6 +245,7 @@ const setStorageFileInArrayType = (object: MainInterface): string => {
             } else if (elementProperty.array) {
               _storageFileToReturn +=
                 `
+                let fieldname_${elementProperty.array?.id} = fieldname_${relatedId} + '[' + ${relatedId}Index + '][${elementProperty.array?.id}]';
                 for(
                   let ${elementProperty.array?.id}Index = 0; 
                   ${elementProperty.array?.id}Index < ${TextTransformation.singularize(relatedId)}?.${elementProperty.array?.id}?.length || 0; 
@@ -263,6 +266,7 @@ const setStorageFileInArrayType = (object: MainInterface): string => {
 
       _findRelatedElements +=
         `
+        let fieldname_${value.id} = '${value.id}';
         for(let ${value.id}Index = 0; ${value.id}Index < data.${value.id}?.length!; ${value.id}Index++){
           const ${TextTransformation.singularize(value.id)} = data.${value.id}![${value.id}Index];
           

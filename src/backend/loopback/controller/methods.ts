@@ -371,8 +371,11 @@ const setDeepPopulate = (object: MainInterface): string => {
       if (value.optionsApi) {
         hasPopulatedField = true;
 
+        let deepPopulateOverPopulate = ``;
+        if (value.optionsApi.populate) deepPopulateOverPopulate += `populate: [${setDeepPopulateOverPopulate(value.optionsApi.populate)}],`;
+
         _deepPopulateCode += `
-          {path: '${value.name}'},`;
+          {path: '${value.name}', ${deepPopulateOverPopulate}},`;
       } else if (type === 'array') {
 
         _deepPopulateCode += `
@@ -380,7 +383,7 @@ const setDeepPopulate = (object: MainInterface): string => {
             path: '${value.id}',
             populate: [
               ${deepPopulate(value.elements)}
-            ]
+            ],
           },`;
       }
     });
@@ -398,6 +401,31 @@ const setDeepPopulate = (object: MainInterface): string => {
     ])
     `
     : '';
+};
+
+const setDeepPopulateOverPopulate = (populateArray: string[]) => {
+
+  const createDeepPopulateOverPopulate = (populateArrayOverPopulate: string[]): string => {
+    let code = ``;
+
+    for (let populateIndex = 0; populateIndex < populateArrayOverPopulate.length; populateIndex++) {
+      const element = populateArrayOverPopulate[populateIndex];
+      if (element.includes('.')) {
+        const childPopulateArray = element.split('.');
+        const childPath = childPopulateArray.shift();
+        code += `{path: '${childPath}', populate: [${createDeepPopulateOverPopulate(childPopulateArray)}],},`;
+      } else {
+        code += `{path: '${element}',},`;
+      }
+    }
+
+    return code;
+  };
+
+  return `
+  [
+    ${createDeepPopulateOverPopulate(populateArray)}
+  ],`;
 };
 
 export { setControllerMethods };

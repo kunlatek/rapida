@@ -64,13 +64,13 @@ const setAutocomplete = (
       }ChipList aria-label="Seleção de ${element.autocomplete.label.toLowerCase()}">
           <mat-chip 
             *ngFor="let ${element.autocomplete.name
-      }Item of chosen${TextTransformation.pascalfy(
+      }Item of get${TextTransformation.pascalfy(
         element.autocomplete.name
-      )}View${getParentsIndexes && getParentsIndexes !== ""
-        ? `[${getParentsIndexes.replace(/: number/g, "][")}]`.replace("[]", "")
+      )}(${getParentsIndexes && getParentsIndexes !== ""
+        ? getParentsIndexes?.replace(/: number/g, "")
         : ""
-      }
-      ${array ? `[${TextTransformation.singularize(array.id)}Index]` : ``}"
+      }${getParentsIndexes && getParentsIndexes !== "" && array ? `, ` : ``}${array ? `${TextTransformation.singularize(array.id)}Index` : ``
+      })"
             (removed)="remove${TextTransformation.pascalfy(
         element.autocomplete.name
       )}(
