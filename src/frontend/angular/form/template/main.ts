@@ -80,7 +80,7 @@ const setSpecificStructureOverFormElement = (
   parentsIndexesParam: any[] = [],
 ): string => {
   let code = ``;
-  let conditions = setConditions(element, array, arrayCurrentIndexAsParam);
+  let conditions = setConditions(element, array);
 
   if (element.input) {
     code += setInput(object, element, conditions, array);
@@ -126,7 +126,7 @@ const setSpecificStructureOverFormElement = (
   }
 
   if (element.select) {
-    code += setSelect(object, element, conditions);
+    code += setSelect(object, element, conditions, array);
   }
 
   if (element.slide) {
@@ -160,7 +160,7 @@ const setSpecificStructureOverFormElement = (
       arrayCurrentIndexAsParam ? [...parentsIndexesParam, arrayCurrentIndexAsParam] : [element.array.id],
     );
   }
-
+  code = code.replace(/: number, \)/g, ": number)");
   return code;
 };
 

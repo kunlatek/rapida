@@ -28,7 +28,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
     }
     if (valueToSearch) {
       const filtersToAppend = this._setSearchFilters(valueToSearch);
-      httpParams = httpParams.append('filter', filtersToAppend);
+      httpParams = httpParams.append('filters', filtersToAppend);
     }
     httpParams = httpParams.append('order_by', '_createdAt DESC');
     this.set${TextTransformation.pascalfy(
@@ -39,16 +39,18 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
   private _setSearchFilters(valueToSearch: string) {
     const filters = this.${table.id
     }DisplayedColumns.filter((col) => col !== 'actions').reduce((previous: any, current) => {
-      const param = {
-        [current]: {
-          $regex: valueToSearch,
-          $options: "i"
-        }
-      };
-      previous.or.push(param);
+      if (current !== "undefined") {
+        const param = {
+          [current]: {
+            $regex: valueToSearch,
+            $options: "i"
+          }
+        };
+        previous.$or.push(param);
+      }
       return previous;
     }, {
-      or: []
+      $or: []
     });
 
     return JSON.stringify(filters);
