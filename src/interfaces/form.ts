@@ -188,6 +188,7 @@ export interface AutocompleteApiInterface {
   isDisabled?: boolean;
   isSelected?: boolean;
   todo?: string;
+  populate?: string[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
