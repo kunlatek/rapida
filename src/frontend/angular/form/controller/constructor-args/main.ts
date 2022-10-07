@@ -4,7 +4,7 @@ import {
 } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { setAutocompleteToEdit } from "./autocomplete-args";
-import { setFormSelectOptions, setSelectToEdit } from "./select-args";
+import { setFormSelectOptions } from "./select-args";
 require("dotenv").config();
 
 let _allParents: Array<string> = [];
@@ -27,7 +27,6 @@ const setFormControllerConstructorArguments = (
   _hasArray = false;
   _optionsCreation += setFormSelectOptions(object);
   _autocompleteToEdit += setAutocompleteToEdit(object, object.form.elements);
-  _selectToEdit += setSelectToEdit(object, object.form.elements);
   object.form.elements.forEach((element: any) => {
     verifyFormElement(element);
   });

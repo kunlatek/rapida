@@ -1,5 +1,4 @@
-import { ArrayFeaturesInterface } from "../../../../../interfaces/array";
-import { ArrayInterface, FormElementInterface } from "../../../../../interfaces/form";
+import { FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 
@@ -13,75 +12,6 @@ const setFormSelectOptions = (
   }
 
   code += setFormSelectOptionsByElements(object, object.form.elements);
-
-  return code;
-};
-
-const setSelectToEdit = (
-  object: MainInterface,
-  formElements: FormElementInterface[],
-  array: ArrayInterface | undefined = undefined
-): string => {
-  const objectId = object.form?.id;
-
-  let code = ``;
-
-  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
-    process.env.ARRAY_LAYER!
-  );
-
-  formElements.forEach((element: any) => {
-    if (element.tabs) {
-      element.tabs.forEach((tabElement: any) => {
-        code += setSelectToEdit(object, tabElement.elements);
-      });
-    }
-
-    if (element.array) {
-      code += setSelectToEdit(object, element.array.elements, element.array.id);
-    }
-
-    if (element.select) {
-      const selectName: string = element.select.name;
-      const selectValueField: string = element.select.optionsApi?.valueField;
-
-      if (element.select.optionsApi) {
-        if (array) {
-          code += `
-          this.${objectId}ToEdit.data.${_arrayLayer[0].name}?.map((${_arrayLayer[0].name}Element: any) => {`;
-          _arrayLayer.forEach((arrayLayerElement: any, index: number) => {
-            const arrayLayerName = arrayLayerElement.name;
-            if (index > 0) {
-              code += `
-              ${_arrayLayer[index - 1].name}Element.${arrayLayerName}?.map((${arrayLayerName}Element: any) => {`;
-            }
-
-            if (index + 1 === _arrayLayer.length) {
-              code += `
-                    ${arrayLayerName}Element.${selectName}?.map((${selectName}Element: any) => {
-                      ${arrayLayerName}Element.${selectName}.push(${selectName}Element.${selectValueField});
-                    })
-                  `;
-            }
-          });
-
-          _arrayLayer.forEach((arrayLayerElement: any, index: number) => {
-            if (index > 0) {
-              code += `})`;
-            }
-          });
-
-          code += `})`;
-        }
-        code += `
-        this.${objectId}ToEdit.data.${selectName} = 
-        this.${objectId}ToEdit.data.${selectName}.map((element: any) => {
-          return element.${selectValueField}
-        });
-        `;
-      }
-    }
-  });
 
   return code;
 };
@@ -147,5 +77,4 @@ const setFormSelectOptionsByElements = (
 
 export {
   setFormSelectOptions,
-  setSelectToEdit
 };

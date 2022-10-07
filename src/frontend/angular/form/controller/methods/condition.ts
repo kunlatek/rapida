@@ -60,13 +60,13 @@ const setCondition = (
                 if (!array) {
                   if (index > 0) {
                     code += `${condition.logicalOperator
-                        ? ` ${condition.logicalOperator} `
-                        : ` && `
+                      ? ` ${condition.logicalOperator} `
+                      : ` && `
                       }`;
                   }
                   code += `(this.${condition.key} ${condition.comparisonOperator
-                      ? ` ${condition.comparisonOperator} `
-                      : ` === `
+                    ? ` ${condition.comparisonOperator} `
+                    : ` === `
                     } "${condition.value}");`;
                 }
                 code += `)`;
@@ -125,8 +125,8 @@ const setConditionNotInArray = (
         }`;
     }
     code += `(this.${object.form!.id}Form.get("${condition.key}")?.value ${condition.comparisonOperator
-        ? ` ${condition.comparisonOperator} `
-        : ` === `
+      ? ` ${condition.comparisonOperator} `
+      : ` === `
       } "${condition.value}")`;
   });
 
@@ -181,14 +181,14 @@ const setConditionOverEdition = (
                     }FormCondition`;
                   if (index > 0) {
                     code += `${condition.logicalOperator
-                        ? ` ${condition.logicalOperator} `
-                        : ` && `
+                      ? ` ${condition.logicalOperator} `
+                      : ` && `
                       }`;
                   }
                   code += `_${array.id}.${condition.key}`;
                   code += `${condition.comparisonOperator
-                      ? ` ${condition.comparisonOperator} `
-                      : ` === `
+                    ? ` ${condition.comparisonOperator} `
+                    : ` === `
                     } "${condition.value}"`;
 
                   _conditionMethodsOverEdition.push(
@@ -214,14 +214,14 @@ const setConditionOverEdition = (
                     }FormCondition`;
                   if (index > 0) {
                     code += `${condition.logicalOperator
-                        ? ` ${condition.logicalOperator} `
-                        : ` && `
+                      ? ` ${condition.logicalOperator} `
+                      : ` && `
                       }`;
                   }
                   code += `this.${object.form?.id}Form.get("${condition.key}")?.value`;
                   code += `${condition.comparisonOperator
-                      ? ` ${condition.comparisonOperator} `
-                      : ` === `
+                    ? ` ${condition.comparisonOperator} `
+                    : ` === `
                     } "${condition.value}"`;
 
                   _conditionMethodsOverEdition.push(
@@ -345,14 +345,14 @@ const setConditionsInArray = (
                 (condition: any, index: number) => {
                   if (index > 0) {
                     conditionMethodCode += `${condition.logicalOperator
-                        ? ` ${condition.logicalOperator} `
-                        : ` && `
+                      ? ` ${condition.logicalOperator} `
+                      : ` && `
                       }`;
                   }
 
                   conditionMethodCode += `(this.${object.form!.id}Form.get([${getParentsControl && getParentsControl !== ""
-                      ? `${getParentsControl} ,`
-                      : ``
+                    ? `${getParentsControl} ,`
+                    : ``
                     }${array
                       ? `"${array.id}", ${arrayIdSingular}Index, "${condition.key}"`
                       : ``

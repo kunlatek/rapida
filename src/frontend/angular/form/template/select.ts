@@ -71,9 +71,9 @@ const setSelect = (
     if (array) {
       setCondition += `setConditionIn${TextTransformation.pascalfy(
         element.select.name
-      )}(${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
+      )}(${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? ", " : ""
         }${array
-          ? `${arrayIdSingular}Index: number, `
+          ? `${arrayIdSingular}Index, `
           : ``
         })`;
     }
@@ -94,6 +94,7 @@ const setSelect = (
       </mat-select>
     </mat-form-field>
     `;
+
   return code;
 };
 

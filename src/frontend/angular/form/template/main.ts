@@ -160,7 +160,8 @@ const setSpecificStructureOverFormElement = (
       arrayCurrentIndexAsParam ? [...parentsIndexesParam, arrayCurrentIndexAsParam] : [element.array.id],
     );
   }
-  code = code.replace(/: number, \)/g, ": number)");
+  code = code.replace(/, \)/g, ")");
+  code = code.replace(/: number/g, "");
   return code;
 };
 
