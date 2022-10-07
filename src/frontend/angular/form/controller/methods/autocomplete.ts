@@ -157,6 +157,30 @@ const addMultipleAutocomplete = (
   let code = ``;
 
   code += `
+    get${autocompleteNamePascal}(
+      ${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""}
+      ${array ? `${arrayIdSingular}Index: number, ` : ``
+    }) {
+      try {
+        return this.chosen${autocompleteNamePascal}View${array ? `[${getParentsIndexes && getParentsIndexes !== "" ? `${getParentsIndexes.replace(/: number/g, "][")}` : ""}${arrayIdSingular}Index]` : ``};
+      } catch (e) {
+        ${getParentsIndexes && getParentsIndexes !== "" ?
+      `${getParentsIndexes}${arrayIdSingular}Index`.split(': number').reduce((prev, current, index) => {
+        const lastIndex = index > 0 ? `${getParentsIndexes}${arrayIdSingular}Index`.split(': number')[index - 1] : ``;
+        const indexesCode = prev.indexesCode += (index > 0 ? `[${lastIndex}]` : '');
+        const code = prev.code += `
+                  if (this.chosen${autocompleteNamePascal}View${indexesCode}.length <= ${current}) this.chosen${autocompleteNamePascal}View.push(
+                    ${'['.repeat(getParentsIndexes.split(': number').length - index)}${']'.repeat(getParentsIndexes.split(': number').length - index)}
+                  )`;
+        return { indexesCode, code, };
+      }, { code: ``, indexesCode: `` }).code
+      : ``
+    }
+        
+        return this.chosen${autocompleteNamePascal}View${array ? `[${getParentsIndexes ? `${getParentsIndexes.replace(/: number/g, "][")}` : ""}${arrayIdSingular}Index]` : ``};
+      }
+    };
+
     add${autocompleteNamePascal}(${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
     }${array ? `${arrayIdSingular}Index: number, ` : ``
     }event: MatChipInputEvent): void {
