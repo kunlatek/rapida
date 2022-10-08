@@ -1,6 +1,6 @@
 import {
   FormButtonTypeEnum,
-  FormInputTypeEnum, ServiceFunctionsEnum
+  FormInputTypeEnum, ParamTypeEnum, ServiceFunctionsEnum
 } from "../../../src/enums/form";
 import { MainInterface } from "../../../src/interfaces/main";
 
@@ -93,21 +93,21 @@ export const ANIMATION_FORM: MainInterface = {
                               type: FormInputTypeEnum.File,
                             }
                           },
-                          // {
-                          //   autocomplete: {
-                          //     label: "Personagem principal do episódio",
-                          //     name: "episodeCharacters",
-                          //     type: FormInputTypeEnum.Text,
-                          //     optionsApi: {
-                          //       labelField: "name",
-                          //       valueField: "_id",
-                          //       paramsToFilter: ["name"],
-                          //       endpoint: "characters",
-                          //       paramType: ParamTypeEnum.Query
-                          //     },
-                          //     isMultiple: true,
-                          //   }
-                          // },
+                          {
+                            autocomplete: {
+                              label: "Personagem principal do episódio",
+                              name: "episodeCharacters",
+                              type: FormInputTypeEnum.Text,
+                              optionsApi: {
+                                labelField: "name",
+                                valueField: "_id",
+                                paramsToFilter: ["name"],
+                                endpoint: "characters",
+                                paramType: ParamTypeEnum.Query
+                              },
+                              isMultiple: true,
+                            }
+                          },
                         ]
                       }
                     }
