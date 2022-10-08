@@ -60,13 +60,13 @@ const setCondition = (
                 if (!array) {
                   if (index > 0) {
                     code += `${condition.logicalOperator
-                      ? ` ${condition.logicalOperator} `
-                      : ` && `
+                        ? ` ${condition.logicalOperator} `
+                        : ` && `
                       }`;
                   }
                   code += `(this.${condition.key} ${condition.comparisonOperator
-                    ? ` ${condition.comparisonOperator} `
-                    : ` === `
+                      ? ` ${condition.comparisonOperator} `
+                      : ` === `
                     } "${condition.value}");`;
                 }
                 code += `)`;
@@ -125,8 +125,8 @@ const setConditionNotInArray = (
         }`;
     }
     code += `(this.${object.form!.id}Form.get("${condition.key}")?.value ${condition.comparisonOperator
-      ? ` ${condition.comparisonOperator} `
-      : ` === `
+        ? ` ${condition.comparisonOperator} `
+        : ` === `
       } "${condition.value}")`;
   });
 
@@ -137,8 +137,7 @@ const setConditionNotInArray = (
 
 const setConditionOverEdition = (
   object: MainInterface,
-  elements: Array<FormElementInterface>,
-  array: ArrayInterface | undefined = undefined
+  elements: Array<FormElementInterface>
 ): string => {
   const formElements = [
     "input",
@@ -150,7 +149,190 @@ const setConditionOverEdition = (
     "slide",
     "array",
   ];
+
   let code = ``;
+
+  elements.forEach((element) => {
+    if (element.tabs) {
+      element.tabs.forEach((tab) => {
+        code += setConditionOverEdition(object, tab.elements);
+      });
+    }
+
+    if (element.array) {
+      code += setConditionOverEditionInArray(
+        object,
+        element.array.elements,
+        element.array
+      );
+    }
+
+    if (!element.array && !element.tabs) {
+      code += setConditionOverEditionInNotArray(object, elements);
+    }
+  });
+
+  return code;
+};
+
+const setConditionOverEditionInArray = (
+  object: MainInterface,
+  elements: Array<FormElementInterface>,
+  array: ArrayInterface
+): string => {
+  if (!object.form) {
+    return "";
+  }
+  const formElements = [
+    "input",
+    "autocomplete",
+    "button",
+    "checkbox",
+    "radio",
+    "select",
+    "slide",
+    "array",
+  ];
+  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
+
+  let code = ``;
+
+  elements.forEach((element) => {
+    const type = Object.keys(element)[0];
+    const value = Object.values(element)[0];
+
+    if (formElements.includes(type)) {
+      if (value.conditions) {
+        let parentArray: string | undefined;
+        let getParentsIndexesToCondition: string = ``;
+        let getParentsControlToCondition: string = ``;
+        if (value.conditions.type === ConditionEnum.Form) {
+          if (
+            !_conditionMethodsOverEdition.includes(
+              value.name ? value.name : value.id
+            )
+          ) {
+            let conditionId = "";
+            _arrayLayer?.forEach((arrayLayer: ArrayFeaturesInterface) => {
+              if (arrayLayer.name === array.id) {
+                parentArray = arrayLayer.parentArray;
+              }
+            });
+
+            if (parentArray) {
+              _allParents = [];
+              setAllParents(parentArray);
+              _allParents.reverse().forEach((parent: string, index: number) => {
+                const singularParent: string =
+                  TextTransformation.singularize(parent);
+                getParentsIndexesToCondition += `${singularParent}Index: number${index < _allParents.length - 1 ? ", " : ""
+                  }`;
+                getParentsControlToCondition += `"${parent}", ${singularParent}Index${index < _allParents.length - 1 ? ", " : ""
+                  }`;
+                code += `
+                this.${object.form?.id}Form.get([`;
+                code += `${getParentsControlToCondition}]`
+                  .replace(/, ]/g, "]")
+                  .replace(/,]/g, "]")
+                  .replace(`, ${singularParent}Index]`, "]");
+                code += `)?.value.forEach((`;
+                code += `_${parent}: any, 
+                  ${singularParent}Index: number
+                ) => {
+                `;
+              });
+            }
+
+            code += `
+            this.${object.form?.id}Form
+            .get([${getParentsControlToCondition}, "${array.id}"])?.value.forEach((
+              _${array.id}: any, 
+              ${array.id}Index: number
+            ) => {
+              if(
+            `;
+
+            value.conditions.elements.forEach(
+              (condition: ConditionElementInterface, index: number) => {
+                conditionId = `${value.name ? value.name : value.id
+                  }FormCondition`;
+                if (index > 0) {
+                  code += `${condition.logicalOperator
+                      ? ` ${condition.logicalOperator} `
+                      : ` && `
+                    }`;
+                }
+                code += `_${array.id}.${condition.key}`;
+                code += `${condition.comparisonOperator
+                    ? ` ${condition.comparisonOperator} `
+                    : ` === `
+                  } "${condition.value}"`;
+
+                _conditionMethodsOverEdition.push(
+                  value.name ? value.name : value.id
+                );
+              }
+            );
+
+            code += `) {
+              this.${conditionId}[${getParentsIndexesToCondition
+                ? `${getParentsIndexesToCondition.replace(/: number/g, "][")}`
+                : ""
+              }${array.id}Index] = true;
+            }
+            });`;
+
+            if (parentArray) {
+              _allParents.reverse().forEach((parent: string, index: number) => {
+                code += `
+                  });
+                  `;
+              });
+            }
+          }
+        }
+      }
+    }
+
+    if (element.tabs) {
+      element.tabs.forEach((tab) => {
+        code += setConditionOverEdition(object, tab.elements);
+      });
+    }
+
+    if (element.array) {
+      code += setConditionOverEditionInArray(
+        object,
+        element.array.elements,
+        element.array
+      );
+    }
+  });
+
+  return code;
+};
+
+const setConditionOverEditionInNotArray = (
+  object: MainInterface,
+  elements: Array<FormElementInterface>
+): string => {
+  if (!object.form) {
+    return "";
+  }
+  const formElements = [
+    "input",
+    "autocomplete",
+    "button",
+    "checkbox",
+    "radio",
+    "select",
+    "slide",
+    "array",
+  ];
+
+  let code = "";
 
   elements.forEach((element) => {
     const type = Object.keys(element)[0];
@@ -165,75 +347,36 @@ const setConditionOverEdition = (
             )
           ) {
             let conditionId = "";
-            if (array) {
-              code += `
-              this.${object.form?.id}Form
-              .get("${array.id}")?.value.forEach((
-                _${array.id}: any, 
-                index: number
-              ) => {
-                if(
-              `;
 
-              value.conditions.elements.forEach(
-                (condition: ConditionElementInterface, index: number) => {
-                  conditionId = `${value.name ? value.name : value.id
-                    }FormCondition`;
-                  if (index > 0) {
-                    code += `${condition.logicalOperator
+            code += `              
+              if(
+            `;
+
+            value.conditions.elements.forEach(
+              (condition: ConditionElementInterface, index: number) => {
+                conditionId = `${value.name ? value.name : value.id
+                  }FormCondition`;
+                if (index > 0) {
+                  code += `${condition.logicalOperator
                       ? ` ${condition.logicalOperator} `
                       : ` && `
-                      }`;
-                  }
-                  code += `_${array.id}.${condition.key}`;
-                  code += `${condition.comparisonOperator
+                    }`;
+                }
+                code += `this.${object.form?.id}Form.get("${condition.key}")?.value`;
+                code += `${condition.comparisonOperator
                     ? ` ${condition.comparisonOperator} `
                     : ` === `
-                    } "${condition.value}"`;
+                  } "${condition.value}"`;
 
-                  _conditionMethodsOverEdition.push(
-                    value.name ? value.name : value.id
-                  );
-                }
-              );
-
-              code += `) {
-                this.${conditionId}[index] = true;
+                _conditionMethodsOverEdition.push(
+                  value.name ? value.name : value.id
+                );
               }
-              })`;
-            }
+            );
 
-            if (!array) {
-              code += `              
-                if(
-              `;
-
-              value.conditions.elements.forEach(
-                (condition: ConditionElementInterface, index: number) => {
-                  conditionId = `${value.name ? value.name : value.id
-                    }FormCondition`;
-                  if (index > 0) {
-                    code += `${condition.logicalOperator
-                      ? ` ${condition.logicalOperator} `
-                      : ` && `
-                      }`;
-                  }
-                  code += `this.${object.form?.id}Form.get("${condition.key}")?.value`;
-                  code += `${condition.comparisonOperator
-                    ? ` ${condition.comparisonOperator} `
-                    : ` === `
-                    } "${condition.value}"`;
-
-                  _conditionMethodsOverEdition.push(
-                    value.name ? value.name : value.id
-                  );
-                }
-              );
-
-              code += `) {
-                this.${conditionId} = true;
-              }`;
-            }
+            code += `) {
+              this.${conditionId} = true;
+            }`;
           }
         }
       }
@@ -246,7 +389,7 @@ const setConditionOverEdition = (
     }
 
     if (element.array) {
-      code += setConditionOverEdition(
+      code += setConditionOverEditionInArray(
         object,
         element.array.elements,
         element.array
@@ -300,8 +443,7 @@ const setConditionsInArray = (
     if (parentArray) {
       _allParents = [];
       setAllParents(parentArray);
-
-      _allParents.forEach((parent: string, index: number) => {
+      _allParents.reverse().forEach((parent: string, index: number) => {
         const singularParent: string = TextTransformation.singularize(parent);
 
         getParentsIndexes += `${singularParent}Index: number${index < _allParents.length - 1 ? ", " : ""
@@ -345,14 +487,14 @@ const setConditionsInArray = (
                 (condition: any, index: number) => {
                   if (index > 0) {
                     conditionMethodCode += `${condition.logicalOperator
-                      ? ` ${condition.logicalOperator} `
-                      : ` && `
+                        ? ` ${condition.logicalOperator} `
+                        : ` && `
                       }`;
                   }
 
                   conditionMethodCode += `(this.${object.form!.id}Form.get([${getParentsControl && getParentsControl !== ""
-                    ? `${getParentsControl} ,`
-                    : ``
+                      ? `${getParentsControl} ,`
+                      : ``
                     }${array
                       ? `"${array.id}", ${arrayIdSingular}Index, "${condition.key}"`
                       : ``

@@ -43,7 +43,7 @@ const setAutocompleteMethod = (
       _allParents = [];
       setAllParents(parentArray);
 
-      _allParents.forEach((parent: string, index: number) => {
+      _allParents.reverse().forEach((parent: string, index: number) => {
         const singularParent: string = TextTransformation.singularize(parent);
 
         getParentsIndexes += `${singularParent}Index: number${index < _allParents.length - 1 ? ", " : ""

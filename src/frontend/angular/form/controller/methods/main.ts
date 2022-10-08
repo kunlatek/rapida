@@ -203,8 +203,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
     });
   };
   `;
-
-  return code;
+  return code.replace(/\[\, /g, "[");
 };
 
 const verifyFormElement = (

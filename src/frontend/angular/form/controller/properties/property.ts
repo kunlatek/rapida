@@ -52,7 +52,7 @@ const setFormPropertiesByElements = (
       _allParents = [];
       setAllParents(parentArray);
 
-      _allParents.forEach((parent: string, index: number) => {
+      _allParents.reverse().forEach((parent: string, index: number) => {
         const singularParent: string = TextTransformation.singularize(parent);
 
         getParents += `this.${parent}.at(${singularParent}Index).`;
@@ -157,3 +157,4 @@ const setAllParents = (lastParent: string) => {
 export {
   setProperty
 };
+
