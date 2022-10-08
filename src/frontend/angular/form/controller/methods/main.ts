@@ -5,7 +5,7 @@ import {
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 import { setArray } from "../../../core/array";
-import { setArrayOfElementsToCreateArray, setArraysToEdit } from "./array";
+import { setArrayOfAutocompleteMultipleElements, setArrayOfElementsToCreateArray, setArraysToEdit } from "./array";
 import {
   setCondition,
   setConditionOverEdition,
@@ -48,14 +48,31 @@ const setFormControllerMethods = (object: MainInterface): string => {
       ?
       `
       private _createAllArray(data: any) {
+        
+        const araryOfElementsToCreateArray: any[] = [
+          ${setArrayOfElementsToCreateArray(_arrays)}
+        ];
+  
+        const araryOfMultipleAutocompleFields: any[] = [
+          ${setArrayOfAutocompleteMultipleElements(object.form.elements)}
+        ];
+
         const addNewFormArrayItem = (
           functionName: string,
           array: any[],
           arrayOfFields: any[],
         ) => {
-          const araryOfElementsToCreateArray: any[] = [
-            ${setArrayOfElementsToCreateArray(_arrays)}
-          ];
+          
+          araryOfMultipleAutocompleFields
+            .filter(el => el.element === functionName)
+            .forEach(el => {
+              this._setAutocompleteAttrToEdit(
+                arrayOfFields,
+                el.view,
+                el.value,
+                array, el.attrs[0], el.attrs[1],
+              )
+            })
 
           if (
             araryOfElementsToCreateArray
@@ -99,6 +116,39 @@ const setFormControllerMethods = (object: MainInterface): string => {
 
       public deleteFromMultidimensionalArray(arrayOfFields: any[], index: number) {
         (this.${objectId}Form.get([...arrayOfFields]) as FormArray).removeAt(index);
+      }
+
+      private _setAutocompleteAttrToEdit(
+        arrayOfFields: any[],
+        arrayView: any[],
+        arrayValue: any[],
+        objectValuesArray: any,
+        viewAttr: any,
+        valueAttr: any,
+      ) {
+        const arrayOfIndexes = arrayOfFields.filter((field, fieldIndex) => fieldIndex % 2 !== 0)
+
+        const setValue = (
+          _arrayView: any[],
+          _arrayValue: any[],
+          _index: number,
+          count: number,
+        ) => {
+          if (count < arrayOfIndexes.length) setValue(_arrayView[_index], _arrayValue[_index], arrayOfIndexes[count++], count++)
+          else {
+            (objectValuesArray || []).forEach((el: any) => {
+              _arrayView.push(el[viewAttr]);
+              _arrayValue.push(el[valueAttr]);
+            });
+          }
+        }
+
+        setValue(
+          arrayView,
+          arrayValue,
+          arrayOfIndexes[0],
+          0,
+        )
       }
     `
       : ``
