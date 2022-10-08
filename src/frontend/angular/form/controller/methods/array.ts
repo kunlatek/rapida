@@ -1,5 +1,5 @@
 import { ArrayFeaturesInterface } from "../../../../../interfaces/array";
-import { ArrayInterface } from "../../../../../interfaces/form";
+import { ArrayInterface, FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 import { setArraysInAFlow } from "../../../core/array";
@@ -225,6 +225,42 @@ const setArrayOfElementsToCreateArray = (array: Array<ArrayInterface>) => {
   return code;
 };
 
+const setArrayOfAutocompleteMultipleElements = (elements: Array<FormElementInterface>) => {
+
+  const getAutocompleteMultiple = (element: FormElementInterface) => {
+    let autocompletMultipleCode = ``;
+
+    if (
+      element.autocomplete &&
+      element.autocomplete.optionsApi &&
+      element.autocomplete.isMultiple
+    ) {
+      autocompletMultipleCode += `{ 
+        element: '${element.autocomplete.name}', 
+        view: this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}View, 
+        value: this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}Value, 
+        attrs: ['${element.autocomplete.optionsApi.labelField}', '${element.autocomplete.optionsApi.valueField}'] 
+      },`;
+    } else if (element.array || element.tabs) {
+      const arrayElements = element.array?.elements || element.tabs?.map(tab => tab.elements).flat();
+      for (let elementIndex = 0; elementIndex < arrayElements!.length; elementIndex++) {
+        const childElement = arrayElements![elementIndex];
+        autocompletMultipleCode += getAutocompleteMultiple(childElement);
+      }
+    }
+
+    return autocompletMultipleCode;
+  };
+
+  let code = ``;
+  for (let elementIndex = 0; elementIndex < elements.length; elementIndex++) {
+    const element = elements[elementIndex];
+    code += getAutocompleteMultiple(element);
+  }
+
+  return code;
+};
+
 export {
   setArrayNames,
   setArrayControls,
@@ -234,4 +270,5 @@ export {
   setArrayMethod,
   setArraysToEdit,
   setArrayOfElementsToCreateArray,
+  setArrayOfAutocompleteMultipleElements,
 };
