@@ -123,8 +123,8 @@ const setFormControllerMethods = (object: MainInterface): string => {
         arrayView: any[],
         arrayValue: any[],
         objectValuesArray: any,
-        viewAttr: any,
-        valueAttr: any,
+        viewAttr: string[],
+        valueAttr: string,
       ) {
         const arrayOfIndexes = arrayOfFields.filter((field, fieldIndex) => fieldIndex % 2 !== 0)
 
@@ -137,7 +137,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
           if (count < arrayOfIndexes.length) setValue(_arrayView[_index], _arrayValue[_index], arrayOfIndexes[count++], count++)
           else {
             (objectValuesArray || []).forEach((el: any) => {
-              _arrayView.push(el[viewAttr]);
+              _arrayView.push(viewAttr.reduce((prev, current, index) => prev += ((index > 0 ? ' - ' : '') + el[current]), ''));
               _arrayValue.push(el[valueAttr]);
             });
           }

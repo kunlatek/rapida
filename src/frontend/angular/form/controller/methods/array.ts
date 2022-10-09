@@ -239,7 +239,7 @@ const setArrayOfAutocompleteMultipleElements = (elements: Array<FormElementInter
         element: '${element.autocomplete.name}', 
         view: this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}View, 
         value: this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}Value, 
-        attrs: ['${element.autocomplete.optionsApi.labelField}', '${element.autocomplete.optionsApi.valueField}'] 
+        attrs: [[${[...element.autocomplete.optionsApi.labelField].map(el => `'${el}'`)}], '${element.autocomplete.optionsApi.valueField}']
       },`;
     } else if (element.array || element.tabs) {
       const arrayElements = element.array?.elements || element.tabs?.map(tab => tab.elements).flat();
