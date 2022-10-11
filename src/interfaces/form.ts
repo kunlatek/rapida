@@ -160,6 +160,7 @@ export interface OptionInterface {
 export interface ApiFormRequest {
   endpoint?: string;
   externalEndpoint?: string;
+  isNotKunlatekResponse?: boolean;
   formFieldsFilledByApiResponse: Array<
     {
       formFieldName: string,

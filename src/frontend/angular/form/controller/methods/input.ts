@@ -195,7 +195,7 @@ const setInputRequestToFind = (
       }"${inputName}"])?.value));`
       : `value?.${inputName}));`
     }
-        if (array.data) {
+        if (array${element.input?.apiRequest?.isNotKunlatekResponse ? "" : ".data"}) {
           ${fillFieldsOverApiRequest(object, element, array)}
         }
       } catch (error: any) {
@@ -287,7 +287,7 @@ const fillFieldsOverApiRequest = (
           }"${e.formFieldName}"])?.`
           : `get("${e.formFieldName}")?.`
         }
-      setValue(array.data.${e.propertyFromApiToFillFormField});`;
+      setValue(array.${element.input?.apiRequest?.isNotKunlatekResponse ? "" : "data."}${e.propertyFromApiToFillFormField});`;
     });
   }
 
