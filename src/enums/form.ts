@@ -78,3 +78,11 @@ export enum ParamTypeEnum {
     Query = "query",
     Path = "path"
 }
+
+export enum RouterTypeEnum {
+    Create = 'create',
+    Read = 'read',
+    ReadOne = 'readOne',
+    Update = 'update',
+    Delete = 'delete',
+}
