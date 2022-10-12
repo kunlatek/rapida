@@ -1,4 +1,4 @@
-import { FormInputTypeEnum } from "../../../../../enums/form";
+import { FormInputTypeEnum, ParamTypeEnum } from "../../../../../enums/form";
 import { ArrayFeaturesInterface } from "../../../../../interfaces/array";
 import {
   ArrayInterface,
@@ -87,7 +87,8 @@ const selectFileToUpload = (
   let code = ``;
 
   code += `
-    async on${inputNamePascal}FileSelected(${arrayIdSingular ? `${arrayIdSingular}: any ,` : ""}event: any) {
+    async on${inputNamePascal}FileSelected(${arrayIdSingular ? `${arrayIdSingular}: any ,` : ""
+    }event: any) {
         if (event.target.files.length > 0) {
           for (let i = 0; i < event.target.files.length; i++) {
           ${array
@@ -173,7 +174,9 @@ const setInputRequestToFind = (
     ? TextTransformation.singularize(arrayId)
     : "";
 
-  let code = ``;
+  let code = "";
+  let mainFilterCode: string = setMainFilterToInputRequestToFind(object, element, array);
+  let otherFiltersCode: string = setOtherFiltersToInputRequestToFind(object, element, array);
 
   code += `
     set${inputNamePascal}InputRequestToFind = 
@@ -183,19 +186,13 @@ const setInputRequestToFind = (
       ${array ? `${arrayIdSingular}Index: number` : ``}
     ) => {
       try {
-        const array: any = await lastValueFrom(this._${objectId}Service
-        .${inputName}InputRequestToFind(this.${objectId}Form.
-        ${array
-      ? `get([
-        ${getParentsControl && getParentsControl !== ""
-        ? `${getParentsControl}, `
-        : ``
-      }
-      ${array ? `"${arrayId}", ${arrayIdSingular}Index, ` : ``
-      }"${inputName}"])?.value));`
-      : `value?.${inputName}));`
-    }
-        if (array${element.input?.apiRequest?.isNotKunlatekResponse ? "" : ".data"}) {
+        const array: any = await lastValueFrom(
+          this._${objectId}Service.${inputName}InputRequestToFind(
+            ${mainFilterCode}, ${otherFiltersCode}
+          )
+        );
+        if (array${element.input?.apiRequest?.isNotKunlatekResponse ? "" : ".data"
+    }) {
           ${fillFieldsOverApiRequest(object, element, array)}
         }
       } catch (error: any) {
@@ -221,6 +218,101 @@ const setInputRequestToFind = (
     `;
 
   return code;
+};
+
+const setMainFilterToInputRequestToFind = (
+  object: MainInterface,
+  element: FormElementInterface,
+  array: ArrayInterface | undefined = undefined
+): string => {
+  if (!object.form || !element.input) {
+    return "";
+  }
+
+  const objectId = object.form.id;
+  const inputName = element.input.name;
+  const arrayId = array?.id ? array.id : "";
+  const arrayIdSingular = array?.id
+    ? TextTransformation.singularize(arrayId)
+    : "";
+
+  let mainFilterCode: string = "";
+
+  mainFilterCode += `this.${objectId}Form.
+        ${array
+      ? `get([
+            ${getParentsControl && getParentsControl !== ""
+        ? `${getParentsControl}, `
+        : ``
+      }
+            "${arrayId}", ${arrayIdSingular}Index, "${inputName}"])?.value`
+      : `value?.${inputName}`
+    }
+  `;
+
+  return mainFilterCode;
+};
+
+const setOtherFiltersToInputRequestToFind = (
+  object: MainInterface,
+  element: FormElementInterface,
+  array: ArrayInterface | undefined = undefined
+): string => {
+  if (!object.form || !element.input) {
+    return "";
+  }
+
+  const objectId = object.form.id;
+  const inputName = element.input.name;
+  const arrayId = array?.id ? array.id : "";
+  const arrayIdSingular = array?.id
+    ? TextTransformation.singularize(arrayId)
+    : "";
+  const apiRequest = element.input.apiRequest;
+
+  let otherFiltersCode: string = "[";
+
+  if (apiRequest) {
+    if (apiRequest.filtersFromOtherFormFields) {
+      if (apiRequest.paramType === ParamTypeEnum.Query) {
+        apiRequest.filtersFromOtherFormFields.forEach((otherFilters: any) => {
+          otherFiltersCode += `{ 
+            filterProperty: "${otherFilters.filterPropertyName}",
+            filterValue: this.${objectId}Form.
+          ${array
+              ? `get([
+        ${getParentsControl && getParentsControl !== ""
+                ? `${getParentsControl}, `
+                : ``
+              }
+      ${array ? `"${arrayId}", ${arrayIdSingular}Index, ` : ``
+              }"${otherFilters.formFieldName}"])?.value`
+              : `value?.${otherFilters.formFieldName}`
+            }},`;
+        });
+      }
+
+      if (apiRequest.paramType === ParamTypeEnum.Path) {
+        apiRequest.filtersFromOtherFormFields.forEach((otherFilters: any) => {
+          otherFiltersCode += `&${otherFilters.propertyFromApiToFillFormField}/
+          ${array
+              ? `get([
+        ${getParentsControl && getParentsControl !== ""
+                ? `${getParentsControl}, `
+                : ``
+              }
+      ${array ? `"${arrayId}", ${arrayIdSingular}Index, ` : ``
+              }"${otherFilters.formFieldName}"])?.value));`
+              : `value?.${otherFilters.formFieldName}));`
+            }`;
+        });
+      }
+    }
+  }
+
+  otherFiltersCode += "]";
+
+  return otherFiltersCode;
 };
 
 const fillFieldsOverApiRequest = (
@@ -274,20 +366,21 @@ const fillFieldsOverApiRequest = (
     }
   }
 
-  if (element.input) {
-    element.input.apiRequest?.formFieldsFilledByApiResponse.forEach((e) => {
+  if (element.input.apiRequest) {
+    const apiRequest = element.input.apiRequest;
+
+    apiRequest.formFieldsFilledByApiResponse.forEach((e) => {
       code += `this.${objectId}Form.
       ${array
           ? `get([${getParentsControl && getParentsControl !== ""
             ? `${getParentsControl} ,`
             : ``
-          }${array
-            ? `"${array.id}", ${arrayIdSingular}Index, `
-            : ``
-          }"${e.formFieldName}"])?.`
+          }${array ? `"${array.id}", ${arrayIdSingular}Index, ` : ``}"${e.formFieldName
+          }"])?.`
           : `get("${e.formFieldName}")?.`
         }
-      setValue(array.${element.input?.apiRequest?.isNotKunlatekResponse ? "" : "data."}${e.propertyFromApiToFillFormField});`;
+      setValue(array.${apiRequest.isNotKunlatekResponse ? "" : "data."}${e.propertyFromApiToFillFormField
+        });`;
     });
   }
 

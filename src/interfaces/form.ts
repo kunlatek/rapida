@@ -158,12 +158,19 @@ export interface OptionInterface {
 }
 
 export interface ApiFormRequest {
+  paramType: ParamTypeEnum;
   endpoint?: string;
   externalEndpoint?: string;
   isNotKunlatekResponse?: boolean;
+  filtersFromOtherFormFields?: Array<
+    {
+      formFieldName: string;
+      filterPropertyName: string;
+    }
+  >;
   formFieldsFilledByApiResponse: Array<
     {
-      formFieldName: string,
+      formFieldName: string;
       propertyFromApiToFillFormField: string;
     }
   >;

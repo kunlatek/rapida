@@ -1,6 +1,6 @@
 import * as chp from "child_process";
 import * as fs from "fs";
-import { ServiceFunctionsEnum } from "../../../../enums/form";
+import { ParamTypeEnum, ServiceFunctionsEnum } from "../../../../enums/form";
 import {
   FormElementInterface,
   ServiceInterface
@@ -192,12 +192,19 @@ const setFormServiceServicesOverFormElement = (
   let code = ``;
 
   if (element.input) {
-    if (element.input.apiRequest) {
-      if (element.input.apiRequest.endpoint) {
+    const apiRequest = element.input.apiRequest;
+
+    if (apiRequest) {
+      if (apiRequest.endpoint && (apiRequest.paramType === ParamTypeEnum.Path)) {
         code += `
-          ${element.input.name}InputRequestToFind(param: string) {
+          ${element.input.name}InputRequestToFind(filter: string, otherFilters: any = []) {
+            if (otherFilters.length > 0) {
+              otherFilters.forEach((otherFilter: any) => {
+                filter += \`/\${otherFilter.filterProperty}/\${otherFilter.filterValue}\`;
+              });
+            }
             return this._httpClient.get(
-              \`\${this.BASE_URL}/${element.input.apiRequest.endpoint}/\${param}\`, {
+              \`\${this.BASE_URL}/${apiRequest.endpoint}/\${filter}\`, {
               headers: {
                 ${hasAuthorization}
               }
@@ -207,11 +214,54 @@ const setFormServiceServicesOverFormElement = (
         `;
       }
 
-      if (element.input.apiRequest.externalEndpoint) {
+      if (apiRequest.endpoint && (apiRequest.paramType === ParamTypeEnum.Query)) {
         code += `
-          ${element.input.name}InputRequestToFind(filter: string = "") {
+          ${element.input.name}InputRequestToFind(filter: string, otherFilters: any = []) {
+            if (otherFilters.length > 0) {
+              otherFilters.forEach((otherFilter: any) => {
+                filter += \`&\${otherFilter.filterProperty}=\${otherFilter.filterValue}\`;
+              });
+            }
             return this._httpClient.get(
-              \`${element.input.apiRequest.externalEndpoint}\${filter}\`, {
+              \`\${this.BASE_URL}/${apiRequest.endpoint}\${filter}\`, {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+            );
+        }
+        `;
+      }
+
+      if (apiRequest.externalEndpoint && (apiRequest.paramType === ParamTypeEnum.Query)) {
+        code += `
+          ${element.input.name}InputRequestToFind(filter: string = "", otherFilters: any = []) {
+            if (otherFilters.length > 0) {
+              otherFilters.forEach((otherFilter: any) => {
+                filter += \`&\${otherFilter.filterProperty}=\${otherFilter.filterValue}\`;
+              });
+            }
+            return this._httpClient.get(
+              \`${apiRequest.externalEndpoint}\${filter}\`, {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+            );
+        }
+        `;
+      }
+
+      if (apiRequest.externalEndpoint && (apiRequest.paramType === ParamTypeEnum.Path)) {
+        code += `
+          ${element.input.name}InputRequestToFind(filter: string = "", otherFilters: any = []) {
+            if (otherFilters.length > 0) {
+              otherFilters.forEach((otherFilter: any) => {
+                filter += \`/\${otherFilter.filterProperty}/\${otherFilter.filterValue}\`;
+              });
+            }
+            return this._httpClient.get(
+              \`${apiRequest.externalEndpoint}/\${filter}\`, {
               headers: {
                 ${hasAuthorization}
               }
