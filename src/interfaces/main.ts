@@ -1,4 +1,5 @@
 import { BackendFrameworkEnum, FrontendFrameworkEnum } from "../enums/main";
+import { RouterTypeEnum } from './../enums/form';
 import { ChartInterface } from './chart';
 import { FormInterface } from "./form";
 import { ListInterface } from './list';
@@ -25,6 +26,7 @@ export interface MainInterface {
   tree?: TreeInterface;
   module?: ModuleInterface;
   model?: ModelInterface;
+  publicRoutes?: RouterTypeEnum[];
 };
 
 export interface BuildedFrontendCode {

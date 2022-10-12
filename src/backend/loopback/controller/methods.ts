@@ -1,3 +1,4 @@
+import { RouterTypeEnum } from "../../../enums/form";
 import { FormElementInterface } from "../../../interfaces/form";
 import { MainInterface } from "../../../interfaces/main";
 import { TextTransformation } from "../../../utils/text.transformation";
@@ -15,7 +16,10 @@ const setControllerMethods = (object: MainInterface): string => {
   let _propertiesRelatedFind: string = ``;
 
   let code = `
-  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'createOne'}})
+  ${object.publicRoutes?.includes(RouterTypeEnum.Create) ?
+      `` :
+      `@authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'createOne'}})`
+    }
   @post('/${TextTransformation.plurarize(TextTransformation.kebabfy(modelName))}')
   @response(201, new ${TextTransformation.pascalfy(modelName)}Service().swaggerResponseData('${TextTransformation.pascalfy(modelName)} model instance', 201))
   async create(
@@ -27,8 +31,8 @@ const setControllerMethods = (object: MainInterface): string => {
         const bodyAndFiles: any = await this.storageService.getBodyAndFiles(request, this.httpResponse)
         let data = bodyAndFiles.body;
   
-        const createdBy = this.currentUser?.[securityId] as string;
-        const ownerId = this.currentUser?.ownerId as string;
+        const createdBy = this.currentUser?.[securityId] as string || '';
+        const ownerId = this.currentUser?.ownerId as string || '';
 
         data = await this.${modelName}Service.manageFiles(data, bodyAndFiles);
     
@@ -38,7 +42,7 @@ const setControllerMethods = (object: MainInterface): string => {
           _ownerId: ownerId
         });
         
-        const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+        const tokens = ${object.publicRoutes?.includes(RouterTypeEnum.Create) ? `{};` : `await Autentikigo.refreshToken(this.httpRequest.headers.authorization!);`}
 
         return HttpResponseToClient.createHttpResponse({
           data: dataCreated,
@@ -60,7 +64,10 @@ const setControllerMethods = (object: MainInterface): string => {
       }
   }
   
-  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'read'}})
+  ${object.publicRoutes?.includes(RouterTypeEnum.Read) ?
+      `` :
+      `@authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'read'}})`
+    }
   @get('/${TextTransformation.plurarize(TextTransformation.kebabfy(modelName))}')
   @response(200, new ${TextTransformation.pascalfy(modelName)}Service().swaggerResponseData('Array of ${TextTransformation.pascalfy(modelName)} model instance', 200))
   async find(
@@ -83,7 +90,7 @@ const setControllerMethods = (object: MainInterface): string => {
 
           const total = await ${TextTransformation.pascalfy(modelName)}Schema.countDocuments({"$and": and});
 
-          const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+          const tokens = ${object.publicRoutes?.includes(RouterTypeEnum.Read) ? `{};` : `await Autentikigo.refreshToken(this.httpRequest.headers.authorization!);`}
 
           return HttpResponseToClient.okHttpResponse({
               data: {total: total, result},
@@ -105,7 +112,10 @@ const setControllerMethods = (object: MainInterface): string => {
       }
   }
   
-  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'readOne'}})
+  ${object.publicRoutes?.includes(RouterTypeEnum.ReadOne) ?
+      `` :
+      `@authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'readOne'}})`
+    }
   @get('/${TextTransformation.plurarize(TextTransformation.kebabfy(modelName))}/{id}')
   @response(200, new ${TextTransformation.pascalfy(modelName)}Service().swaggerResponseData('${TextTransformation.pascalfy(modelName)} model instance', 200))
   async findById(
@@ -119,7 +129,7 @@ const setControllerMethods = (object: MainInterface): string => {
           
           if (!data) throw new Error(serverMessages['httpResponse']['notFoundError'][locale ?? LocaleEnum['pt-BR']]);
 
-          const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+          const tokens = ${object.publicRoutes?.includes(RouterTypeEnum.ReadOne) ? `{};` : `await Autentikigo.refreshToken(this.httpRequest.headers.authorization!);`}
       
           return HttpResponseToClient.okHttpResponse({
               data,
@@ -141,7 +151,10 @@ const setControllerMethods = (object: MainInterface): string => {
       }
   }
   
-  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'updateOne'}})
+  ${object.publicRoutes?.includes(RouterTypeEnum.Update) ?
+      `` :
+      `@authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'updateOne'}})`
+    }
   @put('/${TextTransformation.plurarize(TextTransformation.kebabfy(modelName))}/{id}')
   @response(200, new ${TextTransformation.pascalfy(modelName)}Service().swaggerResponseData('${TextTransformation.pascalfy(modelName)} PUT success', 200))
   async updateById(
@@ -158,7 +171,7 @@ const setControllerMethods = (object: MainInterface): string => {
 
         await ${TextTransformation.pascalfy(modelName)}Schema.findByIdAndUpdate(id, data);
         
-        const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+        const tokens = ${object.publicRoutes?.includes(RouterTypeEnum.Update) ? `{};` : `await Autentikigo.refreshToken(this.httpRequest.headers.authorization!);`}
     
         return HttpResponseToClient.noContentHttpResponse({
           tokens,
@@ -179,7 +192,10 @@ const setControllerMethods = (object: MainInterface): string => {
       }
   }
   
-  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'updateOne'}})
+  ${object.publicRoutes?.includes(RouterTypeEnum.Update) ?
+      `` :
+      `@authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'updateOne'}})`
+    }
   @patch('/${TextTransformation.plurarize(TextTransformation.kebabfy(modelName))}/{id}')
   @response(200, new ${TextTransformation.pascalfy(modelName)}Service().swaggerResponseData('${TextTransformation.pascalfy(modelName)} PATCH success', 200))
   async partialUpdateById(
@@ -196,7 +212,7 @@ const setControllerMethods = (object: MainInterface): string => {
 
         await ${TextTransformation.pascalfy(modelName)}Schema.findByIdAndUpdate(id, data);
 
-        const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+        const tokens = ${object.publicRoutes?.includes(RouterTypeEnum.Update) ? `{};` : `await Autentikigo.refreshToken(this.httpRequest.headers.authorization!);`}
     
         return HttpResponseToClient.noContentHttpResponse({
           tokens,
@@ -217,7 +233,10 @@ const setControllerMethods = (object: MainInterface): string => {
       }
   }
   
-  @authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'deleteOne'}})
+  ${object.publicRoutes?.includes(RouterTypeEnum.Delete) ?
+      `` :
+      `@authenticate({strategy: 'autentikigo', options: {collection: '${TextTransformation.pascalfy(modelName)}', action: 'deleteOne'}})`
+    }
   @del('/${TextTransformation.plurarize(TextTransformation.kebabfy(modelName))}/{id}')
   @response(204, new ${TextTransformation.pascalfy(modelName)}Service().swaggerResponseData('${TextTransformation.pascalfy(modelName)} DELETE success', 204))
   async deleteById(
@@ -228,7 +247,7 @@ const setControllerMethods = (object: MainInterface): string => {
   
         await ${TextTransformation.pascalfy(modelName)}Schema.findByIdAndUpdate(id, {_deletedAt: new Date()});
 
-        const tokens = await Autentikigo.refreshToken(this.httpRequest.headers.authorization!)
+        const tokens = ${object.publicRoutes?.includes(RouterTypeEnum.Delete) ? `{};` : `await Autentikigo.refreshToken(this.httpRequest.headers.authorization!);`}
 
         return HttpResponseToClient.noContentHttpResponse({
           tokens,
@@ -413,7 +432,7 @@ const setDeepPopulateOverPopulate = (populateArray: string[]) => {
       if (element.includes('.')) {
         const childPopulateArray = element.split('.');
         const childPath = childPopulateArray.shift();
-        code += `{path: '${childPath}', populate: [${createDeepPopulateOverPopulate(childPopulateArray)}],},`;
+        code += `{path: '${childPath}', populate: [${createDeepPopulateOverPopulate([childPopulateArray.join('.')])}],},`;
       } else {
         code += `{path: '${element}',},`;
       }
