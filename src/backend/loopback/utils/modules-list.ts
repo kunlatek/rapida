@@ -9,11 +9,11 @@ const setUtilsModulesList = (objectList: Array<MainInterface>): void => {
 
   for (let objectIndex = 0; objectIndex < objectList.length; objectIndex++) {
     const object: MainInterface = objectList[objectIndex];
-    const modelName = object.form!.id.replace("Form", "");
+    const modelName = object.module!.id;
 
     code += `{
-      'name': '${object.form!.title}',
-      'icon': '${object.form!.icon || 'dashboard'}',
+      'name': '${object.module!.title}',
+      'icon': '${object.module!.icon || 'dashboard'}',
       'route': '/${TextTransformation.kebabfy(modelName)}',
       'collection': '${TextTransformation.pascalfy(modelName)}',
       'project': project,

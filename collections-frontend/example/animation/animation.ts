@@ -3,7 +3,8 @@ import { MainInterface } from "../../../src/interfaces/main";
 export const ANIMATION: MainInterface = {
     module: {
         id: "animation",
-        title: "Animações",
+        title: "Animação",
+        icon: "theaters",
         components: [
             "animationForm",
             "animationTable",

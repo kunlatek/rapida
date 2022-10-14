@@ -18,7 +18,7 @@ const setBackend = (
     switch (array[index].backendFramework) {
       case BackendFrameworkEnum.Loopback:
         response = createLoopbackProject(array[index], index);
-        setUtilsModulesList(array.filter(object => object.form));
+        setUtilsModulesList(array.filter(object => object.module));
         break;
 
       default:

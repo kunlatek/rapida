@@ -11,7 +11,6 @@ export const CHARACTER_FORM: MainInterface = {
   form: {
     title: "Personagem",
     id: "characterForm",
-    icon: "theater_comedy",
     elements: [
       {
         tabs: [
