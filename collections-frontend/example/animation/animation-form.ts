@@ -14,7 +14,6 @@ export const ANIMATION_FORM: MainInterface = {
           {
             id: "mainTab",
             title: "Dados principais",
-            icon: "theaters",
             elements: [
               {
                 input: {
