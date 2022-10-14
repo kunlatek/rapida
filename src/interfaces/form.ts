@@ -25,6 +25,7 @@ export interface FormInterface {
   attributes?: FormAttributeEnum;
   service?: ServiceInterface;
   todo?: string;
+  icon?: string;
 }
 export interface ServiceInterface {
   baseUrl: string;

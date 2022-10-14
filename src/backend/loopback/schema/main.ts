@@ -46,9 +46,6 @@ const schemaMain = (
   });
 
   module.exports = mongoose.model('${TextTransformation.pascalfy(schemaName)}', ${TextTransformation.pascalfy(schemaName)}Schema, '${TextTransformation.pascalfy(schemaName)}');
-  
-  /* moduleName->${object.form?.title}<- */
-  /* moduleIndex->${index}<- */
   `;
 
   setModelArchitectureAndWriteToFile(object, code);
