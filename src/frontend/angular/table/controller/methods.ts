@@ -165,6 +165,20 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
       createXls = () => {
         const objects: any = ${hasInfiniteScroll ? `this.dataSource.matTableDataSource.filteredData;` : `this.dataSource`}
         let data = objects.map((object: any) => {
+          for (const key in object) {
+            let newStringToObject: string = "";
+            if (Object.prototype.hasOwnProperty.call(object, key)) {
+              let element = object[key];
+              if (typeof element === "object") {
+                newStringToObject += this.treatPopulatedPropertyToXls(element);
+              }
+            }
+
+            if (newStringToObject && newStringToObject != "") {
+              object[key] = newStringToObject;
+            }
+          }
+          
           return this.setNewObject(object);
         });
         const fileName = \`${table.title
@@ -174,6 +188,35 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
         const exportType =  exportFromJSON.types.xls;
 
         exportFromJSON({ data, fileName, exportType });
+      };
+
+      treatPopulatedPropertyToXls = (newObject: any): string => {
+        let newStringToObject: string = "";
+        if (!Array.isArray(newObject)) {
+          for (const newKey in newObject) {
+            if (Object.prototype.hasOwnProperty.call(newObject, newKey)) {
+              const newElement = newObject[newKey];
+              if ((typeof newElement === "string") && (newKey.substring(0, 1) !== "_")) {
+                newStringToObject += \`\${newElement} | \`;
+              }
+            }
+          }
+        }
+
+        if (Array.isArray(newObject)) {
+          newObject.forEach(newObjectElement => {
+            for (const newKey in newObjectElement) {
+              if (Object.prototype.hasOwnProperty.call(newObjectElement, newKey)) {
+                const newElement = newObjectElement[newKey];
+                if ((typeof newElement === "string") && (newKey.substring(0, 1) !== "_")) {
+                  newStringToObject += \`\${newElement} | \`;
+                }
+              }
+            }
+          });
+        }
+
+        return newStringToObject;
       };
 
       setNewObject = (object: any) => {
