@@ -32,7 +32,7 @@ const setFormControllerImports = (object: MainInterface): string => {
   });
 
   let code = `
-  import { Component, 
+  import { Component, Input, OnChanges,
   ${_hasAutocompleteMultiple ? `ElementRef, ViewChild,` : ``
     }} from "@angular/core";
   import { FormBuilder, FormGroupDirective, FormGroup, FormControl, 

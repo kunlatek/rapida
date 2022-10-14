@@ -47,7 +47,7 @@ const setModuleComponents = (module: ModuleInterface): string => {
       <mat-step> 
         <ng-template matStepLabel>${TextTransformation.kebabfy(component)}</ng-template>`;
     }
-    code += `<app-${TextTransformation.kebabfy(component)}></app-${TextTransformation.kebabfy(component)}> `;
+    code += `<app-${TextTransformation.kebabfy(component)} _moduleRelated="${module.title}"></app-${TextTransformation.kebabfy(component)}> `;
     if (forms > 1) {
       code += `</mat-step>`;
     }

@@ -3,15 +3,15 @@ import { createProject } from "./index";
 
 const envFrontDev = `
 export const environment = {
- baseUrl: "http://localhost:3000",
- production: false,
+baseUrl: "http://localhost:3000",
+production: false,
 };
 `;
 
 const envFrontProd = `
 export const environment = {
- baseUrl: "http://localhost:3000",
- production: true,
+baseUrl: "http://localhost:3000",
+production: true,
 };
 `;
 
@@ -23,7 +23,7 @@ MONGO_URL=mongodb+srv://kunlatek:Kunlatek751@cluster0.b0pfr.mongodb.net/__DB_NAM
 DB=animation
 NODEMAILER_USER=administrativo@kunlatek.com
 NODEMAILER_PASS=yetyxhgzjzktuwef
-ADMIN_USERS=contato@kunlatek.com 
+ADMIN_USERS=contato@kunlatek.com
 `;
 
 const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitation-and-permission";

@@ -56,6 +56,7 @@ const setTableControllerProperties = ({ table }: MainInterface, mainArray: Array
   private _page!: number;
   ${hasInfiniteScroll ? `
   ITEM_SIZE = 50;
+  @Input() _moduleRelated!: string;
   @ViewChild(CdkVirtualScrollViewport, { static: true })
   viewPort!: CdkVirtualScrollViewport;
   @ViewChild(MatSort, { static: true }) matSort!: MatSort;

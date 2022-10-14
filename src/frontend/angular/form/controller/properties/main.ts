@@ -18,6 +18,7 @@ const setFormControllerProperties = (object: MainInterface): string => {
   permissionsToCheck = JSON.parse(sessionStorage.getItem("permission")!)[0].modulePermissions;
   updateOnePermission: any;
   createOnePermission: any;
+  @Input() _moduleRelated!: string;
   `;
 
   code += setCondition(object);
