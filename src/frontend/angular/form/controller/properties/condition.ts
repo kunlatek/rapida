@@ -15,8 +15,9 @@ const setCondition = (
   if (!object.form) {
     return "";
   }
-
   let code = ``;
+
+  _conditionProperties = [];
 
   code += setConditionByElements(object, object.form.elements);
 

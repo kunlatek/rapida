@@ -22,7 +22,6 @@ const setCondition = (
   if (!object.form) {
     return "";
   }
-
   const formElements = [
     "input",
     "autocomplete",
@@ -35,6 +34,9 @@ const setCondition = (
   ];
 
   let code = "";
+
+  _conditionMethods = [];
+  _conditionMethodsOverEdition = [];
 
   elements.forEach((element) => {
     const type = Object.keys(element)[0];
@@ -60,13 +62,13 @@ const setCondition = (
                 if (!array) {
                   if (index > 0) {
                     code += `${condition.logicalOperator
-                        ? ` ${condition.logicalOperator} `
-                        : ` && `
+                      ? ` ${condition.logicalOperator} `
+                      : ` && `
                       }`;
                   }
                   code += `(this.${condition.key} ${condition.comparisonOperator
-                      ? ` ${condition.comparisonOperator} `
-                      : ` === `
+                    ? ` ${condition.comparisonOperator} `
+                    : ` === `
                     } "${condition.value}");`;
                 }
                 code += `)`;
@@ -100,6 +102,40 @@ const setConditionNotInArray = (
   if (!object.form) {
     return "";
   }
+  const value: any = Object.values(element)[0];
+
+  let code = "";
+
+  code += `this.${value.name ? value.name : value.id}FormCondition = (`;
+
+  value.conditions.elements.forEach((condition: any, index: number) => {
+    if (index > 0) {
+      code += `${condition.logicalOperator ? ` ${condition.logicalOperator} ` : ` && `
+        }`;
+    }
+    code += `(this.${object.form!.id}Form.get("${condition.key}")?.value ${condition.comparisonOperator
+      ? ` ${condition.comparisonOperator} `
+      : ` === `
+      } "${condition.value}")`;
+  });
+
+  code += `);`;
+
+  return code;
+};
+
+const setConditionsInArray = (
+  object: MainInterface,
+  elements: Array<FormElementInterface>,
+  array: ArrayInterface | undefined = undefined
+): string => {
+  if (!object.form) {
+    return "";
+  }
+  const arrayId = array?.id ? array.id : "";
+  const arrayIdSingular = array?.id
+    ? TextTransformation.singularize(arrayId)
+    : "";
 
   const formElements = [
     "input",
@@ -112,25 +148,123 @@ const setConditionNotInArray = (
     "array",
   ];
 
+  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
+    process.env.ARRAY_LAYER!
+  );
+  let parentArray: string | undefined;
+  let getParentsIndexes: string = ``;
+  let getParentsControl: string = ``;
+
+  if (array) {
+    _arrayLayer?.forEach((arrayLayer: ArrayFeaturesInterface) => {
+      if (arrayLayer.name === array.id) {
+        parentArray = arrayLayer.parentArray;
+      }
+    });
+
+    if (parentArray) {
+      _allParents = [];
+      setAllParents(parentArray);
+      _allParents.reverse().forEach((parent: string, index: number) => {
+        const singularParent: string = TextTransformation.singularize(parent);
+
+        getParentsIndexes += `${singularParent}Index: number${index < _allParents.length - 1 ? ", " : ""
+          }`;
+        getParentsControl += `"${parent}", ${singularParent}Index${index < _allParents.length - 1 ? ", " : ""
+          }`;
+      });
+    }
+  }
+
   let code = "";
 
-  const type = Object.keys(element)[0];
-  const value: any = Object.values(element)[0];
+  elements.forEach((element) => {
+    const type = Object.keys(element)[0];
+    const value = Object.values(element)[0];
 
-  code += `this.${value.name ? value.name : value.id}FormCondition = (`;
+    if (formElements.includes(type)) {
+      if (value.conditions) {
+        if (value.conditions.type === ConditionEnum.Form) {
+          if (!_conditionMethods.includes(value.name ? value.name : value.id)) {
+            if (array) {
+              const conditionMethod = `setConditionIn${TextTransformation.pascalfy(
+                value.conditions.elements[0].key
+              )}`;
+              const stringToSplit = `setConditionIn${TextTransformation.pascalfy(
+                value.conditions.elements[0].key
+              )} = (${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
+                }${array ? `${arrayIdSingular}Index: number, ` : ``}) => {`;
+              const stringToSplitExists = code.includes(stringToSplit);
+              const conditionMethodExists = code.includes(conditionMethod);
 
-  value.conditions.elements.forEach((condition: any, index: number) => {
-    if (index > 0) {
-      code += `${condition.logicalOperator ? ` ${condition.logicalOperator} ` : ` && `
-        }`;
+              let conditionMethodCode = `this.${value.name ? value.name : value.id
+                }FormCondition[${getParentsIndexes && getParentsIndexes !== ""
+                  ? `${getParentsIndexes
+                    .replace(/: number/g, "][")
+                    .replace(/, /g, "")}`
+                  : ""
+                }${arrayIdSingular}Index] = (`;
+
+              value.conditions.elements.forEach(
+                (condition: any, index: number) => {
+                  if (index > 0) {
+                    conditionMethodCode += `${condition.logicalOperator
+                      ? ` ${condition.logicalOperator} `
+                      : ` && `
+                      }`;
+                  }
+
+                  conditionMethodCode += `(this.${object.form!.id}Form.get([${getParentsControl && getParentsControl !== ""
+                    ? `${getParentsControl} ,`
+                    : ``
+                    }${array
+                      ? `"${array.id}", ${arrayIdSingular}Index, "${condition.key}"`
+                      : ``
+                    }])?.value${condition.comparisonOperator
+                      ? ` ${condition.comparisonOperator} `
+                      : ` === `
+                    } ${typeof condition.value !== "string"
+                      ? condition.value
+                      : `"${condition.value}"`
+                    })`;
+                }
+              );
+
+              if (stringToSplitExists) {
+                const codeSplited = code.split(stringToSplit);
+                codeSplited.splice(
+                  1,
+                  0,
+                  `${stringToSplit} ${conditionMethodCode});`
+                );
+                code = codeSplited.join("");
+              } else {
+                if (!conditionMethodExists) {
+                  code += `${stringToSplit} ${conditionMethodCode}); };`;
+                }
+              }
+
+              _conditionMethods.push(value.id);
+            }
+          }
+        }
+      }
     }
-    code += `(this.${object.form!.id}Form.get("${condition.key}")?.value ${condition.comparisonOperator
-        ? ` ${condition.comparisonOperator} `
-        : ` === `
-      } "${condition.value}")`;
-  });
 
-  code += `);`;
+    if (element.tabs) {
+      element.tabs.forEach((tab) => {
+        code += setConditionsInArray(object, tab.elements);
+      });
+    }
+
+    if (element.array) {
+      code += setConditionsInArray(
+        object,
+        element.array.elements,
+        element.array
+      );
+    }
+  });
 
   return code;
 };
@@ -260,14 +394,14 @@ const setConditionOverEditionInArray = (
                   }FormCondition`;
                 if (index > 0) {
                   code += `${condition.logicalOperator
-                      ? ` ${condition.logicalOperator} `
-                      : ` && `
+                    ? ` ${condition.logicalOperator} `
+                    : ` && `
                     }`;
                 }
                 code += `_${array.id}.${condition.key}`;
                 code += `${condition.comparisonOperator
-                    ? ` ${condition.comparisonOperator} `
-                    : ` === `
+                  ? ` ${condition.comparisonOperator} `
+                  : ` === `
                   } "${condition.value}"`;
 
                 _conditionMethodsOverEdition.push(
@@ -358,14 +492,14 @@ const setConditionOverEditionInNotArray = (
                   }FormCondition`;
                 if (index > 0) {
                   code += `${condition.logicalOperator
-                      ? ` ${condition.logicalOperator} `
-                      : ` && `
+                    ? ` ${condition.logicalOperator} `
+                    : ` && `
                     }`;
                 }
                 code += `this.${object.form?.id}Form.get("${condition.key}")?.value`;
                 code += `${condition.comparisonOperator
-                    ? ` ${condition.comparisonOperator} `
-                    : ` === `
+                  ? ` ${condition.comparisonOperator} `
+                  : ` === `
                   } "${condition.value}"`;
 
                 _conditionMethodsOverEdition.push(
@@ -390,153 +524,6 @@ const setConditionOverEditionInNotArray = (
 
     if (element.array) {
       code += setConditionOverEditionInArray(
-        object,
-        element.array.elements,
-        element.array
-      );
-    }
-  });
-
-  return code;
-};
-
-const setConditionsInArray = (
-  object: MainInterface,
-  elements: Array<FormElementInterface>,
-  array: ArrayInterface | undefined = undefined
-): string => {
-  if (!object.form) {
-    return "";
-  }
-
-  const objectId = object.form.id;
-  const arrayId = array?.id ? array.id : "";
-  const arrayIdSingular = array?.id
-    ? TextTransformation.singularize(arrayId)
-    : "";
-
-  const formElements = [
-    "input",
-    "autocomplete",
-    "button",
-    "checkbox",
-    "radio",
-    "select",
-    "slide",
-    "array",
-  ];
-
-  let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
-    process.env.ARRAY_LAYER!
-  );
-  let parentArray: string | undefined;
-  let getParentsIndexes: string = ``;
-  let getParentsControl: string = ``;
-
-  if (array) {
-    _arrayLayer?.forEach((arrayLayer: ArrayFeaturesInterface) => {
-      if (arrayLayer.name === array.id) {
-        parentArray = arrayLayer.parentArray;
-      }
-    });
-
-    if (parentArray) {
-      _allParents = [];
-      setAllParents(parentArray);
-      _allParents.reverse().forEach((parent: string, index: number) => {
-        const singularParent: string = TextTransformation.singularize(parent);
-
-        getParentsIndexes += `${singularParent}Index: number${index < _allParents.length - 1 ? ", " : ""
-          }`;
-        getParentsControl += `"${parent}", ${singularParent}Index${index < _allParents.length - 1 ? ", " : ""
-          }`;
-      });
-    }
-  }
-
-  let code = "";
-
-  elements.forEach((element) => {
-    const type = Object.keys(element)[0];
-    const value = Object.values(element)[0];
-
-    if (formElements.includes(type)) {
-      if (value.conditions) {
-        if (value.conditions.type === ConditionEnum.Form) {
-          if (!_conditionMethods.includes(value.name ? value.name : value.id)) {
-            if (array) {
-              const conditionMethod = `setConditionIn${TextTransformation.pascalfy(
-                value.conditions.elements[0].key
-              )}`;
-              const stringToSplit = `setConditionIn${TextTransformation.pascalfy(
-                value.conditions.elements[0].key
-              )} = (${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
-                }${array ? `${arrayIdSingular}Index: number, ` : ``}) => {`;
-              const stringToSplitExists = code.includes(stringToSplit);
-              const conditionMethodExists = code.includes(conditionMethod);
-
-              let conditionMethodCode = `this.${value.name ? value.name : value.id
-                }FormCondition[${getParentsIndexes && getParentsIndexes !== ""
-                  ? `${getParentsIndexes
-                    .replace(/: number/g, "][")
-                    .replace(/, /g, "")}`
-                  : ""
-                }${arrayIdSingular}Index] = (`;
-
-              value.conditions.elements.forEach(
-                (condition: any, index: number) => {
-                  if (index > 0) {
-                    conditionMethodCode += `${condition.logicalOperator
-                        ? ` ${condition.logicalOperator} `
-                        : ` && `
-                      }`;
-                  }
-
-                  conditionMethodCode += `(this.${object.form!.id}Form.get([${getParentsControl && getParentsControl !== ""
-                      ? `${getParentsControl} ,`
-                      : ``
-                    }${array
-                      ? `"${array.id}", ${arrayIdSingular}Index, "${condition.key}"`
-                      : ``
-                    }])?.value${condition.comparisonOperator
-                      ? ` ${condition.comparisonOperator} `
-                      : ` === `
-                    } ${typeof condition.value !== "string"
-                      ? condition.value
-                      : `"${condition.value}"`
-                    })`;
-                }
-              );
-
-              if (stringToSplitExists) {
-                const codeSplited = code.split(stringToSplit);
-                codeSplited.splice(
-                  1,
-                  0,
-                  `${stringToSplit} ${conditionMethodCode});`
-                );
-                code = codeSplited.join("");
-              } else {
-                if (!conditionMethodExists) {
-                  code += `${stringToSplit} ${conditionMethodCode}); };`;
-                }
-              }
-
-              _conditionMethods.push(value.id);
-            }
-          }
-        }
-      }
-    }
-
-    if (element.tabs) {
-      element.tabs.forEach((tab) => {
-        code += setConditionsInArray(object, tab.elements);
-      });
-    }
-
-    if (element.array) {
-      code += setConditionsInArray(
         object,
         element.array.elements,
         element.array
