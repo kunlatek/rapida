@@ -39,6 +39,7 @@ const setFormControllerConstructorArguments = (
         this.isAddModule = !this.${objectId}Id;
     
         if (this.${objectId}Id) {
+          this.isLoading = true;
           this.${objectId}ToEdit = 
           await lastValueFrom(this._${objectId}Service.find(this.${objectId}Id));
           ${_hasArray

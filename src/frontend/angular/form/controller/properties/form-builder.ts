@@ -65,8 +65,8 @@ const setFormBuilderByElements = (
       `;
       // VALIDATORS
       if (element.input.validators) {
-        code += element.input.validators.forEach((validator) => {
-          return `Validators.${validator},`;
+        element.input.validators.forEach((validator) => {
+          code += `Validators.${validator},`;
         });
       }
       if (element.input.type === FormInputTypeEnum.Email) {
@@ -89,8 +89,8 @@ const setFormBuilderByElements = (
       `;
       // VALIDATORS
       if (element.select.validators) {
-        code += element.select.validators.forEach((validator) => {
-          return `Validators.${validator},`;
+        element.select.validators.forEach((validator) => {
+          code += `Validators.${validator},`;
         });
       }
       if (element.select.type === FormInputTypeEnum.Email) {
@@ -113,8 +113,8 @@ const setFormBuilderByElements = (
       `;
       // VALIDATORS
       if (element.autocomplete.validators) {
-        code += element.autocomplete.validators.forEach((validator) => {
-          return `Validators.${validator},`;
+        element.autocomplete.validators.forEach((validator) => {
+          code += `Validators.${validator},`;
         });
       }
       if (element.autocomplete.type === FormInputTypeEnum.Email) {
@@ -140,8 +140,8 @@ const setFormBuilderByElements = (
       `;
       // VALIDATORS
       if (element.checkbox.validators) {
-        code += element.checkbox.validators.forEach((validator) => {
-          return `Validators.${validator},`;
+        element.checkbox.validators.forEach((validator) => {
+          code += `Validators.${validator},`;
         });
       }
 
@@ -165,8 +165,8 @@ const setFormBuilderByElements = (
       `;
       // VALIDATORS
       if (element.radio.validators) {
-        code += element.radio.validators.forEach((validator) => {
-          return `Validators.${validator},`;
+        element.radio.validators.forEach((validator) => {
+          code += `Validators.${validator},`;
         });
       }
 

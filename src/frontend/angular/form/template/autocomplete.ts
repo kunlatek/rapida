@@ -15,12 +15,19 @@ const setAutocomplete = (
   conditions: string,
   array: ArrayInterface | undefined = undefined
 ) => {
-  let code = ``;
-
   if (!element.autocomplete) {
-    return code;
+    return "";
   }
-
+  const name = element.autocomplete.name;
+  const label = element.autocomplete.label;
+  const labelField = element.autocomplete.optionsApi.labelField;
+  const valueField = element.autocomplete.optionsApi.valueField;
+  const namePascal = TextTransformation.pascalfy(name);
+  const arrayId = array?.id ? array.id : "";
+  const arrayIdSingular = array?.id
+    ? TextTransformation.singularize(arrayId)
+    : "";
+  let code = "";
   let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
     process.env.ARRAY_LAYER!
   );
@@ -55,32 +62,41 @@ const setAutocomplete = (
     ? `matTooltip="${element.autocomplete.tooltip}"`
     : "";
   const required = element.autocomplete.isRequired ? "required" : "";
+  let setCondition = "";
+  if (element.autocomplete.isTriggerToCondition) {
+    setCondition += `(focusout)="`;
 
+    if (array) {
+      setCondition += `setConditionIn${namePascal}(${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? ", " : ""
+        }${array
+          ? `${arrayIdSingular}Index, `
+          : ``
+        })`;
+    }
+
+    if (!array) {
+      setCondition += `setCondition()`;
+    }
+    setCondition += `"`;
+  }
   if (element.autocomplete.isMultiple) {
     code += `
       <mat-form-field class="full-width" ${conditions}>
-        <mat-label>${element.autocomplete.label}</mat-label>
-        <mat-chip-list #${element.autocomplete.name
-      }ChipList aria-label="Seleção de ${element.autocomplete.label.toLowerCase()}">
+        <mat-label}</mat-label>
+        <mat-chip-list #${name}ChipList aria-label="Seleção de ${label.toLowerCase()}">
           <mat-chip 
-            *ngFor="let ${element.autocomplete.name
-      }Item of get${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}(${getParentsIndexes && getParentsIndexes !== ""
+            *ngFor="let ${name}Item of get${namePascal}(${getParentsIndexes && getParentsIndexes !== ""
         ? getParentsIndexes?.replace(/: number/g, "")
         : ""
       }${getParentsIndexes && getParentsIndexes !== "" && array ? `, ` : ``}${array ? `${TextTransformation.singularize(array.id)}Index` : ``
       })"
-            (removed)="remove${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}(
+            (removed)="remove${namePascal}(
               ${getParentsIndexes && getParentsIndexes !== ""
         ? `${getParentsIndexes?.replace(/: number/g, "")}, `
         : ``
       }
-        ${array ? `${TextTransformation.singularize(array.id)}Index, ` : ""}${element.autocomplete.name
-      }Item)">
-            {{${element.autocomplete.name}Item}}
+        ${array ? `${TextTransformation.singularize(array.id)}Index, ` : ""}${name}Item)">
+            {{${name}Item}}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
             </button>
@@ -88,39 +104,29 @@ const setAutocomplete = (
           <input 
             ${placeholder} ${tooltip} 
             type="${element.autocomplete.type}" 
-            formControlName="${element.autocomplete.name}" 
+            formControlName="${name}" 
+            ${setCondition} 
             matInput 
-            [matAutocomplete]="auto${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}" 
-            [matChipInputFor]="${element.autocomplete.name}ChipList" 
-            [matChipInputSeparatorKeyCodes]="${element.autocomplete.name
-      }SeparatorKeysCodes"
-            (matChipInputTokenEnd)="add${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}(${getParentsIndexes && getParentsIndexes !== ""
+            [matAutocomplete]="auto${namePascal}" 
+            [matChipInputFor]="${name}ChipList" 
+            [matChipInputSeparatorKeyCodes]="${name}SeparatorKeysCodes"
+            (matChipInputTokenEnd)="add${namePascal}(${getParentsIndexes && getParentsIndexes !== ""
         ? getParentsIndexes?.replace(/: number/g, "")
         : ""
       }${getParentsIndexes && getParentsIndexes !== "" && array ? `, ` : ``}${array ? `${TextTransformation.singularize(array.id)}Index, ` : ``
       }$event)"
-            (keyup)="callSetFiltered${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}(${getParentsIndexes && getParentsIndexes !== ""
+            (keyup)="callSetFiltered${namePascal}(${getParentsIndexes && getParentsIndexes !== ""
         ? getParentsIndexes?.replace(/: number/g, "")
         : ""
       }${getParentsIndexes && getParentsIndexes !== "" && array ? `, ` : ``}${array ? `${TextTransformation.singularize(array.id)}Index` : ``
       })" 
-            #${element.autocomplete.name}Input 
+            #${name}Input 
             ${required}
           >
         </mat-chip-list>
         <mat-autocomplete 
-          #auto${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}="matAutocomplete" 
-          (optionSelected)="selected${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}(${getParentsIndexes && getParentsIndexes !== ""
+          #auto${namePascal}="matAutocomplete" 
+          (optionSelected)="selected${namePascal}(${getParentsIndexes && getParentsIndexes !== ""
         ? `${getParentsIndexes?.replace(/: number/g, "")}, `
         : ""
       }${array ? `${TextTransformation.singularize(array.id)}Index, ` : ``
@@ -128,41 +134,28 @@ const setAutocomplete = (
         >
         <mat-option disabled *ngIf="
           ${array && getParentsIndexes && getParentsIndexes !== ""
-        ? `loading${TextTransformation.pascalfy(
-          element.autocomplete.name
-        )}[${getParentsIndexes?.split(": number")[0]}]`
-        : `loading${TextTransformation.pascalfy(
-          element.autocomplete.name
-        )}`
+        ? `loading${namePascal}[${getParentsIndexes?.split(": number")[0]}]`
+        : `loading${namePascal}`
       }
           ">
             <mat-spinner diameter="35"></mat-spinner>
           </mat-option>
         <ng-container *ngIf="
           ${array && getParentsIndexes && getParentsIndexes !== ""
-        ? `!loading${TextTransformation.pascalfy(
-          element.autocomplete.name
-        )}[${getParentsIndexes?.split(": number")[0]}];`
-        : `!loading${TextTransformation.pascalfy(
-          element.autocomplete.name
-        )};`
+        ? `!loading${namePascal}[${getParentsIndexes?.split(": number")[0]}];`
+        : `!loading${namePascal};`
       }
           ">
-          <mat-option *ngFor="let ${element.autocomplete.name
-      }Item of filtered${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}" [value]="${element.autocomplete.name}Item.${element.autocomplete.optionsApi.valueField
-      }">`;
+          <mat-option *ngFor="let ${name}Item of filtered${namePascal}" [value]="${name}Item.${valueField}">`;
 
-    if (!Array.isArray(element.autocomplete.optionsApi.labelField)) {
-      code += `{{${element.autocomplete.name}Item.${element.autocomplete.optionsApi.labelField}}}`;
+    if (!Array.isArray(labelField)) {
+      code += `{{${name}Item.${labelField}}}`;
     }
 
-    if (Array.isArray(element.autocomplete.optionsApi.labelField)) {
-      const name = element.autocomplete.name;
+    if (Array.isArray(labelField)) {
       const labelFieldLength =
-        element.autocomplete.optionsApi.labelField.length;
-      element.autocomplete.optionsApi.labelField.forEach(
+        labelField.length;
+      labelField.forEach(
         (e: string, index: number) => {
           code += `{{${name}Item.${e}}}`;
           if (labelFieldLength > index + 1) {
@@ -181,70 +174,50 @@ const setAutocomplete = (
   if (!element.autocomplete.isMultiple) {
     code += `
       <mat-form-field ${conditions}>
-        <mat-label>${element.autocomplete.label}</mat-label>
+        <mat-label>${label}</mat-label>
         <input 
               type="${element.autocomplete.type}" 
               ${placeholder} ${tooltip} 
-              aria-label="${element.autocomplete.label}" 
-              formControlName="${element.autocomplete.name}" 
+              aria-label="${label}" 
+              formControlName="${name}" 
               matInput 
-              [matAutocomplete]="auto${TextTransformation.pascalfy(
-      element.autocomplete.name
-    )}" 
-              (keyup)="callSetFiltered${TextTransformation.pascalfy(
-      element.autocomplete.name
-    )}(${getParentsIndexes && getParentsIndexes !== ""
-      ? getParentsIndexes?.replace(/: number/g, "")
-      : ""
+              ${setCondition} 
+              [matAutocomplete]="auto${namePascal}" 
+              (keyup)="callSetFiltered${namePascal}(${getParentsIndexes && getParentsIndexes !== ""
+        ? getParentsIndexes?.replace(/: number/g, "")
+        : ""
       }${getParentsIndexes && getParentsIndexes !== "" && array ? `, ` : ``}${array ? `${TextTransformation.singularize(array.id)}Index` : ``
       })" 
               ${required}
         >
         <mat-autocomplete 
-          #auto${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}="matAutocomplete" 
-          [displayWith]="displayFnTo${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}.bind(this)"
+          #auto${namePascal}="matAutocomplete" 
+          [displayWith]="displayFnTo${namePascal}.bind(this)"
         >
           <mat-option disabled *ngIf="
           ${array && getParentsIndexes && getParentsIndexes !== ""
-        ? `loading${TextTransformation.pascalfy(
-          element.autocomplete.name
-        )}[${getParentsIndexes?.split(": number")[0]}]`
-        : `loading${TextTransformation.pascalfy(
-          element.autocomplete.name
-        )}`
+        ? `loading${namePascal}[${getParentsIndexes?.split(": number")[0]}]`
+        : `loading${namePascal}`
       }
           ">
             <mat-spinner diameter="35"></mat-spinner>
           </mat-option>
           <ng-container *ngIf="
           ${array && getParentsIndexes && getParentsIndexes !== ""
-        ? `!loading${TextTransformation.pascalfy(
-          element.autocomplete.name
-        )}[${getParentsIndexes?.split(": number")[0]}];`
-        : `!loading${TextTransformation.pascalfy(
-          element.autocomplete.name
-        )};`
+        ? `!loading${namePascal}[${getParentsIndexes?.split(": number")[0]}];`
+        : `!loading${namePascal};`
       }
           ">
-          <mat-option *ngFor="let ${element.autocomplete.name
-      }Item of filtered${TextTransformation.pascalfy(
-        element.autocomplete.name
-      )}" [value]="${element.autocomplete.name}Item.${element.autocomplete.optionsApi.valueField
-      }">`;
+          <mat-option *ngFor="let ${name}Item of filtered${namePascal}" [value]="${name}Item.${valueField}">`;
 
-    if (!Array.isArray(element.autocomplete.optionsApi.labelField)) {
-      code += `{{${element.autocomplete.name}Item.${element.autocomplete.optionsApi.labelField}}}`;
+    if (!Array.isArray(labelField)) {
+      code += `{{${name}Item.${labelField}}}`;
     }
 
-    if (Array.isArray(element.autocomplete.optionsApi.labelField)) {
-      const name = element.autocomplete.name;
+    if (Array.isArray(labelField)) {
       const labelFieldLength =
-        element.autocomplete.optionsApi.labelField.length;
-      element.autocomplete.optionsApi.labelField.forEach(
+        labelField.length;
+      labelField.forEach(
         (e: string, index: number) => {
           code += `{{${name}Item.${e}}}`;
           if (labelFieldLength > index + 1) {

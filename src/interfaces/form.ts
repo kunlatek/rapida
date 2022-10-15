@@ -227,6 +227,7 @@ export interface AutocompleteInterface {
   label: string;
   placeholder?: string;
   tooltip?: string;
+  isTriggerToCondition?: boolean;
   conditions?: ConditionInterface;
   optgroups?: Array<OptgroupInterface>;
   optionsApi: AutocompleteApiInterface;
