@@ -49,8 +49,8 @@ const setFormControllerConstructorArguments = (
           ${_autocompleteToEdit}
           ${_selectToEdit}
 
-          this.${objectId}Form
-          .patchValue(this.${objectId}ToEdit.data);
+          this.${objectId}Form?.reset();
+          this.${objectId}Form.patchValue(this.${objectId}ToEdit.data);
 
         
           ${_hasCondition ? "this.setConditionOverEdition();" : ""}

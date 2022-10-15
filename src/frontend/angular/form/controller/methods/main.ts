@@ -68,10 +68,8 @@ const setFormControllerMethods = (object: MainInterface): string => {
         const araryOfElementsToCreateArray: any[] = [
           ${setArrayOfElementsToCreateArray(_arrays)}
         ];
-  
-        const araryOfMultipleAutocompleFields: any[] = [
-          ${setArrayOfAutocompleteMultipleElements(object.form.elements)}
-        ];
+        
+        ${setArrayOfAutocompleteMultipleElements(object.form.elements)}
 
         const addNewFormArrayItem = (
           functionName: string,
@@ -116,9 +114,17 @@ const setFormControllerMethods = (object: MainInterface): string => {
         };
 
         Object.keys(data).forEach((item) => {
+          
+          if (araryOfElementsToCreateArray.map(el => el.element).includes(item)) {
+            while ((this.${objectId}Form.get([item]) as FormArray).length !== 0) {
+              (this.${objectId}Form.get([item]) as FormArray).removeAt(0)
+            }
+          }
+
           if (Array.isArray(data[item]) && data[item].length) {
             addNewFormArrayItem(item, data[item], [item]);
           }
+          
         });
       }
 

@@ -99,7 +99,7 @@ export const ANIMATION_FORM: MainInterface = {
                               name: "episodeCharacters",
                               type: FormInputTypeEnum.Text,
                               optionsApi: {
-                                labelField: "name",
+                                labelField: ["name"],
                                 valueField: "_id",
                                 paramsToFilter: ["name"],
                                 endpoint: "characters",

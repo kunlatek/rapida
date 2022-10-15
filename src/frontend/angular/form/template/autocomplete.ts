@@ -82,7 +82,7 @@ const setAutocomplete = (
   if (element.autocomplete.isMultiple) {
     code += `
       <mat-form-field class="full-width" ${conditions}>
-        <mat-label}</mat-label>
+        <mat-label>${label}</mat-label>
         <mat-chip-list #${name}ChipList aria-label="Seleção de ${label.toLowerCase()}">
           <mat-chip 
             *ngFor="let ${name}Item of get${namePascal}(${getParentsIndexes && getParentsIndexes !== ""

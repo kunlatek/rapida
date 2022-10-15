@@ -227,7 +227,9 @@ const setArrayOfElementsToCreateArray = (array: Array<ArrayInterface>) => {
 
 const setArrayOfAutocompleteMultipleElements = (elements: Array<FormElementInterface>) => {
 
-  const getAutocompleteMultiple = (element: FormElementInterface) => {
+  let clearAutocompleteMultipleCode = ``;
+
+  const getAutocompleteMultiple = (element: FormElementInterface, depth: number = 0) => {
     let autocompletMultipleCode = ``;
 
     if (
@@ -235,6 +237,11 @@ const setArrayOfAutocompleteMultipleElements = (elements: Array<FormElementInter
       element.autocomplete.optionsApi &&
       element.autocomplete.isMultiple
     ) {
+      clearAutocompleteMultipleCode += `
+      this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}View = ${'['.repeat(depth)}${']'.repeat(depth)};
+      this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}Value = ${'['.repeat(depth)}${']'.repeat(depth)};;
+      `;
+
       autocompletMultipleCode += `{ 
         element: '${element.autocomplete.name}', 
         view: this.chosen${TextTransformation.pascalfy(element.autocomplete.name)}View, 
@@ -245,7 +252,7 @@ const setArrayOfAutocompleteMultipleElements = (elements: Array<FormElementInter
       const arrayElements = element.array?.elements || element.tabs?.map(tab => tab.elements).flat();
       for (let elementIndex = 0; elementIndex < arrayElements!.length; elementIndex++) {
         const childElement = arrayElements![elementIndex];
-        autocompletMultipleCode += getAutocompleteMultiple(childElement);
+        autocompletMultipleCode += getAutocompleteMultiple(childElement, (depth + 1));
       }
     }
 
@@ -253,12 +260,20 @@ const setArrayOfAutocompleteMultipleElements = (elements: Array<FormElementInter
   };
 
   let code = ``;
+
+  code += `const araryOfMultipleAutocompleFields: any[] = [`;
+
   for (let elementIndex = 0; elementIndex < elements.length; elementIndex++) {
     const element = elements[elementIndex];
     code += getAutocompleteMultiple(element);
   }
 
-  return code;
+  code += `];`;
+
+  return `
+    ${clearAutocompleteMultipleCode}
+    ${code}
+  `;
 };
 
 export {
