@@ -569,12 +569,13 @@ const filterAutocompleteOption = (
 
   // Call to setFiltered function with debounce
   code += `
-  callSetFiltered${autocompleteNamePascal} = MyPerformance.debounce((${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
+  callSetFiltered${autocompleteNamePascal} = MyPerformance.debounce((key: any, ${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
     }${array ? `${arrayIdSingular}Index: number` : ``
-    }) => this.setFiltered${autocompleteNamePascal}(${getParentsIndexes && getParentsIndexes !== ""
-      ? `${getParentsIndexes?.replace(/: number/g, "")}, `
-      : ""
-    }${array ? `${arrayIdSingular}Index` : ``}));
+    }) => {
+      if (key?.code !== 'ArrowDown' && key?.code !== 'ArrowUp') {
+        this.setFiltered${autocompleteNamePascal}(${getParentsIndexes && getParentsIndexes !== "" ? `${getParentsIndexes?.replace(/: number/g, "")}, ` : ""}${array ? `${arrayIdSingular}Index` : ``})
+      }
+    });
   `;
 
   return code;

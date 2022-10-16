@@ -115,10 +115,10 @@ const setAutocomplete = (
         : ""
       }${getParentsIndexes && getParentsIndexes !== "" && array ? `, ` : ``}${array ? `${TextTransformation.singularize(array.id)}Index, ` : ``
       }$event)"
-            (keyup)="callSetFiltered${namePascal}(${getParentsIndexes && getParentsIndexes !== ""
-        ? getParentsIndexes?.replace(/: number/g, "")
+            (keyup)="callSetFiltered${namePascal}($event${getParentsIndexes && getParentsIndexes !== ""
+        ? `, ${getParentsIndexes?.replace(/: number/g, "")}`
         : ""
-      }${getParentsIndexes && getParentsIndexes !== "" && array ? `, ` : ``}${array ? `${TextTransformation.singularize(array.id)}Index` : ``
+      }${array ? `, ${TextTransformation.singularize(array.id)}Index` : ``
       })" 
             #${name}Input 
             ${required}
@@ -183,10 +183,10 @@ const setAutocomplete = (
               matInput 
               ${setCondition} 
               [matAutocomplete]="auto${namePascal}" 
-              (keyup)="callSetFiltered${namePascal}(${getParentsIndexes && getParentsIndexes !== ""
-        ? getParentsIndexes?.replace(/: number/g, "")
+              (keyup)="callSetFiltered${namePascal}($event${getParentsIndexes && getParentsIndexes !== ""
+        ? `, ${getParentsIndexes?.replace(/: number/g, "")}`
         : ""
-      }${getParentsIndexes && getParentsIndexes !== "" && array ? `, ` : ``}${array ? `${TextTransformation.singularize(array.id)}Index` : ``
+      }${array ? `, ${TextTransformation.singularize(array.id)}Index` : ``
       })" 
               ${required}
         >
