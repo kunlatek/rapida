@@ -124,10 +124,15 @@ const setControllerMethods = (object: MainInterface): string => {
   ): Promise<IHttpResponse> {
       try {
   
-          let data = await ${TextTransformation.pascalfy(modelName)}Schema.findById(id)
+          const dataFound = await ${TextTransformation.pascalfy(modelName)}Schema.findById(id)
           ${setDeepPopulate(object)}
           
-          if (!data) throw new Error(serverMessages['httpResponse']['notFoundError'][locale ?? LocaleEnum['pt-BR']]);
+          if (!dataFound) throw new Error(serverMessages['httpResponse']['notFoundError'][locale ?? LocaleEnum['pt-BR']]);
+
+          const temp = JSON.stringify(dataFound);
+          let data = JSON.parse(temp);
+
+          ${setExternalApiDataFound(object)}
 
           const tokens = ${object.publicRoutes?.includes(RouterTypeEnum.ReadOne) ? `{};` : `await Autentikigo.refreshToken(this.httpRequest.headers.authorization!);`}
       
@@ -387,7 +392,7 @@ const setDeepPopulate = (object: MainInterface): string => {
       const type = Object.keys(element)[0];
       const value = Object.values(element)[0];
 
-      if (value.optionsApi) {
+      if (value.optionsApi && !value.optionsApi.externalEndpoint) {
         hasPopulatedField = true;
 
         let deepPopulateOverPopulate = ``;
@@ -445,6 +450,63 @@ const setDeepPopulateOverPopulate = (populateArray: string[]) => {
   [
     ${createDeepPopulateOverPopulate(populateArray)}
   ],`;
+};
+
+const setExternalApiDataFound = (object: MainInterface): string => {
+  if (!object.form) {
+    console.info("Only forms set here");
+    return ``;
+  }
+
+  let _externalApiData = ``;
+  let hasExternalApiDataField: boolean = false;
+
+  const deepExternalApiData = (elements: Array<FormElementInterface>, parent: string) => {
+    let _deepExternalApiCode = ``;
+
+    elements.forEach((element) => {
+
+      const type = Object.keys(element)[0];
+      const value = Object.values(element)[0];
+
+      if (value.optionsApi && value.optionsApi.externalEndpoint) {
+        hasExternalApiDataField = true;
+
+        let arrayOfFields = (typeof value.optionsApi.labelField === 'string' ? [value.optionsApi.labelField] : value.optionsApi.labelField).map((el: string) => el.split('.')).flat();
+        arrayOfFields = [...new Set(arrayOfFields)];
+
+        _deepExternalApiCode += `
+          const ${value.name}Fetched = await (await fetch('${value.optionsApi.externalEndpoint}/' + ${parent}.${value.name})).json()
+          ${parent}.${value.name} = (({ ${value.optionsApi.valueField} ${arrayOfFields.reduce((prev: string, current: string) => prev += `, ${current}`, '')} }) => ({ ${value.optionsApi.valueField} ${arrayOfFields.reduce((prev: string, current: string) => prev += `, ${current}`, '')} }))(${value.name}Fetched?.data)
+        `;
+      } else if (type === 'array') {
+
+        _deepExternalApiCode += `
+          let ${element.array?.id} = ${parent}.${element.array?.id};
+          for(
+            let ${element.array?.id}Index = 0; 
+            ${element.array?.id}Index < ${element.array?.id}?.length || 0; 
+            ${element.array?.id}Index++
+          ){
+
+            let ${TextTransformation.singularize(element.array!.id)} = ${element.array?.id}[${element.array?.id}Index];
+
+            ${deepExternalApiData(element.array?.elements!, TextTransformation.singularize(element.array!.id))}
+          };
+        `;
+      }
+    });
+
+    return _deepExternalApiCode;
+  };
+
+  const elements: Array<FormElementInterface> = getAllElements(object.form.elements);
+
+  _externalApiData += deepExternalApiData(elements, 'data');
+
+  return hasExternalApiDataField ?
+    `${_externalApiData}`
+    : '';
 };
 
 export { setControllerMethods };

@@ -487,11 +487,6 @@ const filterAutocompleteOption = (
   setFiltered${autocompleteNamePascal} = async (${getParentsIndexes}${getParentsIndexes && getParentsIndexes !== "" ? `, ` : ""
     }${array ? `${arrayIdSingular}Index: number` : ``}) => {
     try {
-      ${array && getParentsIndexes && getParentsIndexes !== ""
-      ? `this.loading${autocompleteNamePascal}[${getParentsIndexes?.split(": number")[0]
-      }] = true;`
-      : `this.loading${autocompleteNamePascal} = true;`
-    }
       const paramsToFilter = [${element.autocomplete.optionsApi.paramsToFilter.map(
       (element) => {
         return `"${element}"`;
@@ -507,6 +502,13 @@ const filterAutocompleteOption = (
       : `value.${autocompleteName}`
     }
       .length > 0) {
+    
+        ${array && getParentsIndexes && getParentsIndexes !== ""
+      ? `this.loading${autocompleteNamePascal}[${getParentsIndexes?.split(": number")[0]
+      }] = true;`
+      : `this.loading${autocompleteNamePascal} = true;`
+    }
+
         const filter =
         ${element.autocomplete.optionsApi.paramType === ParamTypeEnum.Query
       ? `\`?filters={"$or":[\${paramsToFilter.map((element: string) => {
