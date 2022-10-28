@@ -37,7 +37,8 @@ const setFormControllerImports = (object: MainInterface): string => {
     }} from "@angular/core";
   import { FormBuilder, FormGroupDirective, FormGroup, FormControl, 
   ${_hasArray ? "FormArray," : ""} 
-  ${_hasValidator ? "Validators," : ""} } from "@angular/forms";
+  ${_hasValidator ? "Validators," : ""}
+  ${_hasAutocomplete ? "AbstractControl," : ""} } from "@angular/forms";
   import { ActivatedRoute, Router } from "@angular/router";
   import { MatSnackBar } from "@angular/material/snack-bar";
   import { lastValueFrom } from 'rxjs';

@@ -578,6 +578,12 @@ const filterAutocompleteOption = (
         this.setFiltered${autocompleteNamePascal}(${getParentsIndexes && getParentsIndexes !== "" ? `${getParentsIndexes?.replace(/: number/g, "")}, ` : ""}${array ? `${arrayIdSingular}Index` : ``})
       }
     });
+    ${!element.autocomplete.isMultiple ?
+      `autocompleteOptionValidator${autocompleteNamePascal}() {
+        return (control: AbstractControl): { [key: string]: any } | null =>
+            (this.filtered${autocompleteNamePascal} || []).map(el => el._id).includes(control.value) ? null : { optionInvalid: control.value };
+      }`:
+      `clear${autocompleteNamePascal}Input = (eventField: any) => eventField.target.value = null`}
   `;
 
   return code;

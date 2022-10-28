@@ -1,6 +1,7 @@
 import { FormInputTypeEnum } from "../../../../../enums/form";
 import { FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
+import { TextTransformation } from "../../../../../utils/text.transformation";
 require('dotenv').config();
 
 const setFormBuilderProperty = (
@@ -124,6 +125,7 @@ const setFormBuilderByElements = (
         code += `Validators.required,`;
       }
       code += `
+        ${!element.autocomplete.isMultiple ? `this.autocompleteOptionValidator${TextTransformation.pascalfy(element.autocomplete.name)}(),` : ''}
         ]
       ),
       `;

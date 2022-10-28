@@ -120,6 +120,7 @@ const setAutocomplete = (
         : ""
       }${array ? `, ${TextTransformation.singularize(array.id)}Index` : ``
       })" 
+            (blur)="clear${namePascal}Input($event)"
             #${name}Input 
             ${required}
           >
