@@ -125,7 +125,7 @@ const setFormBuilderByElements = (
         code += `Validators.required,`;
       }
       code += `
-        ${!element.autocomplete.isMultiple ? `this.autocompleteOptionValidator${TextTransformation.pascalfy(element.autocomplete.name)}(),` : ''}
+        ${!element.autocomplete.isMultiple ? `this.autocompleteOptionValidator${TextTransformation.pascalfy(element.autocomplete.name)},` : ''}
         ]
       ),
       `;
