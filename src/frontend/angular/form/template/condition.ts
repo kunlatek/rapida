@@ -22,7 +22,9 @@ const setConditions = (
   ];
   const type = Object.keys(element)[0];
   const value = Object.values(element)[0];
-  const arrayIdSingular = array?.id;
+  const arrayIdSingular = array?.id
+    ? TextTransformation.singularize(array?.id)
+    : "";
 
   let _arrayLayer: Array<ArrayFeaturesInterface> = JSON.parse(
     process.env.ARRAY_LAYER!
