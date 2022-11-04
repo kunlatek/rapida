@@ -69,7 +69,10 @@ const setCondition = (
                   code += `(this.${condition.key} ${condition.comparisonOperator
                     ? ` ${condition.comparisonOperator} `
                     : ` === `
-                    } "${condition.value}");`;
+                    } ${typeof condition.value !== "string"
+                      ? condition.value
+                      : `"${condition.value}"`
+                    });`;
                 }
                 code += `)`;
 
@@ -113,10 +116,13 @@ const setConditionNotInArray = (
       code += `${condition.logicalOperator ? ` ${condition.logicalOperator} ` : ` && `
         }`;
     }
-    code += `(this.${object.form!.id}Form.get("${condition.key}")?.value ${condition.comparisonOperator
+    code += `(this.${object.form!.id}Form.get("${condition.key}")?.value?.value ${condition.comparisonOperator
       ? ` ${condition.comparisonOperator} `
       : ` === `
-      } "${condition.value}")`;
+      } ${typeof condition.value !== "string"
+        ? condition.value
+        : `"${condition.value}"`
+      })`;
   });
 
   code += `);`;
@@ -220,7 +226,7 @@ const setConditionsInArray = (
                     }${array
                       ? `"${array.id}", ${arrayIdSingular}Index, "${condition.key}"`
                       : ``
-                    }])?.value${condition.comparisonOperator
+                    }])?.value?.value${condition.comparisonOperator
                       ? ` ${condition.comparisonOperator} `
                       : ` === `
                     } ${typeof condition.value !== "string"
@@ -402,7 +408,10 @@ const setConditionOverEditionInArray = (
                 code += `${condition.comparisonOperator
                   ? ` ${condition.comparisonOperator} `
                   : ` === `
-                  } "${condition.value}"`;
+                  } ${typeof condition.value !== "string"
+                    ? condition.value
+                    : `"${condition.value}"`
+                  }`;
 
                 _conditionMethodsOverEdition.push(
                   value.name ? value.name : value.id
@@ -496,11 +505,14 @@ const setConditionOverEditionInNotArray = (
                     : ` && `
                     }`;
                 }
-                code += `this.${object.form?.id}Form.get("${condition.key}")?.value`;
+                code += `this.${object.form?.id}Form.get("${condition.key}")?.value?.value`;
                 code += `${condition.comparisonOperator
                   ? ` ${condition.comparisonOperator} `
                   : ` === `
-                  } "${condition.value}"`;
+                  } ${typeof condition.value !== "string"
+                    ? condition.value
+                    : `"${condition.value}"`
+                  }`;
 
                 _conditionMethodsOverEdition.push(
                   value.name ? value.name : value.id
