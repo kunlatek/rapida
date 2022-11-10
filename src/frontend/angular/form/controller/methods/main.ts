@@ -224,7 +224,7 @@ const setFormControllerMethods = (object: MainInterface): string => {
         }
 
         if(!this.isAddModule) {
-          ${_treatmentBeforeSubmitting}
+          ${/*_treatmentBeforeSubmitting*/''}
             await lastValueFrom(this._${objectId}Service.update(
               this.${objectId}Form.value,
               this.${objectId}Id
