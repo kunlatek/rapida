@@ -81,12 +81,15 @@ const setControllerMethods = (object: MainInterface): string => {
           let and = [{ _deletedAt: null }]
           if (filters) and.push(JSON.parse(filters))
 
-          const result = await ${TextTransformation.pascalfy(modelName)}Schema
+          let result = await ${TextTransformation.pascalfy(modelName)}Schema
             .find({"$and": and})
             .limit(limit || 100)
             .skip((limit || 100) * (page || 0))
             .sort(orderBy ? { [orderBy]: -1 } : { _createdAt: -1 })
             ${setDeepPopulate(object)};
+          result = JSON.parse(JSON.stringify(result))
+
+          ${setSeveralExternalApiDataFound(object)}
 
           const total = await ${TextTransformation.pascalfy(modelName)}Schema.countDocuments({"$and": and});
 
@@ -494,6 +497,73 @@ const setExternalApiDataFound = (object: MainInterface): string => {
             ${deepExternalApiData(element.array?.elements!, TextTransformation.singularize(element.array!.id))}
           };
         `;
+      }
+    });
+
+    return _deepExternalApiCode;
+  };
+
+  const elements: Array<FormElementInterface> = getAllElements(object.form.elements);
+
+  _externalApiData += deepExternalApiData(elements, 'data');
+
+  return hasExternalApiDataField ?
+    `${_externalApiData}`
+    : '';
+};
+
+const setSeveralExternalApiDataFound = (object: MainInterface): string => {
+  if (!object.form) {
+    console.info("Only forms set here");
+    return ``;
+  }
+
+  let _externalApiData = ``;
+  let hasExternalApiDataField: boolean = false;
+
+  const deepExternalApiData = (elements: Array<FormElementInterface>, parent: string) => {
+    let _deepExternalApiCode = ``;
+
+    elements.forEach((element) => {
+
+      const type = Object.keys(element)[0];
+      const value = Object.values(element)[0];
+
+      if (value.optionsApi && value.optionsApi.externalEndpoint) {
+        hasExternalApiDataField = true;
+
+        let arrayOfFields = (typeof value.optionsApi.labelField === 'string' ? [value.optionsApi.labelField] : value.optionsApi.labelField).map((el: string) => el.split('.')).flat();
+        arrayOfFields = [...new Set(arrayOfFields)];
+
+        _deepExternalApiCode += `
+          const ${value.name}Fetched_ids = result?.reduce((prev: string, current: any) => prev += \`"\${current.${value.name}}",\`, '')
+          const ${value.name}Fetched = await (await fetch(\`${value.optionsApi.externalEndpoint}?filters={"_id":{"$in":[\${${value.name}Fetched_ids.slice(0, -1)}]}}\`)).json()
+          const ${value.name} = ${value.name}Fetched?.data?.result.map((el: any) => {
+            return (({ ${value.optionsApi.valueField} ${arrayOfFields.reduce((prev: string, current: string) => prev += `, ${current}`, '')} }) => ({ ${value.optionsApi.valueField} ${arrayOfFields.reduce((prev: string, current: string) => prev += `, ${current}`, '')} }))(el);
+          })
+          result = result.map((resultData: any) => {
+            return {
+              ...resultData,
+              ${value.name}: (${value.name} || []).find((el: any) => el._id === resultData.${value.name})
+            }
+          })
+        `;
+      } else if (type === 'array') {
+
+        // TODO: get external data deeper
+        // _deepExternalApiCode += `
+        //   let ${element.array?.id} = ${parent}.${element.array?.id};
+        //   for(
+        //     let ${element.array?.id}Index = 0; 
+        //     ${element.array?.id}Index < ${element.array?.id}?.length || 0; 
+        //     ${element.array?.id}Index++
+        //   ){
+
+        //     let ${TextTransformation.singularize(element.array!.id)} = ${element.array?.id}[${element.array?.id}Index];
+
+        //     ${deepExternalApiData(element.array?.elements!, TextTransformation.singularize(element.array!.id))}
+        //   };
+        // `;
       }
     });
 
