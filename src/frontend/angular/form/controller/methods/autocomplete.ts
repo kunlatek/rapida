@@ -575,7 +575,14 @@ const filterAutocompleteOption = (
     }${array ? `${arrayIdSingular}Index: number` : ``
     }) => {
       if (key?.code !== 'ArrowDown' && key?.code !== 'ArrowUp') {
-        this.setFiltered${autocompleteNamePascal}(${getParentsIndexes && getParentsIndexes !== "" ? `${getParentsIndexes?.replace(/: number/g, "")}, ` : ""}${array ? `${arrayIdSingular}Index` : ``})
+        this.setFiltered${autocompleteNamePascal}(${getParentsIndexes && getParentsIndexes !== "" ? `${getParentsIndexes?.replace(/: number/g, "")}, ` : ""}${array ? `${arrayIdSingular}Index` : ``});
+        ${element.autocomplete.isTriggerToCondition ?
+      `if (key?.code === 'Enter') {
+          ${(getParentsIndexes && getParentsIndexes !== "") || array ?
+        `this.setConditionIn${autocompleteNamePascal}(${getParentsIndexes && getParentsIndexes !== "" ? `${getParentsIndexes?.replace(/: number/g, "")}, ` : ""}${array ? `${arrayIdSingular}Index` : ``})` :
+        `this.setCondition()`
+      };
+        }`: ``}
       }
     });
     ${!element.autocomplete.isMultiple ?
