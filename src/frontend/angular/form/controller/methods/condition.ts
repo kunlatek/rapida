@@ -116,7 +116,7 @@ const setConditionNotInArray = (
       code += `${condition.logicalOperator ? ` ${condition.logicalOperator} ` : ` && `
         }`;
     }
-    code += `(this.${object.form!.id}Form.get("${condition.key}")?.value?.value ${condition.comparisonOperator
+    code += `(this.${object.form!.id}Form.get("${condition.key}")?.value ${condition.comparisonOperator
       ? ` ${condition.comparisonOperator} `
       : ` === `
       } ${typeof condition.value !== "string"
@@ -226,7 +226,7 @@ const setConditionsInArray = (
                     }${array
                       ? `"${array.id}", ${arrayIdSingular}Index, "${condition.key}"`
                       : ``
-                    }])?.value?.value${condition.comparisonOperator
+                    }])?.value${condition.comparisonOperator
                       ? ` ${condition.comparisonOperator} `
                       : ` === `
                     } ${typeof condition.value !== "string"
@@ -505,7 +505,7 @@ const setConditionOverEditionInNotArray = (
                     : ` && `
                     }`;
                 }
-                code += `this.${object.form?.id}Form.get("${condition.key}")?.value?.value`;
+                code += `this.${object.form?.id}Form.get("${condition.key}")?.value`;
                 code += `${condition.comparisonOperator
                   ? ` ${condition.comparisonOperator} `
                   : ` === `
