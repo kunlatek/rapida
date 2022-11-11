@@ -511,7 +511,7 @@ const filterAutocompleteOption = (
 
         const filter =
         ${element.autocomplete.optionsApi.paramType === ParamTypeEnum.Query
-      ? `\`?filters={"$or":[\${paramsToFilter.map((element: string) => {
+      ? `\`?${element.autocomplete.optionsApi.rawQuery ? element.autocomplete.optionsApi.rawQuery : ""}filters={"$or":[\${paramsToFilter.map((element: string) => {
           if(element !== "undefined") {
             return \`{"\${element}":{"$regex": "\${
               this.${object.form?.id}Form.

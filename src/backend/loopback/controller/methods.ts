@@ -537,7 +537,7 @@ const setSeveralExternalApiDataFound = (object: MainInterface): string => {
 
         _deepExternalApiCode += `
           const ${value.name}Fetched_ids = result?.reduce((prev: string, current: any) => prev += \`"\${current.${value.name}}",\`, '')
-          const ${value.name}Fetched = await (await fetch(\`${value.optionsApi.externalEndpoint}?filters={"_id":{"$in":[\${${value.name}Fetched_ids.slice(0, -1)}]}}\`)).json()
+          const ${value.name}Fetched = await (await fetch(\`${value.optionsApi.externalEndpoint}?${value.optionsApi.rawQuery ? value.optionsApi.rawQuery : ""}filters={"_id":{"$in":[\${${value.name}Fetched_ids.slice(0, -1)}]}}\`)).json()
           const ${value.name} = ${value.name}Fetched?.data?.result.map((el: any) => {
             return (({ ${value.optionsApi.valueField} ${arrayOfFields.reduce((prev: string, current: string) => prev += `, ${current}`, '')} }) => ({ ${value.optionsApi.valueField} ${arrayOfFields.reduce((prev: string, current: string) => prev += `, ${current}`, '')} }))(el);
           })

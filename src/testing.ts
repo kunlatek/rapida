@@ -3,89 +3,51 @@ import { createProject } from "./index";
 
 const envFrontDev = `
 export const environment = {
-baseUrl: "http://localhost:3000",
-production: false,
+ baseUrl: "http://localhost:3000",
+ production: false,
 };
 `;
 
 const envFrontProd = `
 export const environment = {
-baseUrl: "https://a-plus-energy-api-tftftsuywa-ue.a.run.app",
-production: true,
+ baseUrl: "http://localhost:3000",
+ production: true,
 };
 `;
 
 const envBackend = `
+AUTH_DB=uzanto
 PORT=3000
 SERVER_ROOT_URI=http://localhost:3000
 CLIENT_REDIRECT_URI=http://localhost:4200
 MONGO_URL=mongodb+srv://kunlatek:Kunlatek751@cluster0.b0pfr.mongodb.net/__DB_NAME__?authSource=admin&replicaSet=atlas-zft6fn-shard-0&readPreference=primary&ssl=true
-DB=aPlusEnergyFundamento
+DB=kliento
 NODEMAILER_USER=administrativo@kunlatek.com
 NODEMAILER_PASS=yetyxhgzjzktuwef
 ADMIN_USERS=contato@kunlatek.com
+ 
 `;
 
 const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitation-and-permission";
 const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api";
-const projectPath = "/home/ryzzan/Projects/a-plus-energy-fundamento";
+const projectPath = "/home/ryzzan/Projects/kliento";
 
-import { CLIENT } from "../collections-frontend/clients/a-plus-energy-fundamento/client";
-import { CLIENT_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-form";
-import { CLIENT_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-table";
+import { CLIENT_COMPANY } from "../collections-frontend/kunlatek/kliento/client-company";
+import { CLIENT_COMPANY_FORM } from "../collections-frontend/kunlatek/kliento/client-company-form";
+import { CLIENT_COMPANY_TABLE } from "../collections-frontend/kunlatek/kliento/client-company-table";
 
-import { CLIENT_SETTLEMENT } from "../collections-frontend/clients/a-plus-energy-fundamento/client-settlement";
-import { CLIENT_SETTLEMENT_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-settlement-form";
-import { CLIENT_SETTLEMENT_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-settlement-table";
-
-import { CLIENT_SERVICE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-service";
-import { CLIENT_SERVICE_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/client-service-form";
-import { CLIENT_SERVICE_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/client-service-table";
-
-import { MANUFACTURER } from "../collections-frontend/clients/a-plus-energy-fundamento/manufacturer";
-import { MANUFACTURER_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/manufacturer-form";
-import { MANUFACTURER_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/manufacturer-table";
-
-import { PRODUCT } from "../collections-frontend/clients/a-plus-energy-fundamento/product";
-import { PRODUCT_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/product-form";
-import { PRODUCT_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/product-table";
-
-import { SERVICE } from "../collections-frontend/clients/a-plus-energy-fundamento/service";
-import { SERVICE_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/service-form";
-import { SERVICE_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/service-table";
-
-import { ACTION } from "../collections-frontend/clients/a-plus-energy-fundamento/action";
-import { ACTION_FORM } from "../collections-frontend/clients/a-plus-energy-fundamento/action-form";
-import { ACTION_TABLE } from "../collections-frontend/clients/a-plus-energy-fundamento/action-table";
+import { CLIENT_PERSON } from "../collections-frontend/kunlatek/kliento/client-person";
+import { CLIENT_PERSON_FORM } from "../collections-frontend/kunlatek/kliento/client-person-form";
+import { CLIENT_PERSON_TABLE } from "../collections-frontend/kunlatek/kliento/client-person-table";
 
 const array = [
-  CLIENT_FORM,
-  CLIENT_TABLE,
-  CLIENT,
+  CLIENT_COMPANY_FORM,
+  CLIENT_COMPANY_TABLE,
+  CLIENT_COMPANY,
 
-  CLIENT_SETTLEMENT_FORM,
-  CLIENT_SETTLEMENT_TABLE,
-  CLIENT_SETTLEMENT,
-
-  CLIENT_SERVICE_FORM,
-  CLIENT_SERVICE_TABLE,
-  CLIENT_SERVICE,
-
-  MANUFACTURER_FORM,
-  MANUFACTURER_TABLE,
-  MANUFACTURER,
-
-  PRODUCT_FORM,
-  PRODUCT_TABLE,
-  PRODUCT,
-
-  SERVICE_FORM,
-  SERVICE_TABLE,
-  SERVICE,
-
-  ACTION_FORM,
-  ACTION_TABLE,
-  ACTION,
+  CLIENT_PERSON_FORM,
+  CLIENT_PERSON_TABLE,
+  CLIENT_PERSON,
 ];
 
 array.forEach((object) => {

@@ -181,6 +181,7 @@ export interface OptionApiInterface {
   externalEndpoint?: string;
   labelField: string;
   valueField: string;
+  rawQuery?: string;
   isDisabled?: boolean;
   isSelected?: boolean;
   todo?: string;
@@ -193,6 +194,7 @@ export interface AutocompleteApiInterface {
   valueField: string;
   paramsToFilter: Array<string>;
   paramType: ParamTypeEnum;
+  rawQuery?: string;
   isDisabled?: boolean;
   isSelected?: boolean;
   todo?: string;
