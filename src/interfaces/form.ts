@@ -6,6 +6,7 @@ import {
   FormInputTypeEnum,
   FormMethodEnum,
   FormTargetEnum,
+  MathOperatorEnum,
   ParamTypeEnum,
   ServiceFunctionsEnum
 } from "../enums/form";
@@ -127,6 +128,7 @@ export interface InputInterface {
   validators?: Array<string>;
   value?: string;
   width?: number;
+  composedValue?: ComposedValueInterface;
   todo?: string;
 }
 
@@ -288,4 +290,11 @@ export interface ConditionElementInterface {
   array?: string;
   comparisonOperator?: FilterComparisonOperatorEnum;
   logicalOperator?: FilterLogicalOperatorEnum;
+}
+
+export interface ComposedValueInterface {
+  operator: MathOperatorEnum;
+  fields?: string[];
+  elements?: number[];
+  roundTo?: number;
 }

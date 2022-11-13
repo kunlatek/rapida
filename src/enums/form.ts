@@ -86,3 +86,10 @@ export enum RouterTypeEnum {
     Update = 'update',
     Delete = 'delete',
 }
+
+export enum MathOperatorEnum {
+    Addition = 'addition',
+    Subtraction = 'subtraction',
+    Multiplication = 'multiplication',
+    Division = 'division',
+}
