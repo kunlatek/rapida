@@ -177,6 +177,8 @@ const setControllerMethods = (object: MainInterface): string => {
         
         data = await this.${modelName}Service.manageFiles(data, bodyAndFiles);
 
+        for (const key in data) { if (data[key] === '') data[key] = null }
+
         await ${TextTransformation.pascalfy(modelName)}Schema.findByIdAndUpdate(id, data);
         
         const tokens = ${object.publicRoutes?.includes(RouterTypeEnum.Update) ? `{};` : `await Autentikigo.refreshToken(this.httpRequest.headers.authorization!);`}
@@ -217,6 +219,8 @@ const setControllerMethods = (object: MainInterface): string => {
         let data = bodyAndFiles.body;
           
         data = await this.${modelName}Service.manageFiles(data, bodyAndFiles);
+
+        for (const key in data) { if (data[key] === '') data[key] = null }
 
         await ${TextTransformation.pascalfy(modelName)}Schema.findByIdAndUpdate(id, data);
 
