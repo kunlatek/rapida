@@ -129,6 +129,7 @@ export interface InputInterface {
   value?: string;
   width?: number;
   composedValue?: ComposedValueInterface;
+  unique?: boolean;
   todo?: string;
 }
 
@@ -222,6 +223,7 @@ export interface SelectInterface {
   isDisabled?: boolean;
   isMultiple?: boolean;
   isRequired?: boolean;
+  unique?: boolean;
   todo?: string;
 }
 
@@ -241,6 +243,7 @@ export interface AutocompleteInterface {
   isDisabled?: boolean;
   isMultiple?: boolean;
   isRequired?: boolean;
+  unique?: boolean;
   todo?: string;
 }
 
