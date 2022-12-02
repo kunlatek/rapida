@@ -21,6 +21,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
   ${_methods}
 
   _setFiltersParams(isPagination = false) {
+    this.isLoading = true;
     let httpParams = new HttpParams();
     const valueToSearch = this.${table.id}SearchForm.value.searchInput;
     if (this._page) {
@@ -60,6 +61,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
       table.id
     )}Service = async (params: HttpParams, isPagination: boolean) => {
     try {
+      this.isLoading = true;
       const result: any = await lastValueFrom(this._${table.id}Service.getAll(params));
       const currentData = ${hasInfiniteScroll
       ? "this.dataSource.matTableDataSource.data"

@@ -80,7 +80,7 @@ const setTableTemplate = ({ table, projectPath }: MainInterface): string => {
                              matSort>`
       : ""
     }
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="!isLoading">
       ${_specificStructure}    
       <tr mat-header-row *matHeaderRowDef="${table.id}DisplayedColumns${hasInfiniteScroll ? ";sticky: true" : ""
     }" ${hasInfiniteScroll ? '[style.top.px]="offset"' : ""}></tr>
