@@ -183,6 +183,12 @@ export interface OptionApiInterface {
   externalEndpoint?: string;
   labelField: string;
   valueField: string;
+  formFieldsFilledByApiResponse?: Array<
+    {
+      formFieldName: string;
+      propertyFromApiToFillFormField: string;
+    }
+  >;
   rawQuery?: string;
   isDisabled?: boolean;
   isSelected?: boolean;
@@ -196,6 +202,12 @@ export interface AutocompleteApiInterface {
   valueField: string;
   paramsToFilter: Array<string>;
   paramType: ParamTypeEnum;
+  formFieldsFilledByApiResponse?: Array<
+    {
+      formFieldName: string;
+      propertyFromApiToFillFormField: string;
+    }
+  >;
   rawQuery?: string;
   isDisabled?: boolean;
   isSelected?: boolean;

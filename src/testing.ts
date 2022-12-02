@@ -21,33 +21,24 @@ PORT=3000
 SERVER_ROOT_URI=http://localhost:3000
 CLIENT_REDIRECT_URI=http://localhost:4200
 MONGO_URL=mongodb+srv://kunlatek:Kunlatek751@cluster0.b0pfr.mongodb.net/__DB_NAME__?authSource=admin&replicaSet=atlas-zft6fn-shard-0&readPreference=primary&ssl=true
-DB=kliento
+DB=financo
 NODEMAILER_USER=administrativo@kunlatek.com
 NODEMAILER_PASS=yetyxhgzjzktuwef
-ADMIN_USERS=contato@kunlatek.com
- 
+ADMIN_USERS=contato@kunlatek.com 
 `;
 
 const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitation-and-permission";
 const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api";
-const projectPath = "/home/ryzzan/Projects/kliento";
+const projectPath = "/home/ryzzan/Projects/financo";
 
-import { CLIENT_COMPANY } from "../collections-frontend/kunlatek/kliento/client-company";
-import { CLIENT_COMPANY_FORM } from "../collections-frontend/kunlatek/kliento/client-company-form";
-import { CLIENT_COMPANY_TABLE } from "../collections-frontend/kunlatek/kliento/client-company-table";
-
-import { CLIENT_PERSON } from "../collections-frontend/kunlatek/kliento/client-person";
-import { CLIENT_PERSON_FORM } from "../collections-frontend/kunlatek/kliento/client-person-form";
-import { CLIENT_PERSON_TABLE } from "../collections-frontend/kunlatek/kliento/client-person-table";
+import { INPUT } from "../collections-frontend/kunlatek/financo/input";
+import { INPUT_FORM } from "../collections-frontend/kunlatek/financo/input-form";
+import { INPUT_TABLE } from "../collections-frontend/kunlatek/financo/input-table";
 
 const array = [
-  CLIENT_COMPANY_FORM,
-  CLIENT_COMPANY_TABLE,
-  CLIENT_COMPANY,
-
-  CLIENT_PERSON_FORM,
-  CLIENT_PERSON_TABLE,
-  CLIENT_PERSON,
+  INPUT_FORM,
+  INPUT_TABLE,
+  INPUT,
 ];
 
 array.forEach((object) => {

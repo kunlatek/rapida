@@ -193,7 +193,7 @@ const setAutocomplete = (
         >
         <mat-autocomplete 
           #auto${namePascal}="matAutocomplete" 
-          [displayWith]="displayFnTo${namePascal}.bind(this)"
+          [displayWith]="displayFnTo${namePascal}${array ? `.bind(this , ${TextTransformation.singularize(array.id)}Index)` : ""}"
         >
           <mat-option disabled *ngIf="
           ${array && getParentsIndexes && getParentsIndexes !== ""

@@ -408,60 +408,59 @@ const displayNoMultipleAutocomplete = (
   }
   const labelField = element.autocomplete.optionsApi.labelField;
   const valueField = element.autocomplete.optionsApi.valueField;
-  const autocompletName = element.autocomplete.name;
-  const autocompleteNamePascal = TextTransformation.pascalfy(autocompletName);
+  const formFieldsFilledByApiResponse = element.autocomplete.optionsApi.formFieldsFilledByApiResponse;
+  const autocompleteName = element.autocomplete.name;
+  const autocompleteNamePascal = TextTransformation.pascalfy(autocompleteName);
   const labelFieldLength = labelField.length;
+
+  let labelFieldCode = ``;
+  let formFieldsFilledByApiResponseCode = ``;
+
+  if (formFieldsFilledByApiResponse) {
+    formFieldsFilledByApiResponse.map((result: any) => {
+      formFieldsFilledByApiResponseCode += `
+      const ${result.formFieldName}Value = this.filtered${autocompleteNamePascal}[0].${result.propertyFromApiToFillFormField};
+      `;
+    });
+
+    formFieldsFilledByApiResponse.map((result: any) => {
+      formFieldsFilledByApiResponseCode += `
+        this.${object.form?.id}Form.
+        ${array
+          ? `get([${getParentsControl && getParentsControl !== ""
+            ? `${getParentsControl}, `
+            : ``
+          }${array ? `"${array.id}", value, ` : ``
+          }"${result.formFieldName}"])?.setValue(${result.formFieldName}Value);`
+          : `get("${result.formFieldName}").setValue(${result.formFieldName}Value);`
+        }
+      `;
+    });
+
+  }
+
+  if (Array.isArray(labelField)) {
+    labelField.forEach((e: string, index: number) => {
+      labelFieldCode += `this.filtered${autocompleteNamePascal}[0].${e}`;
+      if (labelFieldLength > index + 1) {
+        labelFieldCode += ` + " - " + `;
+      }
+    });
+  } else {
+    labelFieldCode = `this.filtered${autocompleteNamePascal}[0].${labelField}`;
+  };
 
   let code = ``;
 
   code += `
     displayFnTo${autocompleteNamePascal} = (value?: any) => {
-          if (value?.${valueField}) {
-            return `;
-  if (Array.isArray(labelField)) {
-    labelField.forEach((e: string, index: number) => {
-      code += `value.${e}`;
-      if (labelFieldLength > index + 1) {
-        code += ` + " - " + `;
+      if (this.filtered${autocompleteNamePascal}[0]) {
+        ${formFieldsFilledByApiResponseCode}      
+        return ${labelFieldCode};
       }
-    });
-  }
-
-  if (!Array.isArray(labelField)) {
-    code += `value?.${labelField}`;
-  }
-  code += `} 
-  if (`;
-
-  if (Array.isArray(labelField)) {
-    code += `this.filtered${autocompleteNamePascal}.find((_) => _.${valueField} === value)?.${labelField[0]}`;
-  }
-
-  if (!Array.isArray(labelField)) {
-    code += `this.filtered${autocompleteNamePascal}.find((_) => _.${element.autocomplete.optionsApi.valueField} === value)?.${labelField}`;
-  }
-
-  code += `){
-            return `;
-
-  if (Array.isArray(labelField)) {
-    const labelFieldLength = labelField.length;
-    labelField.forEach((e: string, index: number) => {
-      code += `this.filtered${autocompleteNamePascal}.find((_) => _.${valueField} === value)?.${e}`;
-      if (labelFieldLength > index + 1) {
-        code += ` + " - " + `;
-      }
-    });
-  }
-
-  if (!Array.isArray(labelField)) {
-    code += `this.filtered${autocompleteNamePascal}.find((_) => _.${element.autocomplete.optionsApi.valueField} === value)?.${labelField}`;
-  }
-
-  code += `}
         
-        return "";
-      };`;
+      return "";
+    };`;
 
   return code;
 };
