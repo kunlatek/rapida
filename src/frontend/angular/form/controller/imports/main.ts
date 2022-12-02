@@ -10,6 +10,7 @@ let _hasAutocomplete: boolean = false;
 let _hasCondition: boolean = false;
 let _hasInputApiRequest: boolean = false;
 let _hasFile: boolean = false;
+let _hasMathCalculations: boolean = false;
 
 const setFormControllerImports = (object: MainInterface): string => {
   if (!object.form) {
@@ -54,7 +55,7 @@ const setFormControllerImports = (object: MainInterface): string => {
     }
   import { MyErrorHandler } from "../../utils/error-handler";
   import { ${objectIdPascal}Service } from "./${objectIdKebab}.service";
-  import { calculate, MathOperatorEnum } from 'src/app/utils/math';
+  ${_hasMathCalculations ? `import { calculate, MathOperatorEnum } from 'src/app/utils/math';` : ``}
   `;
 
   return code;
@@ -91,6 +92,9 @@ const verifyFormElement = (element: FormElementInterface): void => {
   if (element.input) {
     if (element.input.type === FormInputTypeEnum.File) {
       _hasFile = true;
+    }
+    if (element.input.composedValue) {
+      _hasMathCalculations = true;
     }
   }
 

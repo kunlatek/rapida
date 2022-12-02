@@ -189,7 +189,7 @@ const setByElement = (
         ${value.name}: [
           {
             type: mongoose.Schema.Types.ObjectId,
-            ref: '${className}',
+            ref: '${className}', ${value.unique ? `unique: true,` : ``}
           }
         ],
       `;
@@ -197,7 +197,7 @@ const setByElement = (
       code += `
         ${value.name}: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: '${className}',
+          ref: '${className}', ${value.unique ? `unique: true,` : ``}
           required: ${value.isRequired || false},
           ${!value.isRequired ? 'default: null,' : ''}
         },
@@ -214,7 +214,7 @@ const setByElement = (
   } else {
     code += `
       ${value.name}: {
-        type: ${propertyType},
+        type: ${propertyType}, ${value.unique ? `unique: true,` : ``}
         required: ${value.isRequired || false},
         ${!value.isRequired ? 'default: null,' : ''}
       },
