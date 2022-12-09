@@ -32,12 +32,12 @@ const setCalculateComposedValue = (
             element.input.composedValue.fields.forEach((field: string) => fields += `this.${objectId}Form.get('${field}')?.value,`);
 
             code += `
-                const composedValue_${pascalName} = calculate({
+                const composedValue${pascalName} = calculate({
                     operator: '${element.input.composedValue.operator}' as MathOperatorEnum,
                     elements: [${fields}],
                     ${element.input.composedValue.roundTo ? `roundTo: ${element.input.composedValue.roundTo},` : ``}
                 });
-                this.${objectId}Form.get('${element.input.name}')?.setValue(composedValue_${pascalName});
+                this.${objectId}Form.get('${element.input.name}')?.setValue(composedValue${pascalName});
             `;
         }
     });
