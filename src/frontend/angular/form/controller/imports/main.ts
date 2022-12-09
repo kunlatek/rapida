@@ -55,7 +55,7 @@ const setFormControllerImports = (object: MainInterface): string => {
     }
   import { MyErrorHandler } from "../../utils/error-handler";
   import { ${objectIdPascal}Service } from "./${objectIdKebab}.service";
-  ${_hasMathCalculations ? `import { calculate, MathOperatorEnum } from 'src/app/utils/math';` : ``}
+  ${_hasMathCalculations ? `import { calculate, calculateArray, MathOperatorEnum } from 'src/app/utils/math';` : ``}
   `;
 
   return code;

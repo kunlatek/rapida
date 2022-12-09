@@ -74,7 +74,7 @@ const setFormControllerConstructorArguments = (
   this.${objectId}Form = 
   this._formBuilder.group(this.${objectId}Builder);
 
-  this.${objectId}Form.valueChanges.subscribe(() => {
+  this.${objectId}Form.valueChanges.subscribe((form) => {
     ${_calculationComposedValue}
   })
   `;

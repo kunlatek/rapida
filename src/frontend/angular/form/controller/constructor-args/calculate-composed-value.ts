@@ -1,11 +1,11 @@
-import { ArrayInterface, FormElementInterface } from "../../../../../interfaces/form";
+import { FormElementInterface } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 
 const setCalculateComposedValue = (
     object: MainInterface,
     formElements: FormElementInterface[],
-    array: ArrayInterface | undefined = undefined
+    arrayId?: string,
 ): string => {
     const objectId = object.form?.id;
 
@@ -21,24 +21,36 @@ const setCalculateComposedValue = (
             code += setCalculateComposedValue(
                 object,
                 element.array.elements,
-                element.array.id
+                element.array.id,
             );
         }
 
         if (element.input && element.input.composedValue) {
             const pascalName: string = TextTransformation.pascalfy(element.input.name);
 
-            let fields = ``;
-            element.input.composedValue.fields.forEach((field: string) => fields += `this.${objectId}Form.get('${field}')?.value,`);
+            if (!arrayId) {
+                let fields = ``;
+                element.input.composedValue.fields.forEach((field: string) => fields += `this.${objectId}Form.get('${field}')?.value,`);
 
-            code += `
-                const composedValue${pascalName} = calculate({
-                    operator: '${element.input.composedValue.operator}' as MathOperatorEnum,
-                    elements: [${fields}],
-                    ${element.input.composedValue.roundTo ? `roundTo: ${element.input.composedValue.roundTo},` : ``}
-                });
-                this.${objectId}Form.get('${element.input.name}')?.setValue(composedValue${pascalName});
-            `;
+                code += `
+                    const composedValue${pascalName} = calculate({
+                        operator: '${element.input.composedValue.operator}' as MathOperatorEnum,
+                        elements: [${fields}],
+                        ${element.input.composedValue.roundTo ? `roundTo: ${element.input.composedValue.roundTo},` : ``}
+                    });
+                    this.${objectId}Form.get('${element.input.name}')?.setValue(composedValue${pascalName});
+                `;
+            } else {
+                let fields = ``;
+                element.input.composedValue.fields.forEach((field: string) => fields += `'${field}',`);
+
+                code += `
+                    const composedValue${pascalName} = calculateArray({ array: [...form.${arrayId}], fieldsArray: [${fields}], composedField: '${element.input.name}', operator: '${element.input.composedValue.operator}' as MathOperatorEnum, ${element.input.composedValue.roundTo ? `roundTo: ${element.input.composedValue.roundTo},` : ``}  })
+                    if (composedValue${pascalName} !== this.${objectId}Form.get('${arrayId}')?.value)
+                        this.${objectId}Form.get('${arrayId}')?.setValue([...composedValue${pascalName}]);
+                `;
+            }
+
         }
     });
 
