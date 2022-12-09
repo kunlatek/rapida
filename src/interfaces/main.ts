@@ -5,6 +5,7 @@ import { FormInterface } from "./form";
 import { ListInterface } from './list';
 import { ModelInterface } from './model';
 import { ModuleInterface } from "./module";
+import { AppInterface } from "./quickstart";
 import { TableInterface } from "./table";
 import { TreeInterface } from "./tree";
 
@@ -26,6 +27,7 @@ export interface MainInterface {
   tree?: TreeInterface;
   module?: ModuleInterface;
   model?: ModelInterface;
+  quickstart?: QuickstartInterface;
   publicRoutes?: RouterTypeEnum[];
 };
 
@@ -42,4 +44,8 @@ export interface BuildedBackendCode {
   repository?: string;
   service?: string;
   mongooseSchema: string;
+};
+
+export interface QuickstartInterface {
+  app?: AppInterface[];
 };

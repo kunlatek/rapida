@@ -17,6 +17,7 @@ import { setTableTemplate } from "./table/template/main";
 
 import { setModuleController } from "./module/controller/main";
 import { setModuleTemplate } from "./module/template/main";
+import { quickstartMain } from "./quickstart/main";
 import { setTableInfiniteScrollService } from "./table/service/infinite-scroll-table-data-source";
 require("dotenv").config();
 
@@ -83,6 +84,10 @@ const createAngularProject = (
       component: controllerCode,
       template: templateCode,
     };
+  }
+
+  if (object.quickstart) {
+    quickstartMain(object);
   }
 
   // console.info(response);

@@ -30,6 +30,20 @@ const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitat
 const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api";
 const projectPath = "/home/ryzzan/Projects/animation";
 
+const app: AppInterface[] = [
+  {
+    name: "Kliento",
+    url: "https://kliento-dev.web.app",
+    icon: "person"
+  },
+  {
+    name: "Produkto",
+    url: "https://produkto-dev.web.app",
+    icon: "qr_code_2"
+  },
+]
+  ;
+
 import { ANIMATION } from "../collections-frontend/example/animation/animation";
 import { ANIMATION_FORM } from "../collections-frontend/example/animation/animation-form";
 import { ANIMATION_TABLE } from "../collections-frontend/example/animation/animation-table";
@@ -37,6 +51,7 @@ import { ANIMATION_TABLE } from "../collections-frontend/example/animation/anima
 import { CHARACTER } from "../collections-frontend/example/animation/character";
 import { CHARACTER_FORM } from "../collections-frontend/example/animation/character-form";
 import { CHARACTER_TABLE } from "../collections-frontend/example/animation/character-table";
+import { AppInterface } from "./interfaces/quickstart";
 
 const array = [
   ANIMATION_FORM,
@@ -49,14 +64,15 @@ const array = [
 ];
 
 array.forEach((object) => {
-  object.backendFramework = BackendFrameworkEnum.Loopback,
-    object.frontendFramework = FrontendFrameworkEnum.Angular,
-    object.projectPath = projectPath;
+  object.backendFramework = BackendFrameworkEnum.Loopback;
+  object.frontendFramework = FrontendFrameworkEnum.Angular;
+  object.projectPath = projectPath;
   object.cloneFrontendPath = cloneFrontendPath;
   object.cloneBackendPath = cloneBackendPath;
   object.envFrontendDev = envFrontDev;
   object.envFrontendProd = envFrontProd;
   object.envBackend = envBackend;
+  object.quickstart = { app };
 });
 
 createProject(array);
