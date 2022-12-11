@@ -10,10 +10,20 @@ const schemaMain = (
 ): string => {
   const schemaName: string = object.form!.id.replace("Form", "");
   let _arrayTypeModels: string = setArrayTypeSchemas(object.form?.elements!);
-  let _properties: string = setModelProperties(object);
+  let _properties: string = setModelProperties(object, TextTransformation.pascalfy(schemaName));
 
   let code = `
   import mongoose, { Schema } from "mongoose";
+
+  const unique = (modelName: string, field: string) => {
+    return async function (value: string) {
+      if (value && value.length) {
+        var query = mongoose.model(modelName).find({ [field]: { $regex: new RegExp('^' + value + '$', 'i') } });
+        const count = await query.count()
+        return count < 1
+      } else return false;
+    };
+  }
 
   ${_arrayTypeModels}
 

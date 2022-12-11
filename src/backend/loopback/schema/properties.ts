@@ -143,7 +143,7 @@ const setByElementInArrayType = (
   return code;
 };
 
-const setModelProperties = (object: MainInterface): string => {
+const setModelProperties = (object: MainInterface, schemaName: string): string => {
   if (!object.form) {
     console.info("Only forms set here");
     return ``;
@@ -154,14 +154,15 @@ const setModelProperties = (object: MainInterface): string => {
   const elements: Array<FormElementInterface> = getAllElements(object.form.elements);
 
   elements.forEach((element) => {
-    code += setByElement(/*object, */element);
+    code += setByElement(element, schemaName);
   });
 
   return code;
 };
 
 const setByElement = (
-  element: FormElementInterface
+  element: FormElementInterface,
+  schemaName: string,
 ): string => {
   const type = Object.keys(element)[0];
   const value = Object.values(element)[0];
@@ -189,7 +190,7 @@ const setByElement = (
         ${value.name}: [
           {
             type: mongoose.Schema.Types.ObjectId,
-            ref: '${className}', ${value.unique ? `unique: true,` : ``}
+            ref: '${className}', ${value.isUnique ? `unique: true,` : ``}
           }
         ],
       `;
@@ -197,7 +198,7 @@ const setByElement = (
       code += `
         ${value.name}: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: '${className}', ${value.unique ? `unique: true,` : ``}
+          ref: '${className}', ${value.isUnique ? `unique: true,` : ``}
           required: ${value.isRequired || false},
           ${!value.isRequired ? 'default: null,' : ''}
         },
@@ -214,7 +215,8 @@ const setByElement = (
   } else {
     code += `
       ${value.name}: {
-        type: ${propertyType}, ${value.unique ? `unique: true,` : ``}
+        type: ${propertyType}, 
+        ${value.isUnique ? `validate: [unique('${schemaName}', '${value.name}'), 'unique'],` : ``}
         required: ${value.isRequired || false},
         ${!value.isRequired ? 'default: null,' : ''}
       },
