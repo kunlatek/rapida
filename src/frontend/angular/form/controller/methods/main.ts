@@ -6,6 +6,7 @@ import { MainInterface } from "../../../../../interfaces/main";
 import { TextTransformation } from "../../../../../utils/text.transformation";
 import { setArray } from "../../../core/array";
 import { setArrayOfAutocompleteMultipleElements, setArrayOfElementsToCreateArray, setArraysToEdit } from "./array";
+import { setCalculateComposedValue } from "./calculate-composed-value";
 import {
   setCondition,
   setConditionOverEdition,
@@ -42,6 +43,9 @@ const setFormControllerMethods = (object: MainInterface): string => {
   });
 
   _arraysToEdit = setArraysToEdit(_arrays);
+
+  let _calculationComposedValue: string = ``;
+  _calculationComposedValue += setCalculateComposedValue(object, object.form.elements);
 
   const code = `
   ${_arrays.length > 0
@@ -208,9 +212,11 @@ const setFormControllerMethods = (object: MainInterface): string => {
       ? setConditionsInArray(object, object.form.elements)
       : ""
     }
-
-  ${_methods}
   
+  ${_methods}
+
+  ${_calculationComposedValue}
+
   ${objectId}Submit = async (
     ${objectId}Directive: FormGroupDirective
   ) => {

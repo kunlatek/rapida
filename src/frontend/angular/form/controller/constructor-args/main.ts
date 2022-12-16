@@ -4,7 +4,6 @@ import {
 } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
 import { setAutocompleteToEdit } from "./autocomplete-args";
-import { setCalculateComposedValue } from "./calculate-composed-value";
 import { setFormSelectOptions, setSelectToEdit } from "./select-args";
 require("dotenv").config();
 
@@ -24,13 +23,11 @@ const setFormControllerConstructorArguments = (
   let _optionsCreation: string = ``;
   let _autocompleteToEdit: string = ``;
   let _selectToEdit: string = ``;
-  let _calculationComposedValue: string = ``;
 
   _hasArray = false;
   _optionsCreation += setFormSelectOptions(object);
   _autocompleteToEdit += setAutocompleteToEdit(object, object.form.elements);
   _selectToEdit += setSelectToEdit(object, object.form.elements);
-  _calculationComposedValue += setCalculateComposedValue(object, object.form.elements);
   object.form.elements.forEach((element: any) => {
     verifyFormElement(element);
   });
@@ -73,10 +70,6 @@ const setFormControllerConstructorArguments = (
 
   this.${objectId}Form = 
   this._formBuilder.group(this.${objectId}Builder);
-
-  this.${objectId}Form.valueChanges.subscribe((form) => {
-    ${_calculationComposedValue}
-  })
   `;
 
   return code;

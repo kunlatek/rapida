@@ -130,6 +130,7 @@ export interface InputInterface {
   width?: number;
   composedValue?: ComposedValueInterface;
   isUnique?: boolean;
+  isAComposedValueTrigger?: boolean;
   todo?: string;
 }
 
