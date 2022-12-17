@@ -8,31 +8,35 @@ const setAppTemplate = (object: MainInterface) => {
     console.info("Only apps set here");
     return ``;
   }
-  const appCodeToSplit = fs.readFileSync(`${object.projectPath}/src/app/modules/main/main.component.html`).toString();
 
-  const appCodeSplitted = appCodeToSplit.split("<!-- APPS_SPACE -->");
-  const appMenuCodeSplitted = appCodeToSplit.split("<!-- APPS_SPACE_MENU -->");
+  try {
+    const projectPath = `${object.projectPath}/src/app/modules/main/main.component.html`;
+    const appCodeToSplit = fs.readFileSync(projectPath).toString();
+    const appCodeSplitted = appCodeToSplit.split("<!-- APPS_SPACE -->");
+    const appMenuCode = writeAppCode(object.quickstart.app);
 
+    let code = `
+    ${appCodeSplitted[0]}<!-- APPS_SPACE -->
+    <button mat-icon-button
+            [matMenuTriggerFor]="appMenu"
+            aria-label="Example icon-button with a menu">
+      <mat-icon>apps</mat-icon>
+    </button>
+    <!-- APPS_SPACE -->${appCodeSplitted[2]}
+    `;
 
-  const appMenuCode = writeAppCode(object.quickstart.app);
+    const appMenuCodeSplitted = code.split("<!-- APPS_SPACE_MENU -->");
 
-  let code = `
-  ${appCodeSplitted[0]}<!-- APPS_SPACE -->
-  <button mat-icon-button
-          [matMenuTriggerFor]="appMenu"
-          aria-label="Example icon-button with a menu">
-    <mat-icon>apps</mat-icon>
-  </button>
-  <!-- APPS_SPACE -->${appCodeSplitted[2]}
-  `;
+    code = `
+    ${appMenuCodeSplitted[0]}<!-- APPS_SPACE_MENU -->
+    ${appMenuCode}
+    <!-- APPS_SPACE_MENU -->${appMenuCodeSplitted[2]}
+    `;
 
-  code = `
-  ${appMenuCodeSplitted[0]}<!-- APPS_SPACE_MENU -->
-  ${appMenuCode}
-  <!-- APPS_SPACE_MENU -->${appMenuCodeSplitted[2]}
-  `;
-
-  console.log(code);
+    fs.writeFileSync(projectPath, code);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const writeAppCode = (array: AppInterface[]) => {
@@ -41,10 +45,10 @@ const writeAppCode = (array: AppInterface[]) => {
   `;
   array.forEach(element => {
     appCode += `
-    <button mat-menu-item>
+    <a [href]="['${element.url}']" target="_blank" mat-menu-item>
       ${element.icon ? `<mat-icon>${element.icon}</mat-icon>` : ""}
       <span>${element.name}</span>
-    </button>
+    </a>
     `;
   });
 
