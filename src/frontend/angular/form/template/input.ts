@@ -121,7 +121,7 @@ const setInput = (
     code += `
       <mat-form-field ${conditions}>
         <mat-label>${element.input.label}</mat-label>
-        <input matInput type="${element.input.type}" formControlName="${inputName}" ${placeholder} ${tooltip} ${required} ${mask} ${callMethod} autocomplete="new-password">
+        <input matInput type="${element.input.type}" formControlName="${inputName}" ${placeholder} ${tooltip} ${required} ${mask} ${callMethod} ${element.input.isAComposedValueTrigger ? setComposedValueTriggerFunction(object, inputName) : ``} autocomplete="new-password">
       </mat-form-field>
       `;
   }
@@ -141,6 +141,73 @@ const setAllParents = (lastParent: string) => {
       setAllParents(element.parentArray);
     }
   });
+};
+
+const getAllElements = (
+  elementList: Array<FormElementInterface>,
+  elementsToReturn: Array<FormElementInterface> = [],
+): Array<FormElementInterface> => {
+
+  const validTypes = ["checkbox", "radio", "datalist", "fieldset", "input", "select", "slide", "textarea", "text", "autocomplete", "array"];
+
+  elementList.forEach(element => {
+    const type = Object.keys(element)[0];
+
+    if (validTypes.includes(type)) {
+
+      elementsToReturn.push(element);
+
+    } else if (type === "tabs") {
+
+      element.tabs?.forEach((tab) => {
+        elementsToReturn = getAllElements(tab.elements, elementsToReturn);
+      });
+
+    }
+    // else if (type === 'array') {
+
+    //   elementsToReturn = getAllElements(element!.array?.elements || [], elementsToReturn);
+
+    // }
+
+  });
+
+  return elementsToReturn;
+};
+
+const setComposedValueTriggerFunction = (object: MainInterface, inputName: string) => {
+  const elements: Array<FormElementInterface> = getAllElements(object!.form!.elements);
+
+  const composedValueElement = elements.find((element: FormElementInterface) => element.input?.composedValue?.fields?.includes(inputName));
+  const composedValueName = composedValueElement && composedValueElement.input?.name;
+  if (composedValueName) {
+    const pascalName: string = TextTransformation.pascalfy(composedValueName || '');
+    return `(keyup)="updateComposedValue${pascalName}()"`;
+  }
+
+  const arrayObjElements: any[] = elements
+    .filter((element: FormElementInterface) => element.array)
+    .map((element: FormElementInterface) => {
+      return {
+        array: TextTransformation.singularize(element.array!.id),
+        elements: element.array?.elements,
+        elementNames: element.array?.elements?.map(el => el.input?.name),
+      };
+    });
+
+  const composedValueInArrayElement = arrayObjElements.find((obj: any) => obj.elementNames.includes(inputName));
+  const composedValueInArrayName = composedValueInArrayElement && composedValueInArrayElement.array;
+
+  if (composedValueInArrayName) {
+    const elementsFromArray: Array<FormElementInterface> = getAllElements(composedValueInArrayElement && composedValueInArrayElement.elements);
+    const composedValueElementInArray = elementsFromArray.find((element: FormElementInterface) => element.input?.composedValue?.fields?.includes(inputName));
+    const composedValueNameInArray = composedValueElementInArray && composedValueElementInArray.input?.name;
+
+    const pascalNameInArray: string = TextTransformation.pascalfy(composedValueNameInArray || '');
+    return `(keyup)="updateComposedValueInArray${pascalNameInArray}(${composedValueInArrayName}Index)"`;
+  }
+
+  return ``;
 };
 
 export { setInput };

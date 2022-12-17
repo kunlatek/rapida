@@ -33,21 +33,30 @@ const setCalculateComposedValue = (
                 element.input.composedValue.fields.forEach((field: string) => fields += `this.${objectId}Form.get('${field}')?.value,`);
 
                 code += `
-                    const composedValue${pascalName} = calculate({
-                        operator: '${element.input.composedValue.operator}' as MathOperatorEnum,
-                        elements: [${fields}],
-                        ${element.input.composedValue.roundTo ? `roundTo: ${element.input.composedValue.roundTo},` : ``}
-                    });
-                    this.${objectId}Form.get('${element.input.name}')?.setValue(composedValue${pascalName});
+                    updateComposedValue${pascalName} = () => {
+                        const composedValue${pascalName} = calculate({
+                            operator: '${element.input.composedValue.operator}' as MathOperatorEnum,
+                            elements: [${fields}],
+                            ${element.input.composedValue.roundTo ? `roundTo: ${element.input.composedValue.roundTo},` : ``}
+                        });
+
+                        this.${objectId}Form.get('${element.input.name}')?.setValue(composedValue${pascalName});
+                    }
                 `;
             } else {
                 let fields = ``;
-                element.input.composedValue.fields.forEach((field: string) => fields += `'${field}',`);
+                element.input.composedValue.fields.forEach((field: string) => fields += `this.${objectId}Form.get(['${arrayId}', index, '${field}'])?.value,`);
 
                 code += `
-                    const composedValue${pascalName} = calculateArray({ array: [...form.${arrayId}], fieldsArray: [${fields}], composedField: '${element.input.name}', operator: '${element.input.composedValue.operator}' as MathOperatorEnum, ${element.input.composedValue.roundTo ? `roundTo: ${element.input.composedValue.roundTo},` : ``}  })
-                    if (composedValue${pascalName} !== this.${objectId}Form.get('${arrayId}')?.value)
-                        this.${objectId}Form.get('${arrayId}')?.setValue([...composedValue${pascalName}]);
+                    updateComposedValueInArray${pascalName} = (index: number) => {
+                        const composedValue${pascalName} = calculate({
+                            operator: '${element.input.composedValue.operator}' as MathOperatorEnum,
+                            elements: [${fields}],
+                            ${element.input.composedValue.roundTo ? `roundTo: ${element.input.composedValue.roundTo},` : ``}
+                        });
+
+                        this.${objectId}Form.get(['${arrayId}', index, '${element.input.name}'])?.setValue(composedValue${pascalName});
+                    }
                 `;
             }
 
