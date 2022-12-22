@@ -456,7 +456,10 @@ const displayNoMultipleAutocomplete = (
     displayFnTo${autocompleteNamePascal} = (value?: any) => {
       if (this.filtered${autocompleteNamePascal}[0]) {
         ${formFieldsFilledByApiResponseCode}      
-        return ${labelFieldCode};
+        
+        const toReturn = ${labelFieldCode}
+        this.filtered${autocompleteNamePascal} = [];
+        return toReturn;
       }
         
       return "";
