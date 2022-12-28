@@ -22,6 +22,7 @@ export const ANIMATION_FORM: MainInterface = {
                   placeholder: "Nome da animação",
                   type: FormInputTypeEnum.Text,
                   isRequired: true,
+                  isUnique: true,
                 },
               },
               {

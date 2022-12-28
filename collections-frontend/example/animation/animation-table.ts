@@ -6,7 +6,7 @@ import { MainInterface } from "../../../src/interfaces/main";
 export const ANIMATION_TABLE: MainInterface = {
   table: {
     id: "animationTable",
-    title: "Exemplos",
+    title: "Animações",
     infiniteScroll: true,
     data: {
       type: RequestTypeEnum.Object,

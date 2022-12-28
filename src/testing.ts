@@ -20,7 +20,7 @@ PORT=3000
 SERVER_ROOT_URI=http://localhost:3000
 CLIENT_REDIRECT_URI=http://localhost:4200
 MONGO_URL=mongodb+srv://kunlatek:Kunlatek751@cluster0.b0pfr.mongodb.net/__DB_NAME__?authSource=admin&replicaSet=atlas-zft6fn-shard-0&readPreference=primary&ssl=true
-DB=animation
+DB=executa
 NODEMAILER_USER=administrativo@kunlatek.com
 NODEMAILER_PASS=yetyxhgzjzktuwef
 ADMIN_USERS=contato@kunlatek.com
@@ -28,39 +28,32 @@ ADMIN_USERS=contato@kunlatek.com
 
 const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitation-and-permission";
 const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api";
-const projectPath = "/home/ryzzan/Projects/animation";
+const projectPath = "/home/ryzzan/Projects/Clients/executa";
 
-const app: AppInterface[] = [
-  {
-    name: "Kliento",
-    url: "https://kliento-dev.web.app",
-    icon: "person"
-  },
-  {
-    name: "Produkto",
-    url: "https://produkto-dev.web.app",
-    icon: "qr_code_2"
-  },
-]
-  ;
+import { COURSE } from "../collections-frontend/clients/executa/course";
+import { COURSE_FORM } from "../collections-frontend/clients/executa/course-form";
+import { COURSE_TABLE } from "../collections-frontend/clients/executa/course-table";
 
-import { ANIMATION } from "../collections-frontend/example/animation/animation";
-import { ANIMATION_FORM } from "../collections-frontend/example/animation/animation-form";
-import { ANIMATION_TABLE } from "../collections-frontend/example/animation/animation-table";
+import { COURSE_SCHEDULE } from "../collections-frontend/clients/executa/course-schedule";
+import { COURSE_SCHEDULE_FORM } from "../collections-frontend/clients/executa/course-schedule-form";
+import { COURSE_SCHEDULE_TABLE } from "../collections-frontend/clients/executa/course-schedule-table";
 
-import { CHARACTER } from "../collections-frontend/example/animation/character";
-import { CHARACTER_FORM } from "../collections-frontend/example/animation/character-form";
-import { CHARACTER_TABLE } from "../collections-frontend/example/animation/character-table";
-import { AppInterface } from "./interfaces/quickstart";
+import { QUIZ } from "../collections-frontend/clients/executa/quiz";
+import { QUIZ_FORM } from "../collections-frontend/clients/executa/quiz-form";
+import { QUIZ_TABLE } from "../collections-frontend/clients/executa/quiz-table";
 
 const array = [
-  ANIMATION_FORM,
-  ANIMATION_TABLE,
-  ANIMATION,
+  COURSE_FORM,
+  COURSE_TABLE,
+  COURSE,
 
-  CHARACTER_FORM,
-  CHARACTER_TABLE,
-  CHARACTER,
+  COURSE_SCHEDULE_FORM,
+  COURSE_SCHEDULE_TABLE,
+  COURSE_SCHEDULE,
+
+  QUIZ_FORM,
+  QUIZ_TABLE,
+  QUIZ,
 ];
 
 array.forEach((object) => {
@@ -72,7 +65,6 @@ array.forEach((object) => {
   object.envFrontendDev = envFrontDev;
   object.envFrontendProd = envFrontProd;
   object.envBackend = envBackend;
-  object.quickstart = { app };
 });
 
 createProject(array);
