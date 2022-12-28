@@ -6,14 +6,15 @@ export interface TableInterface {
   id: string;
   data: RequestInterface;
   elements: Array<TableElementInterface>;
-  fieldsToLabels?: Array<{label: string; field: string;}>;
-  formIdToFieldsToLabels?: string;
+  fieldsToLabels?: Array<{ label: string; field: string; }>; // Creates XLS according to fields chosen from the related form using label as table column name
+  formIdToFieldsToLabels?: string; // Creates XLS using all the fields related to formId
   actions?: FormInterface;
   object?: Array<unknown>;
   subtitle?: string;
   title?: string;
   service?: ServiceInterface;
   infiniteScroll?: boolean;
+  filtersToSearch?: [{ label: string; field: string; }]; // Specific filters to search table list content
 }
 
 export interface TableElementInterface {
