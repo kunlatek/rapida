@@ -53,9 +53,11 @@ const setControllerMethods = (object: MainInterface): string => {
         })
   
       } catch (err: any) {
-  
+        const logMessage = (err?.message || '').includes(':') ?
+          err.message.split(':').pop().trim() : err?.message;
+
         return HttpResponseToClient.badRequestErrorHttpResponse({
-          logMessage: err.message,
+          logMessage,
           locale,
           request: this.httpRequest,
           response: this.httpResponse,
@@ -191,9 +193,11 @@ const setControllerMethods = (object: MainInterface): string => {
         })
   
       } catch (err: any) {
-  
+        const logMessage = (err?.message || '').includes(':') ?
+          err.message.split(':').pop().trim() : err?.message;
+
         return HttpResponseToClient.badRequestErrorHttpResponse({
-          logMessage: err.message,
+          logMessage,
           locale,
           request: this.httpRequest,
           response: this.httpResponse,
@@ -234,9 +238,11 @@ const setControllerMethods = (object: MainInterface): string => {
         })
   
       } catch (err: any) {
-  
+        const logMessage = (err?.message || '').includes(':') ?
+          err.message.split(':').pop().trim() : err?.message;
+
         return HttpResponseToClient.badRequestErrorHttpResponse({
-          logMessage: err.message,
+          logMessage,
           locale,
           request: this.httpRequest,
           response: this.httpResponse,

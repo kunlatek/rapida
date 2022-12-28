@@ -216,7 +216,7 @@ const setByElement = (
     code += `
       ${value.name}: {
         type: ${propertyType}, 
-        ${value.isUnique ? `validate: [unique('${schemaName}', '${value.name}'), 'unique'],` : ``}
+        ${value.isUnique ? `validate: [unique('${schemaName}', '${value.name}'), '${value.name} is unique'],` : ``}
         required: ${value.isRequired || false},
         ${!value.isRequired ? 'default: null,' : ''}
       },
