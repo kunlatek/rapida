@@ -186,11 +186,12 @@ const setInputRequestToFind = (
       ${array ? `${arrayIdSingular}Index: number` : ``}
     ) => {
       try {
-        const array: any = await lastValueFrom(
+        const array: any = await 
+        //lastValueFrom(
           this._${objectId}Service.${inputName}InputRequestToFind(
             ${mainFilterCode}, ${otherFiltersCode}
           )
-        );
+        //);
         if (array${element.input?.apiRequest?.isNotKunlatekResponse ? "" : ".data"
     }) {
           ${fillFieldsOverApiRequest(object, element, array)}

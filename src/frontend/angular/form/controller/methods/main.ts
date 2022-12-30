@@ -224,17 +224,14 @@ const setFormControllerMethods = (object: MainInterface): string => {
 
       try {
         if(this.isAddModule) {
-            await lastValueFrom(this._${objectId}Service.save(
-              this.${objectId}Form.value
-            ));
+            // await lastValueFrom(this._${objectId}Service.save(this.${objectId}Form.value));
+            await this._${objectId}Service.save(this.${objectId}Form.value);
         }
 
         if(!this.isAddModule) {
           ${/*_treatmentBeforeSubmitting*/''}
-            await lastValueFrom(this._${objectId}Service.update(
-              this.${objectId}Form.value,
-              this.${objectId}Id
-            ));
+            // await lastValueFrom(this._${objectId}Service.update(this.${objectId}Form.value,this.${objectId}Id));
+            await this._${objectId}Service.update(this.${objectId}Form.value,this.${objectId}Id);
         }
         this.redirectTo
         ("main/${TextTransformation.kebabfy(objectId.split("Form")[0])}");
@@ -257,7 +254,8 @@ const setFormControllerMethods = (object: MainInterface): string => {
   
   refreshToken = async () => {
       try {
-        const res: any = await await lastValueFrom(this._${objectId}Service.refreshToken());
+        // const res: any = await await lastValueFrom(this._${objectId}Service.refreshToken());
+        const res: any = await this._${objectId}Service.refreshToken();
         if (res) {
           sessionStorage.setItem('token', res?.data.authToken);
           sessionStorage.setItem('refreshToken', res?.data.authRefreshToken);

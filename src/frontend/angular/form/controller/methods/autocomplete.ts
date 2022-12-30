@@ -547,8 +547,9 @@ const filterAutocompleteOption = (
     })}\``
     }
 
-      const result: any = await lastValueFrom(this._${object.form?.id}Service
-      .${autocompleteName}SelectObjectGetAll(filter.replace("},]", "}]")));
+      // const result: any = await lastValueFrom(this._${object.form?.id}Service
+      const result: any = await this._${object.form?.id}Service
+      .${autocompleteName}SelectObjectGetAll(filter.replace("},]", "}]"));
     
       this.filtered${autocompleteNamePascal} = result.data.result;
       ${array && getParentsIndexes && getParentsIndexes !== ""

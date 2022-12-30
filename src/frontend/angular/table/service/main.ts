@@ -21,9 +21,10 @@ const setTableService = ({ table, projectPath }: MainInterface): string => {
   let _services: string = setTableServiceServices(table);
 
   let code = `
-  import { HttpClient } from "@angular/common/http";
+  /*import { HttpClient } from "@angular/common/http";*/
   import { Injectable } from "@angular/core";
   import { HttpParams } from "@angular/common/http";
+  import { Http } from "src/app/implementations";
   
   @Injectable({
   providedIn: "root",
@@ -31,20 +32,28 @@ const setTableService = ({ table, projectPath }: MainInterface): string => {
   export class ${TextTransformation.pascalfy(table.id)}Service {
       BASE_URL = "${table.service?.baseUrl}";
 
-      constructor(private _httpClient: HttpClient) {}
+      constructor(/*private _httpClient: HttpClient*/) {}
 
       ${_services}
 
       ${_hasAuthorization
       ? `
         refreshToken () {
-          return this._httpClient.get(
+          /*return this._httpClient.get(
             \`\${this.BASE_URL}/auth/refresh-token\`, {
             headers: {
               'Authorization': \`Bearer \${sessionStorage.getItem('refreshToken')}\`
             }
           }
-          );
+          );*/
+          return Http.get({
+            route: \`\${this.BASE_URL}/auth/refresh-token\`,
+            options: {
+              headers: {
+                'Authorization': \`Bearer \${sessionStorage.getItem('refreshToken')}\`
+              }
+            }
+          });
         }
         `
       : ``
@@ -91,14 +100,22 @@ const setTableServiceServicesOverTableElement = (
       case ServiceFunctionsEnum.Get:
         code += `
         getAll(params: HttpParams) {
-          return this._httpClient.get(
+          /*return this._httpClient.get(
             \`\${this.BASE_URL}/${service.endpoint}\`, {
               params,
               headers: {
                 ${hasAuthorization}
               }
             }
-          );
+          );*/
+          return Http.get({
+            route: \`\${this.BASE_URL}/${service.endpoint}\`,
+            options: {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+          });
         };
         `;
         break;
@@ -106,14 +123,22 @@ const setTableServiceServicesOverTableElement = (
       case ServiceFunctionsEnum.Find:
         code += `
         find(id: string) {
-          return this._httpClient.get(
+          /*return this._httpClient.get(
             \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
             {
               headers: {
                 ${hasAuthorization}
               }
             }
-          );
+          );*/
+          return Http.get({
+            route: \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
+            options: {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+          });
         };
         `;
         break;
@@ -121,7 +146,7 @@ const setTableServiceServicesOverTableElement = (
       case ServiceFunctionsEnum.Save:
         code += `
         save(body: any) {
-          return this._httpClient.post(
+          /*return this._httpClient.post(
           \`\${this.BASE_URL}/${service.endpoint}\`, 
           body,
           {
@@ -129,7 +154,16 @@ const setTableServiceServicesOverTableElement = (
               ${hasAuthorization}
             }
           }
-          );
+          );*/
+          return Http.post({
+            route: \`\${this.BASE_URL}/${service.endpoint}\`,
+            body,
+            options: {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+          });
         };
         `;
         break;
@@ -137,7 +171,7 @@ const setTableServiceServicesOverTableElement = (
       case ServiceFunctionsEnum.Update:
         code += `
         update(body: any, id: string) {
-          return this._httpClient.put(
+          /*return this._httpClient.put(
             \`\${this.BASE_URL}/${service.endpoint}/\${id}\`, 
             body,
             {
@@ -145,7 +179,16 @@ const setTableServiceServicesOverTableElement = (
                 ${hasAuthorization}
               }
             }
-          );
+          );*/
+          return Http.put({
+            route: \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
+            body,
+            options: {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+          });
         };
         `;
         break;
@@ -153,14 +196,22 @@ const setTableServiceServicesOverTableElement = (
       case ServiceFunctionsEnum.Delete:
         code += `
         delete(id: string) {
-          return this._httpClient.delete(
+          /*return this._httpClient.delete(
             \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
             {
               headers: {
                 ${hasAuthorization}
               }
             }
-          );
+          );*/
+          return Http.delete({
+            route: \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
+            options: {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+          });
         };
         `;
         break;
@@ -168,14 +219,22 @@ const setTableServiceServicesOverTableElement = (
       case ServiceFunctionsEnum.SoftDelete:
         code += `
         softDelete(id: string) {
-          return this._httpClient.put(
+          /*return this._httpClient.put(
             \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
             {
               headers: {
                 ${hasAuthorization}
               }
             }
-          );
+          );*/
+          return Http.put({
+            route: \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
+            options: {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+          });
         };
         `;
         break;

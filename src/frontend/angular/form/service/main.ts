@@ -35,9 +35,10 @@ const setFormService = (
   }
 
   let code = `
-  import { HttpClient } from "@angular/common/http";
+  // import { HttpClient } from "@angular/common/http";
   import { Injectable } from "@angular/core";
   import { convertJsonToFormData } from "src/app/utils/convert-json-to-form-data";
+  import { Http } from "src/app/implementations";
 
   @Injectable({
   providedIn: "root",
@@ -45,20 +46,28 @@ const setFormService = (
   export class ${TextTransformation.pascalfy(object.form.id)}Service {
       BASE_URL = "${object.form.service?.baseUrl}";
 
-      constructor(private _httpClient: HttpClient) {}
+      constructor(/*private _httpClient: HttpClient*/) {}
 
       ${_services}
 
       ${_hasAuthorization
       ? `
         refreshToken () {
-          return this._httpClient.get(
+          /*return this._httpClient.get(
             \`\${this.BASE_URL}/auth/refresh-token\`, {
             headers: {
               'Authorization': \`Bearer \${sessionStorage.getItem('refreshToken')}\`
             }
           }
-          );
+          );*/
+          return Http.get({
+            route: \`\${this.BASE_URL}/auth/refresh-token\`,
+            options: {
+              headers: {
+                'Authorization': \`Bearer \${sessionStorage.getItem('refreshToken')}\`
+              }
+            }
+          });
         }
         `
       : ``
@@ -84,28 +93,44 @@ const setFormServiceServices = (service: ServiceInterface): string => {
       case ServiceFunctionsEnum.Get:
         code += `
         getAll(filter: string = "") {
-          return this._httpClient.get(
+          /*return this._httpClient.get(
             \`\${this.BASE_URL}/${service.endpoint}\${filter}\`, {
               headers: {
                 ${hasAuthorization}
               }
             }
-          );
-        };
+          );*/
+          return Http.get({
+            route: \`\${this.BASE_URL}/${service.endpoint}\${filter}\`,
+            options: {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+          });
+        }
         `;
         break;
 
       case ServiceFunctionsEnum.Find:
         code += `
         find(id: string) {
-          return this._httpClient.get(
+          /*return this._httpClient.get(
             \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
             {
               headers: {
                 ${hasAuthorization}
               }
             }
-          );
+          );*/
+          return Http.get({
+            route:  \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
+            options: {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+          });
         };
         `;
         break;
@@ -114,7 +139,7 @@ const setFormServiceServices = (service: ServiceInterface): string => {
         code += `
         save(body: any) {
           body = convertJsonToFormData(body, null, new FormData());
-          return this._httpClient.post(
+          /*return this._httpClient.post(
           \`\${this.BASE_URL}/${service.endpoint}\`, 
           body,
           {
@@ -122,7 +147,16 @@ const setFormServiceServices = (service: ServiceInterface): string => {
               ${hasAuthorization}
             }
           }
-          );
+          );*/
+          return Http.post({
+            route: \`\${this.BASE_URL}/${service.endpoint}\`, 
+            body,
+            options: {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+          });
         };
         `;
         break;
@@ -131,7 +165,7 @@ const setFormServiceServices = (service: ServiceInterface): string => {
         code += `
         update(body: any, id: string) {
           body = convertJsonToFormData(body, null, new FormData());
-          return this._httpClient.put(
+          /*return this._httpClient.put(
             \`\${this.BASE_URL}/${service.endpoint}/\${id}\`, 
             body,
             {
@@ -139,7 +173,16 @@ const setFormServiceServices = (service: ServiceInterface): string => {
                 ${hasAuthorization}
               }
             }
-          );
+          );*/
+          return Http.put({
+            route: \`\${this.BASE_URL}/${service.endpoint}/\${id}\`, 
+            body,
+            options: {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+          });
         };
         `;
         break;
@@ -147,14 +190,22 @@ const setFormServiceServices = (service: ServiceInterface): string => {
       case ServiceFunctionsEnum.Delete:
         code += `
         delete(id: string) {
-          return this._httpClient.delete(
+          /*return this._httpClient.delete(
             \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
             {
               headers: {
                 ${hasAuthorization}
               }
             }
-          );
+          );*/
+          return Http.delete({
+            route: \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
+            options: {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+          });
         };
         `;
         break;
@@ -162,14 +213,22 @@ const setFormServiceServices = (service: ServiceInterface): string => {
       case ServiceFunctionsEnum.SoftDelete:
         code += `
         softDelete(id: string) {
-          return this._httpClient.put(
+          /*return this._httpClient.put(
             \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
             {
               headers: {
                 ${hasAuthorization}
               }
             }
-          );
+          );*/
+          return Http.put({
+            route: \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
+            options: {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+          });
         };
         `;
         break;
@@ -203,13 +262,21 @@ const setFormServiceServicesOverFormElement = (
                 filter += \`/\${otherFilter.filterProperty}/\${otherFilter.filterValue}\`;
               });
             }
-            return this._httpClient.get(
+            /*return this._httpClient.get(
               \`\${this.BASE_URL}/${apiRequest.endpoint}/\${filter}\`, {
               headers: {
                 ${hasAuthorization}
               }
             }
-            );
+            );*/
+            return Http.get({
+              route: \`\${this.BASE_URL}/${apiRequest.endpoint}/\${filter}\`,
+              options: {
+                headers: {
+                  ${hasAuthorization}
+                }
+              }
+            });
         }
         `;
       }
@@ -222,13 +289,21 @@ const setFormServiceServicesOverFormElement = (
                 filter += \`&\${otherFilter.filterProperty}=\${otherFilter.filterValue}\`;
               });
             }
-            return this._httpClient.get(
+            /*return this._httpClient.get(
               \`\${this.BASE_URL}/${apiRequest.endpoint}\${filter}\`, {
               headers: {
                 ${hasAuthorization}
               }
             }
-            );
+            );*/
+            return Http.get({
+              route: \`\${this.BASE_URL}/${apiRequest.endpoint}\${filter}\`, 
+              options: {
+                headers: {
+                  ${hasAuthorization}
+                }
+              }
+            });*/
         }
         `;
       }
@@ -241,13 +316,21 @@ const setFormServiceServicesOverFormElement = (
                 filter += \`&\${otherFilter.filterProperty}=\${otherFilter.filterValue}\`;
               });
             }
-            return this._httpClient.get(
+            /*return this._httpClient.get(
               \`${apiRequest.externalEndpoint}\${filter}\`, {
               headers: {
                 ${hasAuthorization}
               }
             }
-            );
+            );*/
+            return Http.get({
+              route: \`${apiRequest.externalEndpoint}\${filter}\`, 
+              options: {
+                headers: {
+                  ${hasAuthorization}
+                }
+              }
+            });
         }
         `;
       }
@@ -260,13 +343,21 @@ const setFormServiceServicesOverFormElement = (
                 filter += \`/\${otherFilter.filterProperty}/\${otherFilter.filterValue}\`;
               });
             }
-            return this._httpClient.get(
+            /*return this._httpClient.get(
               \`${apiRequest.externalEndpoint}/\${filter}\`, {
               headers: {
                 ${hasAuthorization}
               }
             }
-            );
+            );*/
+            return Http.get({
+              route: \`${apiRequest.externalEndpoint}/\${filter}\`, 
+              options: {
+                headers: {
+                  ${hasAuthorization}
+                }
+              }
+            });
         }
         `;
       }
@@ -278,13 +369,21 @@ const setFormServiceServicesOverFormElement = (
       if (element.autocomplete.optionsApi.endpoint) {
         code += `
           ${element.autocomplete.name}SelectObjectGetAll(filter: string = "") {
-            return this._httpClient.get(
+            /*return this._httpClient.get(
               \`\${this.BASE_URL}/${element.autocomplete.optionsApi.endpoint}\${filter}\`, {
               headers: {
                 ${hasAuthorization}
               }
             }
-            );
+            );*/
+            return Http.get({
+              route: \`\${this.BASE_URL}/${element.autocomplete.optionsApi.endpoint}\${filter}\`, 
+              options: {
+                headers: {
+                  ${hasAuthorization}
+                }
+              }
+            });
         }
         `;
       }
@@ -292,13 +391,21 @@ const setFormServiceServicesOverFormElement = (
       if (element.autocomplete.optionsApi.externalEndpoint) {
         code += `
           ${element.autocomplete.name}SelectObjectGetAll(filter: string = "") {
-            return this._httpClient.get(
+            /*return this._httpClient.get(
               \`${element.autocomplete.optionsApi.externalEndpoint}\${filter}\`, {
               headers: {
                 ${hasAuthorization}
               }
             }
-            );
+            );*/
+            return Http.get({
+              route: \`${element.autocomplete.optionsApi.externalEndpoint}\${filter}\`, 
+              options: {
+                headers: {
+                  ${hasAuthorization}
+                }
+              }
+            });
         }
         `;
       }
@@ -310,13 +417,21 @@ const setFormServiceServicesOverFormElement = (
       if (element.select.optionsApi.endpoint) {
         code += `
         ${element.select.name}SelectObjectGetAll() {
-          return this._httpClient.get(
+          /*return this._httpClient.get(
             \`\${this.BASE_URL}/${element.select.optionsApi.endpoint}\`, {
             headers: {
               ${hasAuthorization}
             }
           }
-          );
+          );*/
+          return Http.get({
+            route: \`\${this.BASE_URL}/${element.select.optionsApi.endpoint}\`, 
+            options: {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+          });
         }
         `;
       }
@@ -324,13 +439,21 @@ const setFormServiceServicesOverFormElement = (
       if (element.select.optionsApi.externalEndpoint) {
         code += `
         ${element.select.name}SelectObjectGetAll() {
-          return this._httpClient.get(
+          /*return this._httpClient.get(
             \`${element.select.optionsApi.externalEndpoint}\`, {
             headers: {
               ${hasAuthorization}
             }
           }
-          );
+          );*/
+          return Http.get({
+            route: \`${element.select.optionsApi.externalEndpoint}\`, 
+            options: {
+              headers: {
+                ${hasAuthorization}
+              }
+            }
+          });
         }
         `;
       }
