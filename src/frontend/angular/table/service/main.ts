@@ -109,7 +109,7 @@ const setTableServiceServicesOverTableElement = (
             }
           );*/
           return Http.get({
-            route: \`\${this.BASE_URL}/${service.endpoint}\`,
+            route: \`\${this.BASE_URL}/${service.endpoint}?\${params.toString()}\`,
             options: {
               headers: {
                 ${hasAuthorization}
