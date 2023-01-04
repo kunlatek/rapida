@@ -75,6 +75,7 @@ const setControllerMethods = (object: MainInterface): string => {
   async find(
       @param.query.string('filters') filters?: string,
       @param.query.number('limit') limit?: number,
+      @param.query.boolean('no_limit') noLimit?: boolean,
       @param.query.number('page') page?: number,
       @param.query.string('order_by') orderBy?: string,
       @param.query.string('locale') locale?: LocaleEnum,
@@ -82,6 +83,10 @@ const setControllerMethods = (object: MainInterface): string => {
       try {
           let and = [{ _deletedAt: null }]
           if (filters) and.push(JSON.parse(filters))
+          
+          const total = await ${TextTransformation.pascalfy(modelName)}Schema.countDocuments({"$and": and});
+
+          if(noLimit) limit = total
 
           let result = await ${TextTransformation.pascalfy(modelName)}Schema
             .find({"$and": and})
@@ -92,8 +97,6 @@ const setControllerMethods = (object: MainInterface): string => {
           result = JSON.parse(JSON.stringify(result))
 
           ${setSeveralExternalApiDataFound(object)}
-
-          const total = await ${TextTransformation.pascalfy(modelName)}Schema.countDocuments({"$and": and});
 
           const tokens = ${object.publicRoutes?.includes(RouterTypeEnum.Read) ? `{};` : `await Autentikigo.refreshToken(this.httpRequest.headers.authorization!);`}
 
