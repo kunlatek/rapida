@@ -1,5 +1,6 @@
 export interface AppInterface {
   name: string;
+  db: string;
   url: string;
   icon?: string;
   iconPath?: string;

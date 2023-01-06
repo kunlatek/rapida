@@ -15,6 +15,7 @@ import { setTableController } from "./table/controller/main";
 import { setTableService } from "./table/service/main";
 import { setTableTemplate } from "./table/template/main";
 
+import { setInvitationConfigs } from "./core/invitation";
 import { setModuleController } from "./module/controller/main";
 import { setModuleTemplate } from "./module/template/main";
 import { quickstartMain } from "./quickstart/main";
@@ -88,6 +89,7 @@ const createAngularProject = (
 
   if (object.quickstart) {
     quickstartMain(object);
+    setInvitationConfigs(object);
   }
 
   // console.info(response);
