@@ -1,6 +1,7 @@
 import { BackendFrameworkEnum } from "../enums/main";
 import { BuildedBackendCode, MainInterface } from "../interfaces/main";
 import { createLoopbackProject } from "./loopback/main";
+import { setInvitationConfigs } from "./loopback/utils/invitation";
 import { setUtilsModulesList } from "./loopback/utils/modules-list";
 
 const setBackend = (
@@ -19,6 +20,7 @@ const setBackend = (
       case BackendFrameworkEnum.Loopback:
         response = createLoopbackProject(array[index], index);
         setUtilsModulesList(array.filter(object => object.module));
+        if (array[index].quickstart) setInvitationConfigs(array[index]);
         break;
 
       default:
