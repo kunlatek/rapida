@@ -31,7 +31,7 @@ const writeInvitationCode = (array: AppInterface[]) => {
     array
         .filter(element => element.permissionEnabled)
         .forEach(element => {
-            appCode += `<mat-option value="${element.db}">${element.name}</mat-option>`;
+            appCode += `<mat-option value="${element.db}" (click)="clearPermissionGroupOptions()">${element.name}</mat-option>`;
         });
 
     return appCode;
