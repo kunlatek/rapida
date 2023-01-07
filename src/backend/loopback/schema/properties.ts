@@ -21,7 +21,7 @@ const booleanTypes = ["slide"];
 
 const dateTypes = ["date", "datetime-local"];
 
-const setArrayTypeSchemas = (formElements: Array<FormElementInterface>): string => {
+const setArrayTypeSchemas = (formElements: Array<FormElementInterface>, schemaName: string): string => {
 
   let code = ``;
 
@@ -38,17 +38,17 @@ const setArrayTypeSchemas = (formElements: Array<FormElementInterface>): string 
 
       let _properties = ``;
 
-      const createProperties = (elements: Array<FormElementInterface>) => {
+      const createProperties = (elements: Array<FormElementInterface>, arrayFullPath: String = '') => {
         let _propertiesToReturn = ``;
 
         for (let elementPropertyIndex = 0; elementPropertyIndex < elements?.length; elementPropertyIndex++) {
           const elementProperty = elements[elementPropertyIndex];
 
-          _propertiesToReturn += setByElementInArrayType(elementProperty);
+          _propertiesToReturn += setByElementInArrayType(elementProperty, schemaName, arrayFullPath);
 
           if (elementProperty.array) {
             const _relatedTypeInMultidimensionalArray = TextTransformation.setIdToClassName(elementProperty.array.id);
-            const _propertiesCreatedInMultidimensionalArray = createProperties(elementProperty.array.elements);
+            const _propertiesCreatedInMultidimensionalArray = createProperties(elementProperty.array.elements, `${arrayFullPath}.${elementProperty.array.id}`);
 
             arrayTypeSchemas += `
               const ${_relatedTypeInMultidimensionalArray} = new Schema({
@@ -61,7 +61,7 @@ const setArrayTypeSchemas = (formElements: Array<FormElementInterface>): string 
         return _propertiesToReturn;
       };
 
-      const _propertiesCreated = createProperties(value.elements);
+      const _propertiesCreated = createProperties(value.elements, value.id);
       _properties += _propertiesCreated;
 
       code += `
@@ -78,7 +78,9 @@ const setArrayTypeSchemas = (formElements: Array<FormElementInterface>): string 
 };
 
 const setByElementInArrayType = (
-  element: FormElementInterface
+  element: FormElementInterface,
+  schemaName: string,
+  arrayFullPath: String,
 ): string => {
 
   const type = Object.keys(element)[0];
@@ -134,6 +136,7 @@ const setByElementInArrayType = (
     code += `
       ${value.name}: {
         type: ${propertyType},
+        ${value.isUnique ? `validate: [uniqueInArray('${schemaName}', '${arrayFullPath}', '${value.name}'), '${value.name} is unique'],` : ``}
         required: ${value.isRequired || false},
         ${!value.isRequired ? 'default: null,' : ''}
       },

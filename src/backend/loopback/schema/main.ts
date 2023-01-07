@@ -9,7 +9,7 @@ const schemaMain = (
   index: number,
 ): string => {
   const schemaName: string = object.form!.id.replace("Form", "");
-  let _arrayTypeModels: string = setArrayTypeSchemas(object.form?.elements!);
+  let _arrayTypeModels: string = setArrayTypeSchemas(object.form?.elements!, TextTransformation.pascalfy(schemaName));
   let _properties: string = setModelProperties(object, TextTransformation.pascalfy(schemaName));
 
   let code = `
@@ -18,12 +18,26 @@ const schemaMain = (
   const unique = (modelName: string, field: string) => {
     return async function (value: string) {
       if (value && value.length) {
-        var query = mongoose.model(modelName).find({ [field]: { $regex: new RegExp('^' + value + '$', 'i') } });
-        const count = await query.count()
-        return count < 1
+        var query = mongoose
+          .model(modelName)
+          .find({[field]: {$regex: new RegExp('^' + value + '$', 'i')}});
+        const count = await query.count();
+        return count < 1;
       } else return false;
     };
-  }
+  };
+
+  const uniqueInArray = (modelName: string, fieldPath: string, field: string) => {
+    return async function (value: string) {
+      if (value && value.length) {
+        var query = mongoose
+          .model(modelName)
+          .findOne({[fieldPath]: {$elemMatch: {[field]: value}}});
+        const count = await query.count();
+        return count < 1;
+      } else return false;
+    };
+  };
 
   ${_arrayTypeModels}
 
