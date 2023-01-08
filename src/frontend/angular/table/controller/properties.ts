@@ -53,6 +53,7 @@ const setTableControllerProperties = ({ table }: MainInterface, mainArray: Array
   dataSource: ${hasInfiniteScroll ? 'InfiniteScrollTableDataSource' : ' any = []'};
   ${table.id}SearchForm: FormGroup;
   isLoading = true;
+  isCreatingXlsLoading = false;
   private _page!: number;
   ${hasInfiniteScroll ? `
   ITEM_SIZE = 50;

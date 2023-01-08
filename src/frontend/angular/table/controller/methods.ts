@@ -167,32 +167,43 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
 
   ${table.fieldsToLabels || table.formIdToFieldsToLabels
       ? `
-      createXls = () => {
-        const objects: any = ${hasInfiniteScroll ? `this.dataSource.matTableDataSource.filteredData;` : `this.dataSource`}
-        let data = objects.map((object: any) => {
+      createXls = async () => {
+        let httpParams = new HttpParams();
+        this.isCreatingXlsLoading = true;
+        httpParams = httpParams.append('no_limit', 'true');
+        const valueToSearch = this.${table.id}SearchForm.value.searchInput;
+
+        if (valueToSearch) {
+          const filtersToAppend = this._setSearchFilters(valueToSearch);
+          httpParams = httpParams.append('filters', filtersToAppend);
+        }
+
+        const objects: any = await this._${table.id}Service.getAll(httpParams);
+        this.isCreatingXlsLoading = false;
+        let data = objects.data.result.map((object: any) => {
           for (const key in object) {
-            let newStringToObject: string = "";
+            let newStringToObject: string = '';
             if (Object.prototype.hasOwnProperty.call(object, key)) {
               let element = object[key];
-              if (typeof element === "object") {
+              if (typeof element === 'object') {
                 newStringToObject += this.treatPopulatedPropertyToXls(element);
               }
             }
 
-            if (newStringToObject && newStringToObject != "") {
+            if (newStringToObject && newStringToObject != '') {
               object[key] = newStringToObject;
             }
           }
-          
+
           return this.setNewObject(object);
         });
         const fileName = \`${table.title
         ? table.title + "-${Date.now()}"
         : "download-${Date.now()}"
       }\`;
-        const exportType =  exportFromJSON.types.xls;
+        const exportType = exportFromJSON.types.xls;
 
-        exportFromJSON({ data, fileName, exportType });
+        exportFromJSON({ data, fileName, exportType });        
       };
 
       treatPopulatedPropertyToXls = (newObject: any): string => {

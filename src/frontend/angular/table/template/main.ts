@@ -63,7 +63,7 @@ const setTableTemplate = ({ table, projectPath }: MainInterface): string => {
         </form>
         ${table.fieldsToLabels || table.formIdToFieldsToLabels
       ? `
-      <button mat-raised-button color="primary" (click)="createXls()">
+      <button mat-raised-button color="primary" (click)="createXls()" [disabled]="isCreatingXlsLoading">
         <mat-icon>format_list_bulleted</mat-icon>
         Baixar XLS
       </button>
