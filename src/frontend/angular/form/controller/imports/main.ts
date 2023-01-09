@@ -54,6 +54,7 @@ const setFormControllerImports = (object: MainInterface): string => {
       : ``
     }
   import { MyErrorHandler } from "../../utils/error-handler";
+  import { RxwebValidators } from "@rxweb/reactive-form-validators";
   import { ${objectIdPascal}Service } from "./${objectIdKebab}.service";
   ${_hasMathCalculations ? `import { calculate, calculateArray, MathOperatorEnum } from 'src/app/utils/math';` : ``}
   `;

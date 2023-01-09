@@ -76,6 +76,9 @@ const setFormBuilderByElements = (
       if (element.input.isRequired) {
         code += `Validators.required,`;
       }
+      if (element.input.isUnique) {
+        code += `RxwebValidators.unique(),`;
+      }
       code += `
         ]
       ),
