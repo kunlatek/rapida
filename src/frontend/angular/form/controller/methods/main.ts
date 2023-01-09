@@ -225,13 +225,13 @@ const setFormControllerMethods = (object: MainInterface): string => {
       try {
         if(this.isAddModule) {
             // await lastValueFrom(this._${objectId}Service.save(this.${objectId}Form.value));
-            await this._${objectId}Service.save(this.${objectId}Form.value);
+            await this._${objectId}Service.save(this.${objectId}Form.getRawValue());
         }
 
         if(!this.isAddModule) {
           ${/*_treatmentBeforeSubmitting*/''}
             // await lastValueFrom(this._${objectId}Service.update(this.${objectId}Form.value,this.${objectId}Id));
-            await this._${objectId}Service.update(this.${objectId}Form.value,this.${objectId}Id);
+            await this._${objectId}Service.update(this.${objectId}Form.getRawValue(),this.${objectId}Id);
         }
         this.redirectTo
         ("main/${TextTransformation.kebabfy(objectId.split("Form")[0])}");
