@@ -196,8 +196,13 @@ const setControllerMethods = (object: MainInterface): string => {
         })
   
       } catch (err: any) {
-        const logMessage = (err?.message || '').includes(':') ?
+        let logMessage = (err?.message || '').includes(':') ?
           err.message.split(':').pop().trim() : err?.message;
+
+        if(err?.code === 11000){
+          const field = Object.keys(err?.keyPattern || {'null':1})[0]
+          logMessage = \`\${field} is unique\`
+        }
 
         return HttpResponseToClient.badRequestErrorHttpResponse({
           logMessage,
