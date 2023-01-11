@@ -20,7 +20,7 @@ PORT=3000
 SERVER_ROOT_URI=http://localhost:3000
 CLIENT_REDIRECT_URI=http://localhost:4200
 MONGO_URL=mongodb+srv://kunlatek:Kunlatek751@cluster0.b0pfr.mongodb.net/__DB_NAME__?authSource=admin&replicaSet=atlas-zft6fn-shard-0&readPreference=primary&ssl=true
-DB=sarapoc
+DB=animation
 NODEMAILER_USER=administrativo@kunlatek.com
 NODEMAILER_PASS=yetyxhgzjzktuwef
 ADMIN_USERS=contato@kunlatek.com
@@ -28,16 +28,24 @@ ADMIN_USERS=contato@kunlatek.com
 
 const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitation-and-permission";
 const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api";
-const projectPath = "/home/ryzzan/Projects/GrupoNc/sara-poc-backoffice";
+const projectPath = "/home/ryzzan/Projects/Demo/animation";
 
-import { MEDICINE } from "../collections-frontend/clients/sara/medicine";
-import { MEDICINE_FORM } from "../collections-frontend/clients/sara/medicine-form";
-import { MEDICINE_TABLE } from "../collections-frontend/clients/sara/medicine-table";
+import { ANIMATION } from "../collections-frontend/example/animation/animation";
+import { ANIMATION_FORM } from "../collections-frontend/example/animation/animation-form";
+import { ANIMATION_TABLE } from "../collections-frontend/example/animation/animation-table";
+
+import { CHARACTER } from "../collections-frontend/example/animation/character";
+import { CHARACTER_FORM } from "../collections-frontend/example/animation/character-form";
+import { CHARACTER_TABLE } from "../collections-frontend/example/animation/character-table";
 
 const array = [
-  MEDICINE_FORM,
-  MEDICINE_TABLE,
-  MEDICINE,
+  ANIMATION_FORM,
+  ANIMATION_TABLE,
+  ANIMATION,
+
+  CHARACTER_FORM,
+  CHARACTER_TABLE,
+  CHARACTER,
 ];
 
 array.forEach((object) => {

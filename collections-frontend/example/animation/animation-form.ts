@@ -76,7 +76,8 @@ export const ANIMATION_FORM: MainInterface = {
                               label: "Título",
                               name: "episodeTitle",
                               type: FormInputTypeEnum.Text,
-                              isRequired: true
+                              isRequired: true,
+                              isUnique: true
                             }
                           },
                           {

@@ -136,7 +136,6 @@ const setByElementInArrayType = (
     code += `
       ${value.name}: {
         type: ${propertyType},
-        ${value.isUnique ? `validate: [uniqueInArray('${schemaName}', '${arrayFullPath}', '${value.name}'), '${value.name} is unique'],` : ``}
         required: ${value.isRequired || false},
         ${!value.isRequired ? 'default: null,' : ''}
       },
