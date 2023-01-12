@@ -497,8 +497,10 @@ const setExternalApiDataFound = (object: MainInterface): string => {
         arrayOfFields = [...new Set(arrayOfFields)];
 
         _deepExternalApiCode += `
-          const ${value.name}Fetched = await (await fetch('${value.optionsApi.externalEndpoint}/' + ${parent}.${value.name})).json()
-          ${parent}.${value.name} = (({ ${value.optionsApi.valueField} ${arrayOfFields.reduce((prev: string, current: string) => prev += `, ${current}`, '')} }) => ({ ${value.optionsApi.valueField} ${arrayOfFields.reduce((prev: string, current: string) => prev += `, ${current}`, '')} }))(${value.name}Fetched?.data)
+          if(data.${value.name}){
+            const ${value.name}Fetched = await (await fetch('${value.optionsApi.externalEndpoint}/' + ${parent}.${value.name}, { method: 'GET', headers: { 'Authorization': this.httpRequest.headers.authorization } })).json()
+            ${parent}.${value.name} = (({ ${value.optionsApi.valueField} ${arrayOfFields.reduce((prev: string, current: string) => prev += `, ${current}`, '')} }) => ({ ${value.optionsApi.valueField} ${arrayOfFields.reduce((prev: string, current: string) => prev += `, ${current}`, '')} }))(${value.name}Fetched?.data)
+          }
         `;
       } else if (type === 'array') {
 
@@ -555,7 +557,7 @@ const setSeveralExternalApiDataFound = (object: MainInterface): string => {
 
         _deepExternalApiCode += `
           const ${value.name}Fetched_ids = result?.reduce((prev: string, current: any) => prev += \`"\${current.${value.name}}",\`, '')
-          const ${value.name}Fetched = await (await fetch(\`${value.optionsApi.externalEndpoint}?${value.optionsApi.rawQuery ? value.optionsApi.rawQuery : ""}filters={"_id":{"$in":[\${${value.name}Fetched_ids.slice(0, -1)}]}}\`)).json()
+          const ${value.name}Fetched = await (await fetch(\`${value.optionsApi.externalEndpoint}?${value.optionsApi.rawQuery ? value.optionsApi.rawQuery : ""}filters={"_id":{"$in":[\${${value.name}Fetched_ids.slice(0, -1)}]}}\`, { method: 'GET', headers: { 'Authorization': this.httpRequest.headers.authorization } })).json()
           const ${value.name} = ${value.name}Fetched?.data?.result.map((el: any) => {
             return (({ ${value.optionsApi.valueField} ${arrayOfFields.reduce((prev: string, current: string) => prev += `, ${current}`, '')} }) => ({ ${value.optionsApi.valueField} ${arrayOfFields.reduce((prev: string, current: string) => prev += `, ${current}`, '')} }))(el);
           })
