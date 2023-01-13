@@ -20,6 +20,7 @@ const setControllerImports = (object: MainInterface): string => {
   import {ChartService, StorageService, ${TextTransformation.pascalfy(modelName)}Service} from '../services';
   import {serverMessages} from '../utils/server-messages';
   const ${TextTransformation.pascalfy(modelName)}Schema = require('../mongoose-schemas/${TextTransformation.kebabfy(modelName)}.schema');
+  import { convertStringFieldsToDate } from '../utils/date-manipulation-functions';
   const fetch = require('node-fetch');
   `;
 

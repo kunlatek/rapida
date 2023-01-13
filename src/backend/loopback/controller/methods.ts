@@ -142,6 +142,9 @@ const setControllerMethods = (object: MainInterface): string => {
 
           ${setExternalApiDataFound(object)}
 
+          ${setAllDateFields(object)}
+          data = convertStringFieldsToDate(data, dateFields)
+
           const tokens = ${object.publicRoutes?.includes(RouterTypeEnum.ReadOne) ? `{};` : `await Autentikigo.refreshToken(this.httpRequest.headers.authorization!);`}
       
           return HttpResponseToClient.okHttpResponse({
@@ -597,6 +600,37 @@ const setSeveralExternalApiDataFound = (object: MainInterface): string => {
   return hasExternalApiDataField ?
     `${_externalApiData}`
     : '';
+};
+
+const setAllDateFields = (object: MainInterface): string => {
+  if (!object.form) {
+    console.info("Only forms set here");
+    return ``;
+  }
+
+  let _allDateFields = ``;
+
+  const getDateFields = (elements: Array<FormElementInterface>) => {
+    let _dateFieldsCode = ``;
+
+    elements.forEach((element: FormElementInterface) => {
+      const value = Object.values(element)[0];
+
+      if (value.type === 'date') _dateFieldsCode += `'${value.name}',`;
+      else if (value.type === 'array') {
+
+        _dateFieldsCode += `${getDateFields(value.elements)}`;
+      }
+    });
+
+    return _dateFieldsCode;
+  };
+
+  const elements: Array<FormElementInterface> = getAllElements(object.form.elements);
+
+  _allDateFields += getDateFields(elements);
+
+  return `const dateFields: string[] = [${_allDateFields}];`;
 };
 
 export { setControllerMethods };

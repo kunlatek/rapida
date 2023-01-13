@@ -96,6 +96,7 @@ const getAllElements = (
     "textarea",
     "text",
     "autocomplete",
+    'date',
 
     'array',
   ];

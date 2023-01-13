@@ -14,12 +14,14 @@ const stringTypes = [
   "time",
   "url",
   "week",
+  'date',
+  'datetime-local'
 ];
 const numberTypes = ["number"];
 
 const booleanTypes = ["slide"];
 
-const dateTypes = ["date", "datetime-local"];
+// const dateTypes = ["date", "datetime-local"];
 
 const setArrayTypeSchemas = (formElements: Array<FormElementInterface>, schemaName: string): string => {
 
@@ -95,8 +97,7 @@ const setByElementInArrayType = (
         (
           numberTypes.includes(value.type || type) ? 'Number' :
             (
-              booleanTypes.includes(value.type || type) ? 'Boolean' :
-                (dateTypes.includes(value.type || type) ? 'Date' : 'Object')
+              booleanTypes.includes(value.type || type) ? 'Boolean' : 'Object'
             )
         )
     );
@@ -178,8 +179,7 @@ const setByElement = (
         (
           numberTypes.includes(value.type || type) ? 'Number' :
             (
-              booleanTypes.includes(value.type || type) ? 'Boolean' :
-                (dateTypes.includes(value.type || type) ? 'Date' : 'Object')
+              booleanTypes.includes(value.type || type) ? 'Boolean' : 'Object'
             )
         )
     );
