@@ -32,6 +32,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
       httpParams = httpParams.append('filters', filtersToAppend);
     }
     httpParams = httpParams.append('order_by', '_createdAt DESC');
+    httpParams = httpParams.append('select', '${table.elements.reduce((prev, current) => prev += `${current.row.field} `, '')}');
     this.set${TextTransformation.pascalfy(
     table.id
   )}Service(httpParams, isPagination);
