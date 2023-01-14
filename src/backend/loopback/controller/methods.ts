@@ -74,6 +74,7 @@ const setControllerMethods = (object: MainInterface): string => {
   @response(200, new ${TextTransformation.pascalfy(modelName)}Service().swaggerResponseData('Array of ${TextTransformation.pascalfy(modelName)} model instance', 200))
   async find(
       @param.query.string('filters') filters?: string,
+      @param.query.string('select') select?: string,
       @param.query.number('limit') limit?: number,
       @param.query.boolean('no_limit') noLimit?: boolean,
       @param.query.number('page') page?: number,
@@ -89,7 +90,7 @@ const setControllerMethods = (object: MainInterface): string => {
           if(noLimit) limit = total
 
           let result = await ${TextTransformation.pascalfy(modelName)}Schema
-            .find({"$and": and})
+            .find({"$and": and}, select)
             .limit(limit || 100)
             .skip((limit || 100) * (page || 0))
             .sort(orderBy ? { [orderBy]: -1 } : { _createdAt: -1 })
