@@ -121,7 +121,35 @@ const getAllElements = (
   return elementsToReturn;
 };
 
+const getSpecifiqueTypesElements = (
+  elementList: Array<FormElementInterface>,
+  typesToCheck: Array<string> = [],
+  elementsToReturn: string[] = [],
+): string[] => {
+
+  elementList.forEach((element: FormElementInterface) => {
+    const type = Object.keys(element)[0];
+    const value = Object.values(element)[0];
+
+    if (typesToCheck.includes(value.type) || (value.optionsApi && typesToCheck.includes('objectId'))) {
+
+      elementsToReturn = [...elementsToReturn, value.name];
+
+    } else if (type === "tabs" || type === "array") {
+
+      element.tabs?.forEach((tab) => {
+        elementsToReturn = [...elementsToReturn, ...getSpecifiqueTypesElements(tab.elements, typesToCheck, elementsToReturn)];
+      });
+
+    }
+
+  });
+
+  return [...new Set(elementsToReturn)];
+};
+
 export {
   createLoopbackProject,
   getAllElements,
+  getSpecifiqueTypesElements,
 };

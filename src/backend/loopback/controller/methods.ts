@@ -3,7 +3,7 @@ import { FormElementInterface } from "../../../interfaces/form";
 import { MainInterface } from "../../../interfaces/main";
 import { TextTransformation } from "../../../utils/text.transformation";
 
-import { getAllElements } from "../main";
+import { getAllElements, getSpecifiqueTypesElements } from "../main";
 
 const setControllerMethods = (object: MainInterface): string => {
   if (!object.form) {
@@ -83,7 +83,7 @@ const setControllerMethods = (object: MainInterface): string => {
   ): Promise<IHttpResponse> {
       try {
           let and = [{ _deletedAt: null }]
-          if (filters) and.push(JSON.parse(filters))
+          if (filters) and.push(removeObjAttr(JSON.parse(filters), [${setAllFieldsToRemoveInFind(object)}]))
           
           const total = await ${TextTransformation.pascalfy(modelName)}Schema.countDocuments({"$and": and});
 
@@ -632,6 +632,31 @@ const setAllDateFields = (object: MainInterface): string => {
   _allDateFields += getDateFields(elements);
 
   return `const dateFields: string[] = [${_allDateFields}];`;
+};
+
+const setAllFieldsToRemoveInFind = (object: MainInterface): string => {
+  if (!object.form) {
+    console.info("Only forms set here");
+    return ``;
+  }
+
+  let _allFieldsToRemove = ``;
+
+  const getFieldsToRemoveInFind = (elements: Array<FormElementInterface>) => {
+    let _removeFieldsCode = ``;
+
+    const fieldsToRemoveArray = getSpecifiqueTypesElements(elements, ['number', 'objectId']);
+
+    fieldsToRemoveArray.forEach((field: string) => {
+      _removeFieldsCode += `'${field}', `;
+    });
+
+    return _removeFieldsCode;
+  };
+
+  _allFieldsToRemove += getFieldsToRemoveInFind(object.form.elements);
+
+  return _allFieldsToRemove;
 };
 
 export { setControllerMethods };

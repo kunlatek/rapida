@@ -21,6 +21,7 @@ const setControllerImports = (object: MainInterface): string => {
   import {serverMessages} from '../utils/server-messages';
   const ${TextTransformation.pascalfy(modelName)}Schema = require('../mongoose-schemas/${TextTransformation.kebabfy(modelName)}.schema');
   import { convertStringFieldsToDate } from '../utils/date-manipulation-functions';
+  import { removeObjAttr } from '../utils/general-functions';
   const fetch = require('node-fetch');
   `;
 
