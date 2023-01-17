@@ -218,7 +218,11 @@ const setArrayOfElementsToCreateArray = (array: Array<ArrayInterface>) => {
   for (let index = 0; index < array.length; index++) {
     const element = array[index];
 
-    code += `{ element: '${element.id}', getFormGroup: () => this.get${TextTransformation.pascalfy(TextTransformation.singularize(element.id))}() },
+    code += `{ 
+      element: '${element.id}', 
+      getFormGroup: () => this.get${TextTransformation.pascalfy(TextTransformation.singularize(element.id))}(),
+      objectIdFields: [ ${element.elements.reduce((prev, current) => prev += (current.autocomplete && !current.autocomplete.isMultiple) ? `{field: '${current.autocomplete.name}', filtered: this.filtered${TextTransformation.pascalfy(current.autocomplete.name)}}` : '', '')}]
+    },
     `;
   }
 

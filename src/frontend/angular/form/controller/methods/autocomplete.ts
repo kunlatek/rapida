@@ -418,21 +418,22 @@ const displayNoMultipleAutocomplete = (
 
   if (formFieldsFilledByApiResponse) {
     formFieldsFilledByApiResponse.map((result: any) => {
-      formFieldsFilledByApiResponseCode += `
-      const ${result.formFieldName}Value = this.filtered${autocompleteNamePascal}[0].${result.propertyFromApiToFillFormField};
+      formFieldsFilledByApiResponseCode += `const ${result.formFieldName}Value = this.filtered${autocompleteNamePascal}${array ? `[value]` : ''}[0].${result.propertyFromApiToFillFormField};
       `;
     });
 
     formFieldsFilledByApiResponse.map((result: any) => {
       formFieldsFilledByApiResponseCode += `
-        this.${object.form?.id}Form.
-        ${array
+        if(${result.formFieldName}Value){
+          this.${object.form?.id}Form.
+          ${array
           ? `get([${getParentsControl && getParentsControl !== ""
             ? `${getParentsControl}, `
             : ``
           }${array ? `"${array.id}", value, ` : ``
           }"${result.formFieldName}"])?.setValue(${result.formFieldName}Value);`
           : `get("${result.formFieldName}").setValue(${result.formFieldName}Value);`
+        }
         }
       `;
     });
@@ -441,29 +442,30 @@ const displayNoMultipleAutocomplete = (
 
   if (Array.isArray(labelField)) {
     labelField.forEach((e: string, index: number) => {
-      labelFieldCode += `this.filtered${autocompleteNamePascal}[0].${e}`;
+      labelFieldCode += `this.filtered${autocompleteNamePascal}${array ? `[value]` : ``}[0].${e}`;
       if (labelFieldLength > index + 1) {
         labelFieldCode += ` + " - " + `;
       }
     });
   } else {
-    labelFieldCode = `this.filtered${autocompleteNamePascal}[0].${labelField}`;
+    labelFieldCode = `this.filtered${autocompleteNamePascal}${array ? `[value]` : ``}[0].${labelField}`;
   };
 
   let code = ``;
 
   code += `
     displayFnTo${autocompleteNamePascal} = (value?: any) => {
-      if (this.filtered${autocompleteNamePascal}[0]) {
+      if (this.filtered${autocompleteNamePascal}${array ? `[value]` : ``}[0]) {
         ${formFieldsFilledByApiResponseCode}      
         
         const toReturn = ${labelFieldCode}
-        this.filtered${autocompleteNamePascal} = [];
+        this.filtered${autocompleteNamePascal}${array ? `[value]` : ``} = [];
         return toReturn;
       }
         
       return "";
-    };`;
+    };
+    `;
 
   return code;
 };
@@ -551,7 +553,7 @@ const filterAutocompleteOption = (
       const result: any = await this._${object.form?.id}Service
       .${autocompleteName}SelectObjectGetAll(filter.replace("},]", "}]"));
     
-      this.filtered${autocompleteNamePascal} = result.data.result;
+      this.filtered${autocompleteNamePascal}${array ? `[${arrayIdSingular}Index]` : ''} = result.data.result;
       ${array && getParentsIndexes && getParentsIndexes !== ""
       ? `this.loading${autocompleteNamePascal}[${getParentsIndexes?.split(": number")[0]
       }] = false;`
@@ -613,4 +615,64 @@ const setAllParents = (lastParent: string) => {
   });
 };
 
-export { setAutocompleteMethod };
+const filterAutocompleteOptionOnGetData = (
+  object: MainInterface,
+) => {
+  const elements: Array<FormElementInterface> = getAllElements(object.form!.elements);
+
+  let code = ``;
+  elements.forEach((element) => {
+
+    if (element.autocomplete) {
+      const autocompleteName = element.autocomplete.name;
+      const autocompleteNamePascal = TextTransformation.pascalfy(autocompleteName);
+
+      code += `if(this.${object.form?.id}ToEdit.data['${autocompleteName}']) this.filtered${autocompleteNamePascal} = [this.${object.form?.id}ToEdit.data['${autocompleteName}']];`;
+    }
+  });
+
+  return code;
+};
+
+const getAllElements = (
+  elementList: Array<FormElementInterface>,
+  elementsToReturn: Array<FormElementInterface> = [],
+): Array<FormElementInterface> => {
+
+  const validTypes = [
+    "checkbox",
+    "radio",
+    "datalist",
+    "fieldset",
+    "input",
+    "select",
+    "slide",
+    "textarea",
+    "text",
+    "autocomplete",
+    'date',
+
+    'array',
+  ];
+
+  elementList.forEach(element => {
+    const type = Object.keys(element)[0];
+
+    if (validTypes.includes(type)) {
+
+      elementsToReturn.push(element);
+
+    } else if (type === "tabs") {
+
+      element.tabs?.forEach((tab) => {
+        elementsToReturn = getAllElements(tab.elements, elementsToReturn);
+      });
+
+    }
+
+  });
+
+  return elementsToReturn;
+};
+
+export { setAutocompleteMethod, filterAutocompleteOptionOnGetData };

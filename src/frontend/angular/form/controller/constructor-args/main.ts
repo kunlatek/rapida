@@ -3,6 +3,7 @@ import {
   FormElementInterface
 } from "../../../../../interfaces/form";
 import { MainInterface } from "../../../../../interfaces/main";
+import { filterAutocompleteOptionOnGetData } from "../methods/autocomplete";
 import { setAutocompleteToEdit } from "./autocomplete-args";
 import { setFormSelectOptions, setSelectToEdit } from "./select-args";
 require("dotenv").config();
@@ -49,6 +50,8 @@ const setFormControllerConstructorArguments = (
     }
           ${_autocompleteToEdit}
           ${_selectToEdit}
+
+          ${filterAutocompleteOptionOnGetData(object)}
 
           this.${objectId}Form?.reset();
           this.${objectId}Form.patchValue(this.${objectId}ToEdit.data);

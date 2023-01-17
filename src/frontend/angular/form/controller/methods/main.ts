@@ -109,6 +109,11 @@ const setFormControllerMethods = (object: MainInterface): string => {
 
               const childData: any = array[elementIndex];
               Object.keys(childData).forEach((item) => {
+
+                const objectIdFields = araryOfElementsToCreateArray.find((el) => el.element === functionName).objectIdFields
+                const objectIdField = objectIdFields.find((el:any) => el.field === item)
+                if(objectIdField) objectIdField.filtered[elementIndex] = [childData[item]]
+                
                 if (Array.isArray(childData[item]) && childData[item].length) {
                   addNewFormArrayItem(item, childData[item], [...arrayOfFields, elementIndex, item]/*, elementIndex*/);
                 }
