@@ -112,7 +112,7 @@ const setFormBuilderByElements = (
     if (element.autocomplete) {
       code += `
       ${element.autocomplete.name}: new FormControl(
-        ${(element.autocomplete.isMultiple) ? `[]` : `{value: null}`},
+        ${(element.autocomplete.isMultiple) ? `[]` : `{value: null, disabled: false}`},
         [
       `;
       // VALIDATORS

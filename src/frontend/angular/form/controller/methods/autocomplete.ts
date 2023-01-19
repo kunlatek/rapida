@@ -459,7 +459,7 @@ const displayNoMultipleAutocomplete = (
         ${formFieldsFilledByApiResponseCode}      
         
         const toReturn = ${labelFieldCode}
-        this.filtered${autocompleteNamePascal}${array ? `[value]` : ``} = [];
+        setTimeout(() => this.filtered${autocompleteNamePascal}${array ? `[value]` : ``} = [], 500);
         return toReturn;
       }
         
