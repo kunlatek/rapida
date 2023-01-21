@@ -5,6 +5,7 @@ import {
 } from "../../../../interfaces/form";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
+import { setFormFieldShimmer } from "./main";
 require("dotenv").config();
 
 let _allParents: Array<string> = [];
@@ -170,6 +171,7 @@ const setAutocomplete = (
           </ng-container>
         </mat-autocomplete>
       </mat-form-field>
+      ${setFormFieldShimmer(element.autocomplete.label, conditions.replace('!isLoading', 'isLoading'))}
       `;
   }
   if (!element.autocomplete.isMultiple) {
@@ -232,6 +234,7 @@ const setAutocomplete = (
           </ng-container>
         </mat-autocomplete>
       </mat-form-field>
+      ${setFormFieldShimmer(element.autocomplete.label, conditions.replace('!isLoading', 'isLoading'))}
       `;
   }
 

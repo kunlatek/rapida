@@ -51,6 +51,7 @@ const setTableControllerProperties = ({ table }: MainInterface, mainArray: Array
       : ``
     )}
   dataSource: ${hasInfiniteScroll ? 'InfiniteScrollTableDataSource' : ' any = []'};
+  dataSourceShimmer: any[];
   ${table.id}SearchForm: FormGroup;
   isLoading = true;
   isCreatingXlsLoading = false;

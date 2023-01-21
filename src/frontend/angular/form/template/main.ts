@@ -53,15 +53,15 @@ const setFormTemplate = (
     </mat-card-header>
 
     <mat-card-content>
-      <div *ngIf="isLoading" class="loading">
+      <!-- <div *ngIf="isLoading" class="loading">
         <mat-progress-bar color="primary" mode="buffer">
         </mat-progress-bar>
-      </div>
+      </div> -->
       <form id="${object.form.id}" 
-      [formGroup]="${object.form.id}Form" 
-      #${object.form.id}Directive="ngForm" 
-      (ngSubmit)="${object.form.id}Submit(${object.form.id}Directive)" 
-      *ngIf="!isLoading">
+        [formGroup]="${object.form.id}Form" 
+        #${object.form.id}Directive="ngForm" 
+        (ngSubmit)="${object.form.id}Submit(${object.form.id}Directive)" 
+      >
       ${_specificStructure}
       </form>
     </mat-card-content>
@@ -105,6 +105,7 @@ const setSpecificStructureOverFormElement = (
         </mat-checkbox>
       </section>
     </mat-form-field>
+    ${setFormFieldShimmer(element.checkbox.label, conditions.replace('!isLoading', 'isLoading'))}
     `;
   }
 
@@ -122,6 +123,7 @@ const setSpecificStructureOverFormElement = (
         </mat-radio-button>
       </mat-radio-group>
     </mat-form-field>
+    ${setFormFieldShimmer(element.radio.label, conditions.replace('!isLoading', 'isLoading'))}
     `;
   }
 
@@ -242,4 +244,12 @@ const verifyFormElement = (
   }
 };
 
-export { setFormTemplate, setSpecificStructureOverFormElement };
+const setFormFieldShimmer = (label: string, conditions: string) => {
+  return `<div ${conditions} style="float: left;">
+    <div style="color: rgba(0, 0, 0, 0.54);font-size: 12px;margin-bottom: -10px;">${label}</div>
+    <div class="lines shimmer" style="width: 250px;margin-right: 30px;"></div>
+  </div>
+  `;
+};
+
+export { setFormTemplate, setSpecificStructureOverFormElement, setFormFieldShimmer };

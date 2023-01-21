@@ -59,22 +59,24 @@ const setConditions = (
     if (value.conditions) {
       if (value.conditions.type === ConditionEnum.Form) {
         if (array) {
-          code += `*ngIf="${value.name ? value.name : value.id}FormCondition[${getParentsIndexes && getParentsIndexes !== ""
+          code += `*ngIf="!isLoading && ${value.name ? value.name : value.id}FormCondition[${getParentsIndexes && getParentsIndexes !== ""
             ? `${getParentsIndexes.replace(/: number/g, "][").replace(/, /g, "")}`
             : ""
             }${arrayIdSingular}Index]"`;
         }
 
         if (!array) {
-          code += `*ngIf="${value.name ? value.name : value.id}FormCondition"`;
+          code += `*ngIf="!isLoading && ${value.name ? value.name : value.id}FormCondition"`;
         }
       }
 
       if (value.conditions.type === ConditionEnum.Code) {
-        code += `*ngIf="${value.name ? value.name : value.id}CodeCondition"`;
+        code += `*ngIf="!isLoading && ${value.name ? value.name : value.id}CodeCondition"`;
       }
     }
   }
+
+  if (!code.length) code += `*ngIf="!isLoading"`;
 
   return code;
 };

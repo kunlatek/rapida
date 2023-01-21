@@ -80,7 +80,7 @@ const setTableTemplate = ({ table, projectPath }: MainInterface): string => {
                              matSort>`
       : ""
     }
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="!isLoading">
+    <table mat-table [dataSource]="dataSourceShimmer.length ? dataSourceShimmer: dataSource" class="mat-elevation-z8">
       ${_specificStructure}    
       <tr mat-header-row *matHeaderRowDef="${table.id}DisplayedColumns${hasInfiniteScroll ? ";sticky: true" : ""
     }" ${hasInfiniteScroll ? '[style.top.px]="offset"' : ""}></tr>
@@ -103,10 +103,10 @@ const setTableTemplate = ({ table, projectPath }: MainInterface): string => {
         <span>No Data</span>
       </div>
     </div> 
-    <div *ngIf="isLoading" class="loading">
+    <!-- <div *ngIf="isLoading" class="loading">
         <mat-progress-bar color="primary" mode="buffer">
         </mat-progress-bar>
-    </div>
+    </div> -->
     </mat-card-content>
   </mat-card>
   ${_specificStructureOverMenu}
@@ -139,7 +139,7 @@ const setSpecificStructureOverTableElement = (
     <button mat-icon-button class="icon" aria-label="${TextTransformation.pascalfy(
       table.id
     )}" [matMenuTriggerFor]="${table?.id
-      }Menu"  [matMenuTriggerData]="{element: element}">
+      }Menu"  [matMenuTriggerData]="{element: element}" *ngIf="!isLoading">
       <mat-icon>${element.row.icon}</mat-icon>
     </button>
     `;
@@ -149,14 +149,18 @@ const setSpecificStructureOverTableElement = (
     if (element.row.fieldProperties) {
       element.row.fieldProperties.forEach((property: string, index: number) => {
         columnContent += `
-        ${index > 0 ? " | " : ""}{{element.${element.row.field}.${property}}}
+        <div class="{{ isLoading ? 'lines shimmer' : '' }}">
+          ${index > 0 ? " | " : ""}{{element.${element.row.field}?.${property}}}
+        </div>
         `;
       });
     }
 
     if (!element.row.fieldProperties) {
       columnContent = `
-      {{element.${element.row.field}}}
+      <div class="{{ isLoading ? 'lines shimmer' : '' }}">
+        {{element.${element.row.field}}}
+      </div>
       `;
     }
   }

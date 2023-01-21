@@ -32,7 +32,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
       httpParams = httpParams.append('filters', filtersToAppend);
     }
     httpParams = httpParams.append('order_by', '_createdAt DESC');
-    httpParams = httpParams.append('select', '${table.elements.reduce((prev, current) => prev += `${current.row.field} `, '')}');
+    httpParams = httpParams.append('select', '${table.elements.filter(el => el.row.field !== 'actions').reduce((prev, current) => prev += `${current.row.field} `, '')}');
     this.set${TextTransformation.pascalfy(
     table.id
   )}Service(httpParams, isPagination);
@@ -81,6 +81,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
       ? "this.dataSource.matTableDataSource.data"
       : "this.dataSource"
     } = newData;
+        this.dataSourceShimmer = [];
         this.isLoading = false;
     } catch (error: any) {
       if (error.logMessage === "jwt expired") {

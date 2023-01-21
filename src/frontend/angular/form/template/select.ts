@@ -2,6 +2,7 @@ import { ArrayFeaturesInterface } from "../../../../interfaces/array";
 import { ArrayInterface, FormElementInterface } from "../../../../interfaces/form";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
+import { setFormFieldShimmer } from "./main";
 require("dotenv").config();
 
 let _allParents: Array<string> = [];
@@ -93,6 +94,7 @@ const setSelect = (
         </mat-option>
       </mat-select>
     </mat-form-field>
+    ${setFormFieldShimmer(element.select.label, conditions.replace('!isLoading', 'isLoading'))}
     `;
 
   return code;

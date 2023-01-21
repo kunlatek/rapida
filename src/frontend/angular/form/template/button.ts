@@ -1,6 +1,7 @@
 import { FormButtonTypeEnum } from "../../../../enums/form";
 import { FormElementInterface } from "../../../../interfaces/form";
 import { MainInterface } from "../../../../interfaces/main";
+import { TextTransformation } from "../../../../utils/text.transformation";
 
 const setButton = (
   object: MainInterface,
@@ -42,10 +43,22 @@ const setButton = (
     code += `<mat-card-actions>`;
   }
   code += `
+    <div style="clear: both"></div>
     <button mat-raised-button 
     ${color} ${disabled}>
       <mat-icon>${icon}</mat-icon>
       ${label}
+    </button>
+
+    <button 
+      mat-raised-button 
+      color="primary"  
+      [disabled]="!${object.form?.id}Form.valid || isLoading" 
+      *ngIf="!isAddModule" 
+      type="button" 
+      [routerLink]="['/main/${TextTransformation.kebabfy((object.form?.id || '').split("Form")[0])}']"
+    >
+      <mat-icon>close</mat-icon> Limpar  
     </button>
     `;
   if (element.button.type === FormButtonTypeEnum.Submit) {

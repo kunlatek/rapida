@@ -22,6 +22,8 @@ const setTableControllerConstructorArguments = (
   }
   ${hasInfiniteScroll ? '' : `this._setFiltersParams();`}
   
+  this.dataSourceShimmer = new Array(10).fill(1).map(el => {return  {${table.elements.filter(el => el.row.field !== 'actions').reduce((prev, current) => prev += `${current.row.field}:null, `, '')}}});
+  
   ${hasInfiniteScroll ? `
   this.dataSource = new InfiniteScrollTableDataSource();
   this.dataSource.page$.subscribe((page: string) => {

@@ -3,6 +3,7 @@ import { ArrayFeaturesInterface } from "../../../../interfaces/array";
 import { ArrayInterface, FormElementInterface } from "../../../../interfaces/form";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
+import { setFormFieldShimmer } from "./main";
 require("dotenv").config();
 
 let _allParents: Array<string> = [];
@@ -74,6 +75,7 @@ const setInput = (
 
   if (element.input.type === FormInputTypeEnum.File) {
     code += `
+        <div style="clear: both;"></div>
         <input type="file" class="file-input" (change)="on${inputNamePascal}FileSelected(${array ? `_${arrayIdSingular}, ` : ""}$event)" ${tooltip}
         #${inputName}Upload 
         onclick="this.value = null" 
@@ -85,7 +87,7 @@ const setInput = (
                 Enviar arquivo
             </button>
         </div>
-        <mat-list>
+        <mat-list *ngIf="!isLoading">
           <mat-list-item *ngFor="let file of ${array
         ? `_${arrayIdSingular}.get('${inputName}')?.value; `
         : `${object.form?.id}Form.value.${inputName}; `}index as i;">
@@ -104,6 +106,7 @@ const setInput = (
           <textarea matInput formControlName="${inputName}" ${placeholder} ${tooltip} ${required}>
         </textarea>
       </mat-form-field>
+      ${setFormFieldShimmer(element.input.label, conditions.replace('!isLoading', 'isLoading'))}
       `;
   } else if (element.input.type === FormInputTypeEnum.Date) {
     code += `
@@ -116,6 +119,7 @@ const setInput = (
         <mat-datepicker #${element.input.name
       }Picker [disabled]="false"></mat-datepicker>
       </mat-form-field>
+      ${setFormFieldShimmer(element.input.label, conditions.replace('!isLoading', 'isLoading'))}
       `;
   } else {
     code += `
@@ -123,6 +127,7 @@ const setInput = (
         <mat-label>${element.input.label}</mat-label>
         <input matInput type="${element.input.type}" formControlName="${inputName}" ${placeholder} ${tooltip} ${required} ${mask} ${callMethod} ${element.input.isAComposedValueTrigger ? setComposedValueTriggerFunction(object, inputName) : ``} autocomplete="new-password">
       </mat-form-field>
+      ${setFormFieldShimmer(element.input.label, conditions.replace('!isLoading', 'isLoading'))}
       `;
   }
 
