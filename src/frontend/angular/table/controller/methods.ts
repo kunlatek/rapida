@@ -22,6 +22,8 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
 
   _setFiltersParams(isPagination = false) {
     this.isLoading = true;
+    this.dataSourceShimmer = new Array(10).fill(1).map(el => {return  {${table.elements.filter(el => el.row.field !== 'actions').reduce((prev, current) => prev += `${current.row.field}:null, `, '')}}});
+    
     let httpParams = new HttpParams();
     const valueToSearch = this.${table.id}SearchForm.value.searchInput;
     if (this._page) {
@@ -90,6 +92,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
         } else {
           const message = this._errorHandler.apiErrorMessage(error.message);
           this.isLoading = false;
+          this.dataSourceShimmer = [];
           this.sendErrorMessage(message);
         }
     }
