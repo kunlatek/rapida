@@ -12,6 +12,11 @@ const setTableControllerConstructorArguments = (
   this.${table.id}SearchForm = this._formBuilder.group({
     searchInput: [null, []],
   });
+  this.${table.id}SpecificSearchForm = this._formBuilder.group({
+    ${(table.filtersToSearch || []).reduce((prev, current) => {
+    return prev += `${current.field}: [null, []],`;
+  }, '')}
+  });
   try {
     this._activatedRoute.params.subscribe(async (routeParams) => {
       this.${table.id}Id = routeParams["id"];

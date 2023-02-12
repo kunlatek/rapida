@@ -14,7 +14,7 @@ export interface TableInterface {
   title?: string;
   service?: ServiceInterface;
   infiniteScroll?: boolean;
-  filtersToSearch?: [{ label: string; field: string; }]; // Specific filters to search table list content
+  filtersToSearch?: Array<{ label: string; field: string; }>; // Specific filters to search table list content
 }
 
 export interface TableElementInterface {

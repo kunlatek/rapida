@@ -41,8 +41,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
   }
   
   private _setSearchFilters(valueToSearch: string) {
-    const filters = this.${table.id
-    }DisplayedColumns.filter((col) => col !== 'actions').reduce((previous: any, current) => {
+    const filters = this.${table.id}DisplayedColumns.filter((col) => col !== 'actions').reduce((previous: any, current) => {
       if (current !== "undefined") {
         const param = {
           [current]: {
@@ -57,12 +56,27 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
       $or: []
     });
 
+    Object.keys(this.${table.id}SpecificSearchForm.value).forEach(
+      (key) => {
+        const specificSearchValue = this.${table.id}SpecificSearchForm.value[key];
+        if (specificSearchValue) {
+          const param = {
+            [key]: {
+              $regex: specificSearchValue,
+              $options: 'i',
+            },
+          };
+          filters['$and'] = [...(filters['$and'] || []), param];
+        }
+      }
+    );
+
     return JSON.stringify(filters);
   }
 
   set${TextTransformation.pascalfy(
-      table.id
-    )}Service = async (params: HttpParams, isPagination: boolean) => {
+    table.id
+  )}Service = async (params: HttpParams, isPagination: boolean) => {
     try {
       this.isLoading = true;
       // const result: any = await lastValueFrom(this._${table.id}Service.getAll(params));

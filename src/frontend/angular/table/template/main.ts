@@ -71,6 +71,23 @@ const setTableTemplate = ({ table, projectPath }: MainInterface): string => {
       : ``
     }
       </div>
+
+    ${table.filtersToSearch && table.filtersToSearch.length ?
+      `<form id="${table.id}SpecificSearch" #${table.id}Directive="ngForm" [formGroup]="${table.id}SpecificSearchForm">
+        ${table.filtersToSearch.reduce((prev, current) => {
+        return prev += `
+            <mat-form-field appearance="standard">
+              <mat-label>${current.label}</mat-label>
+              <input matInput formControlName="${current.field}" 
+              placeholder="${current.label}">
+            </mat-form-field>
+
+          `;
+      }, '')}
+      </form>`
+      : ``
+    }
+
     </mat-card-actions>
 
     <mat-card-content class="${hasInfiniteScroll ? '' : 'table-container'}">
