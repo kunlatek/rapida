@@ -27,7 +27,7 @@ ADMIN_USERS=contato@kunlatek.com
 `;
 
 const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitation-and-permission";
-const cloneBackendPath = "https://github.com/kunlabori-teknologio/quickstart-api";
+const cloneBackendPath = "https://github.com/alexisbarros/rapida-quickstart-api.git";
 const projectPath = "/home/ryzzan/Projects/Demo/animation";
 
 import { ANIMATION } from "../collections-frontend/example/animation/animation";

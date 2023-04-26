@@ -1,7 +1,7 @@
 import * as fs from "fs";
 
-import { MainInterface } from "../../../interfaces/main";
-import { AppInterface } from "../../../interfaces/quickstart";
+import { MainInterface } from "../../../../interfaces/main";
+import { AppInterface } from "../../../../interfaces/quickstart";
 
 const setInvitationConfigs = (object: MainInterface) => {
     if (!object.quickstart?.app) {

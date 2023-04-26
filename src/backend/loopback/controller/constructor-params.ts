@@ -7,18 +7,17 @@ const setControllerConstructorParams = (object: MainInterface): string => {
     return ``;
   }
 
-  const modelName: string = object.form.id.replace("Form", "");
+  const entityName: string = object.form.id.replace("Form", "");
+  const modelName: string = TextTransformation.pascalfy(entityName);
 
 
   let code = `
-  @service(ChartService) private chartService: ChartService,
-  @service(StorageService) private storageService: StorageService,
-  @service(${TextTransformation.pascalfy(modelName)}Service) private ${modelName}Service: ${TextTransformation.pascalfy(modelName)}Service,
-                                        
   @inject(RestBindings.Http.REQUEST) private httpRequest: Request,
   @inject(RestBindings.Http.RESPONSE) private httpResponse: Response,
 
-  @inject(SecurityBindings.USER, {optional: true}) private currentUser?: UserProfile,
+  @repository(${modelName}Repository) private ${entityName}Repository: I${modelName}Repository,
+
+  @inject(SecurityBindings.USER, {optional: true}) private user?: UserProfile,
   `;
 
   return code;

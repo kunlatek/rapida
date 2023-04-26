@@ -38,12 +38,12 @@ const setControllerArchitectureAndWriteToFile = (
   object: MainInterface,
   code: string
 ) => {
-  const componentFilePath = `${object.projectPath}-api/src/controllers/${TextTransformation.kebabfy(object.form?.id.replace("Form", "")!)}.controller.ts`;
+  const componentFilePath = `${object.projectPath}-api/src/controllers/api/${TextTransformation.kebabfy(object.form?.id.replace("Form", "")!)}.controller.ts`;
   const componentIndexFilePath = `${object.projectPath}-api/src/controllers/index.ts`;
 
   try {
     fs.writeFileSync(componentFilePath, code);
-    fs.appendFile(componentIndexFilePath, `export * from './${TextTransformation.kebabfy(object.form?.id.replace("Form", '')!)}.${ComponentCodeTypeEnum.Controller}';`, () => { });
+    fs.appendFile(componentIndexFilePath, `export * from './api/${TextTransformation.kebabfy(object.form?.id.replace("Form", '')!)}.${ComponentCodeTypeEnum.Controller}';`, () => { });
 
     console.info(`File ${TextTransformation.kebabfy(object.form?.id.replace("Form", '')!)} already exists.`);
     console.info(`File successfully written in ${componentFilePath}.`);

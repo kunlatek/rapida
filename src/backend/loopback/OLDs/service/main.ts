@@ -1,7 +1,7 @@
 import * as fs from "fs";
-import { ComponentCodeTypeEnum } from "../../../enums/architecture";
-import { MainInterface } from "../../../interfaces/main";
-import { TextTransformation } from "../../../utils/text.transformation";
+import { ComponentCodeTypeEnum } from "../../../../enums/architecture";
+import { MainInterface } from "../../../../interfaces/main";
+import { TextTransformation } from "../../../../utils/text.transformation";
 import { setServiceConstructorParams } from "./constructor-params";
 import { setServiceImports } from "./imports";
 import { setServiceMethods } from "./methods";
@@ -69,3 +69,4 @@ const setServiceArchitectureAndWriteToFile = (
 export {
   serviceMain
 };
+

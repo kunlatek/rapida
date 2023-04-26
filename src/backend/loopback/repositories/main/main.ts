@@ -1,26 +1,68 @@
 import * as fs from "fs";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
-import { setConstructor } from "./constructor";
-import { setEntityInterfaces } from "./interfaces";
-import { setEntityProperties } from "./properties";
+import { setRepositoryImports } from "./imports";
 
 const repositoryMain = (object: MainInterface): string => {
   const entityName: string = object.form!.id.replace("Form", "");
+  const modelName: string = TextTransformation.pascalfy(entityName);
 
-  let _interface: string = setEntityInterfaces(object);
-  let _properties: string = setEntityProperties(object);
-  let _constructorParams: string = setConstructor(object);
+  let _imports: string = setRepositoryImports(object);
 
   let code = `
-  ${_interface}
+  ${_imports}
 
-  export class ${TextTransformation.pascalfy(entityName)} {  
+  if(mongoose.connection.readyState === 0){
+    mongoose.connect(
+      process.env.MONGO_URL ?? 'mongodb://localhost:27017/kunlatek',
+      { dbName: process.env.DB! }
+    ).then(() => console.log('Mongoose: Connected to db!!'))
+  }
 
-    ${_properties}
+  export class ${modelName}Repository implements I${modelName}Repository {
+    async create(data: I${modelName}): Promise<${modelName}> {
+      const dataCreated = await ${modelName}MongoModel.create(data);
+      return new ${modelName}(dataCreated);
+    }
 
-    constructor(entity: I${TextTransformation.pascalfy(entityName)}){
-      ${_constructorParams}
+    async findAll(filters: any, limit: number, page: number): Promise<${modelName}[]> {
+      return (await ${modelName}MongoModel
+        .find(filters)
+        // .populate(getPopulateObjFromSchema('modules', moduleSchema))
+        .skip(page * limit)
+        .limit(limit)
+      ).map((data: any) => new ${modelName}(data));
+    }
+
+    async findById(id: string): Promise<${modelName}> {
+      const data = await ${modelName}MongoModel
+        .findById(id)
+        //.populate(getPopulateObjFromSchema('modules', moduleSchema))
+        .orFail(new HttpErrors[404]('${modelName} not found'));
+
+      return new ${modelName}(data);
+    }
+
+    async updateById(id: string, dataToUpdate: Partial<I${modelName}>): Promise<${modelName}> {
+      const data = await ${modelName}MongoModel
+        .findByIdAndUpdate(id, dataToUpdate, {new: true})
+        //.populate(getPopulateObjFromSchema('modules', moduleSchema))
+        .orFail(new HttpErrors[404]('${modelName} not found'));
+
+      return new ${modelName}(data);
+    }
+
+    async replaceById(id: string, dataToUpdate: I${modelName}): Promise<${modelName}> {
+      const data = await ${modelName}MongoModel
+        .findOneAndReplace({_id: id}, dataToUpdate, {new: true})
+        //.populate(getPopulateObjFromSchema('modules', moduleSchema))
+        .orFail(new HttpErrors[404]('${modelName} not found'));
+
+      return new ${modelName}(data);
+    }
+
+    async deleteById(id: string): Promise<void> {
+      await ${modelName}MongoModel.findByIdAndDelete(id);
     }
   }
   `;
@@ -38,12 +80,12 @@ const setDomainEntityArchitectureAndWriteToFile = (
   object: MainInterface,
   code: string
 ) => {
-  const componentFilePath = `${object.projectPath}-api/src/domain/entities/api/${TextTransformation.kebabfy(object.form?.id.replace("Form", "")!)}.model.ts`;
-  const componentIndexFilePath = `${object.projectPath}-api/src/domain/entities/api/index.ts`;
+  const componentFilePath = `${object.projectPath}-api/src/repositories/mongo/api/${TextTransformation.kebabfy(object.form?.id.replace("Form", "")!)}.repository.ts`;
+  const componentIndexFilePath = `${object.projectPath}-api/src/repositories/index.ts`;
 
   try {
     fs.writeFileSync(componentFilePath, code);
-    fs.appendFile(componentIndexFilePath, `export * from './${TextTransformation.kebabfy(object.form?.id.replace("Form", '')!)}.model';`, () => { });
+    fs.appendFile(componentIndexFilePath, `export * from './mongo/api/${TextTransformation.kebabfy(object.form?.id.replace("Form", '')!)}.repository';`, () => { });
 
     console.info(`File ${TextTransformation.kebabfy(object.form?.id.replace("Form", '')!)} already exists.`);
     console.info(`File successfully written in ${componentFilePath}.`);

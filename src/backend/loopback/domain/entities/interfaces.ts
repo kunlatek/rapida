@@ -56,7 +56,7 @@ const setByElement = (
         )
     );
 
-  code += `${value.name}${!value.isRequired ? '?' : ''}: ${propertyType}`;
+  code += `${value.name}${!value.isRequired ? '?' : ''}: ${propertyType};`;
 
   return code;
 };

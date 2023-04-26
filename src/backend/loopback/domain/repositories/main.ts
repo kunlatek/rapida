@@ -50,4 +50,4 @@ const setDomainRepositoryArchitectureAndWriteToFile = (
   }
 };
 
-export { domainRepositoryMain as entityMain };
+export { domainRepositoryMain };

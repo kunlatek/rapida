@@ -1,16 +1,17 @@
 import { BackendFrameworkEnum } from "../enums/main";
 import { BuildedBackendCode, MainInterface } from "../interfaces/main";
 import { createLoopbackProject } from "./loopback/main";
-import { setInvitationConfigs } from "./loopback/utils/invitation";
-import { setUtilsModulesList } from "./loopback/utils/modules-list";
+import { setInvitationConfigs } from "./loopback/OLDs/utils/invitation";
+import { setUtilsModulesList } from "./loopback/OLDs/utils/modules-list";
 
 const setBackend = (
   array: Array<MainInterface>,
   index = 0
 ): BuildedBackendCode => {
   let response: BuildedBackendCode = {
+    domainModel: "",
+    domainRepository: "",
     controller: "",
-    model: "",
     repository: "",
     mongooseSchema: "",
   };

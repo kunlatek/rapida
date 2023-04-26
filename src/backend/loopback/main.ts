@@ -4,17 +4,21 @@ import * as fs from "fs";
 import { FormElementInterface } from "../../interfaces/form";
 import { BuildedBackendCode, MainInterface } from "../../interfaces/main";
 import { controllerMain } from "./controller/main";
-import { schemaMain } from "./schema/main";
-import { serviceMain } from "./service/main";
+import { entityMain } from "./domain/entities/main";
+import { domainRepositoryMain } from "./domain/repositories/main";
+import { repositoryMain } from "./repositories/main/main";
+import { repositorySchemaMain } from "./repositories/schema/main";
 
 const createLoopbackProject = (
   object: MainInterface,
   index: number
 ): BuildedBackendCode => {
   let response: BuildedBackendCode = {
+    domainModel: "",
+    domainRepository: "",
     controller: "",
+    repository: "",
     mongooseSchema: "",
-    service: "",
   };
 
   if (!doesProjectFolderExists(object)) {
@@ -22,14 +26,18 @@ const createLoopbackProject = (
   }
 
   if (object.form) {
+    const domainModelCode = entityMain(object);
+    const domainRepositoryCode = domainRepositoryMain(object);
+    const mongooseSchemaCode = repositorySchemaMain(object);
+    const repositoryCode = repositoryMain(object);
     const controllerCode = controllerMain(object);
-    const mongooseSchemaCode = schemaMain(object, index);
-    const serviceCode = serviceMain(object);
 
     response = {
+      domainModel: domainModelCode,
+      domainRepository: domainRepositoryCode,
       controller: controllerCode,
       mongooseSchema: mongooseSchemaCode,
-      service: serviceCode,
+      repository: repositoryCode,
     };
   }
 
@@ -153,3 +161,4 @@ export {
   getAllElements,
   getSpecifiqueTypesElements,
 };
+

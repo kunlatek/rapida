@@ -1,7 +1,7 @@
 import * as fs from "fs";
 
-import { MainInterface } from "../../../interfaces/main";
-import { TextTransformation } from "../../../utils/text.transformation";
+import { MainInterface } from "../../../../interfaces/main";
+import { TextTransformation } from "../../../../utils/text.transformation";
 import { setArrayTypeSchemas, setModelProperties } from "./properties";
 
 const schemaMain = (
@@ -108,3 +108,4 @@ const setModelArchitectureAndWriteToFile = (
 export {
   schemaMain
 };
+

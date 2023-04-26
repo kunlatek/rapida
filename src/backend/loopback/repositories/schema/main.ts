@@ -15,7 +15,7 @@ const repositorySchemaMain = (
   import mongoose from 'mongoose';
   import {transformSchemaToMongooseModel} from '../../../../utils/general.util';
 
-  const ${schemaName}Schema = {
+  export const ${schemaName}Schema = {
 
     _createdBy: { type: 'string', required: false, default: '' },
     _ownerId: { type: 'string', required: false, default: '' },

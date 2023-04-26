@@ -1,7 +1,7 @@
 import * as fs from "fs";
 
-import { MainInterface } from "../../../interfaces/main";
-import { TextTransformation } from "../../../utils/text.transformation";
+import { MainInterface } from "../../../../interfaces/main";
+import { TextTransformation } from "../../../../utils/text.transformation";
 
 const setUtilsModulesList = (objectList: Array<MainInterface>): void => {
   let code = `export const modulesList = (project: string) => [

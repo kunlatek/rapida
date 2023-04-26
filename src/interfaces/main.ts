@@ -39,11 +39,11 @@ export interface BuildedFrontendCode {
 };
 
 export interface BuildedBackendCode {
-  model?: string;
-  controller: string;
-  repository?: string;
-  service?: string;
+  domainModel?: string;
+  domainRepository?: string;
   mongooseSchema: string;
+  repository?: string;
+  controller: string;
 };
 
 export interface QuickstartInterface {

@@ -30,13 +30,13 @@ const setByElement = (
   let code = ``;
 
   const propertyType = value.isMultiple || type === 'array' || value.type === 'file' ?
-    'any' :
+    'string' :
     (
       stringTypes.includes(value.type || type) ? 'string' :
         (
           numberTypes.includes(value.type || type) ? 'number' :
             (
-              booleanTypes.includes(value.type || type) ? 'boolean' : 'any'
+              booleanTypes.includes(value.type || type) ? 'boolean' : 'string'
             )
         )
     );
@@ -68,8 +68,7 @@ const setByElement = (
   } else {
     code += `
       ${value.name}: {
-        type: '${propertyType}', 
-        ${value.isUnique ? `validate: [unique('${schemaName}', '${value.name}'), '${value.name} is unique'],` : ``}
+        type: '${propertyType}', // ${value.isUnique ? `validate: [unique('${schemaName}', '${value.name}'), '${value.name} is unique'],` : ``}
         required: ${value.isRequired || false},
         ${!value.isRequired ? 'default: null,' : ''}
       },

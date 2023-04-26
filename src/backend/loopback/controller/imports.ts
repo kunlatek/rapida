@@ -7,22 +7,22 @@ const setControllerImports = (object: MainInterface): string => {
     return ``;
   }
 
-  const modelName: string = object.form.id.replace("Form", "");
+  const entityName: string = object.form.id.replace("Form", "");
+  const modelName: string = TextTransformation.pascalfy(entityName);
 
   let code = `
   import {authenticate} from '@loopback/authentication';
-  import {inject, service} from '@loopback/core';
-  import {del, get, param, patch, post, put, Request, requestBody, response, Response, RestBindings} from '@loopback/rest';
-  import {SecurityBindings, securityId, UserProfile} from '@loopback/security';
-  import {LocaleEnum} from '../enums/locale.enum';
-  import {HttpDocumentation, HttpResponseToClient, Autentikigo} from '../implementations/index';
-  import {IHttpResponse} from '../interfaces/http.interface';
-  import {ChartService, StorageService, ${TextTransformation.pascalfy(modelName)}Service} from '../services';
-  import {serverMessages} from '../utils/server-messages';
-  const ${TextTransformation.pascalfy(modelName)}Schema = require('../mongoose-schemas/${TextTransformation.kebabfy(modelName)}.schema');
-  import { convertStringFieldsToDate } from '../utils/date-manipulation-functions';
-  import { removeObjAttr } from '../utils/general-functions';
-  const fetch = require('node-fetch');
+  import {inject} from '@loopback/core';
+  import {repository} from '@loopback/repository';
+  import {Request, Response, RestBindings, api, del, get, param, patch, post, put, requestBody, response} from '@loopback/rest';
+  import {SecurityBindings, UserProfile} from '@loopback/security';
+  import {I${modelName}} from '../../domain/entities';
+  import {I${modelName}Repository} from '../../domain/repositories';
+  import {${modelName}Repository} from '../../repositories';
+  import {${entityName}Schema} from '../../repositories/mongo/api/schemas/${TextTransformation.kebabfy(entityName)}.schema';
+  import {getSwaggerRequestBodySchema, getSwaggerResponseSchema} from '../../utils/general.util';
+  import {IHttpResponse, badRequestErrorHttpResponse, createHttpResponse, notFoundErrorHttpResponse, okHttpResponse} from '../../utils/http-response.util';
+  
   `;
 
   return code;

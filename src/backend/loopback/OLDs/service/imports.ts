@@ -1,4 +1,4 @@
-import { MainInterface } from "../../../interfaces/main";
+import { MainInterface } from "../../../../interfaces/main";
 
 const setServiceImports = (object: MainInterface): string => {
   if (!object.form) {

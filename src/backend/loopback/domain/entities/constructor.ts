@@ -4,9 +4,9 @@ import { getAllElements } from "../../main";
 
 const setConstructor = (object: MainInterface): string => {
   let code = `
-    this._id = app._id;
-    this._createdBy = app._createdBy;
-    this._ownerId = app._ownerId;
+    this._id = entity._id;
+    this._createdBy = entity._createdBy;
+    this._ownerId = entity._ownerId;
   `;
 
   const elements: Array<FormElementInterface> = getAllElements(object.form!.elements);
