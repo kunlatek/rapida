@@ -4,6 +4,7 @@ import { createProject } from "./index";
 const envFrontDev = `
 export const environment = {
 baseUrl: "http://localhost:3000",
+cookieDomain: "localhost",
 production: false,
 };
 `;
@@ -11,24 +12,14 @@ production: false,
 const envFrontProd = `
 export const environment = {
 baseUrl: "http://localhost:3000",
+cookieDomain: "localhost",
 production: true,
 };
 `;
 
-const envBackend = `
-PORT=3000
-SERVER_ROOT_URI=http://localhost:3000
-CLIENT_REDIRECT_URI=http://localhost:4200
-MONGO_URL=mongodb+srv://kunlatek:Kunlatek751@cluster0.b0pfr.mongodb.net/__DB_NAME__?authSource=admin&replicaSet=atlas-zft6fn-shard-0&readPreference=primary&ssl=true
-DB=animation
-NODEMAILER_USER=administrativo@kunlatek.com
-NODEMAILER_PASS=yetyxhgzjzktuwef
-ADMIN_USERS=contato@kunlatek.com
-`;
-
-const cloneFrontendPath = "https://github.com/ryzzan/kunlatek-quickstart-invitation-and-permission";
+const cloneFrontendPath = "https://github.com/alexisbarros/rapida-quickstart-client.git";
 const cloneBackendPath = "https://github.com/alexisbarros/rapida-quickstart-api.git";
-const projectPath = "/home/ryzzan/Projects/Demo/animation";
+const projectPath = "/Users/alexisbarros/Documents/projects/kunlatek/Demo/animation";
 
 import { ANIMATION } from "../collections-frontend/example/animation/animation";
 import { ANIMATION_FORM } from "../collections-frontend/example/animation/animation-form";
@@ -56,7 +47,7 @@ array.forEach((object) => {
   object.cloneBackendPath = cloneBackendPath;
   object.envFrontendDev = envFrontDev;
   object.envFrontendProd = envFrontProd;
-  object.envBackend = envBackend;
+  object.envBackend = ``;
 });
 
 createProject(array);

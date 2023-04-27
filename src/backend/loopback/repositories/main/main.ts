@@ -2,6 +2,7 @@ import * as fs from "fs";
 import { MainInterface } from "../../../../interfaces/main";
 import { TextTransformation } from "../../../../utils/text.transformation";
 import { setRepositoryImports } from "./imports";
+import { setSeedModules } from "./modules";
 
 const repositoryMain = (object: MainInterface): string => {
   const entityName: string = object.form!.id.replace("Form", "");
@@ -68,6 +69,9 @@ const repositoryMain = (object: MainInterface): string => {
   `;
 
   setDomainEntityArchitectureAndWriteToFile(object, code);
+
+  setSeedModules(object);
+
   return code;
 };
 
