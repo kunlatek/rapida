@@ -109,9 +109,12 @@ const selectFileToUpload = (
 
             const ${objectId}Files = this.${objectId}Form.value.${inputName} || [];
 
-            ${objectId}Files.push(file);
-            
-            this.${objectId}Form.get("${inputName}")?.setValue(${objectId}Files);
+            const reader = new FileReader();
+            reader.onload = e => {
+              ${objectId}Files.push({ file, url: reader.result });
+              this.${objectId}Form.get("${inputName}")?.setValue(${objectId}Files);
+            };
+            reader.readAsDataURL(file);
           `
     }
         }

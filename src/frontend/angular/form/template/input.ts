@@ -91,7 +91,10 @@ const setInput = (
           <mat-list-item *ngFor="let file of ${array
         ? `_${arrayIdSingular}.get('${inputName}')?.value; `
         : `${object.form?.id}Form.value.${inputName}; `}index as i;">
-            <a href="{{file.url}}" target="_blank">{{file.name}}</a>
+           <img id="file${inputNamePascal}"
+               height="80"
+               [src]="file.url"
+               alt="${inputName}" />
             <button mat-icon-button type="button"
             (click)="delete${inputNamePascal}File(${array ? `_${arrayIdSingular}.get('${inputName}'), ` : ``}i)">
               <mat-icon>delete</mat-icon>

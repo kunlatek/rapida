@@ -46,20 +46,13 @@ const setFormService = (
   export class ${TextTransformation.pascalfy(object.form.id)}Service {
       BASE_URL = "${object.form.service?.baseUrl}";
 
-      constructor(/*private _httpClient: HttpClient*/) {}
+      constructor() {}
 
       ${_services}
 
       ${_hasAuthorization
       ? `
         refreshToken () {
-          /*return this._httpClient.get(
-            \`\${this.BASE_URL}/auth/refresh-token\`, {
-            headers: {
-              'Authorization': \`Bearer \${sessionStorage.getItem('refreshToken')}\`
-            }
-          }
-          );*/
           return Http.get({
             route: \`\${this.BASE_URL}/auth/refresh-token\`,
             options: {
@@ -93,13 +86,6 @@ const setFormServiceServices = (service: ServiceInterface): string => {
       case ServiceFunctionsEnum.Get:
         code += `
         getAll(filter: string = "") {
-          /*return this._httpClient.get(
-            \`\${this.BASE_URL}/${service.endpoint}\${filter}\`, {
-              headers: {
-                ${hasAuthorization}
-              }
-            }
-          );*/
           return Http.get({
             route: \`\${this.BASE_URL}/${service.endpoint}\${filter}\`,
             options: {
@@ -115,14 +101,6 @@ const setFormServiceServices = (service: ServiceInterface): string => {
       case ServiceFunctionsEnum.Find:
         code += `
         find(id: string) {
-          /*return this._httpClient.get(
-            \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
-            {
-              headers: {
-                ${hasAuthorization}
-              }
-            }
-          );*/
           return Http.get({
             route:  \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
             options: {
@@ -139,15 +117,6 @@ const setFormServiceServices = (service: ServiceInterface): string => {
         code += `
         save(body: any) {
           body = convertJsonToFormData(body, null, new FormData());
-          /*return this._httpClient.post(
-          \`\${this.BASE_URL}/${service.endpoint}\`, 
-          body,
-          {
-            headers: {
-              ${hasAuthorization}
-            }
-          }
-          );*/
           return Http.post({
             route: \`\${this.BASE_URL}/${service.endpoint}\`, 
             body,
@@ -165,15 +134,6 @@ const setFormServiceServices = (service: ServiceInterface): string => {
         code += `
         update(body: any, id: string) {
           body = convertJsonToFormData(body, null, new FormData());
-          /*return this._httpClient.put(
-            \`\${this.BASE_URL}/${service.endpoint}/\${id}\`, 
-            body,
-            {
-              headers: {
-                ${hasAuthorization}
-              }
-            }
-          );*/
           return Http.put({
             route: \`\${this.BASE_URL}/${service.endpoint}/\${id}\`, 
             body,
@@ -190,14 +150,6 @@ const setFormServiceServices = (service: ServiceInterface): string => {
       case ServiceFunctionsEnum.Delete:
         code += `
         delete(id: string) {
-          /*return this._httpClient.delete(
-            \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
-            {
-              headers: {
-                ${hasAuthorization}
-              }
-            }
-          );*/
           return Http.delete({
             route: \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
             options: {
@@ -213,14 +165,6 @@ const setFormServiceServices = (service: ServiceInterface): string => {
       case ServiceFunctionsEnum.SoftDelete:
         code += `
         softDelete(id: string) {
-          /*return this._httpClient.put(
-            \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
-            {
-              headers: {
-                ${hasAuthorization}
-              }
-            }
-          );*/
           return Http.put({
             route: \`\${this.BASE_URL}/${service.endpoint}/\${id}\`,
             options: {
@@ -262,13 +206,6 @@ const setFormServiceServicesOverFormElement = (
                 filter += \`/\${otherFilter.filterProperty}/\${otherFilter.filterValue}\`;
               });
             }
-            /*return this._httpClient.get(
-              \`\${this.BASE_URL}/${apiRequest.endpoint}/\${filter}\`, {
-              headers: {
-                ${hasAuthorization}
-              }
-            }
-            );*/
             return Http.get({
               route: \`\${this.BASE_URL}/${apiRequest.endpoint}/\${filter}\`,
               options: {
@@ -289,13 +226,6 @@ const setFormServiceServicesOverFormElement = (
                 filter += \`&\${otherFilter.filterProperty}=\${otherFilter.filterValue}\`;
               });
             }
-            /*return this._httpClient.get(
-              \`\${this.BASE_URL}/${apiRequest.endpoint}\${filter}\`, {
-              headers: {
-                ${hasAuthorization}
-              }
-            }
-            );*/
             return Http.get({
               route: \`\${this.BASE_URL}/${apiRequest.endpoint}\${filter}\`, 
               options: {
@@ -303,7 +233,7 @@ const setFormServiceServicesOverFormElement = (
                   ${hasAuthorization}
                 }
               }
-            });*/
+            });
         }
         `;
       }
@@ -316,13 +246,6 @@ const setFormServiceServicesOverFormElement = (
                 filter += \`&\${otherFilter.filterProperty}=\${otherFilter.filterValue}\`;
               });
             }
-            /*return this._httpClient.get(
-              \`${apiRequest.externalEndpoint}\${filter}\`, {
-              headers: {
-                ${hasAuthorization}
-              }
-            }
-            );*/
             return Http.get({
               route: \`${apiRequest.externalEndpoint}\${filter}\`, 
               options: {
@@ -343,13 +266,6 @@ const setFormServiceServicesOverFormElement = (
                 filter += \`/\${otherFilter.filterProperty}/\${otherFilter.filterValue}\`;
               });
             }
-            /*return this._httpClient.get(
-              \`${apiRequest.externalEndpoint}/\${filter}\`, {
-              headers: {
-                ${hasAuthorization}
-              }
-            }
-            );*/
             return Http.get({
               route: \`${apiRequest.externalEndpoint}/\${filter}\`, 
               options: {
@@ -369,13 +285,6 @@ const setFormServiceServicesOverFormElement = (
       if (element.autocomplete.optionsApi.endpoint) {
         code += `
           ${element.autocomplete.name}SelectObjectGetAll(filter: string = "") {
-            /*return this._httpClient.get(
-              \`\${this.BASE_URL}/${element.autocomplete.optionsApi.endpoint}\${filter}\`, {
-              headers: {
-                ${hasAuthorization}
-              }
-            }
-            );*/
             return Http.get({
               route: \`\${this.BASE_URL}/${element.autocomplete.optionsApi.endpoint}\${filter}\`, 
               options: {
@@ -391,13 +300,6 @@ const setFormServiceServicesOverFormElement = (
       if (element.autocomplete.optionsApi.externalEndpoint) {
         code += `
           ${element.autocomplete.name}SelectObjectGetAll(filter: string = "") {
-            /*return this._httpClient.get(
-              \`${element.autocomplete.optionsApi.externalEndpoint}\${filter}\`, {
-              headers: {
-                ${hasAuthorization}
-              }
-            }
-            );*/
             return Http.get({
               route: \`${element.autocomplete.optionsApi.externalEndpoint}\${filter}\`, 
               options: {
@@ -417,13 +319,6 @@ const setFormServiceServicesOverFormElement = (
       if (element.select.optionsApi.endpoint) {
         code += `
         ${element.select.name}SelectObjectGetAll() {
-          /*return this._httpClient.get(
-            \`\${this.BASE_URL}/${element.select.optionsApi.endpoint}\`, {
-            headers: {
-              ${hasAuthorization}
-            }
-          }
-          );*/
           return Http.get({
             route: \`\${this.BASE_URL}/${element.select.optionsApi.endpoint}\`, 
             options: {
@@ -439,13 +334,6 @@ const setFormServiceServicesOverFormElement = (
       if (element.select.optionsApi.externalEndpoint) {
         code += `
         ${element.select.name}SelectObjectGetAll() {
-          /*return this._httpClient.get(
-            \`${element.select.optionsApi.externalEndpoint}\`, {
-            headers: {
-              ${hasAuthorization}
-            }
-          }
-          );*/
           return Http.get({
             route: \`${element.select.optionsApi.externalEndpoint}\`, 
             options: {
