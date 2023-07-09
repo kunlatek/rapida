@@ -28,12 +28,14 @@ const setModuleControllerImports = (object: MainInterface): string => {
     NgxMaskModule,
     IConfig
   } from "ngx-mask";
+
+  import { NgxSummernoteModule } from "ngx-summernote";
   `;
-  code
+  code;
   object.module.components.forEach((element) => {
     code += setModuleControllerImportsOverElement(element);
   });
-  
+
   return code;
 };
 
@@ -125,7 +127,6 @@ const setNgModuleImportsOverElement = (
 };
 
 export {
-  setModuleControllerImports,
-  setNgModuleImports,
-  setNgModuleDeclarations,
+  setModuleControllerImports, setNgModuleDeclarations, setNgModuleImports
 };
+

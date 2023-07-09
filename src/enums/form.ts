@@ -32,6 +32,7 @@ export enum FormInputTypeEnum {
     Url = "url",
     Week = "week",
     Boolean = "boolean",
+    Wysiwyg = "wysiwyg",
 }
 
 export enum FormButtonTypeEnum {

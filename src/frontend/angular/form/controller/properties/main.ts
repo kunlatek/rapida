@@ -1,6 +1,7 @@
 import { MainInterface } from "../../../../../interfaces/main";
 import { setCondition } from "./condition";
 import { setProperty } from "./property";
+import { setWysiwygConfig } from "./wysiwyg-config";
 
 const setFormControllerProperties = (object: MainInterface): string => {
   if (!object.form) {
@@ -21,6 +22,7 @@ const setFormControllerProperties = (object: MainInterface): string => {
   @Input() _moduleRelated!: string;
   `;
 
+  code += setWysiwygConfig(object);
   code += setCondition(object);
   code += setProperty(object);
 

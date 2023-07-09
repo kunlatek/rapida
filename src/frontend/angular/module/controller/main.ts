@@ -38,6 +38,7 @@ const setModuleController = (object: MainInterface, mainArray: Array<MainInterfa
       ${TextTransformation.pascalfy(object.module.id)}RoutingModule,
       NgxMaskModule.forRoot(maskConfig),
       SharedModule,
+      NgxSummernoteModule,
       ${_ngModuleImports}
     ]
   })
