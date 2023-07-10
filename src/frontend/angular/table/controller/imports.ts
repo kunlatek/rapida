@@ -40,7 +40,11 @@ const setTableControllerImports = ({ table }: MainInterface): string => {
       `import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
       import { MatSort } from "@angular/material/sort";
       import { distinctUntilChanged, map } from "rxjs/operators";
-      import { InfiniteScrollTableDataSource } from "./${TextTransformation.kebabfy(table.id)}-infinite-scroll.service";` : ''} 
+      import { InfiniteScrollTableDataSource } from "./${TextTransformation.kebabfy(table.id)}-infinite-scroll.service";` :
+      `
+    import { PageEvent } from "@angular/material/paginator";
+    `
+    } 
   `;
 
   return code;

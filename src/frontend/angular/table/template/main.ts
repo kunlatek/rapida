@@ -51,7 +51,7 @@ const setTableTemplate = ({ table, projectPath }: MainInterface): string => {
       <div class="flex-row">
         <form id="${table.id}" #${table.id}Directive="ngForm" 
         [formGroup]="${table.id}SearchForm" 
-        (ngSubmit)="_setFiltersParams()">
+        (ngSubmit)="_page=0;_setFiltersParams()">
           <mat-form-field appearance="standard">
             <mat-label>Filtro</mat-label>
             <input matInput formControlName="searchInput" 
@@ -104,7 +104,15 @@ const setTableTemplate = ({ table, projectPath }: MainInterface): string => {
       <tr mat-row *matRowDef="let row; columns: ${table.id
     }DisplayedColumns;"></tr>                                        
     </table>
-    ${hasInfiniteScroll ? `</cdk-virtual-scroll-viewport>` : ""}
+    ${hasInfiniteScroll ?
+      `</cdk-virtual-scroll-viewport>` :
+      `<mat-paginator #paginator
+        [pageIndex]="_page"
+        [pageSize]="100"
+        [length]="_total"
+        [hidePageSize]="true"
+        (page)="_onPagination($event)"></mat-paginator>`
+    }
     <div 
       style="width: 100%; height: 100px; display: flex; align-items: center; justify-content: center; color: #c9c9c9"
       *ngIf="${hasInfiniteScroll

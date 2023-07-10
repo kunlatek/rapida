@@ -56,8 +56,8 @@ const setTableControllerProperties = ({ table }: MainInterface, mainArray: Array
   ${table.id}SpecificSearchForm: FormGroup;
   isLoading = true;
   isCreatingXlsLoading = false;
-  private _page!: number;
   ${hasInfiniteScroll ? `
+  private _page!: number;
   ITEM_SIZE = 50;
   @Input() _moduleRelated!: string;
   @ViewChild(CdkVirtualScrollViewport, { static: true })
@@ -68,7 +68,13 @@ const setTableControllerProperties = ({ table }: MainInterface, mainArray: Array
 
   private _pageCache = new Set<number>();
   
-  `: ''}
+  `:
+      `
+    _pageEvent!: PageEvent;
+    _page!: number;
+    _total!: number;
+    `
+    }
   `;
 
   return code;

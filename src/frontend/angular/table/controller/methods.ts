@@ -20,6 +20,14 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
   let code = `
   ${_methods}
 
+  ${hasInfiniteScroll ?
+      `` :
+      `_onPagination(event?: PageEvent) {
+      this._page = event?.pageIndex!;
+      this._setFiltersParams();
+    }`
+    }
+
   _setFiltersParams(isPagination = false) {
     this.isLoading = true;
     this.dataSourceShimmer = new Array(10).fill(1).map(el => {return  {${table.elements.filter(el => el.row.field !== 'actions').reduce((prev, current) => prev += `${current.row.field}:null, `, '')}}});
@@ -36,8 +44,8 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
     httpParams = httpParams.append('order_by', '_createdAt DESC');
     httpParams = httpParams.append('select', '${table.elements.filter(el => el.row.field !== 'actions').reduce((prev, current) => prev += `${current.row.field} `, '')}');
     this.set${TextTransformation.pascalfy(
-    table.id
-  )}Service(httpParams, isPagination);
+      table.id
+    )}Service(httpParams, isPagination);
   }
   
   private _setSearchFilters(valueToSearch: string) {
@@ -75,8 +83,8 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
   }
 
   set${TextTransformation.pascalfy(
-    table.id
-  )}Service = async (params: HttpParams, isPagination: boolean) => {
+      table.id
+    )}Service = async (params: HttpParams, isPagination: boolean) => {
     try {
       this.isLoading = true;
       // const result: any = await lastValueFrom(this._${table.id}Service.getAll(params));
@@ -99,6 +107,7 @@ const setTableControllerMethods = ({ table }: MainInterface): string => {
     } = newData;
         this.dataSourceShimmer = [];
         this.isLoading = false;
+        ${!hasInfiniteScroll && 'this._total = result.data.total'}
     } catch (error: any) {
       if (error.logMessage === "jwt expired") {
           await this.refreshToken();
