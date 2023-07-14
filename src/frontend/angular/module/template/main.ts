@@ -57,7 +57,7 @@ const setModuleComponents = (module: ModuleInterface): string => {
     code += `</mat-stepper>`;
   }
 
-  return code;
+  return `<div style="padding: 10px;">${code}</div>`;
 };
 
 /**
