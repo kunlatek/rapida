@@ -7,7 +7,7 @@ export const ANIMATION_TABLE: MainInterface = {
   table: {
     id: "animationTable",
     title: "Animações",
-    infiniteScroll: true,
+    infiniteScroll: false,
     data: {
       type: RequestTypeEnum.Object,
     },

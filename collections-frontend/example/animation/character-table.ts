@@ -7,7 +7,7 @@ export const CHARACTER_TABLE: MainInterface = {
   table: {
     id: "characterTable",
     title: "Personagens",
-    infiniteScroll: true,
+    infiniteScroll: false,
     data: {
       type: RequestTypeEnum.Object,
     },

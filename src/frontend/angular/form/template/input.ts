@@ -105,7 +105,7 @@ const setInput = (
   } else if (element.input.type === FormInputTypeEnum.Wysiwyg) {
     code += `
       <mat-form-field class="full-width" ${conditions}>
-        <mat-label>${element.input.label}</mat-label>
+        <mat-label>${element.input.label}</mat-label><br />
         <div [ngxSummernote]="config" formControlName="${inputName}"></div>
         <textarea matInput style="display: none;" formControlName="${inputName}"></textarea>
       </mat-form-field>
