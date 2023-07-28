@@ -455,7 +455,7 @@ const displayNoMultipleAutocomplete = (
 
   code += `
     displayFnTo${autocompleteNamePascal} = (value?: any) => {
-      if (this.filtered${autocompleteNamePascal}${array ? `[value]` : ``}[0]) {
+      if (this.filtered${autocompleteNamePascal}${array ? `[value] && this.filtered${autocompleteNamePascal}[value][0]` : ` && this.filtered${autocompleteNamePascal}[0]`}) {
         ${formFieldsFilledByApiResponseCode}      
         
         const toReturn = ${labelFieldCode}
@@ -675,4 +675,5 @@ const getAllElements = (
   return elementsToReturn;
 };
 
-export { setAutocompleteMethod, filterAutocompleteOptionOnGetData };
+export { filterAutocompleteOptionOnGetData, setAutocompleteMethod };
+
