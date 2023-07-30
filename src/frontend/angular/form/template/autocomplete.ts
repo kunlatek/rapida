@@ -211,7 +211,7 @@ const setAutocomplete = (
         : `!loading${namePascal};`
       }
           ">
-          <mat-option *ngFor="let ${name}Item of filtered${namePascal}${array ? `[${TextTransformation.singularize(array!.id)}Index]` : ''}" [value]="${name}Item.${valueField}">`;
+          <mat-option *ngFor="let ${name}Item of filtered${namePascal}${array ? `[${TextTransformation.singularize(array!.id)}Index]` : ''}" [value]="${name}Item">`;
 
     if (!Array.isArray(labelField)) {
       code += `{{${name}Item.${labelField}}}`;
