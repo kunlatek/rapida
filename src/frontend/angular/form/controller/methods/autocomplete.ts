@@ -440,26 +440,28 @@ const displayNoMultipleAutocomplete = (
 
   }
 
+  const findOptionInAucompleteCode = (label: string) => `.find((el: any) => el._id === value)?.${label} : this.filtered${autocompleteNamePascal}${array ? `[index]` : ``}`;
+
   if (Array.isArray(labelField)) {
     labelField.forEach((e: string, index: number) => {
-      labelFieldCode += `this.filtered${autocompleteNamePascal}${array ? `[value]` : ``}[0].${e}`;
+      labelFieldCode += `this.filtered${autocompleteNamePascal}${array ? `[index]` : ``}${findOptionInAucompleteCode(e)}[0].${e}`;
       if (labelFieldLength > index + 1) {
         labelFieldCode += ` + " - " + `;
       }
     });
   } else {
-    labelFieldCode = `this.filtered${autocompleteNamePascal}${array ? `[value]` : ``}[0].${labelField}`;
+    labelFieldCode = `this.filtered${autocompleteNamePascal}${array ? `[index]` : ``}${findOptionInAucompleteCode(labelField)}[0].${labelField}`;
   };
 
   let code = ``;
 
   code += `
-    displayFnTo${autocompleteNamePascal} = (value?: any) => {
-      if (this.filtered${autocompleteNamePascal}${array ? `[value]` : ``}[0]) {
+    displayFnTo${autocompleteNamePascal} = (${array ? `index?: any, ` : ``}value?: any) => {
+      if (this.filtered${autocompleteNamePascal}${array ? `[index]` : ``}[0]) {
         ${formFieldsFilledByApiResponseCode}      
         
-        const toReturn = ${labelFieldCode}
-        setTimeout(() => this.filtered${autocompleteNamePascal}${array ? `[value]` : ``} = [], 500);
+        const toReturn = typeof value === 'string' ? ${labelFieldCode}
+        setTimeout(() => this.filtered${autocompleteNamePascal}${array ? `[index]` : ``} = [], 500);
         return toReturn;
       }
         
@@ -675,4 +677,5 @@ const getAllElements = (
   return elementsToReturn;
 };
 
-export { setAutocompleteMethod, filterAutocompleteOptionOnGetData };
+export { filterAutocompleteOptionOnGetData, setAutocompleteMethod };
+
