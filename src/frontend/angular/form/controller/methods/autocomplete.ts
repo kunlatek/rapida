@@ -440,17 +440,26 @@ const displayNoMultipleAutocomplete = (
 
   }
 
-  const findOptionInAucompleteCode = (label: string) => `.find((el: any) => el._id === value)?.${label} : this.filtered${autocompleteNamePascal}${array ? `[index]` : ``}`;
+  const findOptionInAucompleteCode = (label: string) => `.find((el: any) => el._id === value)?.${label}`;
 
   if (Array.isArray(labelField)) {
     labelField.forEach((e: string, index: number) => {
-      labelFieldCode += `this.filtered${autocompleteNamePascal}${array ? `[index]` : ``}${findOptionInAucompleteCode(e)}[0].${e}`;
+      labelFieldCode += `this.filtered${autocompleteNamePascal}${array ? `[index]` : ``}${findOptionInAucompleteCode(e)}`;
+      if (labelFieldLength > index + 1) {
+        labelFieldCode += ` + " - " + `;
+      }
+    });
+
+    labelFieldCode += ` : `;
+
+    labelField.forEach((e: string, index: number) => {
+      labelFieldCode += `this.filtered${autocompleteNamePascal}${array ? `[index]` : ``}[0].${e}`;
       if (labelFieldLength > index + 1) {
         labelFieldCode += ` + " - " + `;
       }
     });
   } else {
-    labelFieldCode = `this.filtered${autocompleteNamePascal}${array ? `[index]` : ``}${findOptionInAucompleteCode(labelField)}[0].${labelField}`;
+    labelFieldCode = `this.filtered${autocompleteNamePascal}${array ? `[index]` : ``}${findOptionInAucompleteCode(labelField)} : this.filtered${autocompleteNamePascal}${array ? `[index]` : ``}[0].${labelField}`;
   };
 
   let code = ``;
