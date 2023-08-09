@@ -12,6 +12,7 @@ import { setAutocomplete } from "./autocomplete";
 import { setButton } from "./button";
 import { setConditions } from "./condition";
 import { setInput } from "./input";
+import { setLink } from "./link";
 import { setSelect } from "./select";
 
 /**
@@ -84,6 +85,10 @@ const setSpecificStructureOverFormElement = (
 
   if (element.input) {
     code += setInput(object, element, conditions, array);
+  }
+
+  if (element.link) {
+    code += setLink(object, element, conditions, array);
   }
 
   if (element.autocomplete) {
@@ -252,4 +257,5 @@ const setFormFieldShimmer = (label: string, conditions: string) => {
   `;
 };
 
-export { setFormTemplate, setSpecificStructureOverFormElement, setFormFieldShimmer };
+export { setFormFieldShimmer, setFormTemplate, setSpecificStructureOverFormElement };
+
