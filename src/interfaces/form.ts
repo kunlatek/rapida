@@ -45,6 +45,10 @@ export interface FormElementInterface {
   input?: InputInterface;
   label?: LabelInterface;
   legend?: LegendInterface;
+  link?: {
+    baseUrl: string,
+    values: Array<string>;
+  };
   optgroup?: OptgroupInterface;
   option?: OptionInterface;
   output?: OutputInterface;

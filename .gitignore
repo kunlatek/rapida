@@ -146,4 +146,4 @@ dist
 
 #collection
 /src/testing.ts
-/collections-frontend/*
+/rapida-clients/*

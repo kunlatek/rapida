@@ -9,5 +9,5 @@
     "strictPropertyInitialization": false
   },
   "include": ["src"],
-  "exclude": ["node_modules", "**/__tests__/*", "collections-frontend"]
+  "exclude": ["node_modules", "**/__tests__/*", "rapida-clients"]
 }
