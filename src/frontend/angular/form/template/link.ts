@@ -16,11 +16,13 @@ const setLink = (
   const baseUrl = element.link.baseUrl;
   let code = ``;
   let url = baseUrl;
+  let conditionShowLink = ``;
 
   if (baseUrl.split("?").length < 2) {
     const bound = baseUrl.split(/[[0-9]]/).length - 1;
     for (let i = 0; i < bound; i++) {
       url = url.replace(`[${i}]`, `{{${object.form.id}Form.value.${values[i]}}}`);
+      conditionShowLink += `&& ${object.form.id}Form.value.${values[i]}`;
     }
   }
 
@@ -32,7 +34,7 @@ const setLink = (
   }
 
   code +=
-    `<div *ngIf="!isLoading && ${object.form.id}Form" class="lines link" 
+    `<div *ngIf="!isLoading ${conditionShowLink}" class="lines link" 
         style="width: 100%; margin-bottom: 30px;">
       <a href="${url}"
         target = "_blank" >${url}
