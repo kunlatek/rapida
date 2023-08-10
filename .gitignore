@@ -145,5 +145,5 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/node
 
 #collection
-/src/testing.ts
-/rapida-clients/*
+src/testing.ts
+rapida-clients/*
