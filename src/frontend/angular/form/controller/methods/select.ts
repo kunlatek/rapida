@@ -25,8 +25,8 @@ const setSelectMethod = (
           if (array.data?.result) {
             array.data?.result.map((object: any) => {
               this.${selectName}SelectObject.push({
-                label: object.name,
-                value: object._id,
+                label: object.${element.select?.optionsApi?.labelField ?? 'name'},
+                value: object.${element.select?.optionsApi?.valueField ?? '_id'},
               });
             });
           }

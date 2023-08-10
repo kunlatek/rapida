@@ -73,12 +73,12 @@ const setSelectToEdit = (
 
           code += `})`;
         }
-        code += `
-        this.${objectId}ToEdit.data.${selectName} = 
-        this.${objectId}ToEdit.data.${selectName}.map((element: any) => {
-          return element.${selectValueField}
-        });
-        `;
+        // code += `
+        // this.${objectId}ToEdit.data.${selectName} = 
+        // this.${objectId}ToEdit.data.${selectName}.map((element: any) => {
+        //   return element.${selectValueField}
+        // });
+        // `;
       }
     }
   });
